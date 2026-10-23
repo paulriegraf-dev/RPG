@@ -21827,7 +21827,7 @@ function mpLS62(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===
 
 // ---------- 1. Verbindung: Vermittlung (PeerJS-Server-Format) und WebRTC-Datenkanal ----------
 function mpSigBase62(){const s=MP62Q.get('signal');if(s)return s.endsWith('/')?s:s+'/';return'wss://0.peerjs.com:443/'}
-function mpIce62(){if(MP62Q.get('signal'))return[];return[{urls:'stun:stun.l.google.com:19302'},{urls:['turn:eu-0.turn.peerjs.com:3478','turn:us-0.turn.peerjs.com:3478'],username:'peerjs',credential:'peerjsp'}]}
+function mpIce62(){if(MP62Q.get('signal')||MP62Q.get('ntfy'))return[];return[{urls:'stun:stun.l.google.com:19302'},{urls:['turn:eu-0.turn.peerjs.com:3478','turn:us-0.turn.peerjs.com:3478'],username:'peerjs',credential:'peerjsp'}]}
 function mpSig62(id,onMsg,onOpen,onErr){const tok=mpRnd62(12,'abcdefghijklmnopqrstuvwxyz0123456789');let done=false,hb=null,ws;
   const fail=t=>{if(done)return;done=true;clearInterval(hb);try{ws.close()}catch(e){}onErr&&onErr(t)};
   try{ws=new WebSocket(mpSigBase62()+'peerjs?key=peerjs&id='+encodeURIComponent(id)+'&token='+tok+'&version=1.5.4')}catch(e){setTimeout(()=>fail('NOWS'),0);return{send(){},close(){}}}
@@ -21846,6 +21846,25 @@ function mpWire62(dc,C){dc.binaryType='arraybuffer';const parts={};let cid=0;
     C.onmsg&&C.onmsg(m)};
   dc.onclose=()=>{C.onclose&&C.onclose()};dc.onopen=()=>{C.onopen&&C.onopen()};return C}
 // Zum Testen in einem Browser: BroadcastChannel statt Internet (?lokal=1)
+// Nachbesserung 23.10. abends: Der öffentliche PeerJS-Dienst nimmt Verbindungen an, leitet aber keine Nachrichten mehr weiter
+// (geprüft in Pauls Browser). Standard ist darum ntfy.sh: ein kostenloser Nachrichtendienst (Thema je Raum, Lesen per EventSource,
+// Senden per POST). Darüber laufen nur die zwei Verbindungs-Nachrichten je Mitspieler (Angebot und Antwort), danach geht alles direkt.
+// ?signal=ws://… nutzt weiter das PeerJS-Format (eigener Server, Tests), ?ntfy=https://… einen anderen ntfy-Server.
+function mpNtfy62(){const s=MP62Q.get('ntfy');return(s||'https://ntfy.sh').replace(/\/$/,'')}
+function mpB64e62(s){return btoa(unescape(encodeURIComponent(s)))}
+function mpB64d62(s){return decodeURIComponent(escape(atob(s)))}
+function mpBus62(code,me,onMsg,onOpen,onErr){const url=mpNtfy62()+'/pma62-'+code+'-pt',parts={};let es=null,closed=false,opened=false;
+  try{es=new EventSource(url+'/sse')}catch(e){setTimeout(()=>onErr&&onErr('NOSSE'),0);return{send(){},close(){}}}
+  es.onopen=()=>{if(!opened){opened=true;onOpen&&onOpen()}};es.onerror=()=>{if(!opened&&es.readyState===2){onErr&&onErr('CLOSED')}};
+  es.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}if(m.event&&m.event!=='message')return;let d;try{d=JSON.parse(m.message)}catch(x){return}
+    if(!d||d.k!=='pma62'||d.src===me||(d.dst&&d.dst!==me))return;const P=parts[d.cid]=parts[d.cid]||{got:0,c:[]};if(P.c[d.i]==null){P.c[d.i]=d.c;P.got++}if(P.got<d.n)return;delete parts[d.cid];
+    let o;try{o=JSON.parse(mpB64d62(P.c.join('')))}catch(x){return}onMsg({type:o.type,src:d.src,dst:d.dst,payload:o.payload})};
+  return{send(type,dst,payload){if(closed)return;const b=mpB64e62(JSON.stringify({type,payload})),n=Math.max(1,Math.ceil(b.length/3000)),cid=mpRnd62(8);
+      for(let i=0;i<n;i++)fetch(url,{method:'POST',body:JSON.stringify({k:'pma62',src:me,dst,cid,i,n,c:b.slice(i*3000,(i+1)*3000)})}).catch(()=>{})},
+    close(){closed=true;try{es.close()}catch(e){}}}}
+function mpSigOpen62(id,code,onMsg,onOpen,onErr){return MP62Q.get('signal')?mpSig62(id,onMsg,onOpen,onErr):mpBus62(code,id,onMsg,onOpen,onErr)}
+// Ohne einzelne Kandidaten-Nachrichten: erst sammeln (höchstens 3 s), dann alles in einer Nachricht schicken
+function mpGathered62(pc){return new Promise(res=>{if(pc.iceGatheringState==='complete')return res();const t=setTimeout(res,3000);pc.addEventListener('icegatheringstatechange',()=>{if(pc.iceGatheringState==='complete'){clearTimeout(t);res()}})})}
 function mpLocal62(){return MP62Q.get('lokal')==='1'}
 function mpBC62(code,me){const bc=new BroadcastChannel('pma62-'+code);return bc}
 
@@ -21854,16 +21873,13 @@ function mpHostOpen62(){if(MP62.role==='gast')return;let code=MP62.code||mpLS62(
   MP62.role='wirt';MP62.closing=false;MP62.state='verbinde';mpLS62('pma62_open','1');mpStart62();
   if(mpLocal62()){mpHostBC62(code);MP62.state='offen';mpUI62();return}
   const id='pma62-'+code;
-  MP62.sig=mpSig62(id,mpHostSig62,()=>{MP62.state='offen';MP62.retry=0;mpUI62()},err=>{if(MP62.role!=='wirt'||MP62.closing)return;
-    MP62.state=err==='ID-TAKEN'?'belegt':'getrennt';mpUI62();MP62.retry++;setTimeout(()=>{if(MP62.role==='wirt'&&!MP62.closing&&MP62.state!=='offen')mpReSig62()},err==='ID-TAKEN'?5000:Math.min(15000,2000*MP62.retry))});
-  mpUI62()}
-function mpReSig62(){const id='pma62-'+MP62.code;MP62.sig=mpSig62(id,mpHostSig62,()=>{MP62.state='offen';MP62.retry=0;mpUI62()},err=>{if(MP62.role!=='wirt'||MP62.closing)return;MP62.state=err==='ID-TAKEN'?'belegt':'getrennt';mpUI62();MP62.retry++;setTimeout(()=>{if(MP62.role==='wirt'&&!MP62.closing&&MP62.state!=='offen')mpReSig62()},err==='ID-TAKEN'?5000:Math.min(15000,2000*MP62.retry))})}
+  mpReSig62();mpUI62()}
+function mpReSig62(){const id='pma62-'+MP62.code;try{MP62.sig&&MP62.sig.close()}catch(e){}MP62.sig=mpSigOpen62(id,MP62.code,mpHostSig62,()=>{MP62.state='offen';MP62.retry=0;mpUI62()},err=>{if(MP62.role!=='wirt'||MP62.closing)return;MP62.state=err==='ID-TAKEN'?'belegt':'getrennt';mpUI62();MP62.retry++;setTimeout(()=>{if(MP62.role==='wirt'&&!MP62.closing&&MP62.state!=='offen')mpReSig62()},err==='ID-TAKEN'?5000:Math.min(15000,2000*MP62.retry))})}
 function mpHostSig62(m){const src=m.src;if(!src)return;
   if(m.type==='OFFER'&&m.payload&&m.payload.kind==='pma62'){const old=MP62.pend.get(src);if(old)try{old.pc.close()}catch(e){}
     const pc=new RTCPeerConnection({iceServers:mpIce62()}),P={pc,q:[],ready:false};MP62.pend.set(src,P);
-    pc.onicecandidate=e=>{if(e.candidate&&MP62.sig)MP62.sig.send('CANDIDATE',src,{candidate:e.candidate,kind:'pma62'})};
     pc.ondatachannel=e=>{const C={pc,id:src};mpWire62(e.channel,C);const go=()=>{MP62.pend.delete(src);mpHostConn62(C)};if(e.channel.readyState==='open')go();else C.onopen=go};
-    pc.setRemoteDescription(m.payload.sdp).then(()=>{P.ready=true;P.q.forEach(c=>pc.addIceCandidate(c).catch(()=>{}));P.q=[];return pc.createAnswer()}).then(a=>pc.setLocalDescription(a)).then(()=>{MP62.sig&&MP62.sig.send('ANSWER',src,{sdp:pc.localDescription,kind:'pma62'})}).catch(e=>console.warn('p62',e));
+    pc.setRemoteDescription(m.payload.sdp).then(()=>{P.ready=true;P.q.forEach(c=>pc.addIceCandidate(c).catch(()=>{}));P.q=[];return pc.createAnswer()}).then(a=>pc.setLocalDescription(a)).then(()=>mpGathered62(pc)).then(()=>{MP62.sig&&MP62.sig.send('ANSWER',src,{sdp:pc.localDescription,kind:'pma62'})}).catch(e=>console.warn('p62',e));
     return}
   if(m.type==='CANDIDATE'&&m.payload&&m.payload.candidate){const P=MP62.pend.get(src);if(!P)return;if(P.ready)P.pc.addIceCandidate(m.payload.candidate).catch(()=>{});else P.q.push(m.payload.candidate)}}
 function mpHostBC62(code){const bc=mpBC62(code);MP62.bc=bc;const conns={};
@@ -21995,13 +22011,12 @@ function mpGuestConnect62(){if(G62.closed)return;const code=G62.code;try{G62.con
     bc.postMessage({to:'wirt',from:me,hello:1});const iv=setInterval(()=>{if(!alive)return clearInterval(iv);if(Date.now()-last>8000){alive=false;clearInterval(iv);try{bc.close()}catch(e){}C.onclose()}},2000);return}
   const gid='pma62g-'+mpRnd62(10,'abcdefghijklmnopqrstuvwxyz0123456789'),hostId='pma62-'+code;const pc=new RTCPeerConnection({iceServers:mpIce62()});C.pc=pc;
   const dc=pc.createDataChannel('spiel',{ordered:true});mpWire62(dc,C);let q=[],ready=false,opened=false;
-  const sig=mpSig62(gid,m=>{if(m.src!==hostId)return;if(m.type==='ANSWER'&&m.payload){pc.setRemoteDescription(m.payload.sdp).then(()=>{ready=true;q.forEach(c=>pc.addIceCandidate(c).catch(()=>{}));q=[]}).catch(()=>{})}
+  const sig=mpSigOpen62(gid,code,m=>{if(m.src!==hostId)return;if(m.type==='ANSWER'&&m.payload){pc.setRemoteDescription(m.payload.sdp).then(()=>{ready=true;q.forEach(c=>pc.addIceCandidate(c).catch(()=>{}));q=[]}).catch(()=>{})}
       else if(m.type==='CANDIDATE'&&m.payload&&m.payload.candidate){if(ready)pc.addIceCandidate(m.payload.candidate).catch(()=>{});else q.push(m.payload.candidate)}
       else if(m.type==='EXPIRE'||m.type==='LEAVE'){if(!opened)fail('Raum '+code+' nicht gefunden. Ist der Raum beim Spielleiter offen?')}},
-    async()=>{try{const off=await pc.createOffer();await pc.setLocalDescription(off);sig.send('OFFER',hostId,{sdp:pc.localDescription,kind:'pma62',type:'data',connectionId:gid})}catch(e){fail('Verbindung ging nicht: '+e.message)}},
+    async()=>{try{const off=await pc.createOffer();await pc.setLocalDescription(off);await mpGathered62(pc);if(opened)return;sig.send('OFFER',hostId,{sdp:pc.localDescription,kind:'pma62',type:'data',connectionId:gid});mpWait62('Anfrage an Raum '+code+' geschickt. Warte auf den Spielleiter …')}catch(e){fail('Verbindung ging nicht: '+e.message)}},
     err=>{if(!opened&&err!=='CLOSED')fail(err==='ID-TAKEN'?'Bitte nochmal versuchen.':'Vermittlung nicht erreichbar ('+err+').')});
-  pc.onicecandidate=e=>{if(e.candidate)sig.send('CANDIDATE',hostId,{candidate:e.candidate,kind:'pma62',connectionId:gid})};
-  const tm=setTimeout(()=>{if(!opened)fail('Keine Verbindung zu Raum '+code+'. Ist der Raum offen? (Manche Netze blockieren direkte Verbindungen.)')},20000);
+  const tm=setTimeout(()=>{if(!opened)fail(ready?'Der Spielleiter hat geantwortet, aber die direkte Verbindung kam nicht zustande (manche Netze blockieren das).':'Keine Antwort aus Raum '+code+'. Ist der Raum beim Spielleiter offen und der Code richtig?')},20000);
   function fail(t){if(opened)return;opened=true;clearTimeout(tm);try{sig.close()}catch(e){}try{pc.close()}catch(e){}G62.tries++;const again=(G62.tries<6||G62.ever)&&!G62.closed;mpWait62(t+(again?' Neuer Versuch …':''),true);if(again)setTimeout(mpGuestConnect62,Math.min(10000,2500+800*G62.tries))}
   C.onopen=()=>{opened=true;clearTimeout(tm);setTimeout(()=>{try{sig.close()}catch(e){}},3000);ok()};
   pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState)&&G62.conn===C)C.onclose()}}
