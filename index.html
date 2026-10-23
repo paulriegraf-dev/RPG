@@ -382,7 +382,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
   <header>
 <meta name="robots" content="noindex,nofollow">
     <h1>Pauls Mini-Adventure <span>Prototyp 62 · Pauluso-Tanien</span></h1>
-    <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="55" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
+    <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
       <button data-mode="both" aria-pressed="true">Beide</button>
@@ -561,7 +561,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
       </nav>
       <div class="smenu" id="startOpts" hidden>
         <button type="button" class="opt" id="oMusic">Musik: aus</button><span id="oMusicNote" style="font-size:18px;color:#c8c0d0"></span>
-        <div class="orow"><span>Lautstärke</span><input type="range" id="oVol" min="0" max="100" value="55" aria-label="Lautstärke"></div>
+        <div class="orow"><span>Lautstärke</span><input type="range" id="oVol" min="0" max="100" value="35" aria-label="Lautstärke"></div>
         <button type="button" class="opt" id="oTD">Poke-Perspektive: aus</button>
         <div class="orow"><span>Ansicht</span><div class="seg"><button type="button" data-omode="player">Spieler</button><button type="button" data-omode="both">Beide</button><button type="button" data-omode="dm">Spielleiter</button></div></div>
         <button type="button" class="opt" id="oBack">← Zurück</button>
@@ -1394,7 +1394,7 @@ function vagueSeek(w){
 // ================= music =================
 // Slots: kampf (Kampf), erkunden (draußen / Wald / Erkundung), nacht (Nacht & Lagerfeuer), standard (sonst, z. B. in Gebäuden)
 const MUSIC={kampf:{src:'musik/kampf.mp3',label:'Kampf'},erkunden:{src:'musik/erkunden.mp3',label:'Erkundung'},nacht:{src:'musik/nacht.mp3',label:'Nacht & Lagerfeuer'},standard:{src:'musik/standard.mp3',label:'Standard'}};
-let musicOn=false,musicCur=null,musicVol=.55;const AUD={};
+let musicOn=false,musicCur=null,musicVol=.35;const AUD={};
 function musicSlot(){if(enemy&&!enemy.dead&&!enemy.fade)return'kampf';if(S.flags.night||S.camps[S.scene]!=null)return'nacht';if(isOutdoor()||(S.places[S.scene]&&S.places[S.scene].biome==='cave'))return'erkunden';return'standard'}
 function musicMsg(t2){const m=$('musicNow');if(m)m.textContent=t2;const o=$('oMusicNote');if(o)o.textContent=t2}
 function aud(k){if(!AUD[k]){const a=new Audio(MUSIC[k].src);a.loop=true;a.volume=0;a.preload='auto';a.addEventListener('playing',()=>{if(musicCur===k)musicMsg('♪ '+MUSIC[k].label+' ▶')});a.addEventListener('waiting',()=>{if(musicCur===k)musicMsg('♪ '+MUSIC[k].label+' · lädt …')});a.addEventListener('error',()=>{musicMsg('Musik fehlt: '+MUSIC[k].src+' (Fehler '+(a.error?a.error.code:'?')+')');if(!musicErrSaid){musicErrSaid=true;say('Die Musikdatei „'+MUSIC[k].src+'“ wurde nicht gefunden. Der Ordner „musik“ muss neben der Spieldatei liegen.','sys')}});AUD[k]=a}return AUD[k]}
@@ -22055,8 +22055,9 @@ function mpGuestLeave62(){G62.closed=true;try{G62.conn&&G62.conn.close()}catch(e
 function mpGuestInit62(){document.body.classList.add('gast62');setInterval(()=>{const C=G62.conn;if(C&&G62.seen&&Date.now()-G62.seen>9000){G62.seen=0;try{C.close()}catch(e){}C.onclose&&C.onclose()}},2000);try{$('startScr').hidden=true;$('pickScr').hidden=true;const p=$('path58');if(p)p.hidden=true}catch(e){}
   try{if(typeof musicOn!=='undefined'&&musicOn){musicOn=false;if(typeof updateMusic==='function')updateMusic()}}catch(e){}
   let bar=$('mp62bar');if(!bar){bar=document.createElement('div');bar.id='mp62bar';document.body.appendChild(bar)}
-  bar.innerHTML='<span class="mp62me" id="mp62me"></span><span class="mp62dran" id="mp62dran"></span><button type="button" id="mp62turn">Ich bin dran</button><button type="button" id="mp62card">Mein Held</button><button type="button" id="mp62map">Karte</button><button type="button" id="mp62mus">♪</button><form id="mp62chat" autocomplete="off"><input id="mp62chatIn" maxlength="300" placeholder="An alle / an den Spielleiter …"><button type="submit">Senden</button></form><span class="mp62note" id="mp62note"></span>';
+  bar.innerHTML='<span class="mp62me" id="mp62me"></span><span class="mp62dran" id="mp62dran"></span><button type="button" id="mp62turn">Ich bin dran</button><button type="button" id="mp62card">Mein Held</button><button type="button" id="mp62map">Karte</button><button type="button" id="mp62mus">♪</button><input type="range" id="mp62vol" min="0" max="100" aria-label="Lautstärke" title="Lautstärke"><form id="mp62chat" autocomplete="off"><input id="mp62chatIn" maxlength="300" placeholder="An alle / an den Spielleiter …"><button type="submit">Senden</button></form><span class="mp62note" id="mp62note"></span>';
   $('mp62turn').onclick=()=>G62.conn&&G62.conn.send({t:'turn'});$('mp62map').onclick=()=>G62.conn&&G62.conn.send({t:'map'});$('mp62card').onclick=mpCard62;
+  {const v=$('mp62vol');v.value=String(Math.round(musicVol*100));v.oninput=()=>{musicVol=(+v.value||0)/100;mpLS62('pma_vol62',v.value);if(G62.audio)G62.audio.volume=musicVol}}
   $('mp62mus').onclick=()=>{G62.musicOn=!G62.musicOn;$('mp62mus').classList.toggle('off',!G62.musicOn);mpMusic62(G62.musicSrc,true)};
   $('mp62chat').onsubmit=e=>{e.preventDefault();const v=$('mp62chatIn').value.trim();if(v&&G62.conn)G62.conn.send({t:'chat',text:v});$('mp62chatIn').value=''};
   // Alle Klicks im gespiegelten Bereich gehen an den Wirt
@@ -22111,13 +22112,16 @@ function mpCard62(refresh){let d=$('mp62cardOv');if(!d){d=document.createElement
   d.innerHTML='<div class="mp62box">'+(h?'<h2>'+mpEsc62(h.name)+' <small>'+mpEsc62(h.cls||'')+(h.typ?' · '+mpEsc62(h.typ):'')+'</small></h2><p>Leben '+h.hp+'/'+h.max+(h.gmax?' · Geist '+(h.geist||0)+'/'+h.gmax:'')+'</p>'+(h.tech&&h.tech.length?'<p><b>Techniken:</b> '+h.tech.map(mpEsc62).join(', ')+'</p>':'')+(h.inv&&h.inv.length?'<p><b>Dabei:</b> '+h.inv.map(mpEsc62).join(', ')+'</p>':'<p>Keine Gegenstände.</p>'):'<p>Du hast noch keinen Helden.</p>')+'<div class="mp62row"><button type="button" class="pxbtn" id="mp62cardX">Schließen</button></div></div>';
   $('mp62cardX').onclick=()=>{d.hidden=true}}
 function mpMusic62(src,force){G62.musicSrc=src||'';if(!G62.musicOn||!src){if(G62.audio)G62.audio.pause();return}if(G62.audio&&G62.audio.dataset.src===src&&!force){if(G62.audio.paused)G62.audio.play().catch(()=>{});return}
-  try{if(G62.audio)G62.audio.pause();const a=new Audio(src);a.loop=true;a.volume=.45;a.dataset.src=src;G62.audio=a;a.play().catch(()=>{})}catch(e){}}
+  try{if(G62.audio)G62.audio.pause();const a=new Audio(src);a.loop=true;a.volume=Math.max(0,Math.min(1,musicVol));a.dataset.src=src;G62.audio=a;a.play().catch(()=>{})}catch(e){}}
 
 // ---------- 4. Einstieg: „Mitspielen“ im Startmenü, Link mit #raum=CODE ----------
 function mpStartBtn62(){const m=$('startMenu');if(!m||$('mMit62'))return;const b=document.createElement('button');b.type='button';b.id='mMit62';b.className=($('mLoad')&&$('mLoad').className)||'';b.textContent='Mitspielen (Raum-Code)';b.onclick=()=>mpGuestDlg62((location.hash.match(/raum=([A-Za-z0-9]{5})/)||[])[1]||'');
   const o=$('mOpt');if(o&&o.parentElement===m)m.insertBefore(b,o);else m.appendChild(b)}
 {const _ss62=showStart;showStart=function(){const r=_ss62.apply(this,arguments);try{mpStartBtn62();mpRaumBtn62();mpLobby62()}catch(e){}return r}}
 setTimeout(()=>{try{mpStartBtn62();mpRaumBtn62();const c=(location.hash.match(/raum=([A-Za-z0-9]{5})/)||[])[1];if(c)mpGuestDlg62(c.toUpperCase());else if(mpLS62('pma62_open')==='1'&&!MP62.role)mpHostOpen62()}catch(e){console.warn('p62',e)}},600);
+// Nachbesserung 23.10. (23:20): Die Musik ist am Anfang leiser (35 statt 55); die eingestellte Lautstärke merkt sich der Browser.
+try{const v=mpLS62('pma_vol62');if(v!=null&&v!==''&&!isNaN(+v)){musicVol=Math.max(0,Math.min(1,+v/100));['musicVol','oVol'].forEach(i=>{const e=$(i);if(e)e.value=String(+v)})}
+  $('musicVol').addEventListener('input',e=>mpLS62('pma_vol62',String(e.target.value)))}catch(e){}
 window.addEventListener('beforeunload',()=>{try{if(MP62.role==='wirt')mpGuestsOn62().forEach(G=>G.conn.send({t:'note',text:'Der Spielleiter lädt die Seite neu …'}))}catch(e){}});
 try{const st=document.createElement('style');st.textContent=`
 .mp62sl{border:1px solid var(--line,#555);padding:8px;margin:6px 0 10px;border-radius:6px}.mp62sl h2{margin:0 0 6px}
@@ -22130,7 +22134,7 @@ try{const st=document.createElement('style');st.textContent=`
 .mp62box label{display:flex;flex-direction:column;gap:4px;margin:8px 0}.mp62box input{font-size:16px;padding:6px}.mp62row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .mp62err{color:#f08a7a}.mp62heroes{display:flex;flex-direction:column;gap:6px}.mp62heroes .taken{opacity:.5}
 #mp62bar{position:fixed;left:0;right:0;bottom:0;z-index:8000;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 10px;background:rgba(20,16,28,.96);border-top:2px solid var(--line,#555);font-size:13px;color:#eee}
-#mp62bar button{font:inherit;padding:3px 8px;cursor:pointer}#mp62bar button[hidden]{display:none}#mp62bar .off{opacity:.45}#mp62bar form{display:flex;gap:4px;flex:1;min-width:200px}#mp62bar input{flex:1;min-width:0;font:inherit;padding:3px 6px}
+#mp62bar button{font:inherit;padding:3px 8px;cursor:pointer}#mp62vol{width:70px;accent-color:#e8b04a}#mp62bar button[hidden]{display:none}#mp62bar .off{opacity:.45}#mp62bar form{display:flex;gap:4px;flex:1;min-width:200px}#mp62bar input{flex:1;min-width:0;font:inherit;padding:3px 6px}
 .mp62me{font-weight:bold}.mp62dran.du{color:#1d1a24;background:#8fcf8a;padding:2px 8px;border-radius:4px;font-weight:bold}.mp62note{color:#f0c87a}
 body.gast62{padding-bottom:58px}body.gast62 .dmwin,body.gast62 #dmWin{display:none!important}body.gast62 #musicBtn,body.gast62 #musicVol,body.gast62 #musicNow,body.gast62 #tdBtn,body.gast62 .mode,body.gast62 #menuBtn,body.gast62 #saveBtn,body.gast62 #worldBtn,body.gast62 #mapBtn,body.gast62 .draghint{display:none!important}
 body.gast62:not(.mp62du) .lower .actions{opacity:.55}
