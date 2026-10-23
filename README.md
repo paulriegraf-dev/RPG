@@ -2,6 +2,8 @@
 
 Ein textbasiertes Pixel-Rollenspiel und Spielleiter-Werkzeug in der Welt **Pauluso-Tanien**. Es läuft komplett im Browser – nichts installieren.
 
+**▶ Spielen:** https://paulriegraf-dev.github.io/RPG/
+
 ## Gemeinsam spielen (1 Spielleiter + 1–4 Spieler)
 
 **Spielleiter**
