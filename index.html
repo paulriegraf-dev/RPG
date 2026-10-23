@@ -21910,6 +21910,7 @@ function mpHostMsg62(G,m){
   if(m.t==='map'){if(!mpCan62(G))return mpNo62(G);const b=document.getElementById('mapBtn');if(b)b.click();return}
   if(m.t==='cmd'){const tx=String(m.text||'').replace(/\s+/g,' ').trim().slice(0,300);if(!tx)return;
     if(!mpCan62(G)){say('💬 '+G.name+': '+tx,'sys');return}const inp=$('cmd'),f=$('form');if(!inp||!f)return;inp.value=tx;try{f.requestSubmit?f.requestSubmit():f.dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}))}catch(e){}return}
+  if(m.root==='ov:pickScr'&&(m.t==='click'||m.t==='change')){const el=mpResolve62(m),card=el&&el.closest('#pickGrid .hc');if(!card||GAME_STARTED||m.t!=='click')return G.conn.send({t:'note',text:'Hier wählst du nur deinen Helden: Klick auf eine Karte.'});mpPickFor62(G,card);return}
   if(m.t==='click'||m.t==='change'){const el=mpResolve62(m);if(!el)return G.conn.send({t:'note',text:'Das hat sich gerade geändert. Bitte nochmal.'}),mpPush62(true);
     if(el.closest('.dmonly,[data-dm],.tdm,.b53dm,#dmWin,.mp62host'))return;
     if(m.t==='click'&&m.text!=null&&mpNorm62(el.textContent)!==m.text)return G.conn.send({t:'note',text:'Das hat sich gerade geändert. Bitte nochmal.'}),mpPush62(true);
@@ -21938,24 +21939,26 @@ function mpResolve62(m){let el;if(m.root==='log'){el=$('log')&&$('log').querySel
 const PRIV62={vier31:()=>{try{const V=S.vier31;if(!V)return'';const h=hBy31(V.order[V.i]);return h?h.name:''}catch(e){return''}}};
 function mpPrivHtml62(id,name){return'<div id="'+id+'" role="dialog" class="mp62priv"><div class="box"><h2>Unter vier Augen</h2><p>'+mpEsc62(name||'Jemand')+' spricht gerade unter vier Augen. Ihr dreht euch um – Ehrensache.</p></div></div>'}
 // Was die Gäste sehen: Spieler-Bereich und offene Spieler-Fenster
-const MPOVNO62=new Set(['worldDlg','startScr','pickScr','path58','saveDlg','bg29Dlg','mp62dlg','mp62bar','mp62wait']);
+const MPOVNO62=new Set(['worldDlg','startScr','pickScr','path58','saveDlg','bg29Dlg','mp62dlg','mp62bar','mp62wait','mp62lobby','mp62pick','mp62cardOv']);
 function mpOvList62(){return[...document.body.children].filter(el=>el.id&&!MPOVNO62.has(el.id)&&!el.classList.contains('app')&&!el.classList.contains('dmonly')&&!el.hidden&&el.tagName!=='SCRIPT'&&el.tagName!=='STYLE'&&getComputedStyle(el).display!=='none')}
-function mpSer62(root,outer){const cl=root.cloneNode(true),a=root.querySelectorAll('canvas'),b=cl.querySelectorAll('canvas');
+function mpSer62(root,outer,hide){const cl=root.cloneNode(true),a=root.querySelectorAll('canvas'),b=cl.querySelectorAll('canvas');
   a.forEach((c,i)=>{const d=b[i];if(!d)return;if(c.width*c.height>=3000){let k=MP62.cvKeys.get(c);if(!k){k='c'+(++MP62.cvN);MP62.cvKeys.set(c,k)}MP62.cvs.set(k,c);d.setAttribute('data-m62cv',k)}
     else{const im=document.createElement('img');try{im.src=c.width&&c.height?c.toDataURL():''}catch(e){}im.className=c.className;if(c.getAttribute('style'))im.setAttribute('style',c.getAttribute('style'));im.width=c.width;im.height=c.height;im.style.imageRendering='pixelated';d.replaceWith(im)}});
   const ia=root.querySelectorAll('input,select,textarea'),ib=cl.querySelectorAll('input,select,textarea');ia.forEach((x,i)=>{const y=ib[i];if(!y)return;if(x.type==='checkbox'||x.type==='radio'){if(x.checked)y.setAttribute('checked','');else y.removeAttribute('checked')}else if(x.tagName==='SELECT'){[...y.options].forEach((o,j)=>{if(j===x.selectedIndex)o.setAttribute('selected','');else o.removeAttribute('selected')})}else y.setAttribute('value',x.value)});
-  cl.querySelectorAll('.mp62host').forEach(e=>e.remove());cl.querySelectorAll('.dmonly,[data-dm],.tdm,.b53dm').forEach(e=>e.setAttribute('style','display:none'));return outer?cl.outerHTML:cl.innerHTML}
+  cl.querySelectorAll('.mp62host').forEach(e=>e.remove());cl.querySelectorAll('.dmonly,[data-dm],.tdm,.b53dm'+(hide?','+hide:'')).forEach(e=>e.setAttribute('style','display:none'));return outer?cl.outerHTML:cl.innerHTML}
 function mpHeroes62(){return(PARTY||[]).map(h=>({name:h.name,cls:h.cls,owner:(mpOwner62(h.name)||{}).name||null,ko:h.hp<=0}))}
 function mpMe62(G){const h=PARTY.find(x=>x.name===G.hero);if(!h)return null;let tech=[];try{tech=(h.tech||[]).map(t=>t.n||(typeof TECH27!=='undefined'&&TECH27[t.id]&&TECH27[t.id].n)||t.id).filter(Boolean)}catch(e){}
   let inv=[];try{inv=(h.inv||[]).map(it=>it&&(it.name||it.n)).filter(Boolean)}catch(e){}
   return{name:h.name,cls:h.cls,typ:h.typ||'',hp:Math.max(0,h.hp),max:h.max,geist:h.geist,gmax:h.gmax,lvl:h.lvl||h.level||null,tech,inv:inv.slice(0,30)}}
 function mpPush62(force){const gs=mpGuestsOn62();if(!gs.length)return;
-  if(typeof GAME_STARTED==='undefined'||!GAME_STARTED||!PARTY||!PARTY.length){gs.forEach(G=>{if(G.last.wait!==1||force){G.last={wait:1};G.conn.send({t:'wait',heroes:[]})}});return}
+  const started=typeof GAME_STARTED!=='undefined'&&GAME_STARTED&&PARTY&&PARTY.length;
+  if(started)gs.forEach(G=>{if(!G.hero&&G.pickId){const h=PARTY.find(x=>x.heroId===G.pickId);if(h&&!mpOwner62(h.name)){G.hero=h.name;try{say(G.name+' spielt '+h.name+'.','sys')}catch(e){}mpUI62()}}if(G.hero){G.pickId=null;G.pickAdded=false}});
+  if(!started||($('path58')&&!$('path58').hidden)){mpPre62(gs,force);return}
   let V;try{MP62.cvs.clear();V={body:document.body.className,stage:mpSer62(document.querySelector('.stage')),actions:mpSer62(document.querySelector('.lower .actions')),narr:$('narrSlot')?mpSer62($('narrSlot')):'',
     ovs:mpOvList62().map(el=>({id:el.id,html:mpSer62(el,true)})),heroes:JSON.stringify(mpHeroes62()),actor:mpActor62(),fight:mpFight62(),music:(typeof musicCur!=='undefined'&&musicCur&&typeof MUSIC!=='undefined'&&MUSIC[musicCur])?MUSIC[musicCur].src:''}}catch(e){console.warn('p62',e);return}
   // Log mit laufenden Nummern
   const lg=$('log');if(lg)[...lg.children].forEach(c=>{if(!c.dataset.m62)c.dataset.m62=String(++MP62.seq)});
-  gs.forEach(G=>{const L=G.last,o={t:'view'};if(L.wait){G.last={};}
+  gs.forEach(G=>{const L=G.last,o={t:'view'};if(L.wait||L.pre){G.last={};}
     ['body','stage','actions','narr','heroes','actor','fight','music'].forEach(k=>{if(force||G.last[k]!==V[k]){o[k]=V[k];G.last[k]=V[k]}});
     const ovs={};V.ovs.forEach(x=>{let h=x.html;if(PRIV62[x.id]&&!MP62.free){const own=PRIV62[x.id]();if(own!==G.hero)h=mpPrivHtml62(x.id,own)}ovs[x.id]=h});const prev=G.last.ovs||{};const ch={};let any=false;Object.keys(ovs).forEach(id=>{if(force||prev[id]!==ovs[id]){ch[id]=ovs[id];any=true}});Object.keys(prev).forEach(id=>{if(!(id in ovs)){ch[id]=null;any=true}});if(any){o.ovs=ch;G.last.ovs=ovs}
     const me=JSON.stringify(mpMe62(G));if(force||G.last.me!==me){o.me=me;G.last.me=me}
@@ -21965,6 +21968,32 @@ function mpPush62(force){const gs=mpGuestsOn62();if(!gs.length)return;
       if(!G.logSeq||!has||force){add=kids.slice(-80);G.conn.send({t:'log',reset:1,add:add.map(c=>({s:+c.dataset.m62,h:mpSer62(c,true)}))})}
       else{add=kids.filter(c=>+c.dataset.m62>G.logSeq);if(add.length)G.conn.send({t:'log',add:add.map(c=>({s:+c.dataset.m62,h:mpSer62(c,true)}))})}
       if(kids.length)G.logSeq=+kids[kids.length-1].dataset.m62}})}
+// ---------- Lobby vor der Heldenauswahl (Nachbesserung, Paul 23.10. abends: „bevor man überhaupt die Helden auswählt“) ----------
+function mpHname62(id){try{return pickNames[id]||hdata(id).name}catch(e){return String(id)}}
+function mpLobbyList62(){return[...MP62.guests.values()].filter(G=>G.token).map(G=>({n:G.name,on:G.on,h:G.hero||(G.pickId?mpHname62(G.pickId):null)}))}
+function mpPre62(gs,force){const ps=$('pickScr'),weg=!!($('path58')&&!$('path58').hidden),pick=!weg&&!!(ps&&!ps.hidden),lob=JSON.stringify(mpLobbyList62());let html=null;
+  if(pick){try{MP62.cvs.clear();html=mpSer62(ps,true,'#pickReady,#pickRand,#pickBack,#pickToggle,#pickNameRow,#pickFil')}catch(e){console.warn('p62',e)}}
+  const phase=weg?'weg':pick?'pick':'start';
+  gs.forEach(G=>{const L=G.last;if(!L.pre){G.last={};}const K=G.last;if(!force&&K.pre===phase&&K.lob===lob&&K.pid===G.pickId&&K.hero===G.hero&&(!pick||K.pickHtml===html))return;K.hero=G.hero;
+    K.pre=phase;K.lob=lob;K.pid=G.pickId;const o={t:'pre',phase,lobby:lob,mine:G.pickId?mpHname62(G.pickId):(G.hero||null)};if(pick&&(force||K.pickHtml!==html)){o.html=html;K.pickHtml=html}G.conn.send(o)})}
+function mpPickFor62(G,card){const cards=[...$('pickGrid').querySelectorAll('.hc')],i=cards.indexOf(card),ids=HERODATA.filter(h=>pickFilter==='alle'||h.grp===pickFilter).map(h=>h.id),id=card.dataset.id||ids[i];if(!id)return;
+  const rel=()=>{if(G.pickId&&G.pickAdded)pickList=pickList.filter(x=>x!==G.pickId);G.pickId=null;G.pickAdded=false};
+  if(G.pickId===id){rel();renderPick();return}
+  const other=[...MP62.guests.values()].find(o=>o!==G&&o.pickId===id);if(other)return G.conn.send({t:'note',text:mpHname62(id)+' hat schon '+other.name+' gewählt.'});
+  if(!pickList.includes(id)&&pickList.length>=6&&!(G.pickId&&G.pickAdded))return G.conn.send({t:'note',text:'Die Gruppe ist voll (6 Helden).'});
+  rel();if(!pickList.includes(id)){pickList.push(id);G.pickAdded=true}G.pickId=id;renderPick()}
+{const _rp62=renderPick;renderPick=function(){const r=_rp62.apply(this,arguments);try{if(MP62.role==='wirt'){const gs=[...MP62.guests.values()];gs.forEach(G=>{if(G.pickId&&!pickList.includes(G.pickId)){G.pickId=null;G.pickAdded=false}});
+    const ids=HERODATA.filter(h=>pickFilter==='alle'||h.grp===pickFilter).map(h=>h.id);[...$('pickGrid').querySelectorAll('.hc')].forEach((c,i)=>{const id=c.dataset.id||ids[i],G=gs.find(o=>o.pickId===id);if(G){const e=document.createElement('em');e.className='mp62who mp62pk';e.textContent=G.name;c.appendChild(e)}});
+    const rows=[...$('pickParty').children];pickList.forEach((id,k)=>{const G=gs.find(o=>o.pickId===id);if(G&&rows[k]){const e=document.createElement('em');e.className='mp62who';e.textContent='Spieler: '+G.name;(rows[k].querySelector('.pn')||rows[k]).appendChild(e)}});mpLobby62()}}catch(e){console.warn('p62',e)}return r}}
+// Kasten für den Spielleiter auf Start, Heldenauswahl und Wegwahl
+function mpLobby62(){let b=$('mp62lobby');const show=MP62.role==='wirt'&&!(typeof GAME_STARTED!=='undefined'&&GAME_STARTED);if(!show){if(b)b.hidden=true;return}
+  if(!b){b=document.createElement('div');b.id='mp62lobby';document.body.appendChild(b)}b.hidden=false;const L=mpLobbyList62(),sig=JSON.stringify([MP62.code,MP62.state,L]);if(b.dataset.sig===sig)return;b.dataset.sig=sig;
+  const st={verbinde:'verbinde …',offen:'offen',getrennt:'Vermittlung getrennt – verbinde neu …',belegt:'gleich offen …'}[MP62.state]||MP62.state||'';
+  b.innerHTML='<div class="mp62lt">Gemeinsam spielen · Raum <b>'+mpEsc62(MP62.code)+'</b> · '+mpEsc62(st)+'</div>'+(location.protocol==='file:'?'':'<button type="button" id="mp62lcopy">Link kopieren</button> ')+'<button type="button" id="mp62lclose">Raum schließen</button>'
+    +'<div class="mp62ll">'+(L.length?L.map(x=>'<div><span class="'+(x.on?'on':'off')+'">●</span> '+mpEsc62(x.n)+(x.h?' – '+mpEsc62(x.h):' – wählt noch')+'</div>').join(''):'Noch niemand da. Mitspieler öffnen den Link oder „Mitspielen“ mit dem Code.')+'</div><small>Jeder Mitspieler wählt seinen Helden selbst in der Heldenauswahl.</small>';
+  const cp=$('mp62lcopy');if(cp)cp.onclick=()=>{const v=mpLink62();try{navigator.clipboard.writeText(v);cp.textContent='Kopiert'}catch(e){prompt('Link:',v)}};$('mp62lclose').onclick=()=>mpHostClose62()}
+function mpRaumBtn62(){const m=$('startMenu');if(!m||$('mRaum62'))return;const b=document.createElement('button');b.type='button';b.id='mRaum62';b.className=($('mLoad')&&$('mLoad').className)||'';b.textContent='Gemeinsam spielen (Raum öffnen)';
+  b.onclick=()=>{if(MP62.role!=='wirt')mpHostOpen62();mpLobby62()};const o=$('mMit62')||$('mOpt');if(o&&o.parentElement===m)m.insertBefore(b,o);else m.appendChild(b)}
 function mpFrames62(){const gs=mpGuestsOn62();if(!gs.length)return;
   MP62.cvs.forEach((cv,key)=>{if(MP62.busyKeys.has(key)||!cv.isConnected||cv.offsetParent===null)return;MP62.busyKeys.add(key);
     try{cv.toBlob(b=>{if(!b){MP62.busyKeys.delete(key);return}b.arrayBuffer().then(buf=>{MP62.busyKeys.delete(key);const kb=new TextEncoder().encode(key),out=new Uint8Array(2+kb.length+buf.byteLength);out[0]=kb.length;out[1]=1;out.set(kb,2);out.set(new Uint8Array(buf),2+kb.length);mpGuestsOn62().forEach(G=>G.conn.sendBin(out.buffer))})},'image/webp',0.92)}catch(e){MP62.busyKeys.delete(key)}})}
@@ -21974,7 +22003,7 @@ function mpHostClose62(){MP62.closing=true;mpGuestsOn62().forEach(G=>{try{G.conn
   clearInterval(MP62.tick);clearInterval(MP62.ftick);clearInterval(MP62.ptick);mpLS62('pma62_open',null);MP62.role=null;MP62.state=null;MP62.guests.clear();mpUI62();try{renderAll()}catch(e){}}
 // Spielleiter-Kasten
 function mpLink62(){const u=location.href.split('#')[0];return u+'#raum='+MP62.code}
-function mpUI62(){if(MP62.role==='gast')return;const pane=$('tab-req');if(!pane)return;let box=$('mp62SL');
+function mpUI62(){if(MP62.role==='gast')return;try{mpLobby62()}catch(e){}const pane=$('tab-req');if(!pane)return;let box=$('mp62SL');
   const sigUI=[MP62.role,MP62.state,MP62.code,MP62.free,MP62.fps,(PARTY||[]).map(h=>h.name).join(','),[...MP62.guests.values()].map(G=>G.name+G.on+G.hero).join('|')].join('#');if(box&&box.dataset.sig===sigUI&&box.isConnected)return;
   if(!box){box=document.createElement('div');box.id='mp62SL';box.className='mp62sl';pane.insertBefore(box,pane.children[1]||null)}
   if(MP62.role!=='wirt'){box.innerHTML='<h2>Gemeinsam spielen</h2><p class="small">1–4 Mitspieler steuern im eigenen Fenster je einen Helden. Du bleibst Spielleiter, das Spiel läuft hier.</p><button type="button" class="dbtn" id="mp62open">Raum öffnen</button>';
@@ -22050,10 +22079,15 @@ function mpGuestInit62(){document.body.classList.add('gast62');setInterval(()=>{
 function mpGuestMsg62(m){G62.seen=Date.now();if(m.t==='ping'){G62.conn&&G62.conn.send({t:'pong'});return}
   if(m.t==='hello'){G62.hero=m.hero||null;mpWait62(null);mpBar62();return}
   if(m.t==='wait'){mpWait62('Verbunden. Der Spielleiter wählt gerade die Gruppe – gleich geht es los.');return}
+  if(m.t==='pre'){G62.pre=m.phase;let L=[];try{L=JSON.parse(m.lobby||'[]')}catch(e){}G62.lobby=L;G62.mine=m.mine||null;const who=L.map(x=>x.n+(x.h?' ('+x.h+')':'')+(x.on?'':' – weg')).join(', ');
+    if(m.phase==='pick'){mpWait62(null);if(m.html!=null){let el=$('pickScr');if(el&&el.parentElement!==document.body)el=null;const sg=$('pickGrid'),st=sg?sg.scrollTop:0;if(el)el.outerHTML=m.html;else document.body.insertAdjacentHTML('beforeend',m.html);const ng=$('pickGrid');if(ng)ng.scrollTop=st;G62.ovs.add('pickScr')}
+      const ps=$('pickScr');if(ps)ps.hidden=false;try{scaleArt()}catch(e){}mpNote62(m.mine?'Du spielst '+m.mine+'. Nochmal auf die Karte klicken gibt sie frei.':'Klick auf die Karte deines Helden. Die Gruppe stellt der Spielleiter zusammen.',true)}
+    else{const ps=$('pickScr');if(ps)ps.hidden=true;G62.ovs.delete('pickScr');mpNote62('',true);mpWait62((m.phase==='weg'?'Die Gruppe steht'+(m.mine?' – du spielst '+m.mine:'')+'. Der Spielleiter wählt den Weg, gleich geht es los.':'Verbunden mit Raum '+G62.code+'. Gleich beginnt die Heldenauswahl – dort wählst du deinen Helden.')+(who?' · Im Raum: '+who:''))}
+    mpBar62();return}
   if(m.t==='bye'){G62.closed=true;mpWait62(m.text||'Der Spielleiter hat den Raum geschlossen.',true);return}
-  if(m.t==='note'){const n=$('mp62note');if(n){n.textContent=m.text;clearTimeout(G62.nt);G62.nt=setTimeout(()=>{n.textContent=''},4000)}return}
+  if(m.t==='note'){mpNote62(m.text);return}
   if(m.t==='log'){const lg=$('log');if(!lg)return;if(m.reset)lg.innerHTML='';(m.add||[]).forEach(x=>{if(lg.querySelector('[data-m62="'+x.s+'"]'))return;lg.insertAdjacentHTML('beforeend',x.h)});while(lg.children.length>200)lg.firstElementChild.remove();lg.scrollTop=lg.scrollHeight;try{const st=lg.closest('.story');if(st)st.scrollTop=st.scrollHeight}catch(e){}return}
-  if(m.t==='view'){mpWait62(null);
+  if(m.t==='view'){mpWait62(null);if(G62.pre){G62.pre=null;const ps=$('pickScr');if(ps)ps.hidden=true;G62.ovs.delete('pickScr');mpNote62('',true)}
     if(m.body!=null){const keep=['gast62'];document.body.className=m.body.replace(/\bm-(dm|both)\b/g,'').trim()+' m-player '+keep.join(' ')}
     if(m.stage!=null){const s=document.querySelector('.stage');if(s)s.innerHTML=m.stage}
     if(m.actions!=null){const a=document.querySelector('.lower .actions');if(a)a.innerHTML=m.actions}
@@ -22065,7 +22099,8 @@ function mpGuestMsg62(m){G62.seen=Date.now();if(m.t==='ping'){G62.conn&&G62.conn
     if(m.music!=null)mpMusic62(m.music);mpBar62();return}}
 function mpGuestFrame62(buf){try{const u=new Uint8Array(buf),kl=u[0],key=new TextDecoder().decode(u.subarray(2,2+kl));const cv=document.querySelector('canvas[data-m62cv="'+key+'"]');if(!cv)return;
   createImageBitmap(new Blob([u.subarray(2+kl)],{type:'image/webp'})).then(bm=>{if(cv.width!==bm.width)cv.width=bm.width;if(cv.height!==bm.height)cv.height=bm.height;const x=cv.getContext('2d');x.imageSmoothingEnabled=false;x.clearRect(0,0,cv.width,cv.height);x.drawImage(bm,0,0);bm.close&&bm.close()}).catch(()=>{})}catch(e){}}
-function mpBar62(){const me=$('mp62me'),dr=$('mp62dran');if(!me)return;me.textContent=G62.name+(G62.hero?' · '+G62.hero:' · noch kein Held');
+function mpNote62(text,sticky){const n=$('mp62note');if(!n)return;if(sticky){G62.sticky=text||'';n.textContent=G62.sticky;return}n.textContent=text;clearTimeout(G62.nt);G62.nt=setTimeout(()=>{n.textContent=G62.sticky||''},4500)}
+function mpBar62(){const me=$('mp62me'),dr=$('mp62dran');if(!me)return;document.body.classList.toggle('mp62vor',!!G62.pre);if(G62.pre){me.textContent=G62.name+(G62.mine?' · '+G62.mine:' · wähle deinen Helden');dr.textContent='';dr.classList.remove('du');['mp62turn','mp62card','mp62map'].forEach(i=>{const e=$(i);if(e)e.hidden=true});return}['mp62card','mp62map'].forEach(i=>{const e=$(i);if(e)e.hidden=false});me.textContent=G62.name+(G62.hero?' · '+G62.hero:' · noch kein Held');
   const own=G62.heroes.find(h=>h.name===G62.actor);dr.textContent=G62.can?'Du bist dran!':(G62.actor?'Dran: '+G62.actor+(own&&own.owner?' ('+own.owner+')':' (Spielleiter)'):'');dr.classList.toggle('du',!!G62.can);
   document.body.classList.toggle('mp62du',!!G62.can);$('mp62turn').hidden=!G62.hero||G62.can||G62.fight;
   if(!G62.hero&&G62.heroes.length)mpPick62();else{const p=$('mp62pick');if(p)p.hidden=true}}
@@ -22081,8 +22116,8 @@ function mpMusic62(src,force){G62.musicSrc=src||'';if(!G62.musicOn||!src){if(G62
 // ---------- 4. Einstieg: „Mitspielen“ im Startmenü, Link mit #raum=CODE ----------
 function mpStartBtn62(){const m=$('startMenu');if(!m||$('mMit62'))return;const b=document.createElement('button');b.type='button';b.id='mMit62';b.className=($('mLoad')&&$('mLoad').className)||'';b.textContent='Mitspielen (Raum-Code)';b.onclick=()=>mpGuestDlg62((location.hash.match(/raum=([A-Za-z0-9]{5})/)||[])[1]||'');
   const o=$('mOpt');if(o&&o.parentElement===m)m.insertBefore(b,o);else m.appendChild(b)}
-{const _ss62=showStart;showStart=function(){const r=_ss62.apply(this,arguments);try{mpStartBtn62()}catch(e){}return r}}
-setTimeout(()=>{try{mpStartBtn62();const c=(location.hash.match(/raum=([A-Za-z0-9]{5})/)||[])[1];if(c)mpGuestDlg62(c.toUpperCase());else if(mpLS62('pma62_open')==='1'&&!MP62.role)mpHostOpen62()}catch(e){console.warn('p62',e)}},600);
+{const _ss62=showStart;showStart=function(){const r=_ss62.apply(this,arguments);try{mpStartBtn62();mpRaumBtn62();mpLobby62()}catch(e){}return r}}
+setTimeout(()=>{try{mpStartBtn62();mpRaumBtn62();const c=(location.hash.match(/raum=([A-Za-z0-9]{5})/)||[])[1];if(c)mpGuestDlg62(c.toUpperCase());else if(mpLS62('pma62_open')==='1'&&!MP62.role)mpHostOpen62()}catch(e){console.warn('p62',e)}},600);
 window.addEventListener('beforeunload',()=>{try{if(MP62.role==='wirt')mpGuestsOn62().forEach(G=>G.conn.send({t:'note',text:'Der Spielleiter lädt die Seite neu …'}))}catch(e){}});
 try{const st=document.createElement('style');st.textContent=`
 .mp62sl{border:1px solid var(--line,#555);padding:8px;margin:6px 0 10px;border-radius:6px}.mp62sl h2{margin:0 0 6px}
@@ -22099,6 +22134,9 @@ try{const st=document.createElement('style');st.textContent=`
 .mp62me{font-weight:bold}.mp62dran.du{color:#1d1a24;background:#8fcf8a;padding:2px 8px;border-radius:4px;font-weight:bold}.mp62note{color:#f0c87a}
 body.gast62{padding-bottom:58px}body.gast62 .dmwin,body.gast62 #dmWin{display:none!important}body.gast62 #musicBtn,body.gast62 #musicVol,body.gast62 #musicNow,body.gast62 #tdBtn,body.gast62 .mode,body.gast62 #menuBtn,body.gast62 #saveBtn,body.gast62 #worldBtn,body.gast62 #mapBtn,body.gast62 .draghint{display:none!important}
 body.gast62:not(.mp62du) .lower .actions{opacity:.55}
+#mp62lobby{position:fixed;top:10px;right:10px;z-index:9500;max-width:320px;background:rgba(20,16,28,.96);color:#eee;border:2px solid var(--line,#555);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.4}#mp62lobby[hidden]{display:none}#mp62lobby b{color:var(--gold,#e8c170);letter-spacing:.12em;font-size:15px}#mp62lobby button{font:inherit;padding:2px 8px;margin:4px 4px 4px 0;cursor:pointer}#mp62lobby .on{color:#8fcf8a}#mp62lobby .off{color:#d9625a}.mp62ll{margin:4px 0}
+.hc .mp62pk{position:absolute;left:2px;right:2px;bottom:2px;background:rgba(20,16,28,.85);font-size:11px;text-align:center;padding:1px 0}.hc{position:relative}
+body.gast62 #pickScr{z-index:7000}body.gast62 #pickGrid .hc{cursor:pointer}
 `;document.head.appendChild(st)}catch(e){}
 
 
