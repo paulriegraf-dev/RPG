@@ -16,11 +16,15 @@ Ein textbasiertes Pixel-Rollenspiel und Spielleiter-Werkzeug in der Welt **Paulu
 **Spieler**
 1. Den Link öffnen (oder die Seite öffnen → **Mitspielen (Raum-Code)**), Namen eingeben → **Beitreten**.
 2. In der Heldenauswahl auf die Karte deines Helden klicken (nochmal klicken gibt ihn frei).
-3. Unten in der Leiste steht, wer dran ist. Du klickst, wenn dein Held dran ist:
-   im Kampf nach der Reihenfolge, beim Erkunden über **Ich bin dran** oder dein Bild in der Gruppe.
-4. **Mein Held** zeigt Leben, Geist, Techniken und Gepäck. Das Feld unten schickt Nachrichten an alle.
-   Freitext unter dem Log geht ans Spiel, wenn du dran bist – sonst als Nachricht an alle.
-5. Würfeln: den Würfel anklicken (oder Leertaste).
+3. Beim Erkunden steuerst du deinen Helden jederzeit selbst („Frei unterwegs“): seine Knöpfe, Kapseln, Gespräche.
+   Laufen mit den Pfeiltasten oder WASD, dem Steuerkreuz ◀▲▼▶ in der Leiste oder einem Klick ins Bild.
+   Im Kampf handelst du, wenn dein Held an der Reihe ist („Du bist dran!“).
+4. **◧ Ansicht** wechselt nur für dich zwischen Seitenansicht und Draufsicht. **Karte** (oder Taste M) zeigt dir die Weltkarte;
+   reisen entscheidet ihr gemeinsam über den Spielleiter. Musik: ♪ an/aus und der Regler daneben.
+5. **Mein Held** zeigt Leben, Geist, Techniken und Gepäck. Das Feld unten schickt Nachrichten an alle.
+   Freitext unter dem Log geht als Eingabe deines Helden ans Spiel.
+6. Würfeln: den Würfel anklicken (oder Leertaste). Übungen bei Lehrmeistern (Noten, Takt …) laufen direkt bei dir.
+7. Etwas kaputt? **🐞** in der Leiste: kurz beschreiben und abschicken – der Bericht geht an den Spielleiter.
 
 **Gut zu wissen**
 - Das Spiel läuft im Browser des Spielleiters. Sein Fenster muss offen bleiben. Spielstände speichert nur er.
@@ -28,6 +32,7 @@ Ein textbasiertes Pixel-Rollenspiel und Spielleiter-Werkzeug in der Welt **Paulu
 - Die Browser verbinden sich direkt miteinander (WebRTC). Zum Finden dient der kostenlose Nachrichtendienst ntfy.sh (je Mitspieler nur zwei kurze Nachrichten).
 - Zum Ausprobieren an einem Rechner: die Seite zweimal öffnen und hinten `?lokal=1` anhängen.
 - Am gemeinsamen Bildschirm geht es wie immer ohne Raum.
+- Fehlerberichte: Der Spielleiter sammelt sie (🐞 oben) und legt sie mit „Auf GitHub“ als Issue in diesem Repository an.
 
 ## Auf eine Webseite legen
 

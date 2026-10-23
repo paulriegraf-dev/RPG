@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 62 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 63 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -22065,7 +22065,7 @@ function mpGuestInit62(){document.body.classList.add('gast62');setInterval(()=>{
     if((r=t.closest('.stage')))return{key:'stage',el:r};if((r=t.closest('.lower .actions')))return{key:'actions',el:r};if((r=t.closest('#narrSlot')))return{key:'narr',el:r};
     let o=t;while(o&&o.parentElement!==document.body)o=o.parentElement;if(o&&o.id&&G62.ovs.has(o.id))return{key:'ov:'+o.id,el:o};return null};
   const pathOf=(root,t)=>{const p=[];let e=t;while(e&&e!==root){const par=e.parentElement;if(!par)return null;p.unshift([...par.children].indexOf(e));e=par}return e===root?p:null};
-  const own=t=>t.closest&&t.closest('#mp62bar,.mp62dlg,.mobnav,#form');
+  const own=t=>t.closest&&t.closest('#mp62bar,.mp62dlg,.mobnav,#form,#mini31.mp63own,#mp63toast');
   window.addEventListener('click',e=>{if(!G62.on)return;const t=e.target;if(!t||!t.closest||own(t))return;const R=rootOf(t);e.preventDefault();e.stopImmediatePropagation();if(!R||!G62.conn)return;
     if(t.tagName==='CANVAS'&&t.dataset.m62cv){const r=t.getBoundingClientRect();G62.conn.send({t:'cv',key:t.dataset.m62cv,fx:(e.clientX-r.left)/r.width,fy:(e.clientY-r.top)/r.height});return}
     let tg=t.closest('button,a,label,[role=button],input,select,textarea,summary,[data-k],[tabindex]')||t;if(!R.el.contains(tg))tg=t;
@@ -22142,6 +22142,294 @@ body.gast62:not(.mp62du) .lower .actions{opacity:.55}
 .hc .mp62pk{position:absolute;left:2px;right:2px;bottom:2px;background:rgba(20,16,28,.85);font-size:11px;text-align:center;padding:1px 0}.hc{position:relative}
 body.gast62 #pickScr{z-index:7000}body.gast62 #pickGrid .hc{cursor:pointer}
 `;document.head.appendChild(st)}catch(e){}
+
+
+// ================= Prototyp 63 (m): Mehrspieler frei – jeder steuert seinen Helden, eigene Perspektive, eigene Karte, Fehler melden =================
+// Paul (24.10., 00:23): Der Mitspieler soll seinen Helden sofort frei lenken können, ohne dass der Spielleiter ihn hindert, wenn er
+// oben links z. B. Konrad wählt. Freie Perspektive, eigene Musik-Lautstärke, frei laufen, Kapseln öffnen, Gespräche, die Karte für
+// sich ansehen – und ein Werkzeug, mit dem man Fehler meldet.
+//  1. Jeder Gast bekommt die Knöpfe, Taschen und die Gruppe so, wie sie für SEINEN Helden aussehen (gerechnet beim Wirt mit
+//     `withHero`, danach werden die Knöpfe des Wirts unverändert zurückgelegt). Klickt er, wird sein Held beim Wirt still zum
+//     aktiven Helden (`setActive(i,true)`), dann wird der Klick ausgeführt. Im Kampf gilt weiter die Reihenfolge.
+//  2. Laufen: Pfeiltasten / WASD und ein Steuerkreuz in der Leiste. Mit Mitspielern laufen die Helden einzeln (`setSolo28`).
+//  3. Perspektive je Gast: Wer die andere Ansicht will, bekommt ein eigenes Bild (die Szene wird beim Wirt kurz in der anderen
+//     Ansicht gezeichnet, abgegriffen und sofort zurückgezeichnet – der Wirt sieht davon nichts).
+//  4. Karte für sich: Der Wirt zeichnet die Karte unsichtbar und schickt sie als Bild; beim Wirt geht nichts auf.
+//  5. Fehler melden (🐞): für alle. Gäste schicken an den Spielleiter; der Spielleiter speichert, kopiert oder meldet auf GitHub.
+
+// ---------- 1. Freie Steuerung ----------
+mpCan62=function(G){if(MP62.free)return true;if(!G||!G.hero)return false;if(mpFight62()){const a=mpActor62();return a===G.hero}const h=(PARTY||[]).find(x=>x.name===G.hero);return!!(h&&h.hp>0)};
+function mpIdx63(G){return G&&G.hero?(PARTY||[]).findIndex(h=>h.name===G.hero):-1}
+function mpTake63(G){if(mpFight62())return;const i=mpIdx63(G);if(i<0||PARTY[i]===hero||PARTY[i].hp<=0)return;setActive(i,true);try{renderAll()}catch(e){}}
+// Knöpfe/Taschen/Gruppe für den Helden des Gastes rechnen, ohne die Knöpfe des Wirts zu verlieren
+const MPROWS63=['clsRow','spontRow','genRow','learnRow','inv','heroCard'];
+function mpFor63(G){const i=mpIdx63(G);if(i<0||PARTY[i]===hero||mpFight62())return null;const keep=MPROWS63.map(id=>{const e=$(id);return e?[e,[...e.childNodes],e.className]:null});let out=null;
+  try{withHero(PARTY[i].slot,()=>{try{renderHero();renderInv();renderChips()}catch(e){}out={stage:mpSer62(document.querySelector('.stage')),actions:mpSer62(document.querySelector('.lower .actions'))}})}
+  catch(e){console.warn('p63',e)}finally{keep.forEach(k=>{if(!k)return;k[0].replaceChildren(...k[1]);k[0].className=k[2]})}return out}
+mpPush62=function(force){const gs=mpGuestsOn62();if(!gs.length)return;
+  const started=typeof GAME_STARTED!=='undefined'&&GAME_STARTED&&PARTY&&PARTY.length;
+  if(started)gs.forEach(G=>{if(!G.hero&&G.pickId){const h=PARTY.find(x=>x.heroId===G.pickId);if(h&&!mpOwner62(h.name)){G.hero=h.name;try{say(G.name+' spielt '+h.name+'.','sys')}catch(e){}mpUI62()}}if(G.hero){G.pickId=null;G.pickAdded=false}});
+  if(!started||($('path58')&&!$('path58').hidden)){mpPre62(gs,force);return}
+  // Mit Mitspielern laufen die Helden einzeln (einmal, der Spielleiter kann zurückschalten)
+  try{if(!MP62.solo63&&gs.some(G=>G.hero)&&!S.flags.solo28){MP62.solo63=1;setSolo28(true,true);say('Gemeinsam spielen: Jeder lenkt seinen Helden selbst, die Helden laufen einzeln. (Spielleiter: „Bewegung“ schaltet zurück.)','sys')}else if(gs.some(G=>G.hero))MP62.solo63=1}catch(e){}
+  let V;try{MP62.cvs.clear();V={body:document.body.className,stage:mpSer62(document.querySelector('.stage')),actions:mpSer62(document.querySelector('.lower .actions')),narr:$('narrSlot')?mpSer62($('narrSlot')):'',
+    ovs:mpOvList62().map(el=>({id:el.id,html:mpSer62(el,true)})),heroes:JSON.stringify(mpHeroes62()),actor:mpActor62(),fight:mpFight62(),music:(typeof musicCur!=='undefined'&&musicCur&&typeof MUSIC!=='undefined'&&MUSIC[musicCur])?MUSIC[musicCur].src:''}}catch(e){console.warn('p63',e);return}
+  const lg=$('log');if(lg)[...lg.children].forEach(c=>{if(!c.dataset.m62)c.dataset.m62=String(++MP62.seq)});
+  gs.forEach(G=>{const L=G.last,o={t:'view'};if(L.wait||L.pre){G.last={};}
+    const mine=mpFor63(G),W=mine?Object.assign({},V,mine):V;
+    ['body','stage','actions','narr','heroes','actor','fight','music'].forEach(k=>{if(force||G.last[k]!==W[k]){o[k]=W[k];G.last[k]=W[k]}});
+    const ovs={};V.ovs.forEach(x=>{let h=x.html;if(PRIV62[x.id]&&!MP62.free){const own=PRIV62[x.id]();if(own!==G.hero)h=mpPrivHtml62(x.id,own)}ovs[x.id]=h});const prev=G.last.ovs||{};const ch={};let any=false;Object.keys(ovs).forEach(id=>{if(force||prev[id]!==ovs[id]){ch[id]=ovs[id];any=true}});Object.keys(prev).forEach(id=>{if(!(id in ovs)){ch[id]=null;any=true}});if(any){o.ovs=ch;G.last.ovs=ovs}
+    const me=JSON.stringify(mpMe62(G));if(force||G.last.me!==me){o.me=me;G.last.me=me}
+    o.can=mpCan62(G);o.act=!!(hero&&hero.name===G.hero);if(G.last.can!==o.can||G.last.act!==o.act||Object.keys(o).length>3){G.last.can=o.can;G.last.act=o.act;G.conn.send(o)}
+    if(lg){const kids=[...lg.children];const has=G.logSeq&&lg.querySelector('[data-m62="'+G.logSeq+'"]');let add;
+      if(!G.logSeq||!has||force){add=kids.slice(-80);G.conn.send({t:'log',reset:1,add:add.map(c=>({s:+c.dataset.m62,h:mpSer62(c,true)}))})}
+      else{add=kids.filter(c=>+c.dataset.m62>G.logSeq);if(add.length)G.conn.send({t:'log',add:add.map(c=>({s:+c.dataset.m62,h:mpSer62(c,true)}))})}
+      if(kids.length)G.logSeq=+kids[kids.length-1].dataset.m62}})};
+// Klicks: erst den eigenen Helden still aktiv machen; Fenster (Würfel …) nur für den, dessen Held gerade dran ist
+const MPWALK63={left:[-22,0],right:[22,0],up:[0,-14],down:[0,14]};
+{const _hm63=mpHostMsg62;mpHostMsg62=function(G,m){
+  if(G&&G.token&&typeof GAME_STARTED!=='undefined'&&GAME_STARTED){
+    if((m.t==='click'||m.t==='change')&&m.root&&m.root!=='ov:pickScr'){
+      if(m.root==='actions'||m.root==='stage'||m.root==='narr'||m.root==='log'){
+        // Klick auf ein anderes Heldenbild in der Gruppe bleibt gesperrt (regelt das Original); sonst: eigener Held wird aktiv
+        if(!mpFight62()&&G.hero)mpTake63(G)}
+      else if(m.root.startsWith('ov:')&&!MP62.free&&!mpFight62()){const id=m.root.slice(3);if(!PRIV62[id]&&hero&&hero.name!==G.hero&&id!=='mapOv')return G.conn.send({t:'note',text:'Das gehört gerade zu '+hero.name+'.'})}}
+    if(m.t==='cmd'&&!mpFight62()&&G.hero)mpTake63(G);   // Freitext: mit dem eigenen Helden
+    if(m.t==='walk'){const d=MPWALK63[m.k];if(!d||mpFight62()||!G.hero)return;mpTake63(G);if(!hero||hero.name!==G.hero||hero.hp<=0)return;hero.queue=[];try{walk(hero.tx+d[0],()=>{},hero.ty+d[1])}catch(e){}return}
+    if(m.t==='td'){G.td=m.on==null?null:!!m.on;return}
+    // Klick ins Bild: laufen (oder in der Spielweise „Neugier“ ansehen) – mit dem eigenen Helden, in der eigenen Ansicht
+    if(m.t==='cv'&&MP62.cvs.get(m.key)===cv&&G.hero&&!mpFight62()&&!(typeof MINI31!=='undefined'&&MINI31)){mpTake63(G);if(!hero||hero.name!==G.hero||hero.hp<=0)return;
+      const p={x:Math.max(0,Math.min(1,+m.fx||0))*W+(typeof camOff==='function'?camOff():0),y:Math.max(0,Math.min(1,+m.fy||0))*H},td0=TD;
+      try{if(G.td!=null)TD=G.td;let o=null;try{if(typeof thingAt58==='function'&&!(typeof HOLD56!=='undefined'&&HOLD56))o=thingAt58(p)}catch(e){}if(o)look56(S.scene,o.k,o.name);else clickWalk(p)}catch(e){console.warn('p63',e)}finally{TD=td0}try{renderAll()}catch(e){}return}
+    if(m.t==='mapreq'){mpMapFor63(G,m.tab);return}}
+  if(G&&G.token&&m.t==='bug'){mpBugIn63(G,m);return}
+  return _hm63.apply(this,arguments)}}
+
+// ---------- 3. Perspektive je Gast: zweites Bild der Szene ----------
+function mpSceneDraw63(){g.save();drawScene();
+  (S.floor[S.scene]||[]).forEach(f=>{const fy=TD?(f.y||FLOOR):FLOOR;if(f.it.kind==='weapon'){const L2=TD?24:40;px(f.x-L2/2,fy-3,L2,2,'#7a4a26');px(f.x+L2/2-2,fy-5,4,4,'#e8b04a')}else g.drawImage(itemIcon(f.it),f.x-6,fy-10)});
+  drawArnika();presentNpcs().forEach(n=>drawFigure(n.img,n,false));drawCreatures();drawEnemy();drawParty();drawCamp();drawPet();drawToss();drawNight();drawFX();g.restore();drawBattleIntro();drawKO();drawBlackout();drawBanner()}
+function mpSendFrame63(key,blob,gs){if(!blob)return;blob.arrayBuffer().then(buf=>{const kb=new TextEncoder().encode(key),out=new Uint8Array(2+kb.length+buf.byteLength);out[0]=kb.length;out[1]=1;out.set(kb,2);out.set(new Uint8Array(buf),2+kb.length);gs.forEach(G=>G.conn.sendBin(out.buffer))})}
+mpFrames62=function(){const gs=mpGuestsOn62();if(!gs.length)return;const sceneKey=MP62.cvKeys.get(cv);
+  MP62.cvs.forEach((c,key)=>{if(MP62.busyKeys.has(key)||!c.isConnected||c.offsetParent===null)return;
+    let norm=gs,alt=[];if(c===cv){norm=gs.filter(G=>G.td==null||G.td===TD);alt=gs.filter(G=>G.td!=null&&G.td!==TD)}
+    MP62.busyKeys.add(key);let n=0;const done=()=>{if(--n<=0)MP62.busyKeys.delete(key)};
+    if(norm.length){n++;try{c.toBlob(b=>{mpSendFrame63(key,b,norm);done()},'image/webp',0.92)}catch(e){done()}}
+    if(alt.length&&!(typeof TAC!=='undefined'&&TAC)){n++;let ok=false;try{TD=!TD;mpSceneDraw63();ok=true;c.toBlob(b=>{mpSendFrame63(key,b,alt);done()},'image/webp',0.92)}catch(e){if(!ok)done()}finally{TD=!TD;try{mpSceneDraw63()}catch(e){}}}
+    if(!n)MP62.busyKeys.delete(key)})};
+
+// ---------- 4. Karte für sich ----------
+function mpMapFor63(G,tab){const prev=mapTab,vis=!MOV.hidden;try{if(tab==='welt'||tab==='dorf')mapTab=tab;else if(!vis)mapTab=(typeof inVillage==='function'&&inVillage())?'dorf':'welt';
+    renderMap();const c=MOV.querySelector('canvas'),cl=MOV.cloneNode(true),ci=cl.querySelector('canvas');if(c&&ci){const im=document.createElement('img');im.src=c.toDataURL();im.width=c.width;im.height=c.height;im.className=c.className;im.style.cssText=(c.getAttribute('style')||'')+';image-rendering:pixelated;width:100%;height:auto';ci.replaceWith(im)}
+    cl.hidden=false;cl.classList.remove('trav');cl.setAttribute('data-p63','1');cl.querySelectorAll('.mpad,[data-s]').forEach(e=>e.setAttribute('style','display:none'));
+    G.conn.send({t:'mapview',html:cl.outerHTML,tab:mapTab})}catch(e){console.warn('p63',e)}finally{mapTab=prev;if(vis)try{renderMap()}catch(e){}}}
+
+// ---------- 5. Fehler melden ----------
+const BUG63_REPO='paulriegraf-dev/RPG',ERR63=[];
+window.addEventListener('error',e=>{try{ERR63.push((e.message||'Fehler')+(e.filename?' @'+String(e.filename).split('/').pop()+':'+e.lineno:''));if(ERR63.length>8)ERR63.shift()}catch(x){}});
+window.addEventListener('unhandledrejection',e=>{try{ERR63.push('Promise: '+String(e.reason&&e.reason.message||e.reason).slice(0,200));if(ERR63.length>8)ERR63.shift()}catch(x){}});
+function mpVer63(){const m=/Prototyp \d+/.exec((document.querySelector('header')||document.body).textContent||'');return m?m[0]:'?'}
+function mpUA63(){const u=navigator.userAgent;return(/Firefox\//.test(u)?'Firefox':/Edg\//.test(u)?'Edge':/Chrome\//.test(u)?'Chrome':/Safari\//.test(u)?'Safari':'Browser')+(/Mobi|Android|iPhone/.test(u)?' (Handy)':'')}
+function mpCtx63(){const L=[];L.push('Version: '+mpVer63()+' · '+new Date().toLocaleString('de-DE')+' · '+mpUA63());
+  try{L.push('Rolle: '+(MP62.role==='gast'?'Mitspieler '+G62.name+(G62.hero?' ('+G62.hero+')':''):MP62.role==='wirt'?'Spielleiter, Raum '+MP62.code+' mit '+mpGuestsOn62().length+' Mitspielern':'allein'))}catch(e){}
+  try{if(MP62.role==='gast')L.push('Ort: '+(($('placeName')||{}).textContent||'?'));else if(typeof S!=='undefined'&&S&&WORLD){L.push('Ort: '+((WORLD.scenes[S.scene]||{}).name||S.scene)+' · Held: '+(hero?hero.name:'-')+' · Tag '+(typeof day43==='function'?day43()+1:'?')+', '+(typeof hhmm==='function'?hhmm(clk()):'')+(mpFight62()?' · im Kampf':''))}}catch(e){}
+  try{const lg=[...(($('log')||{}).children||[])].slice(-12).map(p=>'> '+p.textContent.replace(/\s+/g,' ').trim().slice(0,160));if(lg.length)L.push('Letzte Zeilen im Log:\n'+lg.join('\n'))}catch(e){}
+  if(ERR63.length)L.push('Fehlermeldungen im Browser:\n'+ERR63.join('\n'));return L.join('\n')}
+function mpBugs63(){try{return JSON.parse(mpLS62('pma_bugs63')||'[]')}catch(e){return[]}}
+function mpBugSave63(list){mpLS62('pma_bugs63',JSON.stringify(list.slice(-50)))}
+function mpBugText63(r){return(r.text||'(ohne Beschreibung)')+'\n\n---\nGemeldet von: '+(r.from||'?')+'\n'+(r.ctx||'')}
+function mpBugUrl63(r){const title='🐞 '+String(r.text||'Fehler').replace(/\s+/g,' ').trim().slice(0,70);let body=mpBugText63(r);if(body.length>3500)body=body.slice(0,3500)+'\n…';return'https://github.com/'+BUG63_REPO+'/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)}
+function mpBugIn63(G,m){const r={id:mpRnd62(6),from:G.name+(G.hero?' ('+G.hero+')':''),time:Date.now(),text:String(m.text||'').slice(0,1500),ctx:String(m.ctx||'').slice(0,4000)};const L=mpBugs63();L.push(r);mpBugSave63(L);
+  try{say('🐞 '+G.name+' meldet einen Fehler: „'+r.text.slice(0,120)+'“ (Spielleiter: 🐞 Fehler melden)','sys')}catch(e){}G.conn.send({t:'note',text:'Danke! Dein Fehlerbericht ist beim Spielleiter.'});mpBugBadge63()}
+function mpBugBadge63(){const b=$('bugBtn63');if(!b)return;const n=mpBugs63().filter(r=>!r.done).length;b.textContent='🐞 Fehler melden'+(n?' ('+n+')':'')}
+function mpCopy63(txt,btn){const ok=()=>{if(btn){const o=btn.textContent;btn.textContent='Kopiert';setTimeout(()=>{btn.textContent=o},1500)}};try{navigator.clipboard.writeText(txt).then(ok,()=>{prompt('Kopieren:',txt)})}catch(e){prompt('Kopieren:',txt)}}
+function mpFile63(txt){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download='fehlerbericht-'+new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')+'.txt';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}catch(e){}}
+function mpBugOpen63(){let d=$('mp63bug');if(!d){d=document.createElement('div');d.id='mp63bug';d.className='mp62dlg';document.body.appendChild(d)}d.hidden=false;const gast=MP62.role==='gast',L=gast?[]:mpBugs63();
+  d.innerHTML='<div class="mp62box mp63bugbox"><h2>🐞 Fehler melden</h2><p class="small">Was ist passiert? Was hast du davor gemacht? Version, Ort, die letzten Zeilen im Log und Fehlermeldungen hängt das Spiel selbst an.</p><textarea id="mp63bugT" rows="5" maxlength="1500" placeholder="z. B. Nach dem Gespräch mit Ilse kam kein Knopf mehr …"></textarea>'
+    +'<div class="mp62row">'+(gast?'<button type="button" class="pxbtn green" id="mp63send">An den Spielleiter schicken</button>':'<button type="button" class="pxbtn green" id="mp63gh">Auf GitHub melden</button><button type="button" class="pxbtn" id="mp63file">Als Datei</button>')+'<button type="button" class="pxbtn" id="mp63copy">Kopieren</button><button type="button" class="pxbtn" id="mp63x">Schließen</button></div>'
+    +(gast?'':'<p class="small">„Auf GitHub melden“ öffnet einen fertigen Eintrag in deinem Repository '+mpEsc62(BUG63_REPO)+' – dort nur noch „Create“/„Submit new issue“ drücken (mit deinem GitHub-Konto). Claude kann die Einträge dann lesen.</p>')
+    +(L.length?'<h3>Von Mitspielern ('+L.filter(r=>!r.done).length+' offen)</h3><div class="mp63list">'+L.slice().reverse().map(r=>'<div class="mp63r'+(r.done?' done':'')+'"><b>'+mpEsc62(r.from)+'</b> · '+new Date(r.time).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'<br>'+mpEsc62(r.text.slice(0,200))+'<br><button type="button" data-gh="'+r.id+'">Auf GitHub</button> <button type="button" data-cp="'+r.id+'">Kopieren</button> <button type="button" data-ok="'+r.id+'">'+(r.done?'Wieder offen':'Erledigt')+'</button></div>').join('')+'</div>':'')+'</div>';
+  const own=()=>({from:gast?G62.name+(G62.hero?' ('+G62.hero+')':''):'Spielleiter',time:Date.now(),text:$('mp63bugT').value.trim(),ctx:mpCtx63()});
+  $('mp63x').onclick=()=>{d.hidden=true};$('mp63copy').onclick=e=>mpCopy63(mpBugText63(own()),e.target);
+  if(gast)$('mp63send').onclick=()=>{const r=own();if(!r.text){$('mp63bugT').focus();return}if(G62.conn)G62.conn.send({t:'bug',text:r.text,ctx:r.ctx});d.hidden=true;mpNote62('Danke! Dein Fehlerbericht geht an den Spielleiter.')};
+  else{$('mp63gh').onclick=()=>{const r=own();if(!r.text){$('mp63bugT').focus();return}window.open(mpBugUrl63(r),'_blank','noopener')};$('mp63file').onclick=()=>mpFile63(mpBugText63(own()));
+    d.querySelectorAll('[data-gh]').forEach(b=>b.onclick=()=>{const r=mpBugs63().find(x=>x.id===b.dataset.gh);if(r)window.open(mpBugUrl63(r),'_blank','noopener')});
+    d.querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>{const r=mpBugs63().find(x=>x.id===b.dataset.cp);if(r)mpCopy63(mpBugText63(r),b)});
+    d.querySelectorAll('[data-ok]').forEach(b=>b.onclick=()=>{const L2=mpBugs63(),r=L2.find(x=>x.id===b.dataset.ok);if(r){r.done=!r.done;mpBugSave63(L2)}mpBugOpen63();mpBugBadge63()})}
+  setTimeout(()=>{try{$('mp63bugT').focus()}catch(e){}},30)}
+function mpBugBtn63(){const mn=$('menuBtn');if(!mn||$('bugBtn63'))return;const b=document.createElement('button');b.type='button';b.id='bugBtn63';b.className='mbtn';b.title='Fehler melden';b.onclick=mpBugOpen63;mn.parentElement.insertBefore(b,mn.nextSibling);mpBugBadge63()}
+try{mpBugBtn63()}catch(e){}
+
+// ---------- Gast: Leiste, Laufen, Perspektive, Karte ----------
+G62.td=null;
+{const _gi63=mpGuestInit62;mpGuestInit62=function(){
+  // eigene Tasten zuerst anmelden (die Sperre aus P62 hält sonst alle Tasten an)
+  window.addEventListener('keydown',e=>{if(!G62.on)return;const t=e.target;if(t&&t.closest&&t.closest('input,textarea,select,[contenteditable]'))return;
+    const k={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',a:'left',d:'right',w:'up',s:'down',A:'left',D:'right',W:'up',S:'down'}[e.key];
+    if(k&&!G62.pre){e.preventDefault();e.stopImmediatePropagation();if(G62.conn)G62.conn.send({t:'walk',k});return}
+    if((e.key==='m'||e.key==='M')&&!G62.pre){e.stopImmediatePropagation();mpMapReq63()}},true);
+  window.addEventListener('click',e=>{if(!G62.on)return;const t=e.target;if(!t||!t.closest)return;const pm=t.closest('#mapOv[data-p63]');if(!pm)return;e.preventDefault();e.stopImmediatePropagation();
+    if(t.closest('.mx'))return mpMapClose63();const tb=t.closest('[data-t]');if(tb)mpMapReq63(tb.dataset.t)},true);
+  const r=_gi63.apply(this,arguments);
+  try{const bar=$('mp62bar');const t=$('mp62turn');if(t)t.remove();
+    const add=(html,after)=>{const w=document.createElement('span');w.innerHTML=html;const a=$(after);(a&&a.parentElement===bar?a:bar.lastChild).after(...w.childNodes)};
+    add('<button type="button" id="mp63td" title="Poke-Perspektive nur für dich">◧ Ansicht</button>','mp62map');
+    add('<span class="mp63pad"><button type="button" data-k="left" aria-label="links">◀</button><button type="button" data-k="up" aria-label="hoch">▲</button><button type="button" data-k="down" aria-label="runter">▼</button><button type="button" data-k="right" aria-label="rechts">▶</button></span>','mp62card');
+    add('<button type="button" id="mp63bugG" title="Fehler melden">🐞</button>','mp62vol');
+    $('mp63td').onclick=()=>{G62.td=G62.td==null?!G62.tdHost:!G62.td;if(G62.conn)G62.conn.send({t:'td',on:G62.td});$('mp63td').classList.toggle('on',G62.td!==G62.tdHost)};
+    $('mp62map').onclick=()=>mpMapReq63();$('mp62map').title='Karte nur für dich ansehen (Taste M)';$('mp63bugG').onclick=mpBugOpen63;
+    bar.querySelectorAll('.mp63pad [data-k]').forEach(b=>{const go=()=>{if(G62.conn&&!G62.pre)G62.conn.send({t:'walk',k:b.dataset.k})};b.onclick=go})}catch(e){console.warn('p63',e)}
+  return r}}
+function mpToast63(text){let box=$('mp63toast');if(!box){box=document.createElement('div');box.id='mp63toast';document.body.appendChild(box)}const t=document.createElement('div');t.className='mp63t';t.textContent='✨ '+String(text||'').trim();box.appendChild(t);
+  while(box.children.length>3)box.firstElementChild.remove();setTimeout(()=>{t.classList.add('weg');setTimeout(()=>t.remove(),600)},7000)}
+function mpMapReq63(tab){if(G62.conn)G62.conn.send({t:'mapreq',tab:tab||null})}
+function mpMapClose63(){const m=$('mapOv');if(m&&m.dataset.p63)m.hidden=true;G62.mapOwn=false}
+{const _gm63=mpGuestMsg62;mpGuestMsg62=function(m){
+  if(m.t==='mapview'){let el=$('mapOv');if(el&&el.parentElement!==document.body)el=null;if(G62.ovs.has('mapOv')&&el&&!el.hidden&&!el.dataset.p63){mpNote62('Die Karte ist gerade für alle offen.');return}
+    if(el)el.outerHTML=m.html;else document.body.insertAdjacentHTML('beforeend',m.html);G62.mapOwn=true;return}
+  if(m.t==='view'&&m.body!=null){G62.tdHost=/\btd63\b/.test(m.body)}
+  // Neuer Hinweis, neue Möglichkeit … : zusätzlich groß oben einblenden (Paul, 24.10., 00:33) – nur Zeilen, die noch nicht im Log stehen
+  let neu63=[];if(m.t==='log'&&!m.reset&&Array.isArray(m.add)){const lg=$('log');m.add.forEach(x=>{try{if(lg&&lg.querySelector('[data-m62="'+x.s+'"]'))return;const d=document.createElement('div');d.innerHTML=x.h;const p=d.firstElementChild;if(p&&p.classList.contains('new'))neu63.push(p.textContent)}catch(e){}})}
+  const r=_gm63.apply(this,arguments);neu63.forEach(mpToast63);
+  if(m.t==='view'&&m.ovs&&('mapOv' in m.ovs)){G62.mapOwn=false}
+  if(m.t==='view'&&m.act!=null)G62.act=m.act;
+  return r}}
+mpBar62=function(){const me=$('mp62me'),dr=$('mp62dran');if(!me)return;document.body.classList.toggle('mp62vor',!!G62.pre);
+  const vis=(id,v)=>{const e=$(id);if(e)e.hidden=!v};
+  if(G62.pre){me.textContent=G62.name+(G62.mine?' · '+G62.mine:' · wähle deinen Helden');dr.textContent='';dr.classList.remove('du');['mp62card','mp62map','mp63td','mp63bugG'].forEach(i=>vis(i,i==='mp63bugG'));const p=document.querySelector('.mp63pad');if(p)p.hidden=true;return}
+  ['mp62card','mp62map','mp63td','mp63bugG'].forEach(i=>vis(i,true));const p=document.querySelector('.mp63pad');if(p)p.hidden=!G62.hero||G62.fight;
+  me.textContent=G62.name+(G62.hero?' · '+G62.hero:' · noch kein Held');
+  const own=G62.heroes.find(h=>h.name===G62.actor);
+  if(G62.fight){dr.textContent=G62.can?'Du bist dran!':(G62.actor?'Dran: '+G62.actor+(own&&own.owner?' ('+own.owner+')':' (Spielleiter)'):'');dr.classList.toggle('du',!!G62.can)}
+  else{dr.textContent=G62.hero?'Frei unterwegs':'';dr.classList.remove('du')}
+  document.body.classList.toggle('mp62du',!!G62.can);
+  if(!G62.hero&&G62.heroes.length)mpPick62();else{const pk=$('mp62pick');if(pk)pk.hidden=true}};
+// Spielleiter: Ansicht des Wirts für die Gäste (Klasse am body), damit „◧ Ansicht“ beim Gast weiß, was die Grundansicht ist
+{const _std63=setTD;setTD=function(on){const r=_std63.apply(this,arguments);try{document.body.classList.toggle('td63',!!on)}catch(e){}return r}}
+try{document.body.classList.toggle('td63',!!TD)}catch(e){}
+try{const st=document.createElement('style');st.textContent=`
+.mp63pad{display:inline-flex;gap:2px}.mp63pad[hidden]{display:none}.mp63pad button{padding:2px 6px!important;min-width:26px}
+#mp63td.on{background:#e8c170;color:#1d1a24}
+#mp62bar #mp62vol{flex:0 0 80px;width:80px;min-width:60px}
+#mp63bug textarea{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:6px}.mp63bugbox{max-width:560px;max-height:90vh;overflow:auto}
+.mp63list{display:flex;flex-direction:column;gap:6px;margin-top:6px}.mp63r{border:1px solid var(--line,#555);border-radius:6px;padding:6px;font-size:13px}.mp63r.done{opacity:.55}.mp63r button{font:inherit;font-size:12px;padding:1px 6px;margin-top:4px}
+body.gast62 #bugBtn63{display:none!important}
+#mp63toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9600;display:flex;flex-direction:column;gap:6px;max-width:min(640px,92vw);pointer-events:none}
+.mp63t{background:#1d3a28;color:#d8ffe0;border-left:4px solid #7ad36a;border-radius:4px;padding:8px 12px;font-size:16px;box-shadow:0 4px 16px rgba(0,0,0,.5);transition:opacity .5s}.mp63t.weg{opacity:0}
+`;document.head.appendChild(st)}catch(e){}
+
+
+// ================= Prototyp 63 (d): Drohen und Co – Druck, Schmeicheln, Bestechen, Entschuldigen mit spürbaren Folgen =================
+// Paul (24.10., 00:29): „Möglichkeiten bzgl. Drohen und Co ermöglichen, sodass sich dies stärker auswirkt.“
+// Auslegung (vorschlaege-p63.md 63.D): Die Folgen bleiben unterhalb der Geschichte – nichts davon öffnet Themen mit Geheimwissen
+// oder verschiebt den Ruf (den setzt der Spielleiter). Aber jede Drohung hat jetzt etwas zur Folge:
+//  - Drohen (Einschüchtern, Charisma): SG nach Gegenüber (Wachen/Soldaten/Mächtige 15, sonst 12; −2 mit gezogener Waffe).
+//    Geschafft: das Gegenüber ist heute eingeschüchtert, rückt etwas Silber heraus (Händler: heute 30 % billiger),
+//    die Umstehenden weichen zurück (−5 Vertrauen), ein Gerücht macht die Runde. Zweite Drohung am selben Tag: es redet heute nicht mehr.
+//    Misslungen: −35 Vertrauen, es redet heute nicht mehr mit euch; steht eine Wache dabei, kostet es 10 Silber Strafe.
+//  - Schmeicheln (Charisma SG 12, einmal am Tag je Person): +10 Vertrauen, misslungen −5.
+//  - Bestechen (10 Silber): +10 Vertrauen, mit Charisma SG 12 +20; Wachen und Soldaten: misslungen = Silber weg und −15.
+//  - Entschuldigen (wer heute nicht mehr redet; Charisma SG 13): redet wieder, +5.
+// Ilse und Hennig verstummen nie ganz (Geschichte).
+function d63(){try{return day43()}catch(e){return 0}}
+function hard63(n){return/wache|soldat|hauptmann|general|krieger|söldner|wächter|fürst|olaf|krull|bertram/i.test((n.name||'')+' '+(n.role||''))}
+function guardHere63(){try{return presentNpcs().some(x=>/wache|soldat|wächter|bertram/i.test((x.name||'')+' '+(x.role||'')))}catch(e){return false}}
+function story63(n){return n&&(n.id==='ilse'||n.id==='hennig')}
+function mute63(n){return n&&!story63(n)&&n.mute63===d63()}
+function trader63(n){try{return!!(typeof HAND43!=='undefined'&&HAND43[n.name])}catch(e){return false}}
+{const _tt63=talkTopics;talkTopics=function(){let r=_tt63.apply(this,arguments);try{const n=NPCS[talk];if(!n||!Array.isArray(r)||!r.some(x=>x[1]==='threat'))return r;
+    if(mute63(n))return[['Entschuldigen','sorry63'],['Etwas schenken','gift']];
+    const i=r.findIndex(x=>x[1]==='threat');const add=[];if(n.sch63!==d63())add.push(['Schmeicheln','flatter63']);if(silver()>=10)add.push(['Bestechen (10 Silber)','bribe63']);r=r.slice(0,i).concat(add,r.slice(i))}catch(e){console.warn('p63d',e)}return r}}
+{const _tp63=topic;topic=function(k){const n=NPCS[talk];if(!n||!['threat','flatter63','bribe63','sorry63'].includes(k))return _tp63.apply(this,arguments);
+  if(typeof busy27==='function'&&busy27())return renderAll();const D=d63(),who=hero.name,L=s=>say(s,'npc',n.name),sys=s=>say(s,'sys');
+  if(k==='threat'){
+    if(mute63(n)){L('…');sys(n.name+' dreht euch den Rücken zu.');return renderAll()}
+    const armed=(hero.inv||[]).some(i=>i&&i.kind==='weapon'&&i.on),dc=(hard63(n)?15:12)-(armed?2:0);
+    if(n.fear63===D&&!story63(n)){n.mute63=D;trust(n.id,-15,who+' hat noch einmal gedroht');L('Ich hab doch schon … lasst mich in Ruhe!');sys(n.name+' will heute nichts mehr mit euch zu tun haben.');talk=null;return renderAll()}
+    const ok=check('cha',dc,'Einschüchtern'+(armed?' (Waffe gezogen)':''));
+    if(ok){n.fear63=D;trust(n.id,-25,who+' hat gedroht');L(pick(['Schon gut, schon gut! Ich will keinen Ärger.','Ganz ruhig … wir finden doch eine Lösung.','Bitte! Ich hab Familie.']));
+      if(trader63(n)){n.rab63=D;sys(n.name+' gibt nach: Heute bekommt ihr alles 30 % billiger.')}
+      else if(!hard63(n)){const s=4+Math.floor(Math.random()*9);addSilver(s,n.name+' will euch loswerden')}
+      else sys(n.name+' weicht einen Schritt zurück. Mehr gibt es hier nicht zu holen.');
+      try{presentNpcs().forEach(x=>{if(x!==n&&!x.virtual)trust(x.id,-5,'hat gesehen, wie '+who+' gedroht hat')})}catch(e){}
+      try{const ort=(WORLD.scenes[S.scene]||{}).name||'hier';rumor('Man erzählt sich: Fremde haben '+n.name+' bedroht ('+ort+').')}catch(e){}
+      sys('(Spielleiter: Ein Gerücht macht die Runde. Den Ruf der Gruppe kannst du im Reiter „Welt“ anpassen.)')}
+    else{trust(n.id,-35,who+' hat gedroht');L(pick(['Versuch das noch einmal, und du fliegst raus.','Lachhaft. Verschwinde.','Das merk ich mir.']));
+      if(!story63(n)){n.mute63=D;sys(n.name+' redet heute nicht mehr mit euch.')}
+      if(guardHere63()&&!hard63(n)){if(silver()>=10){S.silver=silver()-10;sys('Eine Wache hat alles gesehen: 10 Silber Strafe. Ihr habt noch '+silver()+' Silber.')}else{sys('Eine Wache hat alles gesehen und merkt sich eure Gesichter.')}}
+      talk=mute63(n)?null:talk}
+    return renderAll()}
+  if(k==='flatter63'){n.sch63=D;const ok=check('cha',12,'Schmeicheln');if(ok){trust(n.id,10,who+' hat geschmeichelt');L(pick(['Ach, hör auf … nein, sag ruhig weiter.','Das hat mir lange keiner gesagt.','Du weißt, wie man redet.']))}else{trust(n.id,-5,'plumpe Schmeichelei');L(pick(['Das glaubst du doch selbst nicht.','Spar dir das.','Wer hat dir das beigebracht?']))}return renderAll()}
+  if(k==='bribe63'){if(silver()<10){sys('Ihr habt keine 10 Silber.');return renderAll()}S.silver=silver()-10;const ok=check('cha',12,'Bestechen');
+    if(hard63(n)&&!ok){trust(n.id,-15,'Bestechungsversuch');L('Silber? Mir? Das hab ich nicht gesehen. Das Silber auch nicht mehr.');sys('Die 10 Silber sind weg.')}
+    else{trust(n.id,ok?20:10,'Bestechung (10 Silber)');L(ok?pick(['Na also. Man versteht sich.','Für Freunde tu ich doch alles.']):pick(['Hm. Ein Anfang.','Das reicht für ein Lächeln.']))}
+    sys('Ihr habt noch '+silver()+' Silber.');return renderAll()}
+  if(k==='sorry63'){const ok=check('cha',13,'Entschuldigen');if(ok){n.mute63=null;trust(n.id,5,'Entschuldigung');L(pick(['Na gut. Aber nur dieses eine Mal.','Schon vergessen. Fast.']))}else{L('Zu spät.');talk=null}return renderAll()}
+  return _tp63.apply(this,arguments)}}
+// Händler: heute 30 % billiger, solange eingeschüchtert
+{const _bp63=buyP43;buyP43=function(nm){let p=_bp63.apply(this,arguments);try{const n=Object.values(NPCS).find(x=>x&&x.name===nm);if(n&&n.rab63===d63()&&typeof p==='number')p=Math.max(1,Math.round(p*.7))}catch(e){}return p}}
+// Verstummte Leute grüßen nicht
+{const _gt63=typeof greet==='function'?greet:null;if(_gt63){greet=function(n){if(mute63(n))return'(dreht sich weg)';return _gt63.apply(this,arguments)}}}
+
+
+// ================= Prototyp 63 (r): Übungs-Spiele (Noten, Takt, Atem, Ziel, Schlag) laufen beim Spieler, dessen Held übt =================
+// Paul (24.10., 00:40): „harter Delay bei zB Lehrtechniken bei zB den Noten. Hier laggt es für den anderen Spieler, der nicht hostet.“
+// Bisher lief das Übungs-Spiel (mini31) nur beim Spielleiter, der Gast sah es als Bildfolge (6 Bilder je Sekunde) und seine Tasten
+// gingen erst über die Leitung – für ein Spiel, bei dem es auf Hundertstel ankommt, zu langsam.
+// Jetzt: Gehört der übende Held einem verbundenen Gast, startet der Spielleiter das Spiel bei diesem Gast. Dort läuft es mit voller
+// Bildrate und eigenen Tasten; nur das Ergebnis (perfekt/gut/daneben …) geht zurück und wird beim Spielleiter wie bisher ausgewertet.
+// Der Spielleiter und die übrigen Gäste sehen solange „… übt gerade“. Der Spielleiter kann übernehmen („Hier spielen“) oder abbrechen.
+let MINIR63=null,MININ63=0;const MINIO63=mini31;
+function mpImg63(im){try{im=im&&(im.idle||im);if(!im||!im.width)return null;if(im.toDataURL)return im.toDataURL();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;c.getContext('2d').drawImage(im,0,0);return c.toDataURL()}catch(e){return null}}
+function mpMiniCfg63(cfg,h){const o=JSON.parse(JSON.stringify(cfg||{},(k,v)=>(k==='h'||k==='m')?undefined:typeof v==='function'?undefined:v));
+  o.h=h?{name:h.name,heroId:h.heroId}:null;const m=cfg&&cfg.m;o.m=m?{name:m.name||'',src:mpImg63(m.img)}:null;return o}
+function mpMiniGuestOf63(h){try{if(typeof MP62==='undefined'||MP62.role!=='wirt'||!h)return null;return mpGuestsOn62().find(G=>G.hero===h.name&&G.conn)||null}catch(e){return null}}
+mini31=function(cfg,cb){if(MINIR63)return false;if(MINI31)return MINIO63.apply(this,arguments);
+  let h=null;try{h=(cfg&&cfg.h)||hero}catch(e){}const G=mpMiniGuestOf63(h);if(!G)return MINIO63.apply(this,arguments);
+  const id=++MININ63;let c;try{c=mpMiniCfg63(cfg,h)}catch(e){console.warn('p63r',e);return MINIO63.apply(this,arguments)}
+  MINIR63={id,G,cb,cfg,h,t0:Date.now(),title:(cfg&&cfg.title)||'Übung'};G.conn.send({t:'mini',id,cfg:c});mpMiniWait63();return true};
+function mpMiniWait63(){const R=MINIR63;let ov=$('mp63wait');if(!R){if(ov)ov.remove();return}
+  if(!ov){ov=document.createElement('div');ov.id='mp63wait';ov.setAttribute('role','dialog');document.body.appendChild(ov)}
+  const on=mpGuestsOn62().includes(R.G);
+  ov.innerHTML='<div class="box"><h2>🎵 '+esc63(R.title)+'</h2><p>'+esc63(R.G.name)+' übt gerade mit '+esc63(R.h?R.h.name:'')+'. Das Spiel läuft bei '+esc63(R.G.name)+' – dort ohne Verzögerung.</p>'+
+    (on?'<p class="s">Gleich geht es weiter.</p>':'<p class="s warn">Die Verbindung zu '+esc63(R.G.name)+' ist weg.</p>')+
+    '<div class="row dmonly"><button type="button" data-w63="hier">Hier spielen</button><button type="button" data-w63="ab">Abbrechen</button></div></div>';
+  ov.querySelectorAll('[data-w63]').forEach(b=>b.onclick=()=>b.dataset.w63==='hier'?mpMiniTake63():mpMiniDone63(null,true))}
+function esc63(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function mpMiniRes63(r,abort){r=r||{};const n=v=>Math.max(0,Math.min(99,Math.round(+v||0)));const ch={};try{Object.keys(r.ch||{}).slice(0,6).forEach(k=>{if(/^[a-z]{1,12}$/.test(k))ch[k]=n(r.ch[k])})}catch(e){}
+  const o={perfect:n(r.perfect),good:n(r.good),miss:n(r.miss),konter:n(r.konter),bull:n(r.bull),ch,q:Array.isArray(r.q)?r.q.slice(0,40).map(x=>x==='p'||x==='g'?x:'m'):[],score:n(r.score)};
+  if(abort||r.aborted){o.aborted=true;o.ok=false}else{o.ok=!!r.ok;o.allPerfect=!!r.allPerfect}return o}
+function mpMiniDone63(res,abort){const R=MINIR63;if(!R)return;MINIR63=null;mpMiniWait63();
+  if(abort){try{R.G.conn.send({t:'miniend',id:R.id})}catch(e){}}
+  const r=mpMiniRes63(res,abort);try{R.cb&&R.cb(r)}catch(e){console.warn('p63r',e)}try{renderAll()}catch(e){}try{mpPush62(true)}catch(e){}}
+function mpMiniTake63(){const R=MINIR63;if(!R)return;MINIR63=null;mpMiniWait63();try{R.G.conn.send({t:'miniend',id:R.id,take:1})}catch(e){}MINIO63(R.cfg,R.cb)}
+setInterval(()=>{try{if(MINIR63&&$('mp63wait'))mpMiniWait63()}catch(e){}},1500);
+// Wirt: Ergebnis vom Gast
+{const _hm63r=mpHostMsg62;mpHostMsg62=function(G,m){if(m&&m.t==='minires'){if(MINIR63&&MINIR63.G===G&&MINIR63.id===m.id)mpMiniDone63(m.res,false);return}return _hm63r.apply(this,arguments)}}
+// Gast: Spiel starten, Ergebnis zurück
+function mpMiniGuest63(m){const C=m.cfg||{};if(MINI31){try{G62.conn.send({t:'minires',id:m.id,res:{aborted:true}})}catch(e){}return}
+  const old=$('mini31');if(old){old.remove();G62.ovs.delete('mini31')}
+  if(C.m&&C.m.src){const im=new Image();im.src=C.m.src;C.m.img=im}
+  const me={id:m.id};G62.mini63=me;
+  const ok=MINIO63(C,res=>{if(G62.mini63===me)G62.mini63=null;if(me.dead)return;try{G62.conn.send({t:'minires',id:m.id,res})}catch(e){}});
+  if(ok&&MINI31)MINI31.ov.classList.add('mp63own');else{G62.mini63=null;try{G62.conn.send({t:'minires',id:m.id,res:{aborted:true}})}catch(e){}}}
+{const _gm63r=mpGuestMsg62;mpGuestMsg62=function(m){
+  if(m&&m.t==='mini'){G62.seen=Date.now();mpMiniGuest63(m);return}
+  if(m&&m.t==='miniend'){const me=G62.mini63;if(me&&me.id===m.id){me.dead=true;if(MINI31)mEnd31(true);mpNote62(m.take?'Der Spielleiter hat die Übung übernommen.':'Der Spielleiter hat die Übung abgebrochen.')}return}
+  // läuft die Übung hier, bleibt das eigene Fenster stehen (kein gespiegeltes #mini31 darüber)
+  if(m&&m.t==='view'&&m.ovs&&G62.mini63&&('mini31' in m.ovs)){m=Object.assign({},m,{ovs:Object.assign({},m.ovs)});delete m.ovs.mini31;return _gm63r.call(this,m)}
+  return _gm63r.apply(this,arguments)}}
+// Gast: Die Übung bekommt die Tasten zuerst (vor der Sperre aus P62); renderAll gibt es beim Gast nicht (das Bild kommt vom Wirt)
+{const _gi63r=mpGuestInit62;mpGuestInit62=function(){
+  window.addEventListener('keydown',e=>{if(!G62.on||!MINI31||!MINI31.ov.classList.contains('mp63own'))return;try{MINI31.key(e)}catch(x){}e.stopImmediatePropagation()},true);
+  return _gi63r.apply(this,arguments)}}
+{const _ra63r=renderAll;renderAll=function(){if(typeof MP62!=='undefined'&&MP62.role==='gast')return;return _ra63r.apply(this,arguments)}}
+{const st=document.createElement('style');st.textContent=
+`#mp63wait{position:fixed;inset:0;z-index:92;background:#05040acc;display:flex;align-items:center;justify-content:center;padding:10px;box-sizing:border-box;font-family:"Pixelify Sans",monospace;color:#f3ead6}
+#mp63wait .box{background:#16121c;border:2px solid #3a3346;padding:14px 18px;max-width:560px;text-align:center}
+#mp63wait h2{margin:0 0 6px;font-size:22px;color:#f6c84a;font-weight:normal}#mp63wait p{margin:4px 0;font-size:17px;line-height:1.35}#mp63wait .s{color:#a89fb4;font-size:15px}#mp63wait .warn{color:#ff9a8a}
+#mp63wait .row{display:flex;gap:10px;justify-content:center;margin-top:10px}#mp63wait button{font:inherit;font-size:16px;padding:8px 14px;background:#2a2531;color:#f3ead6;border:2px solid #4a4058;cursor:pointer}
+body:has(#mini31.mp63own) #mp63wait{display:none!important}`;document.head.appendChild(st)}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
