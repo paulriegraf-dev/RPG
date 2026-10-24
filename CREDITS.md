@@ -20,6 +20,8 @@ Die neuen Figuren und Szenen in Prototyp 23 sind im Hausstil nachgebaut. Diese P
 - jazzy_boys.mp3, squid_jazz.mp3, race_track.mp3, frogs_are_friends.mp3 – von Paul bereitgestellt (Quelle hier ergänzen)
 - show.mp3 – „Electronic Futuristic Cyberpunk Background Music with a touch of 8-bit“ (montogoronto, Pixabay)
 - husten.mp3 – „Cough“ (freesound_community, Pixabay)
+- casino_funk.mp3 – „Funk in the City“ (331music, Pixabay), seit P64 Musik im Casino Zum Ewigen Sonntag
+
 
 ## Klänge (Prototyp 35)
 - Casino-Gewinnsounds, von Paul bereitgestellt (Pixabay-Inhaltslizenz laut Dateinamen; liegen in `Quellcode/p27/sfx35/`):
