@@ -23407,6 +23407,8 @@ function bogenTips64(){const h=PARTY[BOGI27]||hero;if(!h)return;
 MUSIC.casino64={src:'musik/casino_funk.mp3',label:'Casino: Funk in the City'};
 MUSIC.ffl64={src:'musik/friede_freude.mp3',label:'Friede Freude Land',lokal:1};
 MUSIC.club64={src:'musik/disco_club.mp3',label:'Disco Glitzerkugel',lokal:1,fb:'casino64'};
+MUSIC.club64b={src:'musik/neon_circuit.mp3',label:'Disco Glitzerkugel · Neon Circuit',lokal:1,fb:'club64'};   // Nachbesserung 4: zweites Stück für den Club, die beiden wechseln sich ab
+const CLUB64={k:'club64'};
 MUSIC.dupp64={src:'musik/duppelbach.mp3',label:'Duppelbach',lokal:1};
 MUSIC.viel64={src:'musik/viellos.mp3',label:'Viellos',lokal:1};
 const GEWINN64={src:'musik/casino_gewinn.mp3',lokal:1};
@@ -23416,7 +23418,7 @@ const FAIL64={};
 function inGast64(){try{return GAST64.includes(sceneName())}catch(e){return false}}
 function ortMusik64(){try{const P=S.places[S.scene];if(!P)return null;const n=sceneName();
   if(n==='casino zum ewigen sonntag'||P.biome==='casino34')return'casino64';
-  if(n==='disco glitzerkugel'||P.biome==='disco34')return'club64';
+  if(n==='disco glitzerkugel'||P.biome==='disco34')return CLUB64.k;
   const o=ortOf(S.scene);return ORTMUS64[o]||null}catch(e){return null}}
 function musOk64(k){let x=k;for(let i=0;i<3&&x;i++){if(MUSIC[x]&&!FAIL64[x])return x;x=MUSIC[x]&&MUSIC[x].fb}return null}
 {const _ms64=musicSlot;musicSlot=function(){
@@ -23426,7 +23428,11 @@ function musOk64(k){let x=k;for(let i=0;i<3&&x;i++){if(MUSIC[x]&&!FAIL64[x])retu
     const k=ortMusik64();const ok=k&&musOk64(k);if(ok)return ok}catch(e){}return s}}
 // Fehlende Datei (z. B. in der Fassung im Netz): merken, still zurück zum bisherigen Stück
 {const _sy64m=say;say=function(text){if(typeof text==='string'&&/^Die Musikdatei „/.test(text)&&Object.keys(MUSIC).some(k=>MUSIC[k].lokal&&text.includes(MUSIC[k].src)))return;return _sy64m.apply(this,arguments)}}
-{const _au64=aud;aud=function(k){const a=_au64.apply(this,arguments);if(a&&!a._f64&&MUSIC[k]&&(MUSIC[k].lokal||MUSIC[k].fb)){a._f64=1;a.addEventListener('error',()=>{FAIL64[k]=1;musicErrSaid=false;try{a.pause()}catch(e){}musicCur=null;setTimeout(()=>{try{updateMusic()}catch(e){}},50)})}return a}}
+{const _au64=aud;aud=function(k){const a=_au64.apply(this,arguments);
+  // Club: zwei Stücke im Wechsel (kein Dauerschleifen eines einzelnen Stücks)
+  if(a&&!a._c64&&(k==='club64'||k==='club64b')){a._c64=1;a.loop=false;a.addEventListener('ended',()=>{if(musicCur!==k)return;CLUB64.k=k==='club64'?'club64b':'club64';const nx=musOk64(CLUB64.k);
+    if(nx===k||!nx){try{a.currentTime=0}catch(e){}tryPlay(a)}else{try{aud(nx).currentTime=0}catch(e){}}updateMusic()})}
+  if(a&&!a._f64&&MUSIC[k]&&(MUSIC[k].lokal||MUSIC[k].fb)){a._f64=1;a.addEventListener('error',()=>{FAIL64[k]=1;musicErrSaid=false;try{a.pause()}catch(e){}musicCur=null;setTimeout(()=>{try{updateMusic()}catch(e){}},50)})}return a}}
 // Mitspieler: Fehlt beim Gast das Stück des Spielleiters, spielt er die Ersatzmusik
 function fbSrc64(src){const k=Object.keys(MUSIC).find(x=>MUSIC[x].src===src&&(MUSIC[x].lokal||MUSIC[x].fb));if(!k)return null;const f=MUSIC[k].fb&&MUSIC[MUSIC[k].fb];return f?f.src:(k==='club64'||k==='ffl64'?MUSIC.standard.src:MUSIC.erkunden.src)}
 const FAILSRC64={};
@@ -23489,6 +23495,223 @@ DLG57.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[
 const WEVRAMP64={moench:{reisen:2,ab:1,start:.08,proTag:.05,miss:.04,max:.5},blumen:{reisen:3,ab:2,start:.06,proTag:.04,miss:0,max:.35}};
 function wevChance64(k,s){const R=WEVRAMP64[k];let d=0;try{d=day43()}catch(e){}if(!R||(s.trips||0)<R.reisen||d<R.ab)return 0;return Math.min(R.max,R.start+R.proTag*(d-R.ab)+R.miss*(s.miss||0))}
 try{Object.keys(WEVRAMP64).forEach(k=>{if(WEVDEF32[k])WEVDEF32[k].chance=s=>wevChance64(k,s)})}catch(e){console.warn('p64d',e)}
+
+
+// ================= Prototyp 64 (s, Nachbesserung 4): Casino-Effekte, Craps-Tisch, Klang-Mischung, Dialog-Hinweis (Paul, 24.10., 23:58) =================
+// K  Glücksautomat: Bei jedem Gewinn springen Münzen (und bei größeren Gewinnen Jetons) lebendig aus der Maschine – aus der Auswurfschale und aus
+//    dem Walzenfenster –, prallen auf dem Boden, rollen, blitzen. Je größer der Gewinn, desto mehr (Jackpot: Münzregen, Konfetti, Wackeln).
+//    Dazu „+N Silber“, das aus der Schale aufsteigt, und Münzgeklimper passend zu den Aufprallen.
+// L  Würfeltisch nach Pauls Vorlagen als Craps-Tisch (eigene Zeichnung, keine Vorlage kopiert): Wand mit Schaumstoff, Pass Line, Don't Pass Bar, COME,
+//    FIELD, Zahlenfelder 4–10 mit ON/OFF-Scheibe, Mittelfeld mit Einzelwurf-Wetten (Sieben 4:1, Any Craps 7:1, Hard-Wetten, Schlangenaugen …),
+//    Chip-Ständer, Stockmann Fortunato. Die Würfel werden geschüttelt, fliegen an die Wand, prallen zurück und rollen aus – mit Klängen für jeden Aufprall.
+//    Wetten: Pass Line · Don't Pass · Field · Sieben · Any Craps (Schalter unter dem Tisch) und alle Felder im Mittelfeld (anklicken).
+//    COME und Big 6/8 sind nur Zeichnung (Vorschlag 64.Z13). Sic Bo (Pauls sechstes Bild) ist noch nicht gebaut (Vorschlag 64.Z14).
+// M  Klang-Mischung: Am Spieltisch wird die Hintergrundmusik zum leisen Rauschen, und die Klangeffekte bleiben auch bei sehr leise gestellter Musik hörbar
+//    (Mindestlautstärke im Casino). Stumm (Regler ganz links) bleibt stumm.
+// N  Dialog-Hinweis („Mini-Cutscene“): Beginnt eine Figur von sich aus zu sprechen (z. B. der normale Typ), schieben sich oben und unten Balken ins Bild, ein
+//    Schild nennt den Sprecher, die Gruppe dreht sich zu ihm, ein „!“ erscheint über ihm, ein Ton erklingt, und die Zeile im Verlauf leuchtet auf.
+
+// ---------- M. Klang-Mischung ----------
+const CASMUS64=.22;
+function inCas64(){try{return !!(CAS34&&CAS34.open&&CASEL34&&!CASEL34.hidden)}catch(e){return false}}
+{const _v=vol35;vol35=function(){const v=_v.apply(this,arguments);return v>0&&inCas64()?Math.max(.7,v):v}}
+{const _um=updateMusic;updateMusic=function(){if(inCas64()){const v=musicVol;musicVol=v*CASMUS64;try{return _um.apply(this,arguments)}finally{musicVol=v}}return _um.apply(this,arguments)}}
+{const _co=casOpen34;casOpen34=function(game){const r=_co.apply(this,arguments);try{if(CAS34.open==='wt'&&!CAS34.g)CAS34.msg='Craps: Wählt eine Wette (Pass Line, Don\'t Pass, Field … oder ein Feld im Mittelfeld anklicken) und würfelt.';updateMusic()}catch(e){}return r}}
+{const _cc=casClose34;casClose34=function(){try{if(CAS34.open==='wt'&&CAS34.g&&CAS34.g.rolling)wtFinish64(CAS34.g)}catch(e){}const r=_cc.apply(this,arguments);try{updateMusic()}catch(e){}return r}}
+function g64(g,f){const o=GAIN35;GAIN35=g;try{f()}finally{GAIN35=o}}
+
+// ---------- K. Automat: Münzen springen aus der Maschine ----------
+function rnd64(i,k){const v=Math.sin(i*127.1+k*311.7)*43758.5453;return v-Math.floor(v)}
+// Flug einer Münze: Start (x0,y0), Anfangsgeschwindigkeit (vx,vy) in px/s, Boden fy; Aufprälle verlieren Schwung
+function coinPos64(x0,y0,vx,vy,t,fy,w){let x=x0+vx*t,yy=y0,v=vy,tt=t,hit=0;const g=1100;
+  x=Math.abs(((x%(2*w))+2*w)%(2*w));if(x>w)x=2*w-x;
+  for(let b=0;b<5;b++){const a=.5*g,bq=v,c=yy-fy,d=bq*bq-4*a*c;const tau=d>=0?(-bq+Math.sqrt(d))/(2*a):1e9;
+    if(tt<tau)return{x,y:yy+v*tt+.5*g*tt*tt,rest:0,hit};
+    tt-=tau;const vi=v+g*tau;yy=fy;v=-vi*.46;hit++;if(Math.abs(v)<90)return{x,y:fy,rest:1,hit}}
+  return{x,y:fy,rest:1,hit}}
+function slFx64(x,G,now){const cv=x.canvas,tw=now-G.t0-2200;if(tw<0)return;const jack=G.res.every(v=>v==='sieben'),gross=G.win>=10;
+  const n=jack?80:gross?34:14,span=jack?2600:gross?1500:700,life=jack?5200:gross?4200:3300,W=cv.width,FY=cv.height-22;
+  x.save();x.imageSmoothingEnabled=false;
+  // Blitz an der Schale
+  if(tw<420){const a=.42*(1-tw/420);x.fillStyle='rgba(255,236,130,'+a+')';x.beginPath();x.ellipse(170,276,60+tw*.25,26+tw*.1,0,0,7);x.fill()}
+  for(let i=0;i<n;i++){const ts=i/n*span,age=tw-ts;if(age<0||age>life)continue;const r=k=>rnd64(i,k),fromReel=r(1)<(jack?.5:gross?.4:.22);
+    const sx=fromReel?170+(r(2)-.5)*120:170+(r(2)-.5)*80,sy=fromReel?170:268,vx=(r(3)-.5)*2*(90+r(4)*230),vy=-(fromReel?460+r(5)*380:320+r(5)*420);
+    const P=coinPos64(sx,sy,vx,vy,age/1000,FY-r(6)*10,W-16);let al=1;if(age>life-700)al=Math.max(0,(life-age)/700);
+    x.globalAlpha=al;const chip=gross&&r(7)<.22,ang=age/(70+r(8)*50)+i;
+    if(chip){const col=['#c0392b','#2a4ab0','#2a8a3a','#e8e8e8'][i%4];x.fillStyle='#141210';x.fillRect(P.x-9,P.y-4,18,8);x.fillStyle=col;x.fillRect(P.x-8,P.y-3,16,6);x.fillStyle='#f8f4ea';x.fillRect(P.x-8,P.y-1,16,2)}
+    else{const cw=P.rest?14:Math.max(3,Math.abs(Math.cos(ang))*14),ch=P.rest?6:14,face=Math.cos(ang)>0;
+      x.fillStyle='#a8701a';x.fillRect(P.x-cw/2-1,P.y-ch/2-1,cw+2,ch+2);x.fillStyle=face?'#e8ba52':'#c8962a';x.fillRect(P.x-cw/2,P.y-ch/2,cw,ch);
+      if(cw>6){x.fillStyle=face?'#fff2a0':'#e8ba52';x.fillRect(P.x-cw/2+2,P.y-ch/2+2,Math.max(2,cw/3),Math.max(2,ch/3))}}
+    // Funkeln im Flug
+    if(!P.rest&&((age/90|0)+i)%5===0){x.fillStyle='#ffffff';x.fillRect(P.x+6,P.y-9,2,2);x.fillRect(P.x+5,P.y-8,4,1)}
+    x.globalAlpha=1}
+  // Konfetti beim Jackpot
+  if(jack&&tw<4200){const C=['#ff4a4a','#ffb02a','#ffe14a','#5aff7a','#4ab0ff','#c87aff'];for(let i=0;i<46;i++){const yy=((tw*.22+i*53)%420)-30,xx=(i*97+Math.sin(tw/260+i)*18)%W;x.fillStyle=C[i%6];x.fillRect(xx,yy,5,5)}}
+  // „+N Silber“
+  if(G.gain64>0&&tw<2600){const p=Math.min(1,tw/900),a=tw<1900?1:Math.max(0,(2600-tw)/700);x.globalAlpha=a;x.font='bold 30px monospace';x.textAlign='center';x.textBaseline='middle';
+    const t='+'+G.gain64+' Silber';x.lineWidth=5;x.strokeStyle='#141210';x.strokeText(t,170,262-ease64(p)*70);x.fillStyle='#fff2a0';x.fillText(t,170,262-ease64(p)*70);x.globalAlpha=1}
+  x.restore();
+  // Wackeln (nur kurz, nur bei großen Gewinnen)
+  const sh=jack?tw<900:gross?tw<350:false;cv.style.transform=sh?'translate('+Math.round((Math.random()-.5)*6)+'px,'+Math.round((Math.random()-.5)*6)+'px)':''}
+{const _sd=slDraw34;slDraw34=function(R,T,x){const r=_sd.apply(this,arguments);try{const G=CAS34.g;if(G&&!G.live&&G.win>=2&&G.res)slFx64(x,G,performance.now());else if(x.canvas.style.transform)x.canvas.style.transform=''}catch(e){console.warn('p64s',e)}return r}}
+slLoop34=function(){if(CAS34.open!=='sl'||!CASEL34||CASEL34.hidden)return;const c=CASEL34.querySelector('canvas'),G=CAS34.g;if(c&&!(G&&G.live))drawCas34(c);
+  const fx=G&&!G.live&&G.win>=2&&performance.now()-G.t0-2200<5600;setTimeout(()=>requestAnimationFrame(slLoop34),fx?16:60)};
+{const _st=settle34;settle34=function(mult,why){try{if(CAS34.open==='sl'&&CAS34.g&&mult>=2){const s=CAS34.stake,G=CAS34.g;G.gain64=s.typ==='silber'?s.amt*(mult-1):0;
+    const jack=G.res&&G.res.every(v=>v==='sieben'),gross=mult>=10;sfx64('muenzfall64',{n:jack?50:gross?24:10,span:jack?2600:gross?1500:700})}}catch(e){}return _st.apply(this,arguments)}}
+
+// ---------- Klänge: Münzen, Würfel ----------
+Object.assign(SFX64,{
+  muenzfall64(a){a=a||{n:10,span:700};g64(1.5,()=>{noise35(0,a.span/1000+.4,.1,5200,2);for(let i=0;i<a.n;i++){const t=.05+i/a.n*a.span/1000+Math.random()*.05;coin35(t,.2);noise35(t+.06,.02,.35,4600+Math.random()*1200,7)}})},
+  wuerfelschuettel(){g64(1.5,()=>{for(let i=0;i<15;i++){const t=i*.03+Math.random()*.012;noise35(t,.022,.5,1500+Math.random()*2600,5);if(i%3===0)osc35('triangle',900+Math.random()*500,600,t,.03,.14,.002)}})},
+  wuerfelwurf(){g64(1.3,()=>{noise35(0,.24,.2,650,1.3);noise35(.05,.16,.16,1500,1.2)})},
+  wuerfelwand(){g64(1.7,()=>{osc35('sine',190,70,0,.13,.55,.002);noise35(0,.05,.5,520,1.5);noise35(.01,.03,.3,2400,5)})},
+  wuerfelklack(){g64(1.5,()=>{noise35(0,.02,.7,3800,8);noise35(.002,.03,.4,2200,6);osc35('sine',2100,1300,0,.05,.3,.001);osc35('sine',380,260,0,.07,.4,.002);noise35(.09,.02,.45,3300,8);osc35('sine',1900,1200,.09,.04,.22,.001)})},
+  wuerfeltick(){g64(1.4,()=>{noise35(0,.018,.6,3400,8);osc35('sine',1700,1100,0,.04,.22,.001)})},
+  wuerfelrollen(){g64(1.3,()=>{for(let i=0;i<9;i++)noise35(i*(.045+i*.012),.02,.4*(1-i/12),2200+Math.random()*1200,6);noise35(0,.45,.1,900,1.5)})},
+  puck64(){g64(1.4,()=>{noise35(0,.02,.5,3000,6);osc35('sine',900,600,0,.05,.25,.001);noise35(.05,.015,.35,2600,6)})}
+});
+
+// ---------- L. Würfeltisch: Craps ----------
+const WTB64={pass:['Pass Line',2],dont:['Don\'t Pass',2],field:['Field',2],seven:['Sieben (Any Seven)',5],craps:['Any Craps',8],
+  hard4:['Hard 4 (2+2)',11],hard10:['Hard 10 (5+5)',11],hard6:['Hard 6 (3+3)',9],hard8:['Hard 8 (4+4)',9],
+  aces:['Schlangenaugen (1+1)',31],boxcars:['Doppelsechs (6+6)',31],acedeuce:['Ass-Zwei (1+2)',16],yo:['Yo-Elf (5+6)',16]};
+const WTC64=[{k:'pass',x:36,y:126,w:164,h:11},{k:'dont',x:36,y:114,w:164,h:10},{k:'field',x:36,y:90,w:164,h:22},{k:'seven',x:208,y:48,w:100,h:12},
+  {k:'hard4',x:208,y:62,w:48,h:13},{k:'hard10',x:260,y:62,w:48,h:13},{k:'hard6',x:208,y:77,w:48,h:13},{k:'hard8',x:260,y:77,w:48,h:13},
+  {k:'aces',x:208,y:92,w:48,h:13},{k:'boxcars',x:260,y:92,w:48,h:13},{k:'acedeuce',x:208,y:107,w:48,h:13},{k:'yo',x:260,y:107,w:48,h:13},{k:'craps',x:208,y:122,w:100,h:13}];
+const WTSH64=480,WTDUR64=1650,WTNM64={4:'Vier',5:'Fünf',6:'Sechs',8:'Acht',9:'Neun',10:'Zehn'};
+function wtBet64(){return WTB64[CAS34.wb]?CAS34.wb:'pass'}
+function wtCell64(k){return WTC64.find(c=>c.k===k)}
+function wtRatio64(k){const m=WTB64[k][1];return(m-1)+' : 1'}
+function wtCall64(a,b,s){return s===7?'Sieben!':s===11?'Yo – Elf!':s===12?'Zwölf, Doppelsechs!':s===2?'Schlangenaugen!':s===3?'Ass-Zwei.':(a===b?'Harte '+WTNM64[s]+'!':WTNM64[s]+'.')}
+// Ergebnis eines Wurfs: {m,k,w} = Ende (Auszahlung, Art, Text) · {pt,w} = Punkt gesetzt · {again,w} = weiter
+function wtRes64(G,a,b){const s=a+b,bet=G.bet,P=G.pt,one=(m,k)=>({m:m,k:m>1?'win':m===1?'push':'lose',w:''});
+  if(bet==='pass'){if(!P){if(s===7||s===11)return{m:2,k:'win',w:'Eine '+s+' beim ersten Wurf!'};if(s===2||s===3||s===12)return{m:0,k:'lose',w:'Eine '+s+'. Der Tisch nimmt.'};return{pt:s,w:'Punkt: '+s+'. Jetzt muss die '+s+' wiederkommen – vor der Sieben.'}}
+    if(s===P)return{m:2,k:'win',w:'Die '+s+' ist wieder da!'};if(s===7)return{m:0,k:'lose',w:'Sieben raus. Vorbei.'};return{again:1,w:'Eine '+s+'. Weiter, bis die '+P+' kommt.'}}
+  if(bet==='dont'){if(!P){if(s===2||s===3)return{m:2,k:'win',w:'Eine '+s+': Die Gegenwette gewinnt.'};if(s===7||s===11)return{m:0,k:'lose',w:'Eine '+s+'. Die Gegenwette verliert.'};if(s===12)return{m:1,k:'push',w:'Zwölf: Unentschieden (Bar 12).'};
+      return{pt:s,w:'Punkt: '+s+'. Ihr setzt dagegen: Die Sieben muss vor der '+s+' kommen.'}}
+    if(s===7)return{m:2,k:'win',w:'Sieben! Die Gegenwette gewinnt.'};if(s===P)return{m:0,k:'lose',w:'Die '+s+' ist wieder da. Die Gegenwette verliert.'};return{again:1,w:'Eine '+s+'. Weiter, bis die Sieben kommt (oder die '+P+').'}}
+  let m=0,why='';const bm=WTB64[bet][1];
+  if(bet==='field'){m=[3,4,9,10,11].includes(s)?2:(s===2||s===12)?3:0;why=m===3?'Eine '+s+': Das Feld zahlt doppelt!':m?'Eine '+s+': Das Feld gewinnt.':'Eine '+s+': Das Feld verliert.'}
+  else if(bet==='seven'){m=s===7?bm:0;why=m?'Sieben! 4 : 1.':'Eine '+s+'. Keine Sieben.'}
+  else if(bet==='craps'){m=[2,3,12].includes(s)?bm:0;why=m?'Eine '+s+': Craps! 7 : 1.':'Eine '+s+'. Kein Craps.'}
+  else{const hit={hard4:a===2&&b===2,hard10:a===5&&b===5,hard6:a===3&&b===3,hard8:a===4&&b===4,aces:a===1&&b===1,boxcars:a===6&&b===6,acedeuce:s===3,yo:s===11}[bet];m=hit?bm:0;why=hit?WTB64[bet][0]+'! '+(bm-1)+' : 1.':'Eine '+s+' ('+a+'+'+b+'). Nicht getroffen.'}
+  return{m:m,k:m>1?'win':m===1?'push':'lose',w:why}}
+function wtSay64(G,t){G.say64=[t,performance.now()]}
+function wtRoll64(){let G=CAS34.g;if(G&&G.rolling)return;
+  if(!(G&&G.pt)){if(!begin34())return;const p=G;G=CAS34.g={pt:0,live:0,hist:(p&&p.hist)||[],a:(p&&p.a)||0,b:(p&&p.b)||0,seed:(p&&p.seed)||Math.random()*1000,bet:wtBet64()}}
+  const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);G.a=a;G.b=b;G.rolling=1;G.live=1;G.res64=null;G.end64=null;G.ptT=null;G.seed=Math.random()*1000;G.t0=performance.now()+WTSH64;
+  sfx64('wuerfelschuettel');setTimeout(()=>{if(CAS34.g===G&&G.rolling)sfx64('wuerfelwurf')},WTSH64-80);
+  [[.40,'wuerfelwand'],[.72,'wuerfelklack'],[.9,'wuerfeltick']].forEach(([u,k])=>setTimeout(()=>{if(CAS34.g===G&&G.rolling)sfx64(k)},WTSH64+u*WTDUR64));
+  setTimeout(()=>{if(CAS34.g===G&&G.rolling)sfx64('wuerfelrollen')},WTSH64+.74*WTDUR64);
+  G.timer=setTimeout(()=>{if(CAS34.g===G&&CAS34.open==='wt')wtFinish64(G)},WTSH64+WTDUR64+260);
+  CAS34.msg='Die Würfel rollen …';wtSay64(G,pick(['Würfel, bitte.','Die Würfel kommen.','Bitte würfeln.']))}
+function wtFinish64(G){if(!G||!G.rolling)return;G.rolling=0;clearTimeout(G.timer);const a=G.a,b=G.b,s=a+b,now=performance.now();G.hist.push(s);if(G.hist.length>9)G.hist.shift();
+  const R=wtRes64(G,a,b);G.callT=now;G.call64=wtCall64(a,b,s);wtSay64(G,G.call64);
+  if(R.pt){G.pt=R.pt;G.live=1;G.ptT=now;CAS34.msg=R.w;sfx64('puck64')}
+  else if(R.again){G.live=1;CAS34.msg=R.w}
+  else{G.live=0;G.pt=0;G.res64=R.k;G.end64=now+250;G.stake64={n:stakeN64(),col:stakeCol64()};settle34(R.m,R.w);
+    sfx64(R.k==='win'?(R.m>=8?'gross':'gewinn'):R.k==='push'?'push':'verloren');setTimeout(()=>{if(CAS34.g===G)sfx64('chips',R.k==='win'?(R.m>=8?9:6):4)},650)}
+  try{renderCas34()}catch(e){}}
+wtUi34=function(row){const G=CAS34.g,busy=!!(G&&G.rolling),lock=busy||!!(G&&G.live&&G.pt);
+  [['pass','Pass Line'],['dont','Don\'t Pass'],['field','Field'],['seven','Sieben 4:1'],['craps','Any Craps 7:1']].forEach(([k,n])=>btn34(row,n,()=>{CAS34.wb=k;sfx64('chip')},wtBet64()===k,lock));
+  btn34(row,G&&G.pt?'Weiter würfeln (Punkt '+G.pt+')':'Würfeln',()=>wtRoll64(),0,busy)};
+function wtClick64(cv,e){const r=cv.getBoundingClientRect(),lx=(e.clientX-r.left)/r.width*320,ly=(e.clientY-r.top)/r.height*150,G=CAS34.g;
+  const c=WTC64.find(c=>lx>=c.x&&lx<c.x+c.w&&ly>=c.y&&ly<c.y+c.h);if(!c)return;
+  if(G&&(G.rolling||(G.live&&G.pt))){CAS34.msg=G.rolling?'Die Würfel rollen noch.':'Die Wette läuft, bis der Punkt fällt oder die Sieben kommt.';renderCas34();return}
+  CAS34.wb=c.k;sfx64('chip');CAS34.msg=WTB64[c.k][0]+': Auszahlung '+wtRatio64(c.k)+'.';renderCas34()}
+{const _rc=renderCas34;renderCas34=function(){const r=_rc.apply(this,arguments);try{if(!CASEL34||CAS34.open!=='wt')return r;const cv=CASEL34.querySelector('canvas');
+  if(cv){cv.height=300;cv.style.cursor='pointer';cv.addEventListener('pointerdown',e=>{try{wtClick64(cv,e)}catch(x){}});drawCas34(cv)}wtLoop64()}catch(e){console.warn('p64s',e)}return r}}
+let WTL64=0;
+function wtLoop64(){if(WTL64)return;const step=()=>{if(CAS34.open!=='wt'||!CASEL34||CASEL34.hidden){WTL64=0;return}const c=CASEL34.querySelector('canvas');if(c)try{drawCas34(c)}catch(e){console.warn('p64s',e)}WTL64=requestAnimationFrame(()=>setTimeout(step,28))};WTL64=requestAnimationFrame(step)}
+
+// Würfel: Lage zu jedem Zeitpunkt (Schütteln in der Hand → Wurf an die Wand → Rückprall → Hüpfer → ausrollen)
+function dieP64(i,G,now){const sd=G.seed||0,rj=k=>{const v=Math.sin(sd*13.7+i*91.3+k*47.1)*43758.5453;return v-Math.floor(v)};
+  const S0=[44+i*8,110],W=[128+i*26+rj(1)*14,50+rj(2)*3],F=[116+i*26+rj(3)*20,70+rj(4)*12],M=[W[0]+(F[0]-W[0])*.55,W[1]+(F[1]-W[1])*.75],fin=i?G.b:G.a,lerp=(a,b,t)=>a+(b-a)*t;
+  if(!G.a)return{x:S0[0],y:S0[1],h:0,ang:.2*(i?1:-1),face:i?2:5};
+  const age=G.t0==null?1e9:now-G.t0;
+  if(age>=WTDUR64)return{x:F[0],y:F[1],h:0,ang:.14*(i?1:-1)+rj(5)*.3,face:fin};
+  const fc=((Math.floor(((age/70)|0)*7+i*3+sd)%6)+6)%6+1;
+  if(age<0)return{x:S0[0]+Math.sin(age/33+i*2)*2,y:S0[1]+Math.cos(age/27+i)*2,h:7+Math.abs(Math.sin(age/40+i))*3,ang:Math.sin(age/45+i)*.7,face:fc};
+  const u=age/WTDUR64,sp=(i?1:-1)*(5+rj(6)*4);
+  if(u<.40){const p=u/.40;return{x:lerp(S0[0],W[0],p),y:lerp(S0[1],W[1],p),h:24*Math.sin(p*Math.PI)+5*p,ang:p*sp*1.4,face:fc}}
+  if(u<.72){const p=(u-.40)/.32,e=1-(1-p)*(1-p);return{x:lerp(W[0],M[0],e),y:lerp(W[1],M[1],e),h:Math.max(0,14*Math.sin(p*Math.PI)+5*(1-p)),ang:sp*1.4+p*sp,face:fc}}
+  if(u<.90){const p=(u-.72)/.18;return{x:lerp(M[0],F[0],p),y:lerp(M[1],F[1],p),h:5*Math.sin(p*Math.PI),ang:sp*2.4+p*sp*.4,face:p>.7?fin:fc}}
+  return{x:F[0],y:F[1],h:0,ang:lerp(sp*2.8,.14*(i?1:-1)+rj(5)*.3,(u-.9)/.1),face:fin}}
+const PIP64={1:[[0,0]],2:[[-1,-1],[1,1]],3:[[-1,-1],[0,0],[1,1]],4:[[-1,-1],[1,-1],[-1,1],[1,1]],5:[[-1,-1],[1,-1],[0,0],[-1,1],[1,1]],6:[[-1,-1],[-1,0],[-1,1],[1,-1],[1,0],[1,1]]};
+function dieDraw64(x,cx,cy,h,face,ang){x.save();x.fillStyle='rgba(0,0,0,.3)';x.beginPath();x.ellipse(cx*2,cy*2+9,Math.max(5,13-h*.3),3.5,0,0,7);x.fill();
+  x.translate(cx*2,(cy-h)*2);x.rotate(ang);const S=24,o=-12;x.fillStyle='#6a1410';x.fillRect(o-1,o-1,S+2,S+2);x.fillStyle='#d8382a';x.fillRect(o,o,S,S);
+  x.fillStyle='#ff7a5a';x.fillRect(o,o,S,3);x.fillRect(o,o,3,S);x.fillStyle='#a82a1e';x.fillRect(o,o+S-3,S,3);x.fillRect(o+S-3,o,3,S);
+  x.fillStyle='#ffffff';(PIP64[face]||PIP64[1]).forEach(([a,b])=>x.fillRect(a*7-2,b*7-2,4,4));x.restore()}
+function miniDie64(R,x,y,n){R(x,y,7,7,'#141210');R(x+1,y+1,5,5,'#f8f4ea');(PIP64[n]||[]).forEach(([a,b])=>R(x+3+Math.round(a*1.5),y+3+Math.round(b*1.5),1,1,'#141210'))}
+function wtBox64(R,c,col){R(c.x,c.y,c.w,1,col);R(c.x,c.y+c.h-1,c.w,1,col);R(c.x,c.y,1,c.h,col);R(c.x+c.w-1,c.y,1,c.h,col)}
+wtDraw34=function(R,T,x){const G=CAS34.g,now=performance.now(),bet=wtBet64(),L='#cfe8cf';
+  wall64(R,36);
+  // Chip-Ständer des Hauses an der Wand
+  R(104,26,92,10,'#2a1408');R(105,27,90,8,'#140a06');[['#e8e8e8','#8a8a96'],['#c0392b','#ffe0d8'],['#2a4ab0','#e0e8ff'],['#2a8a3a','#e8f8e0'],['#7a3aa0','#f0d0ff'],['#e8ba52','#fff6c0'],['#c0392b','#ffe0d8'],['#2a4ab0','#e0e8ff']].forEach((c,i)=>stack64(R,112+i*11,35,3+(i%3),c));
+  // Stockmann Fortunato mit Stock
+  const st={mood:'idle',hl:[262,40],hr:[296,41]};let tip=[300,56];
+  if(G&&G.callT!=null){const q=now-G.callT;if(q<1500){const F=dieP64(0,G,now);tip=[F.x+8,F.y-2];st.hr=[292,40];st.mood=G.a+G.b===7||G.res64==='lose'?'smile':'oh'}}
+  fort64(R,276,1,st,now);
+  rail64(R,36);R(0,41,320,109,'#14633a');for(let i=0;i<90;i++)R((i*47)%320,41+((i*31)%108),1,1,'#187a46');
+  // Wand mit Schaumstoff-Pyramiden (dort prallen die Würfel ab)
+  R(8,41,304,7,'#0e2418');for(let i=0;i<304;i+=6){R(8+i,41,3,2,'#1c4a30');R(8+i+3,44,3,2,'#1c4a30');R(8+i+1,42,1,4,'#2a6a46')}
+  R(0,41,8,109,'#6a3a1a');R(312,41,8,109,'#6a3a1a');R(0,41,1,109,'#a8784a');R(319,41,1,109,'#3a1a0a');R(7,48,1,92,'#3a1a0a');R(312,48,1,92,'#3a1a0a');
+  // Wettfelder
+  R(206,48,104,89,'#0f4f2d');wtBox64(R,{x:206,y:48,w:104,h:89},L);
+  WTC64.forEach(c=>{if(c.k==='pass'||c.k==='dont'||c.k==='field')return;wtBox64(R,c,L)});
+  T('SIEBEN  4 : 1',258,54,'#e8523a',10,'center');T('ANY CRAPS  7 : 1',258,129,'#e8523a',10,'center');
+  [['hard4',2,2,'10:1'],['hard10',5,5,'10:1'],['hard6',3,3,'8:1'],['hard8',4,4,'8:1'],['aces',1,1,'30:1'],['boxcars',6,6,'30:1'],['acedeuce',1,2,'15:1'],['yo',5,6,'15:1']].forEach(([k,a,b,t])=>{const c=wtCell64(k);miniDie64(R,c.x+3,c.y+3,a);miniDie64(R,c.x+11,c.y+3,b);T(t,c.x+33,c.y+7,'#fff2c4',9,'center')});
+  // Zahlenfelder, Come, Field, Don't Pass, Pass Line
+  [4,5,6,8,9,10].forEach((n,i)=>{const c={x:36+i*27,y:48,w:27,h:16};wtBox64(R,c,L);T(n===6?'SECHS':n===9?'NEUN':n+'',c.x+13.5,56,'#f4ecd8',n===6||n===9?8:12,'center');
+    if(G&&G.pt===n&&G.live){R(c.x+7,c.y+3,13,11,'#141210');R(c.x+8,c.y+4,11,9,'#f8f4ea');T('ON',c.x+13.5,9+48,'#141210',9,'center')}});
+  wtBox64(R,{x:36,y:66,w:164,h:22},L);T('COME',118,78,'#e8523a',18,'center');
+  const fc=wtCell64('field');wtBox64(R,fc,L);T('3 · 4 · 9 · 10 · 11',118,96,'#f6d84a',9,'center');T('FIELD',118,106,'#f6d84a',13,'center');
+  [[46,'2'],[190,'12']].forEach(([cx,t])=>{x.strokeStyle='#f6d84a';x.lineWidth=2;x.beginPath();x.arc(cx*2,200,13,0,7);x.stroke();T(t,cx,100,'#f6d84a',11,'center');T('doppelt',cx,111,'#f6d84a',6,'center')});
+  const dc=wtCell64('dont');wtBox64(R,dc,L);T('DON\'T PASS BAR',104,119,'#cfe8cf',8,'center');miniDie64(R,176,115,6);miniDie64(R,185,115,6);
+  const pc=wtCell64('pass');wtBox64(R,pc,L);R(pc.x+1,pc.y+1,pc.w-2,pc.h-2,'#1a7a46');T('PASS LINE',118,132,'#ffffff',10,'center');R(26,48,6,89,'#cfe8cf');R(27,49,4,87,'#14633a');R(26,126,10,11,'#cfe8cf');R(27,127,8,9,'#1a7a46');
+  if(!(G&&G.pt&&G.live)){R(34,70,13,11,'#141210');R(35,71,11,9,'#2a2a30');T('OFF',40.5,76,'#c8c8d0',7,'center')}
+  // gewählte Wette leuchtet
+  const bc=wtCell64(bet),pul=.16+.1*Math.sin(now/220);x.fillStyle='rgba(255,216,74,'+pul+')';x.fillRect(bc.x*2,bc.y*2,bc.w*2,bc.h*2);wtBox64(R,bc,'#ffd84a');R(bc.x+1,bc.y+1,bc.w-2,1,'#ffd84a');
+  // Einsatz-Chips
+  const sk=(G&&G.stake64)||{n:stakeN64(),col:stakeCol64()},E=G&&G.end64?now-G.end64:-1,cx=bc.x+bc.w/2,cy=bc.y+bc.h/2+5;
+  if(E<0||E<500)stack64(R,cx,cy,sk.n,sk.col);
+  else if(E<1300){const p=ease64((E-500)/800),k=G.res64;if(k==='push'){if(((E/120)|0)%2)stack64(R,cx,cy,sk.n,sk.col)}
+    else if(k==='win'){stack64(R,cx+(22-cx)*p,cy+(112-cy)*p,sk.n,sk.col);stack64(R,cx+8+(30-cx-8)*p,cy+(112-cy)*p,Math.min(8,sk.n*2),['#e8ba52','#fff6c0'])}
+    else stack64(R,cx+(280-cx)*p,cy+(44-cy)*p,sk.n,sk.col)}
+  else if(E>2600)stack64(R,cx,cy,sk.n,sk.col);
+  if(E>=0&&E<500&&G.res64==='win'){const p=ease64(E/450);stack64(R,280+(cx+8-280)*p,44+(cy-44)*p,Math.min(8,sk.n*2),['#e8ba52','#fff6c0'])}
+  // Stock des Stockmanns
+  {const sx=296,sy=44;for(let t=0;t<=1;t+=.02)R(Math.round(sx+(tip[0]-sx)*t),Math.round(sy+(tip[1]-sy)*t),2,2,'#b88a4a');R(tip[0]-1,tip[1]-1,4,3,'#8a5a2a');R(tip[0]-3,tip[1]+1,3,2,'#8a5a2a')}
+  // Würfel
+  for(let i=0;i<2;i++){const P=G?dieP64(i,G,now):{x:44+i*8,y:110,h:0,ang:.2*(i?1:-1),face:i?2:5};dieDraw64(x,P.x,P.y,P.h,P.face,P.ang)}
+  // Held, der würfelt
+  try{const im=heroImg(hero);if(im&&im.idle){x.drawImage(im.idle,5*2,(112-24+((now/500|0)%2))*2,32,48);T(hero.name.toUpperCase(),21,140,'#e8ba52',8,'center')}}catch(e){}
+  // gepolsterter Rand, Gesetztes, Würfe, Sprechblase
+  R(0,141,320,9,'#141210');R(0,141,320,1,'#3a3a44');R(0,146,320,1,'#0a0a0e');
+  T('Gesetzt: '+WTB64[bet][0]+' · '+wtRatio64(bet),8,10,'#e8ba52',10);T('Zwei Würfel, Stockmann Fortunato',8,22,'#c8e8d0',8);
+  if(G&&G.hist&&G.hist.length)T('Würfe: '+G.hist.join(' · '),44,145.5,'#c8e8d0',8);else T('Noch kein Wurf.',44,145.5,'#8a9a8f',8);
+  const sp=G&&G.say64;if(sp&&now-sp[1]<3000)bubble64(R,T,92,4,sp[0]);
+  if(G&&G.ptT&&now-G.ptT<1800)banner64(x,R,118,76,'PUNKT '+G.pt,'','#ffd84a',now,G.ptT);
+  if(G&&E>=0&&E<4000){const t={win:['GEWONNEN!','#9fe8a8'],lose:['VERLOREN','#ff9a8a'],push:['UNENTSCHIEDEN','#f4ecd8']}[G.res64];if(t)banner64(x,R,118,76,t[0],'',t[1],now,G.end64)}}
+
+// ---------- N. Dialog-Hinweis (Mini-Cutscene) ----------
+const CUE64={last:{},tmr:0,tmr2:0};
+{const st=document.createElement('style');st.textContent='#cue64{position:fixed;z-index:55;pointer-events:none;display:none;overflow:hidden}#cue64 i{position:absolute;left:0;right:0;height:0;background:#000;opacity:.86;transition:height .35s ease-out}#cue64 .b1{top:0}#cue64 .b2{bottom:0}#cue64.an i{height:10%}'+
+  '#cue64 .pill{position:absolute;left:50%;top:12%;transform:translate(-50%,-8px) scale(.92);opacity:0;background:#141210;border:2px solid #e8ba52;color:#fff2c4;padding:3px 12px;font:bold 13px monospace;letter-spacing:1px;white-space:nowrap;transition:opacity .3s,transform .3s}#cue64.an .pill{opacity:1;transform:translate(-50%,0) scale(1)}'+
+  'p.cue64p{animation:cuep64 1.8s ease-out}@keyframes cuep64{0%{background:rgba(232,186,82,.4);box-shadow:inset 0 0 0 2px #e8ba52}100%{background:transparent;box-shadow:inset 0 0 0 0 transparent}}'+
+  '@media (prefers-reduced-motion:reduce){#cue64 i,#cue64 .pill{transition:none}p.cue64p{animation:none}}';document.head.appendChild(st)}
+function cueTarget64(who){const k=String(who||'').toLowerCase();try{if(/normale typ/.test(k)&&typeof DUDE26!=='undefined'&&DUDE26&&DUDE26.scene===S.scene)return DUDE26}catch(e){}
+  try{const n=presentNpcs().find(o=>o.name&&(k===o.name.toLowerCase()||k.includes(o.name.toLowerCase())||o.name.toLowerCase().includes(k)));if(n)return n}catch(e){}
+  try{if(AMB&&AMB.scene===S.scene){const a=(AMB.list||[]).find(o=>o.name&&(k.includes(String(o.name).toLowerCase())||String(o.name).toLowerCase().includes(k)));if(a)return a}}catch(e){}return null}
+function cue64(who,p){const t=Date.now();const gap=t-(CUE64.last[who]||0);CUE64.last[who]=t;if(gap<12000)return false;
+  try{if(p)p.classList.add('cue64p')}catch(e){}
+  const o=cueTarget64(who);if(o){try{PARTY.filter(h=>h.hp>0).forEach(h=>{h.face=o.x>h.x?1:-1});if(o.face!=null||o.name)o.face=PARTY.length&&PARTY[0].x>o.x?1:-1}catch(e){}try{emo64(o,'!',1800,false)}catch(e){}}
+  let el=document.getElementById('cue64');if(!el){el=document.createElement('div');el.id='cue64';el.innerHTML='<i class="b1"></i><i class="b2"></i><span class="pill"></span>';document.body.appendChild(el)}
+  const cv=document.getElementById('scene'),r=cv?cv.getBoundingClientRect():{left:20,top:80,width:640,height:280};el.style.left=r.left+'px';el.style.top=r.top+'px';el.style.width=r.width+'px';el.style.height=r.height+'px';
+  el.querySelector('.pill').textContent='✦ '+who+' spricht …';el.style.display='block';el.classList.remove('an');void el.offsetWidth;el.classList.add('an');
+  clearTimeout(CUE64.tmr);clearTimeout(CUE64.tmr2);CUE64.tmr=setTimeout(()=>el.classList.remove('an'),2500);CUE64.tmr2=setTimeout(()=>{el.style.display='none'},2900);
+  try{sfx64('ding64')}catch(e){}return true}
+{const _say=say;say=function(text,cls,who){const p=_say.apply(this,arguments);try{if(cls==='npc'&&who&&!talk&&!TAC&&!inFight())cue64(who,p)}catch(e){}return p}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
