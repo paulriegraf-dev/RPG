@@ -23446,6 +23446,51 @@ const GEWINNAB64=10;
 {const _ss64=slotSpin34;slotSpin34=function(cb){const r=_ss64.apply(this,arguments);try{const res=(TAC&&TAC.slotRes34||[]).slice();if(res.length>=3&&res[0]===res[1]&&res[1]===res[2])setTimeout(()=>{if(TAC){S.flags.gewinn64=(S.flags.gewinn64||0)+1;sfx64('gewinn64')}},2300)}catch(e){}return r}}
 
 
+// ================= Prototyp 64 (d, Nachbesserung 3): Fäden einklappen, Fremdes Gesicht, Begegnungen mit der Zeit (Paul, 24.10., 16:33) =================
+// 1. „Was wir wissen“: Jeder Faden auf der Fragen-Tafel lässt sich einklappen. Ist ein Faden beantwortet (er hatte Fragen, keine ist mehr offen),
+//    klappt er von selbst zu. Dazu „Fokus“ je Faden (nur dieser bleibt offen) und oben „Alle auf / Alle zu / Beantwortete zu“.
+//    Was der Spieler selbst auf- oder zuklappt, bleibt so (gespeichert in S.w57.zu64).
+// 2. Finale: Der Gast hat „Fremdes Gesicht“ immer – außer die Gruppe hat in Viellos die Sache mit dem zweiten Miras beendet (Fakt miras_ende).
+// 3. Begegnungen auf der Weltkarte (Bruder Benno → Kloster, das Paar mit Blumenkränzen → Friede Freude Land): anfangs seltener,
+//    die Chance steigt mit den Tagen im Spiel. Der Spielleiter kann sie weiter für die nächste Reise erzwingen.
+
+// ---------- 1. Fäden einklappen ----------
+{const st=document.createElement('style');st.textContent=
+  '#wiss57 .arc64 h3{display:flex;align-items:center;gap:6px}#wiss57 .arc64 h3 .tg64{padding:0 6px;font-size:13px;line-height:1.2}#wiss57 .arc64 h3 .fk64{margin-left:auto;font-size:11px;padding:1px 6px}'+
+  '#wiss57 .arc64 .ok64{color:#7ad48a;font-size:12px}#wiss57 .arc64 .sum64{display:none}#wiss57 .arc64.zu64 .sum64{display:block}#wiss57 .arc64.zu64>p:not(.sum64){display:none}'+
+  '#wiss57 .ctl64 button{font-size:12px;padding:1px 7px;margin-right:4px}';document.head.appendChild(st)}
+function zu64(){const W=W57();W.zu64=W.zu64||{};return W.zu64}
+function arcIds64(a){return Object.keys(WK57).filter(id=>WK57[id].arc===a&&wVis57(id))}
+function arcStat64(a){const ids=arcIds64(a),W=W57();const hasQ=ids.some(id=>WK57[id].frage),open=ids.some(id=>offen57(id));
+  return{n:ids.length,hasQ,open,fertig:hasQ&&!open,neu:ids.filter(id=>W.k[id]&&W.k[id].n>W.seen).length}}
+function arcZu64(a){const z=zu64();if(z[a]!=null)return!!z[a];return arcStat64(a).fertig}
+{const _tf64=tafel57;tafel57=function(){let h=_tf64.apply(this,arguments);try{if(h.indexOf('<div class="grid">')<0)return h;
+    for(const a of ARCORD57){const t=esc57(ARC57[a]),nd='<div class="card2"><h3>'+t+'</h3>';if(h.indexOf(nd)<0)continue;const s=arcStat64(a),zu=arcZu64(a);
+      const rp='<div class="card2 arc64'+(zu?' zu64':'')+'" data-arc64="'+a+'"><h3><button type="button" class="tg64" data-zu64="'+a+'" aria-expanded="'+(!zu)+'" title="'+(zu?'Aufklappen':'Einklappen')+'">'+(zu?'▸':'▾')+'</button>'+
+        '<span>'+t+'</span>'+(s.fertig?'<span class="ok64">✓ beantwortet</span>':'')+(zu&&s.neu?NB57:'')+'<button type="button" class="fk64" data-fokus64="'+a+'" title="Nur diesen Faden offen lassen, alle anderen einklappen">Fokus</button></h3>'+
+        '<p class="small sum64">'+(s.fertig?'Beantwortet – ':'')+s.n+(s.n===1?' Eintrag':' Einträge')+' eingeklappt.</p>';
+      h=h.replace(nd,rp)}
+    h=h.replace('<div class="grid">','<p class="small ctl64"><button type="button" data-alle64="auf">Alle aufklappen</button><button type="button" data-alle64="zu">Alle einklappen</button><button type="button" data-alle64="auto">Beantwortete einklappen</button></p><div class="grid">')}catch(e){console.warn('p64d',e)}return h}}
+DLG57.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-zu64],[data-fokus64],[data-alle64]');if(!b)return;e.stopPropagation();const z=zu64();
+  if(b.dataset.zu64){const a=b.dataset.zu64;z[a]=!arcZu64(a)}
+  else if(b.dataset.fokus64){const a=b.dataset.fokus64;for(const x of ARCORD57)z[x]=x!==a}
+  else{const k=b.dataset.alle64;if(k==='auto')W57().zu64={};else for(const x of ARCORD57)z[x]=k==='zu'}
+  try{renderDlg57()}catch(x){}});
+
+// ---------- 2. Finale: Fremdes Gesicht ----------
+// Paul: „dass der Gast die Fähigkeit ‚Fremdes Gesicht‘ immer hat, außer wenn die Heldengruppe Miras bzw. den zweiten Miras in Viellos besiegt.“
+// „Besiegt“ = die Frage „Spielt das eine Rolle?“ ist beantwortet (K25i, Fakt miras_ende): Danach ist der zweite Miras in jedem Fall weg.
+{const _fr64=frags38;frags38=function(){const f=_fr64.apply(this,arguments).filter(x=>x.k!=='viel');
+  if(!(S.facts&&S.facts.miras_ende))f.push({k:'viel',n:S.facts&&S.facts.miras_zwei?'das Vielgesicht aus Viellos':'das Vielgesicht',e:'Fähigkeit „Fremdes Gesicht“'});return f}}
+
+// ---------- 3. Begegnungen mit der Zeit ----------
+// Tag 1 im Spiel = day43() 0. Bisher: Benno ab der 3. Reise 25 % (+12 % je verpasster Begegnung, bis 80 %), das Paar ab der 4. Reise 20 %.
+// Jetzt: Benno ab Tag 2 mit 8 %, je Tag +5 % (+4 % je verpasster Begegnung), höchstens 50 %. Das Paar ab Tag 3 mit 6 %, je Tag +4 %, höchstens 35 %.
+const WEVRAMP64={moench:{reisen:2,ab:1,start:.08,proTag:.05,miss:.04,max:.5},blumen:{reisen:3,ab:2,start:.06,proTag:.04,miss:0,max:.35}};
+function wevChance64(k,s){const R=WEVRAMP64[k];let d=0;try{d=day43()}catch(e){}if(!R||(s.trips||0)<R.reisen||d<R.ab)return 0;return Math.min(R.max,R.start+R.proTag*(d-R.ab)+R.miss*(s.miss||0))}
+try{Object.keys(WEVRAMP64).forEach(k=>{if(WEVDEF32[k])WEVDEF32[k].chance=s=>wevChance64(k,s)})}catch(e){console.warn('p64d',e)}
+
+
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
 fresh();initRuleForm();setTD(TD);intro();renderAll();renderChron();renderRules();requestAnimationFrame(frame);
 })();
