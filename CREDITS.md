@@ -28,3 +28,10 @@ Die neuen Figuren und Szenen in Prototyp 23 sind im Hausstil nachgebaut. Diese P
   - `gewinn_1zu1_…` – „Level Up Bonus Sequence 2“ (floraphonic, Pixabay)
   - `gewinn_4zu1_…` – „Coin Up“ (freesound_community, Pixabay)
 - Alle übrigen Banditen-Klänge (Hebel, Walzen, Stopp, Einsatz zurück, Nichts, 7:1, 10:1, 16:1, 22:1, Jackpot) werden im Spiel selbst erzeugt (WebAudio), keine fremden Aufnahmen.
+
+## Klänge (Prototyp 64)
+- Blackjack und Roulette, von Paul bereitgestellt (Pixabay-Inhaltslizenz laut Dateinamen; liegen in `Quellcode/p27/sfx35/`):
+  - `karte_…` – „Card Drop 2“ (freesound_community, Pixabay): Karten landen auf dem Tisch, beim Aufdecken etwas heller abgespielt
+  - `kessel_…` – „Spinning Roulette Wheel“ (spinopel, Pixabay): der Roulette-Kessel mit Kugel
+- Chips, Mischen und Kugel-Klicks werden im Spiel selbst erzeugt (WebAudio). Gewinn- und Verlustklänge wie am Automaten (siehe Prototyp 35).
+- Anregungen ohne übernommenen Code oder Grafik: N8Brown/blackjack-game (GitHub, ohne Lizenz – nur die Idee „Karten austeilen und umdrehen“), manim_ace (kjlubick, Code-Animationen), Video „Animated Python: Functions and Blackjack“ (Concepts Illuminated), Pauls Beispielbilder für Roulette- und Blackjack-Tische (nur als Stil).

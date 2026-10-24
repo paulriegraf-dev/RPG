@@ -23,7 +23,8 @@ Ein textbasiertes Pixel-Rollenspiel und Spielleiter-Werkzeug in der Welt **Paulu
    reisen entscheidet ihr gemeinsam über den Spielleiter. Musik: ♪ an/aus und der Regler daneben.
 5. **Mein Held** zeigt Leben, Geist, Techniken und Gepäck. Das Feld unten schickt Nachrichten an alle.
    Freitext unter dem Log geht als Eingabe deines Helden ans Spiel.
-6. Würfeln: den Würfel anklicken (oder Leertaste). Übungen bei Lehrmeistern (Noten, Takt …) laufen direkt bei dir.
+6. Würfeln: den Würfel anklicken (oder Leertaste). Übungen bei Lehrmeistern (Noten, Takt …) und der Rhythmus-Kampf
+   gegen den Mind-Beater laufen direkt bei dir. Die Klänge an den Spieltischen hörst du mit.
 7. Etwas kaputt? **🐞** in der Leiste: kurz beschreiben und abschicken – der Bericht geht an den Spielleiter.
 
 **Gut zu wissen**
