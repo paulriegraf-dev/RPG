@@ -22867,16 +22867,372 @@ function casinoSwap64(){const M=TAC_MAPS.casino34,H=TAC.o.haus64||{};TAC.M=M;TAC
   const d0=T.units.find(u=>u.kind==='der normale typ');const[cx,cy]=d0?tScr(d0.x!=null?d0.x:d0.c,d0.y!=null?d0.y:d0.r,0):[W2/2,H2/2];
   for(let i=0;i<36;i++){const an=i*.7+p*12,rad=Math.max(0,(1-p*1.3))*Math.max(W2,H2)*.6*((i%5)/5+.4);const x=cx+Math.cos(an)*rad,y=cy-10+Math.sin(an)*rad*.55;tq(x-2,y-1,4,3,i%3?'#e8ba52':'#fff2a0');tq(x-1,y-1,2,1,'#fff8d0')}
   const a=Math.max(0,1-Math.abs(p-.47)*2.6);TG.globalAlpha=Math.min(.95,a);tq(0,0,W2,H2,'#fff2c0');TG.globalAlpha=1}}catch(e){TG.globalAlpha=1}return r}}
+// ---------- Nachbesserung (Paul 24.10., 12:39, Frage 64.F1: „dann bleiben wir im Casino“) ----------
+// Nach dem Sieg bleibt die Gruppe im Casino; das Erwachen passiert dort. Nur der erste Satz des Erwachens ändert sich (Ventil hinter der Kasse).
+// Endet der Kampf ausnahmsweise schon im Haus (vor dem Wechsel ins Casino), bleibt alles wie bisher.
+const ERWV64='Das Ventil quietscht. Dann dreht sich das Summen um. Die Jetons im Glasbauch leuchten auf, einer nach dem anderen – und fließen nicht ins Rohr, sondern nach oben, durch die Decke, zurück in die Stadt.';
+const ERWC64T='Hinter der Kasse quietscht das Ventil. Ohne ihn hält es nicht mehr. Das Summen dreht sich um, die Jetons auf den Tischen leuchten auf, einer nach dem anderen – und steigen nach oben, durch die Decke, zurück in die Stadt.';
+let ERWC64=0;
+gfWin34=function(){const F=ffl34();F.gf.done='kampf';slotHide34();say('Der Geschäftsführer geht in die Knie. Die Jetons rollen ziellos auseinander. Für einen Moment seht ihr die Automaten durch ihn hindurch.','dm');
+  dSay26('Schon gut. Schon gut! Das Haus … schließt. Für heute. Für alles außer Silber.',1600);dSay26('Lest das Kleingedruckte, wenn ihr das nächste Mal etwas gewinnt.',4600);
+  setTimeout(()=>{say('Puff. Golden.','dm');addChron('Der Geschäftsführer ist im Casino besiegt. Das Haus steht offen.',['ruf+'],true);
+    const cas=sceneIdByName('Casino Zum Ewigen Sonntag');if(cas&&S.scene===cas)ERWC64=Date.now();
+    else{const id=sceneIdByName('Das Haus');if(id&&S.scene!==id){window.__noTravel=true;try{switchScene(id)}finally{window.__noTravel=false}}}
+    setTimeout(()=>erwachen34('kampf'),1800)},7000)};
+{const _s64e=say;say=function(text,cls,who){if(text===ERWV64&&ERWC64&&Date.now()-ERWC64<20000){ERWC64=0;arguments[0]=ERWC64T}return _s64e.apply(this,arguments)}}
 
 
-// Prototyp 64: eigene Sätze für die Heldenauswahl (aus Helden/heldensaetze.xlsx)
-const SATZ64={};
+// Prototyp 64: Pauls Einträge aus Helden/heldensaetze.xlsx (Sätze, Namen, Klassen-Aktionen, Typ-Knöpfe)
+const SATZ64={"aldric": "Alter Magier mit noch älterem Eichenstab. Muss ein „verzaubertes“ Magiebuch haben, da er jedes Mal den Staub vom Buch pusten muss.", "oda": "Riecht nach Kamille. Weiß auch, wo die Kamille wächst.", "rieke": "Mischt alles mit allem. Was ist eine Anleitung?", "bodo": "Redet wenig, hämmert viel. Die Nachbarn lieben ihn.", "liska": "Folgt jeder Spur. Meist ihren eigenen.", "nyx": "Böse Hexe. Sie klopft heimlich ihren Besenstaub auf das Magiebuch von Aldric.", "wenzel": "Schweigt gern. Ups …", "yara": "Weiß, wohin der Wind weht.", "gerda": "Trägt einen Schild. Mag ihren Schild, sehr …", "pim": "Macht viralen Street-Magic-Content mit gekauften Schauspielern auf Paultube.", "hedda": "Kennt jeden Weg und jeden Klatsch.", "ulrich": "Stand zwanzig Jahre am Tor. Unbezahlt!", "jost": "Immer in der ersten Reihe, wenn sich eine wütende Meute bildet.", "konrad": "Sein Königreich erstreckt sich, so weit seine Sicht den Horizont erblickt. −8 und −10,5 – und „braucht“ keine Brille.", "kage": "Mag es, zuzuschauen.", "gerold": "So böse, wie der Regen feucht ist.", "linail": "Betet laut. Die Götter hören ihr zu. Machen aber nichts – meistens.", "prime": "Weiß alles, außer den Dingen des alltäglichen Lebens.", "oratio": "Gold und Silber sind seine Sprache der Wahl.", "glenys": "Ihr Schwert trashtalkt sie die ganze Zeit. Wird es einfach nicht los.", "wyvera": "Hat einen Drachen. Und jeder wird davon wissen.", "bolle": "Reparatur notwendig? Hammer! Uhr kaputt? Hammer! Es klappt am Ende irgendwie.", "eckhart": "Hat drei Burgen, einen Affen und ein Pferd. Hat Phantom-Schmerzen, wenn man ihm an seinen nicht vorhandenen Zöpfen zieht.", "morla": "Stets bemüht. Lässt Nyx in Aldrics Haus."};
+const KNAME64={"oda": "Pflanzen-Heilerin", "liska": "Spurenjägerin", "wenzel": "Schweigsamer Mönch", "pim": "Street-Magician", "oratio": "Währungs-Krieger", "glenys": "Gefäß des Dämonenschwerts", "hinnerk": "Keyboard-Warrior", "morla": "Zauber-Lehrling"};
+const ANAME64={"juno": "Troubadix Cosplay", "fenn": "Schatten-Spähung", "oda": "Blütenheilung", "kasimir": "Helden-Ansprache", "rieke": "Alchemie-Wahn", "bodo": "Amboss zücken", "yara": "Seefahrer-Gespür", "lorenz": "Quelle überprüfen", "runa": "Söldnerisches Handeln", "gerold": "Kraft sammeln", "oratio": "Preis einfordern", "hinnerk": "Seinem Namen gerecht werden", "gunther": "Back in my days…"};
+const KATXT64={"Froschwanderer": {"ok": "„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.", "no": "{Name} springt. Platsch.", "w": "bei Gräben, Wasser, Mauern, Kanten und im Gebirge"}, "Seefahrerin": {"ok": "Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.", "no": "Der Knoten ist schön. Er hält nur nicht.", "w": "bei Seilen, Booten, Leitern, Brunnen und im Gebirge"}, "Hohepriesterin": {"ok": "{Name} betet laut. Die Götter hören zu – heute schon.", "no": "{Name} betet laut. Die Götter sind gerade beschäftigt.", "w": "wenn jemandem Geist fehlt oder jemand verletzt ist"}, "Mönch": {"ok": "{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.", "no": "{Name} schweigt. Und muss niesen.", "w": "wenn jemandem Geist fehlt"}, "Alchemistin": {"ok": "{Name} mischt alles mit allem. Diesmal klappt es.", "no": "Es blubbert, es stinkt, es bleibt im Glas.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Heilerin": {"ok": "{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.", "no": "Die Hände zittern. {Name} versucht es später noch einmal.", "w": "wenn jemand verletzt ist"}, "Hexe": {"ok": "{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.", "no": "Der Dampf riecht gut. Mehr passiert nicht.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Kräuterkundige": {"ok": "{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.", "no": "Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht.", "w": "bei Pflanzen und draußen im Grünen"}, "Sanitäterin": {"ok": "Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.", "no": "Der Verband hält nicht. {Name} wickelt ihn wieder ab.", "w": "wenn jemand verletzt ist"}, "Handwerker": {"ok": "Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.", "no": "Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg.", "w": "bei Holz, Möbeln, Stegen und Kaputtem"}, "Magd": {"ok": "{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.", "no": "Zu schwer, selbst für {Name}. Für heute.", "w": "bei Schwerem: Fässer, Kisten, Säcke, Steine"}, "Mistgabel-Held": {"ok": "{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!", "no": "{Name} stochert heldenhaft. Leider nur im Heu.", "w": "bei Heu, Laub, Löchern, Gebüsch, Gruben"}, "Ritter": {"ok": "{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.", "no": "{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.", "zu": "Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker.", "w": "bei Türen, Toren, Gittern, Truhen und Kisten"}, "Schmied": {"ok": "{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.", "no": "{Name} dreht es hin und her. Ohne Werkstatt wird das nichts.", "w": "bei Mechanik und bei Kaputtem"}, "Drachenkönigin": {"ok": "{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.", "no": "{Name} ruft. Der Drache hat heute frei.", "w": "draußen, wo eine Probe oder Gefahr wartet"}, "Held": {"ok": "„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.", "no": "„Wir schaffen das …?“ Klang nicht ganz überzeugt.", "w": "wo eine Probe oder Gefahr wartet"}, "König ohne Land": {"ok": "„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.", "no": "„Aufstellung!“ Keiner stellt sich auf.", "w": "wo eine Probe oder Gefahr wartet"}, "Ritterin": {"ok": "{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.", "no": "Der Schild rutscht. Der Mut auch, ein bisschen.", "w": "wo eine Probe oder Gefahr wartet"}, "Schildmaid": {"ok": "{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.", "no": "Der Schild ist heute schwerer als sonst.", "w": "wo eine Probe oder Gefahr wartet"}, "Assassine": {"ok": "Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.", "no": "Der Schatten ist zu klein. {Name} steht einfach in der Ecke.", "w": "im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts"}, "Schattenläufer": {"ok": "{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.", "no": "Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen.", "w": "wo es Verborgenes gibt oder Leute, die man belauschen kann"}, "Sträfling": {"ok": "„Kenn ich.“ Ein Kratzen, ein Klick – offen.", "no": "Das Schloss ist neuer als {Name}s Erfahrung.", "zu": "Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf.", "w": "bei Schlössern, Truhen, Gittern, Zellen"}, "Waldwicht": {"ok": "{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.", "no": "Zu eng – sogar für {Name}.", "w": "bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren"}, "Bardin": {"ok": "{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.", "no": "{Name} stimmt an. Niemand stimmt ein.", "w": "wo Leute sind"}, "Baron": {"ok": "„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.", "no": "„Ihnen? Nein.“ Drei Burgen, kein Eindruck.", "w": "wo Leute sind"}, "Gaukler": {"ok": "{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.", "no": "Ein Ball fällt herunter. Dann noch einer.", "w": "wo Leute sind"}, "Monsterflüsterer": {"ok": "{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.", "no": "Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht.", "w": "bei Tieren und Wesen"}, "Prinzessin a.D.": {"ok": "{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.", "no": "„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof.", "w": "wo Leute sind"}, "Söldner": {"ok": "„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.", "no": "Der Preis ist zu hoch. Sogar für einen guten Witz.", "w": "wo Leute sind"}, "Söldnerin": {"ok": "„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.", "no": "„Sold? Wofür?“ Man lacht {Name} aus.", "w": "wo Leute sind"}, "Wolfsbarde": {"ok": "{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.", "no": "Ein Heuler in Moll. Nur die Hunde im Ort antworten.", "w": "draußen bei Nacht oder wo Leute sind"}, "Bauer": {"ok": "{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.", "no": "Nur Steine und ein beleidigter Wurm.", "w": "bei Erde, Feldern, Gärten, Sand – und draußen im Grünen"}, "Bogenschütze": {"ok": "{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.", "no": "Der Pfeil fliegt sehr weit. In die falsche Richtung.", "w": "draußen oder bei etwas, das man treffen kann"}, "Botin": {"ok": "{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.", "no": "Die Abkürzung ist länger als der Weg.", "w": "draußen, wo mindestens zwei Wege weiterführen"}, "Fuchsjägerin": {"ok": "{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!", "no": "Die Fährte endet einfach. Auch die falsche.", "w": "draußen und überall, wo Spuren sein können"}, "Wachmann": {"ok": "{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.", "no": "Zwanzig Jahre Erfahrung – und heute kommt wieder niemand.", "w": "an Toren, Treppen, Plätzen und wo Leute sind"}, "Waldläuferin": {"ok": "{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.", "no": "Zu viele Spuren, alle durcheinander.", "w": "draußen und überall, wo Spuren sein können"}, "Dämonenschwert": {"ok": "{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.", "no": "Die Klinge schweigt beleidigt.", "w": "bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken"}, "Gelehrter": {"ok": "{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!", "no": "{Name} findet nur Fußnoten zu Fußnoten.", "w": "bei Büchern, Schriften, Tafeln, Briefen, Inschriften"}, "Großer Weiser": {"ok": "{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.", "no": "„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte.", "w": "bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken"}, "Rentner": {"ok": "„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.", "no": "{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe.", "w": "wo Leute sind oder bei Altem"}, "Sternenkundlerin": {"ok": "{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.", "no": "Wolken. Oder {Name} hat sich verzählt.", "w": "draußen bei Nacht oder bei Sternkarten, Fernrohren"}, "Tüftlerin": {"ok": "{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.", "no": "Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus.", "w": "bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser"}, "Zauberin": {"ok": "{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.", "no": "Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht.", "w": "bei Magischem und im Dunkeln, nachts"}, "Zeithexe": {"ok": "{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.", "no": "Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts.", "w": "nach einer misslungenen Probe hier, oder bei Uhren und Glocken"}};
+const TYPN64={"Kämpfer": "Zupacken", "Flinke": "Genau hinsehen", "Gelehrte": "Nachdenken", "Stützen": "Sich kümmern"};
 
 
 // ================= Prototyp 64 (h): Pauls eigene Sätze für die Heldenauswahl =================
 // Paul (24.10.): „Kannst du mir für die Heldenauswahl deren Sätze, die sie beschreiben, tabellarisch in einer bearbeitbaren Datei bereitstellen,
 // sodass ich ggf. eigene Sätze einfügen könnte?“ – Datei: Helden/heldensaetze.xlsx (Spalte „Dein neuer Satz“). Der Bau liest sie (saetze64.py → SATZ64).
 try{if(typeof SATZ64==='object'&&SATZ64)HERODATA.forEach(h=>{const s=SATZ64[h.id];if(typeof s==='string'&&s.trim())h.kurz=s.trim()})}catch(e){console.warn('p64h',e)}
+
+
+// ================= Prototyp 64 (b, Nachbesserung): Klassen-Aktionen nur dort, wo sie passen (Weg B1, Paul 24.10., 11:46–11:51) =================
+// Paul: „Tür aufstemmen dann anzeigen, wenn man auch tatsächlich eine Tür aufstemmen könnte. Ansonsten führt es zu Enttäuschungen.“
+// Teil 1: die Bedingungen je Klassen-Aktion (KA64, KAR64) und die Auswertung je Szene – daraus entstand Pauls Liste (Helden/heldensaetze.xlsx).
+// Teil 2 (unten, nach Pauls Freigabe 24.10., 12:35–12:42): Knöpfe nur dort, wo sie wirken; Typ-Knopf; eigene Texte und Bilder; Anzeige-Namen.
+const KAR64={  // Merkmale, an denen ein Ziel erkannt wird (Name, Erkennungswörter, Ausgänge)
+  tuer:/t(ü|ue)r|\btor\b|\btore\b|pforte|gitter|truhe|kiste|klappe|luke|riegel|zelle|schrank|verschlag|käfig|tresor|kassette/i,
+  schloss:/schloss|schl(ö|oe)sser|truhe|kiste|gitter|zelle|riegel|schrank|kassette|tresor|schublade|käfig|t(ü|ue)r/i,
+  mech:/mechan|zahnr|aufzug|ventil|rohr|uhr\b|uhrwerk|automat|bandit|hebel|kurbel|maschin|pumpe|winde|waage|m(ü|ue)hle|kran|apparat|falle|kompass|spieluhr|räder|getriebe|schloss/i,
+  kaputt:/kaputt|zerbroch|gebroch|morsch|rost|lose|wackel|riss|gesprung|defekt|verbogen|zersplitt|loch\b/i,
+  holz:/holz|brett|bank|tisch|stuhl|leiter|steg|zaun|kiste|fass|karren|br(ü|ue)cke|regal|balken|wagen|hütte|schuppen|bude|stand/i,
+  schwer:/fass|f(ä|ae)sser|kiste|sack|s(ä|ae)cke|eimer|kessel|stein|truhe|wagen|karren|ladung|tonne|amboss|balken|holz|netz/i,
+  stocher:/heu|stroh|mist|haufen|loch|geb(ü|ue)sch|busch|hecke|ritze|spalt|schlamm|asche|kamin|grube|graben|laub|beet|feld/i,
+  stern:/\bstern|himmel|teleskop|fernrohr|globus|\bmond/i,
+  schrift:/buch|b(ü|ue)cher|schrift|tafel|brief|karte\b|zettel|inschrift|regal|liste|aushang|plakat|schild|kassenbuch|bibliothek|tagebuch|notiz|urkunde|vertrag|rune|ritzung|wand/i,
+  alt:/\balt|ruine|altar|statue|inschrift|rune|brunnen|glocke|grab|denkmal|relikt|bild|gem(ä|ae)lde|kessel|baum|zwilling|rahmen/i,
+  magie:/altar|dreieck|glas|spiegel|grab|statue|kessel|kapsel|rahmen|ring|maske|nebel|geist|zeichen|rune|portal|gestell|glocke/i,
+  uhr:/uhr|glocke|sanduhr|kalender|pendel|zeit/i,
+  spur:/spur|abdruck|staub|schnee|matsch|sand|pfad|weg\b|boden|fährte/i,
+  erde:/feld|acker|erde|garten|beet|boden|sand|strand|wiese|grab|r(ü|ue)ben|hof\b|lehm|matsch|weide|kies/i,
+  ziel:/ziel|scheibe|apfel|glocke|vogel|turm|dach|ast|seil|schild|leuchter|lampe|laterne|fahne|wimpel/i,
+  pflanze:/kraut|kr(ä|ae)uter|pflanze|blume|farn|moos|pilz|baum|garten|wiese|schilf|tee\b|kamille|beet|hecke|gras|minze|blüte/i,
+  trank:/kessel|flasche|trank|kr(ä|ae)uter|pilz|kraut|tee\b|gl(ä|ae)ser|tinktur|salbe/i,
+  tier:/tier|katze|hund|vogel|frosch|pferd|ziege|kuh|huhn|h(ü|ue)hner|ratte|maus|fisch|kr(ä|ae)he|m(ö|oe)we|esel|schaf|milbe|wurm|k(ä|ae)fer|eule|spinne|kranich|fuchs|wolf|kraken|paulmon|stall/i,
+  eng:/ritze|spalt|loch|gitter|schacht|rohr|\beng|l(ü|ue)cke|tunnel|kamin|luke|zaun|riss|hecke|abfluss|durchgang|gully|kanal/i,
+  seil:/seil|tau\b|netz|boot|leiter|steg|anleger|hafen|segel|knoten|mast|brunnen|kletter|kran|eimer|fl(ö|oe)ß/i,
+  sprung:/graben|bach|fluss|wasser|kluft|abgrund|wand|leiter|dach|mauer|steg|teich|brunnen|see\b|felsen|kante|spalte|loch|stufe|klippe/i,
+  dunkel:/dunkel|schatten|nische|vorhang|ecke|keller|gang\b|h(ö|oe)hle|stollen|fackel|kerze|verschlag/i,
+  wache:/tor\b|t(ü|ue)r|treppe|eingang|br(ü|ue)cke|steg|stra(ß|ss)e|platz|gasse|wache|posten|schranke/i};
+// je Klasse: Ziel-Merkmale (z), Lage (l: draussen, nacht, leute, verletzt, geist, probe, gruppe, ausgaenge2, berg, wald, hoehle, versteckt), Beschreibung (w)
+const KA64={
+  'Ritter':{z:['tuer'],w:'bei Türen, Toren, Gittern, Truhen und Kisten'},
+  'Schmied':{z:['mech','kaputt'],w:'bei Mechanik und bei Kaputtem'},
+  'Handwerker':{z:['holz','kaputt'],w:'bei Holz, Möbeln, Stegen und Kaputtem'},
+  'Magd':{z:['schwer'],w:'bei Schwerem: Fässer, Kisten, Säcke, Steine'},
+  'Mistgabel-Held':{z:['stocher'],w:'bei Heu, Laub, Löchern, Gebüsch, Gruben'},
+  'Tüftlerin':{z:['mech'],w:'bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser'},
+  'Sternenkundlerin':{z:['stern'],l:['draussen+nacht'],w:'draußen bei Nacht oder bei Sternkarten, Fernrohren'},
+  'Gelehrter':{z:['schrift'],w:'bei Büchern, Schriften, Tafeln, Briefen, Inschriften'},
+  'Großer Weiser':{z:['alt'],w:'bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken'},
+  'Dämonenschwert':{z:['magie'],w:'bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken'},
+  'Zeithexe':{z:['uhr'],l:['fehlprobe'],w:'nach einer misslungenen Probe hier, oder bei Uhren und Glocken'},
+  'Magier':{z:[],l:['immer'],w:'(Aldric hat seine Zauberliste statt eines Knopfs)'},
+  'Zauberin':{z:['magie','dunkel'],l:['nacht'],w:'bei Magischem und im Dunkeln, nachts'},
+  'Waldläuferin':{z:['spur'],l:['draussen'],w:'draußen und überall, wo Spuren sein können'},
+  'Fuchsjägerin':{z:['spur'],l:['draussen'],w:'draußen und überall, wo Spuren sein können'},
+  'Botin':{z:[],l:['draussen+ausgaenge2'],w:'draußen, wo mindestens zwei Wege weiterführen'},
+  'Wachmann':{z:['wache'],l:['leute'],w:'an Toren, Treppen, Plätzen und wo Leute sind'},
+  'Bauer':{z:['erde'],l:['wald'],w:'bei Erde, Feldern, Gärten, Sand – und draußen im Grünen'},
+  'Bogenschütze':{z:['ziel'],l:['draussen'],w:'draußen oder bei etwas, das man treffen kann'},
+  'Kräuterkundige':{z:['pflanze'],l:['wald'],w:'bei Pflanzen und draußen im Grünen'},
+  'Bardin':{z:[],l:['leute'],w:'wo Leute sind'},'Gaukler':{z:[],l:['leute'],w:'wo Leute sind'},'Söldnerin':{z:[],l:['leute'],w:'wo Leute sind'},'Söldner':{z:[],l:['leute'],w:'wo Leute sind'},
+  'Prinzessin a.D.':{z:[],l:['leute'],w:'wo Leute sind'},'Baron':{z:[],l:['leute'],w:'wo Leute sind'},'Rentner':{z:['alt'],l:['leute'],w:'wo Leute sind oder bei Altem'},
+  'Wolfsbarde':{z:['stern'],l:['draussen+nacht','leute'],w:'draußen bei Nacht oder wo Leute sind'},
+  'Monsterflüsterer':{z:['tier'],w:'bei Tieren und Wesen'},
+  'Schattenläufer':{z:[],l:['versteckt','leute'],w:'wo es Verborgenes gibt oder Leute, die man belauschen kann'},
+  'Assassine':{z:['dunkel'],l:['nacht','hoehle'],w:'im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts'},
+  'Sträfling':{z:['schloss'],w:'bei Schlössern, Truhen, Gittern, Zellen'},
+  'Waldwicht':{z:['eng'],w:'bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren'},
+  'Heilerin':{z:[],l:['verletzt'],w:'wenn jemand verletzt ist'},'Sanitäterin':{z:[],l:['verletzt'],w:'wenn jemand verletzt ist'},
+  'Hexe':{z:['trank'],l:['verletzt'],w:'wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen'},
+  'Alchemistin':{z:['trank'],l:['verletzt'],w:'wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen'},
+  'Held':{z:[],l:['probe','gefahr'],w:'wo eine Probe oder Gefahr wartet'},'König ohne Land':{z:[],l:['probe','gefahr'],w:'wo eine Probe oder Gefahr wartet'},
+  'Schildmaid':{z:[],l:['probe','gefahr'],w:'wo eine Probe oder Gefahr wartet'},'Ritterin':{z:[],l:['probe','gefahr'],w:'wo eine Probe oder Gefahr wartet'},
+  'Drachenkönigin':{z:[],l:['draussen+probe','gefahr'],w:'draußen, wo eine Probe oder Gefahr wartet'},
+  'Mönch':{z:[],l:['geist'],w:'wenn jemandem Geist fehlt'},'Hohepriesterin':{z:[],l:['geist','verletzt'],w:'wenn jemandem Geist fehlt oder jemand verletzt ist'},
+  'Seefahrerin':{z:['seil'],l:['berg'],w:'bei Seilen, Booten, Leitern, Brunnen und im Gebirge'},
+  'Froschwanderer':{z:['sprung'],l:['berg'],w:'bei Gräben, Wasser, Mauern, Kanten und im Gebirge'}};
+// Lage einer Szene (für die Liste ohne Spielzustand: was „je nach Lage“ ist, wird eigens markiert)
+function kaCtx64(id){const D=WORLD.scenes[id];if(!D)return null;const s0=S.scene;let out=false,env='';try{S.scene=id;out=!!isOutdoor();env=env27()}catch(e){}finally{S.scene=s0}
+  const objs=(D.objs||[]).map(o=>({name:o.name||o.k,txt:(o.name||o.k||''),probe:!!o.probe})),exits=(D.exits||[]).map(x=>({name:x.label||x.target,txt:(x.label||'')+' '+(x.lock||'')}));
+  const people=(D.people||[]).map(p=>p.name||p).filter(Boolean),foes=(D.foes||[]).length;
+  return{id,name:D.name,ort:D.ortName||D.ort,out,env,objs,exits,people,foes,probe:objs.some(o=>o.probe)||exits.some(x=>/klemmt|verschlossen|probe/i.test(x.txt))}}
+function kaWhy64(cls,C,live){const K=KA64[cls];if(!K)return{ok:false,why:[]};const why=[],dyn=[];
+  (K.z||[]).forEach(z=>{const R=KAR64[z];C.objs.concat(C.exits).forEach(o=>{if(R.test(o.txt)&&!why.includes(o.name))why.push(o.name)})});
+  (K.l||[]).forEach(l=>{const p=l.split('+');let ok=true,d=false;p.forEach(q=>{
+      if(q==='draussen')ok=ok&&C.out;else if(q==='wald')ok=ok&&C.out&&/wald|oase|berg/.test(C.env);else if(q==='berg')ok=ok&&C.env==='berg';else if(q==='hoehle')ok=ok&&C.env==='hoehle';
+      else if(q==='ausgaenge2')ok=ok&&C.exits.length>=2;else if(q==='probe')ok=ok&&C.probe;else if(q==='gefahr')ok=ok&&C.foes>0;else if(q==='versteckt')ok=ok&&C.objs.some(o=>o.probe);
+      else if(q==='leute'){if(live){ok=ok&&live.leute}else{ok=ok&&C.people.length>0;d=true}}
+      else if(q==='nacht'){if(live)ok=ok&&live.nacht;else d=true}
+      else if(q==='verletzt'||q==='geist'||q==='fehlprobe'){if(live)ok=ok&&!!live[q];else{ok=ok&&true;d=true}}
+      else if(q==='immer')ok=true});
+    if(ok){if(d)dyn.push(l);else why.push({draussen:'draußen',wald:'draußen im Grünen',berg:'Gebirge',hoehle:'Höhle',probe:'eine Probe wartet',gefahr:'Gefahr','draussen+ausgaenge2':'mehrere Wege','draussen+probe':'draußen, Probe wartet',versteckt:'Verborgenes',immer:'immer'}[l]||l)}});
+  return{ok:why.length>0,why,dyn}}
+const KAT64D={"Ritter":{"ok":"{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.","no":"{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.","zu":"Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker."},"Schmied":{"ok":"{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.","no":"{Name} dreht es hin und her. Ohne Werkstatt wird das nichts."},"Handwerker":{"ok":"Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.","no":"Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg."},"Magd":{"ok":"{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.","no":"Zu schwer, selbst für {Name}. Für heute."},"Mistgabel-Held":{"ok":"{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!","no":"{Name} stochert heldenhaft. Leider nur im Heu."},"Tüftlerin":{"ok":"{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.","no":"Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus."},"Sternenkundlerin":{"ok":"{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.","no":"Wolken. Oder {Name} hat sich verzählt."},"Gelehrter":{"ok":"{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!","no":"{Name} findet nur Fußnoten zu Fußnoten."},"Großer Weiser":{"ok":"{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.","no":"„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte."},"Dämonenschwert":{"ok":"{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.","no":"Die Klinge schweigt beleidigt."},"Zeithexe":{"ok":"{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.","no":"Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts."},"Rentner":{"ok":"„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.","no":"{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe."},"Zauberin":{"ok":"{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.","no":"Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht."},"Waldläuferin":{"ok":"{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.","no":"Zu viele Spuren, alle durcheinander."},"Fuchsjägerin":{"ok":"{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!","no":"Die Fährte endet einfach. Auch die falsche."},"Botin":{"ok":"{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.","no":"Die Abkürzung ist länger als der Weg."},"Wachmann":{"ok":"{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.","no":"Zwanzig Jahre Erfahrung – und heute kommt wieder niemand."},"Bauer":{"ok":"{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.","no":"Nur Steine und ein beleidigter Wurm."},"Bogenschütze":{"ok":"{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.","no":"Der Pfeil fliegt sehr weit. In die falsche Richtung."},"Bardin":{"ok":"{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.","no":"{Name} stimmt an. Niemand stimmt ein."},"Gaukler":{"ok":"{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.","no":"Ein Ball fällt herunter. Dann noch einer."},"Söldnerin":{"ok":"„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.","no":"„Sold? Wofür?“ Man lacht {Name} aus."},"Söldner":{"ok":"„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.","no":"Der Preis ist zu hoch. Sogar für einen guten Witz."},"Wolfsbarde":{"ok":"{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.","no":"Ein Heuler in Moll. Nur die Hunde im Ort antworten."},"Monsterflüsterer":{"ok":"{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.","no":"Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht."},"Prinzessin a.D.":{"ok":"{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.","no":"„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof."},"Baron":{"ok":"„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.","no":"„Ihnen? Nein.“ Drei Burgen, kein Eindruck."},"Schattenläufer":{"ok":"{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.","no":"Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen."},"Assassine":{"ok":"Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.","no":"Der Schatten ist zu klein. {Name} steht einfach in der Ecke."},"Sträfling":{"ok":"„Kenn ich.“ Ein Kratzen, ein Klick – offen.","no":"Das Schloss ist neuer als {Name}s Erfahrung.","zu":"Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf."},"Waldwicht":{"ok":"{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.","no":"Zu eng – sogar für {Name}."},"Heilerin":{"ok":"{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.","no":"Die Hände zittern. {Name} versucht es später noch einmal."},"Sanitäterin":{"ok":"Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.","no":"Der Verband hält nicht. {Name} wickelt ihn wieder ab."},"Hexe":{"ok":"{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.","no":"Der Dampf riecht gut. Mehr passiert nicht."},"Alchemistin":{"ok":"{Name} mischt alles mit allem. Diesmal klappt es.","no":"Es blubbert, es stinkt, es bleibt im Glas."},"Kräuterkundige":{"ok":"{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.","no":"Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht."},"Held":{"ok":"„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.","no":"„Wir schaffen das …?“ Klang nicht ganz überzeugt."},"Schildmaid":{"ok":"{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.","no":"Der Schild ist heute schwerer als sonst."},"Ritterin":{"ok":"{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.","no":"Der Schild rutscht. Der Mut auch, ein bisschen."},"König ohne Land":{"ok":"„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.","no":"„Aufstellung!“ Keiner stellt sich auf."},"Drachenkönigin":{"ok":"{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.","no":"{Name} ruft. Der Drache hat heute frei."},"Mönch":{"ok":"{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.","no":"{Name} schweigt. Und muss niesen."},"Hohepriesterin":{"ok":"{Name} betet laut. Die Götter hören zu – heute schon.","no":"{Name} betet laut. Die Götter sind gerade beschäftigt."},"Seefahrerin":{"ok":"Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.","no":"Der Knoten ist schön. Er hält nur nicht."},"Froschwanderer":{"ok":"„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.","no":"{Name} springt. Platsch."}};
+// =====================================================================================================================
+// Teil 2 · Weg B1 (Paul, 24.10.): Der Klassen-Knopf erscheint nur, wo die Aktion ein Ziel hat oder die Lage passt (oder die Szene einen
+// eigenen Eintrag für genau diese Klasse hat). Nach dem Benutzen verschwindet er in dieser Szene. Die bisherigen Szenen-Einträge für einen
+// Klassentyp (Kämpfer, Flinke, Gelehrte, Stützen, Alle) bekommen einen eigenen Typ-Knopf, damit kein Weg verloren geht.
+// Die Wirkung bleibt wie bisher (kaGeneric27, kaEffects27). Neu sind: wann der Knopf erscheint, die Texte je Aktion, das Bild je Aktion
+// (der Held geht zum Ziel), die Anzeige-Namen aus Pauls Liste (Klassenname, Name der Klassen-Aktion, Typ-Knöpfe) und „wirkt …“.
+// Zwei kleine Ergänzungen, damit kein Knopf ins Leere läuft: Kräuter-Klassen finden Kräuter, wenn niemand verletzt ist;
+// die Hohepriesterin heilt, wenn der Geist schon voll ist.
+let KAMODE64=null,KACUR64=null,KASKIP64=false;
+const TYPN64D={'Kämpfer':'Zupacken','Flinke':'Genau hinsehen','Gelehrte':'Nachdenken','Stützen':'Sich kümmern'};
+const kxl64=()=>(typeof KATXT64==='object'&&KATXT64)||{};
+function kat64(cls){const x=kxl64()[cls]||{};if(x.aus)return null;const d=KAT64D[cls];if(!d&&!x.ok)return null;const D=d||{};return{ok:x.ok||D.ok||'',no:x.no||D.no||'',zu:x.zu||D.zu||''}}
+function wann64(cls){const x=kxl64()[cls]||{};return x.w||(KA64[cls]&&KA64[cls].w)||''}
+function wirkt64(cls){const w=wann64(cls);return w?'wirkt'+(/^(wo|wenn)\b/.test(w)?', ':' ')+w:''}
+function typName64(t){const T=(typeof TYPN64==='object'&&TYPN64)||{};return T[t]||TYPN64D[t]||t||'Typ-Aktion'}
+const hid64=h=>h&&(h.heroId||h.id);
+function clsName64(h){const K=(typeof KNAME64==='object'&&KNAME64)||{};return K[hid64(h)]||(h&&h.cls)||''}
+function actName64(h){const A=(typeof ANAME64==='object'&&ANAME64)||{},a=h&&KA27[h.cls];return A[hid64(h)]||(a&&a[0])||''}
+const nm64=(s,h)=>String(s||'').replace(/\{Name\}/g,h&&h.name||'');
+// Querverweise in den Sätzen (z. B. „Aldrics Haus“): umbenannte Helden heißen dort so, wie die Gruppe sie genannt hat
+function refs64(txt){let t=String(txt||'');try{HERODATA.forEach(x=>{const p=(typeof PARTY!=='undefined'&&PARTY.find(q=>q.heroId===x.id)),cur=(p&&p.name)||(typeof pickNames==='object'&&pickNames[x.id])||x.name;
+  if(cur&&cur!==x.name)t=t.replace(new RegExp('\\b'+x.name+'(?=s\\b|\\b)','g'),cur)})}catch(e){}return t}
+// ---------- Szenen-Einträge und Lage ----------
+function kaEnt64(){try{return kaDocLines27().map(l=>{const o=pipe(l);const who=(o._[0]||'').replace(/\(.*?\)/g,'');return{o,who:who.split(/[,\/]|\bund\b/).map(s=>s.trim()).filter(Boolean)}}).filter(x=>!x.o.bedingung||cond27(x.o.bedingung))}catch(e){return[]}}
+{const _km64=kaMatch27;kaMatch27=function(h){if(!KAMODE64)return _km64.apply(this,arguments);const L=kaEnt64();
+  if(KAMODE64==='cls')return L.find(x=>x.who.includes(h.cls))||null;
+  return L.find(x=>x.who.includes(h.typ))||L.find(x=>x.who.some(w=>/^alle$/i.test(w)))||null}}
+function exX64(x,D){if(x.dir==='o')return wW()-30;if(x.dir==='w')return 30;const L=nk(x.label||'');const o=(D.objs||[]).filter(o=>o.name&&o.x!=null&&(L.includes(nk(o.name))||nk(o.name).includes(L))).sort((a,b)=>b.name.length-a.name.length)[0];return o?o.x:null}
+function kaLive64(){const id=S.scene,D=WORLD&&WORLD.scenes&&WORLD.scenes[id],P=S.places&&S.places[id];let C=null;
+  if(D){C=kaCtx64(id);if(!C)return null;
+    C.objs=(D.objs||[]).map(o=>({name:o.name||o.k,txt:o.name||o.k||'',probe:!!o.probe&&!S.flags['ok_'+id+'_'+o.k],x:o.x,ty:o.ty}));
+    C.exits=(D.exits||[]).map(x=>{let zu=false;try{zu=!!(x.cond&&!impCond(x.cond))}catch(e){}return{name:x.label||x.target,txt:(x.label||'')+' '+(x.lock||''),zu,x:exX64(x,D),exit:1}});
+    let gef=(D.foes||[]).length;try{const L=LV26&&LV26[sceneName()];if(L&&S.facts[L.fact])gef=0}catch(e){}C.foes=gef;C.probe=C.objs.some(o=>o.probe)||C.exits.some(x=>x.zu)}
+  else{let out=false,env='';try{out=!!isOutdoor();env=env27()}catch(e){}C={id,name:'',out,env,objs:[],exits:[],people:[],foes:0,probe:false};
+    ((P&&P.objs)||[]).forEach(o=>{if(Array.isArray(o)&&o[3])C.objs.push({name:o[3],txt:o[3],probe:false,x:o[2],ty:o[5]})})}
+  return C}
+function kaFlags64(){let nacht=false;try{nacht=!!isNightAt(clk())}catch(e){}
+  return{leute:presentNpcs().some(n=>n.id!=='pet'),nacht,verletzt:PARTY.some(p=>p.hp>0&&p.hp<p.max),
+    geist:PARTY.some(p=>{try{ensure27(p)}catch(e){}return p.hp>0&&p.gmax!=null&&p.geist<p.gmax}),fehlprobe:!!(S.fail64&&S.fail64.sc===S.scene)}}
+// misslungene Probe in dieser Szene (für die Zeithexe: „Fünf Minuten zurück“)
+{const _ck64b=check;check=function(stat,dc,label){const r=_ck64b.apply(this,arguments);try{if(KACUR64&&KACUR64.ok==null)KACUR64.ok=!!r;if(!r&&!inFight()&&!TAC)S.fail64={sc:S.scene}}catch(e){}return r}}
+function twice64(h){try{return typeof has49==='function'&&has49(h,'c1')&&!((wb49(h).st.ka2||{})[S.scene])}catch(e){return false}}
+// Welche Knöpfe hat der Held hier? {cls: Klassen-Knopf, typ: Typ-Knopf}
+function kaShow64(h){const r={cls:null,typ:null};if(!h||h.hp<=0)return r;try{ensure27(h)}catch(e){}if(h.ka64busy&&Date.now()<h.ka64busy)return r;
+  const L=kaEnt64(),own=L.find(x=>x.who.includes(h.cls)),te=L.find(x=>x.who.includes(h.typ))||L.find(x=>x.who.some(w=>/^alle$/i.test(w)));
+  const id=h.heroId||h.name,mk='kam27_'+S.scene+'_'+id,gk='ka27_'+S.scene+'_'+id,tw=twice64(h),once=e=>!/^nein/i.test(e.o.einmal||'');
+  if(h.cls!=='Magier'&&KA27[h.cls]){
+    if(own){if(!(once(own)&&S.flags[mk])||tw)r.cls={own}}
+    else if(!S.flags[gk]||tw){let C=null;try{C=kaLive64()}catch(e){}if(!C||!KA64[h.cls])r.cls={old:1};else{const W=kaWhy64(h.cls,C,kaFlags64());if(W.ok)r.cls={W,C}}}}
+  if(te){const tk=own?mk+'_typ':mk;if(!(once(te)&&S.flags[tk])||tw)r.typ={e:te,key:tk,own:!!own}}
+  return r}
+// Ziel der Aktion: ein Gegenstand oder Ausgang aus der Liste, sonst jemand im Raum oder ein verletzter Gefährte
+function kaTarget64(h,sh){const c=sh&&sh.cls;if(!c||!c.W)return null;const C=c.C,W=c.W,names=W.why.filter(x=>typeof x==='string');
+  const near=a=>a.slice().sort((p,q)=>Math.abs(p.x-h.x)-Math.abs(q.x-h.x))[0];
+  const objs=C.objs.filter(o=>names.includes(o.name)&&o.x!=null),exs=C.exits.filter(x=>names.includes(x.name));let T=null;
+  if(objs.length){const pr=objs.filter(o=>o.probe);T=Object.assign({},near(pr.length?pr:objs))}
+  if(!T&&exs.length){const e2=exs.filter(x=>x.x!=null);T=Object.assign({},e2.length?near(e2):exs[0])}
+  const F=kaFlags64(),l=((KA64[h.cls]||{}).l||[]).join(' ');
+  if(/leute/.test(l)&&F.leute&&(!T||/^(Bardin|Gaukler|Söldnerin|Söldner|Prinzessin a\.D\.|Baron|Schattenläufer|Wolfsbarde)$/.test(h.cls))){const n=near(presentNpcs().filter(n=>n.id!=='pet'&&n.x!=null));if(n)T={name:n.name,x:n.x,npc:n}}
+  if(!T&&/verletzt/.test(l)&&F.verletzt){const w=PARTY.filter(p=>p.hp>0&&p.hp<p.max).sort((x,y)=>x.hp/x.max-y.hp/y.max)[0];if(w)T={name:w.name,x:w.x,ally:w,nowalk:1}}
+  if(T&&T.exit&&T.x==null)T.nowalk=1;return T}
+// ---------- Texte: Die Aktion spricht selbst, danach steht nur noch das Ergebnis da ----------
+function res64(t,h){let m;
+  if((m=t.match(/ entdeckt etwas [^:]*: (.+)\.$/)))return'Entdeckt: '+m[1]+'.';
+  if((m=t.match(/ schleicht sich heran und sieht, was die anderen übersehen haben: (.+)\.$/)))return'Entdeckt: '+m[1]+'.';
+  if(/ sucht .* und findet etwas\.$| packt an .*gibt nach\.$| verschwindet kurz und kommt mit etwas wieder\.$| erreicht einen Platz, an den sonst keiner kommt\.$/.test(t))return null;
+  if(/Die Gruppe fühlt sich klüger: \+1 Geist für alle\./.test(t))return'+1 Geist für alle.';
+  if((m=t.match(/ hat (.+) auf seiner Seite\. Ein paar Münzen klimpern in den Hut\./)))return(m[1]==='die Leute'?'':m[1]+': +5 Vertrauen. ')+'Ein paar Münzen klimpern in den Hut.';
+  if(/Alle bekommen \+2 auf ihre nächste Probe\./.test(t))return'Alle bekommen +2 auf die nächste Probe.';
+  if(/Der Geist der ganzen Gruppe ist wieder klar\./.test(t))return'Der Geist der ganzen Gruppe ist wieder klar.';
+  if((m=t.match(/ kümmert sich um (.+?)\. \+(\d+) LP\./)))return(m[1]==='sich selbst'?h.name:m[1])+': +'+m[2]+' LP.';
+  if(/Bei der nächsten Kletterprobe bekommen alle \+3\./.test(t))return'Bei der nächsten Kletterprobe bekommen alle +3.';
+  return t}
+function herb64(h){let env='';try{env=env27()}catch(e){}const P=((typeof KAFIND27==='object'&&KAFIND27[env])||[]).filter(i=>i.kind==='herbs');
+  if(h.cls==='Kräuterkundige'&&P.length)return Object.assign({},pick(P));
+  if(h.cls==='Alchemistin')return{kind:'herbs',name:'Kleine Heilmischung',uses:1,desc:'Grünlich, blubbert leise. Riecht nach allem gleichzeitig.'};
+  if(h.cls==='Hexe')return{kind:'herbs',name:'Kräuterbündel',uses:1,desc:'Mit einem Faden zusammengebunden. Ein bisschen Besenstaub ist auch dabei.'};
+  return{kind:'herbs',name:'Heilkräuter',uses:1,desc:'Frisch gepflückt und richtig bestimmt.'}}
+{const _kg64=kaGeneric27;kaGeneric27=function(h,a,ok,pre){const C=KACUR64,K=C&&C.h===h?kat64(h.cls):null;if(!K)return _kg64.apply(this,arguments);
+  const art=(KA27[h.cls]||[])[2];
+  if(!ok){if(K.no)say(nm64(K.no,h),'dm');return}
+  const t=(C.T&&C.T.zu&&K.zu)?K.zu:K.ok;
+  if(art==='heil'&&/^(Kräuterkundige|Hexe|Alchemistin)$/.test(h.cls)&&!PARTY.some(p=>p.hp>0&&p.hp<p.max)){if(t)say(nm64(t,h),'dm');C.herb=1;return giveFind24(h,herb64(h),actName64(h))}
+  if(art==='geist'&&h.cls==='Hohepriesterin'&&!PARTY.some(p=>p.hp>0&&p.gmax!=null&&p.geist<p.gmax)){const w=PARTY.filter(p=>p.hp>0&&p.hp<p.max).sort((x,y)=>x.hp/x.max-y.hp/y.max)[0];
+    if(w){if(t)say(nm64(t,h),'dm');const n=d(4)+1;w.hp=Math.min(w.max,w.hp+n);float(w.x,FLOOR-52,'+'+n,'#8fcf8a');say(w.name+': +'+n+' LP.','dm');return}}
+  if(t)say(nm64(t,h),'dm');
+  const _s=say;say=function(text,cls,who){if(cls==='dm'&&typeof text==='string'){const r=res64(text,h);if(!r)return;arguments[0]=r}return _s.apply(this,arguments)};
+  try{return _kg64.apply(this,arguments)}finally{say=_s}}}
+// ---------- Die Knöpfe ----------
+function kaGo64(){const h=hero;if(!h||h.hp<=0)return;const sh=kaShow64(h);if(!sh.cls)return;const a=CLASSACT[h.cls];if(!a)return;
+  const T=kaTarget64(h,sh),S0=S.scene;say(actName64(h),'player',h.name);h.ka64busy=Date.now()+5000;
+  // Mit Mitspielern kann inzwischen ein anderer Held aktiv sein: die Aktion läuft trotzdem für h (withHero)
+  const go=()=>{h.ka64busy=0;if(S.scene!==S0||h.hp<=0||inFight()||TAC){renderAll();return}
+    const cur={h,T,sh,ok:null};KACUR64=cur;KAMODE64='cls';KASKIP64=true;
+    try{withHero(h.slot,()=>classAct(a))}catch(e){console.warn('p64b',e)}finally{KAMODE64=null;KASKIP64=false;KACUR64=null}
+    try{kaAnim64(h,T,cur.ok!==false,cur)}catch(e){console.warn('p64b',e)}renderAll()};
+  const far=T&&T.x!=null&&!T.nowalk&&Math.abs(h.x-T.x)>22;
+  if(far&&h.cls==='Froschwanderer')kaJump64(h,T,go);
+  else if(far){const sd=h.x<T.x?-1:1,X=clamp(T.x+sd*16,30,wW()-30),t0=Date.now();h.queue=[];h.tx=X;try{if(TD){const y=objY(X);if(y!=null)h.ty=clampY(X,y)}}catch(e){}
+    const iv=setInterval(()=>{if(Math.abs(h.x-X)<2||Date.now()-t0>4000||S.scene!==S0){clearInterval(iv);go()}},80)}
+  else go();renderAll()}
+function kaJump64(h,T,go){const x0=h.x,x1=clamp(T.x+(h.x<T.x?-16:16),30,wW()-30);h.face=x1>x0?1:-1;h.jmp64={x0,x1,t0:now64(),dur:760};h.queue=[];
+  try{if(typeof bell35==='function')bell35(520,.05,.08,.25)}catch(e){}setTimeout(()=>{h.jmp64=null;h.x=h.tx=x1;go()},780)}
+function kaTyp64(){const h=hero;if(!h||h.hp<=0)return;const sh=kaShow64(h);if(!sh.typ)return;const a=CLASSACT[h.cls]||KA27[h.cls]||['Klassen-Aktion','int','wissen'];
+  say(typName64(h.typ),'player',h.name);const mk='kam27_'+S.scene+'_'+(h.heroId||h.name),own=sh.typ.own;let sv;if(own){sv=S.flags[mk];S.flags[mk]=S.flags[mk+'_typ']}
+  KAMODE64='typ';try{classAct(a)}catch(e){console.warn('p64b',e)}finally{KAMODE64=null;if(own){S.flags[mk+'_typ']=S.flags[mk];S.flags[mk]=sv}}renderAll()}
+// Die allgemeinen Bilder aus p64a bleiben für Typ-Knopf und Spotlight; der Klassen-Knopf hat ein eigenes Bild (kaAnim64)
+{const _cf64=classFx64;classFx64=function(h){if(KASKIP64)return;return _cf64.apply(this,arguments)}}
+// Zeile mit dem Namen des Helden: Klassen-Knopf und Typ-Knopf
+function kaRow64(){const cr=$('clsRow');if(!cr||!hero)return;const lb=cr.querySelector('.lbl');if(!lb)return;if(talk||inFight()||S.ko||TAC)return;const h=hero;
+  lb.textContent=h.name+' · '+clsName64(h);lb.title=h.cls==='Magier'?'':actName64(h)+': '+wirkt64(h.cls);
+  // Aldrics Zauberliste (auch „chip cls“) bleibt stehen; bei allen anderen ersetzt der neue Knopf den alten
+  cr.querySelectorAll(h.cls==='Magier'?'button.ka64':'button.chip.cls,button.ka64').forEach(b=>b.remove());const sh=kaShow64(h);
+  const mkb=(t,fn,c,tip,k)=>{const b=document.createElement('button');b.type='button';b.className='chip cls ka64'+(c?' '+c:'');b.textContent=t;b.dataset.ka64=k;if(tip)b.title=tip;b.onclick=()=>{if(!hero||hero.hp<=0)return;fn();renderAll()};return b};
+  let last=lb;if(sh.cls){const b=mkb(actName64(h),kaGo64,'',wirkt64(h.cls)?actName64(h)+': '+wirkt64(h.cls):'','cls');last.after(b);last=b}
+  if(sh.typ){const b=mkb(typName64(h.typ),kaTyp64,'typ64','Was diese Szene für '+h.typ+' bereithält','typ');if(h.cls==='Magier')cr.appendChild(b);else last.after(b)}
+  try{const gr=$('genRow');if(gr)gr.querySelectorAll('button').forEach(b=>{PARTY.forEach(p=>{const a=CLASSACT[p.cls];if(a&&b.textContent===p.name+': '+a[0]&&actName64(p)!==a[0])b.textContent=p.name+': '+actName64(p)})})}catch(e){}}
+{const _rc64b=renderChips;renderChips=function(){const r=_rc64b.apply(this,arguments);try{kaRow64()}catch(e){console.warn('p64b',e)}return r}}
+// Echte Würfel (P56): Probe der neuen Knöpfe erkennen
+if(typeof probeOf56==='function'){const _po64=probeOf56;probeOf56=function(b){try{const k=b&&b.dataset&&b.dataset.ka64;if(k){const h=hero,sh=kaShow64(h),SN=Object.keys(STAT56),nm=s=>SN.find(x=>STAT56[x]===s)||'',lab=(b.textContent||'').trim();
+  if(k==='cls'){if(!sh.cls)return null;if(sh.cls.own){const pr=parseProbe(sh.cls.own.o.probe||'');return pr?{label:lab,stat:nm(pr.stat)}:null}const a=CLASSACT[h.cls];return a?{label:lab,stat:nm(a[1])}:null}
+  if(!sh.typ)return null;const pr=parseProbe(sh.typ.e.o.probe||'');return pr?{label:lab,stat:nm(pr.stat)}:null}}catch(e){}return _po64.apply(this,arguments)}}
+// ---------- Anzeige-Namen: Heldenauswahl, Gruppe, Heldenbogen ----------
+{const _rp64=renderPick;renderPick=function(){const r=_rp64.apply(this,arguments);try{const grid=$('pickGrid'),L=HERODATA.filter(h=>pickFilter==='alle'||h.grp===pickFilter),B=[...grid.querySelectorAll('.hc')];
+    B.forEach((b,i)=>{const h=L[i];if(!h)return;const k=b.querySelector('.hk');if(k&&k.textContent===h.cls)k.textContent=clsName64(h);const al=b.getAttribute('aria-label');if(al)b.setAttribute('aria-label',al.replace(', '+h.cls,', '+clsName64(h)))});
+    [...$('pickParty').querySelectorAll('.pr')].forEach((row,i)=>{const h=pickList[i]&&hdata(pickList[i]),sm=row.querySelector('.pn small');if(h&&sm)sm.textContent=sm.textContent.replace(h.cls+' · ',clsName64(h)+' · ')});
+    const s=hdata(pickSel);if(s){const k=$('pickKurz');if(k){k.textContent=refs64(s.kurz);k.style.fontSize=String(s.kurz||'').length>90?'15px':String(s.kurz||'').length>70?'16px':''}let e=$('pickKa64');if(!e){e=document.createElement('p');e.id='pickKa64';const st=$('pickStats');if(st)st.after(e)}
+      e.textContent=s.cls==='Magier'?'Klassen-Aktion: die Zauberliste':'Klassen-Aktion: '+actName64(s)+' – '+wirkt64(s.cls)}}catch(e){console.warn('p64b',e)}return r}}
+{const st=document.createElement('style');st.textContent='#pickKa64{margin:2px 0 0;font-size:14px;line-height:1.05;color:#c8b0ff}#pickKurz{overflow-wrap:anywhere}#clsRow .ka64.typ64{border-style:dashed}';document.head.appendChild(st)}
+{const _rh64=renderHero;renderHero=function(){const r=_rh64.apply(this,arguments);try{[...$('heroCard').querySelectorAll('button.pm')].forEach((b,i)=>{const h=PARTY[i];if(h&&b.title)b.title=b.title.replace('('+h.cls+')','('+clsName64(h)+')')+(h.cls!=='Magier'&&wirkt64(h.cls)?' · '+actName64(h)+': '+wirkt64(h.cls):'')})}catch(e){}return r}}
+{const _rb64=renderBogen27;renderBogen27=function(){const r=_rb64.apply(this,arguments);try{const h=PARTY[BOGI27]||hero,c=BOG27.querySelector('.card2');if(c&&h){const h3=c.querySelector('h3');if(h3)h3.textContent=h.name+' · '+clsName64(h);
+    const p=document.createElement('p');p.className='small';p.textContent=h.cls==='Magier'?'Klassen-Aktion: die Zauberliste. Typ-Knopf „'+typName64(h.typ)+'“, wo die Szene für Gelehrte etwas hat.':'Klassen-Aktion „'+actName64(h)+'“ – '+wirkt64(h.cls)+'. Typ-Knopf „'+typName64(h.typ)+'“, wo die Szene für '+h.typ+' etwas hat.';c.appendChild(p)}}catch(e){}return r}}
+// ---------- Bilder je Klassen-Aktion (eigene Pixel-Arbeit, Spalte „Bild“ in Pauls Liste) ----------
+// Der Held geht vorher zum Ziel (Froschwanderer: ein großer Sprung). Gezeichnet wird in der Szene, damit die Mitspieler es mitsehen.
+const KADUR64={'Drachenkönigin':2800,'Hohepriesterin':2200,'Sternenkundlerin':2600,'Assassine':2200,'Schattenläufer':2200,'Botin':2400,'Waldläuferin':2400,'Fuchsjägerin':2400,'Rentner':2800,'Zeithexe':2000,'Bogenschütze':1500,'Gelehrter':2000,'Tüftlerin':2200,'Schmied':2000,'Handwerker':2000};
+function kaAnim64(h,T,ok,cur){const n=now64(),cls=h.cls,dur=Math.round((KADUR64[cls]||1800)*(ok?1:.7));
+  const d={cls,no:!ok,tx:T&&T.x!=null?T.x:null,tyTD:T&&T.ty!=null?T.ty:null,npc:T&&T.npc||null,ally:T&&T.ally||null,exit:!!(T&&T.exit),zu:!!(T&&T.zu),herb:!!(cur&&cur.herb)};
+  if(d.tx!=null&&Math.abs(d.tx-h.x)>3&&!d.ally)h.face=d.tx>h.x?1:-1;const f=h.face||1;
+  fx64('ka64',h,dur,true,d);
+  try{presentNpcs().forEach(o=>{if(!o.virtual&&!moving64(o))o.face=o.x<h.x?1:-1})}catch(e){}
+  const npcs=()=>{try{return presentNpcs().filter(o=>!o.virtual&&o.id!=='pet')}catch(e){return[]}},later=(ms,fn)=>setTimeout(()=>{try{fn()}catch(e){}},ms);
+  switch(cls){
+    case'Ritter':h.lunge=6;h.off64={t0:n,dur:340,dx:f*8};later(160,()=>{shake=Math.max(shake||0,ok?6:2)});break;
+    case'Schmied':case'Handwerker':[250,700,1150].forEach(ms=>later(ms,()=>{shake=Math.max(shake||0,2)}));break;
+    case'Mistgabel-Held':h.off64={t0:n,dur:1000,dx:f*5,osc:3};break;
+    case'König ohne Land':if(ok)PARTY.filter(p=>p.hp>0).forEach(p=>{p.hop64={t0:n+250,dur:540,hi:1}});break;
+    case'Gaukler':h.spin64={t0:n+80,dur:620};h.hop64={t0:n,dur:760,hi:2};break;
+    case'Waldwicht':h.sq64={t0:n,dur:1100};h.off64={t0:n,dur:1100,dx:f*10};break;
+    case'Assassine':h.fade64=n+1500;break;
+    case'Schattenläufer':h.fade64=n+1900;steps64(h,d.tx,false,0);break;
+    case'Waldläuferin':steps64(h,d.tx,true,0);break;
+    case'Fuchsjägerin':steps64(h,d.tx,true,1);break;
+    case'Wachmann':[350,800,1250].forEach((ms,i)=>later(ms,()=>{if(!moving64(h))h.face=i%2?f:-f}));later(1600,()=>{h.face=f});break;
+    case'Zeithexe':h.off64={t0:n,dur:1300,dx:-f*12};break;
+    case'Bardin':case'Wolfsbarde':if(ok)npcs().forEach((o,i)=>later(500+i*260,()=>{o.hop64={t0:now64(),dur:420,hi:1}}));break;
+    case'Prinzessin a.D.':if(ok)npcs().forEach((o,i)=>later(700+i*200,()=>{o.off64={t0:now64(),dur:700,dy:2}}));break;
+    case'Söldnerin':if(ok)npcs().forEach((o,i)=>later(600+i*150,()=>emo64(o,'!',1400,false)));break;
+    case'Rentner':if(ok)later(2000,()=>emo64(h,'!',1400,true));break;
+    case'Gelehrter':if(ok)later(1000,()=>emo64(h,'!',1400,true));break;
+    case'Held':h.hop64={t0:n+120,dur:420,hi:1};break;
+    case'Drachenkönigin':if(ok)later(1300,()=>{shake=Math.max(shake||0,3)});break;
+    case'Monsterflüsterer':if(ok&&d.npc)later(900,()=>{d.npc.hop64={t0:now64(),dur:420,hi:1}});break}
+  return d}
+function steps64(h,tx,glow,zig){const f=h.face||1,x0=h.x,x1=tx!=null?tx:x0+f*70,n=Math.max(3,Math.min(9,Math.round(Math.abs(x1-x0)/12)));
+  for(let i=1;i<=n;i++)setTimeout(()=>{const q=i/n,x=x0+(x1-x0)*q,zz=zig?((i%4<2)?3:-3):0;TRK64.push({x:x+(i%2?2:-2),y:TD?(h.y||FLOOR)+((i%2)?2:-2)+zz:FLOOR-1-(i%2)-Math.max(0,zz),t0:now64(),life:glow?3600:2400,kind:'spur',sc:S.scene,glow:glow?1:0})},120+i*130)}
+// Zeichen-Helfer
+const D64=(x,y,w,h,c)=>{if(w<0){x+=w;w=-w}if(h<0){y+=h;h=-h}px(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)),c)};
+function dots64(x0,y0,x1,y1,step,s,c,upto){const L=Math.hypot(x1-x0,y1-y0),n=Math.max(1,Math.floor(L/step)),m=Math.floor(n*(upto==null?1:Math.max(0,Math.min(1,upto))));for(let i=0;i<=m;i++){const q=i/n;D64(x0+(x1-x0)*q-s/2,y0+(y1-y0)*q-s/2,s,s,c)}}
+function ring64(x,y,r,s,c,k,ry){k=k||16;for(let i=0;i<k;i++){const an=i/k*Math.PI*2;D64(x+Math.cos(an)*r-s/2,y+Math.sin(an)*r*(ry||1)-s/2,s,s,c)}}
+function cog64(x,y,r,rot,s,c){ring64(x,y,r,s,c,Math.max(10,Math.round(r*1.4)));for(let i=0;i<8;i++){const an=rot+i/8*Math.PI*2;D64(x+Math.cos(an)*(r+s)-s,y+Math.sin(an)*(r+s)-s,2*s,2*s,c)}D64(x-s,y-s,2*s,2*s,c)}
+function cross64(x,y,s,c){D64(x-s,y-3*s,2*s,6*s,c);D64(x-3*s,y-s,6*s,2*s,c)}
+function crown64(x,y,s,c,gem){D64(x-3*s,y,7*s,2*s,c);D64(x-3*s,y-2*s,s,2*s,c);D64(x,y-3*s,s,3*s,c);D64(x+3*s,y-2*s,s,2*s,c);if(gem)D64(x,y+s/2,s,s,gem)}
+function puff64(x,y,r,c){D64(x-r,y-r/2,2*r,r,c);D64(x-r/2,y-r,r,2*r,c)}
+function coin64(x,y,s,now){const w=((now/70)|0)%3===0?s:3*s;D64(x-w/2,y,w,3*s,'#e8ba52');D64(x-w/2,y,Math.max(1,w/2),s,'#fff2a0')}
+function rune64(x,y,s,k,c){const R=[['#.#','.#.','#.#'],['##.','#..','###'],['.#.','###','.#.'],['#..','##.','.##'],['###','#.#','#..']][k%5];R.forEach((row,j)=>{for(let i=0;i<3;i++)if(row[i]==='#')D64(x+i*s,y+j*s,s,s,c)})}
+function kaTgt64(F,P){const d=F.d,s=P.s;let x=d.tx!=null?d.tx:P.x+P.f*16*s,ym=P.base-12*s,yg=P.base;
+  if(d.ally){const Q=figPos64(d.ally,true);x=Q.x;ym=Q.top+10*s;yg=Q.base}else if(d.npc&&d.npc.scene===S.scene){const Q=figPos64(d.npc,false);x=Q.x;ym=Q.top+10*s;yg=Q.base}
+  else if(TD&&d.tyTD!=null){yg=d.tyTD;ym=d.tyTD-8*s}return{x,ym,yg}}
+{const _dk64b=drawKind64;drawKind64=function(F,P,p,now){if(F.kind!=='ka64')return _dk64b.apply(this,arguments);try{kaDraw64(F,P,p,now)}catch(e){}g.globalAlpha=1}}
+function kaDraw64(F,P,p,now){const d=F.d,s=P.s,f=P.f,no=d.no,T=kaTgt64(F,P),hx=P.x+f*5*s,hy=P.top+15*s,head=P.top-2*s,env=Math.max(0,Math.min(1,Math.sin(p*Math.PI)*1.6))*(no?.55:1);
+  const A=v=>{g.globalAlpha=Math.max(0,Math.min(1,v))};A(env);const blink=((now/110)|0)%2,end=p>.62&&!no;
+  switch(d.cls){
+    case'Ritter':for(let i=0;i<8;i++){const q=Math.min(1,p*1.6),an=-Math.PI/2+(i-3.5)*.35;A(env*(1-q));D64(T.x+Math.cos(an)*q*14*s*-f,T.ym+Math.sin(an)*q*10*s+q*q*12*s,2*s,s,i%2?'#a07848':'#d8b878')}
+      A(env*.6);for(let i=0;i<5;i++)puff64(T.x+(i-2)*4*s,T.yg-2*s-p*6*s,2*s+p*2*s,'#b8a890');if(end)star64(Math.round(T.x),Math.round(T.ym),2*s,'#fff2a0');break;
+    case'Schmied':{const beat=(p*3)%1,i=Math.floor(p*3);if(beat<.35&&!no)for(let k=0;k<7;k++){const an=-Math.PI*(k/6);D64(T.x+Math.cos(an)*beat*16*s,T.ym+Math.sin(an)*beat*12*s,s,s,k%2?'#ffb84a':'#fff2a0')}
+      D64(T.x-s,T.ym-4*s-(beat<.2?0:3*s),2*s,4*s,'#8a8a96');D64(T.x-3*s,T.ym-6*s-(beat<.2?0:3*s),6*s,2*s,'#5a5a66');if(i>=2&&!no)cog64(T.x+8*s,T.ym-8*s,3*s,now/300,Math.max(1,s>>1)||1,blink?'#fff2a0':'#e8ba52');break}
+    case'Handwerker':{D64(T.x-8*s,T.ym,16*s,2*s,'#a07848');D64(T.x-8*s,T.ym+2*s,16*s,1,'#6a4a2a');const i=Math.min(2,Math.floor(p*3)),beat=(p*3)%1;
+      for(let k=0;k<=i;k++)D64(T.x-5*s+k*5*s,T.ym-s,s,s,(k===i&&beat<.3)?'#ffffff':'#c8c8d8');D64(T.x-5*s+i*5*s+f*2*s,T.ym-(beat<.25?3:7)*s,3*s,2*s,'#5a5a66');if(beat<.2&&!no)star64(Math.round(T.x-5*s+i*5*s),Math.round(T.ym-s),s,'#fff6c0');break}
+    case'Magd':{const up=Math.min(1,p*2.2),y=hy-up*20*s;D64(P.x-5*s,y-6*s,10*s,7*s,'#a07848');D64(P.x-5*s,y-6*s,10*s,s,'#c8a068');D64(P.x-s,y-6*s,2*s,7*s,'#6a4a2a');
+      if(up>=1){A(env*.7);for(let i=0;i<4;i++)puff64(P.x+(i-1.5)*5*s,P.base-s-((p*3+i*.3)%1)*4*s,2*s,'#a89c86')}break}
+    case'Mistgabel-Held':for(let i=0;i<10;i++){const q=(p*1.8+i*.13)%1,side=i%2?1:-1;A(env*(1-q));D64(T.x+side*q*(10+i)*s,T.yg-3*s-Math.sin(q*Math.PI)*14*s,2*s,s,i%3?'#e8d070':'#7ad36a')}break;
+    case'Tüftlerin':{cog64(T.x-4*s,T.ym-10*s,4*s,now/260,s,'#c8c8d8');cog64(T.x+5*s,T.ym-14*s,3*s,-now/200,s,'#e8ba52');
+      if(p>.5){const lx=T.x+(p-.5)*8*s;ring64(lx,T.ym-2*s,4*s,s,blink?'#ffffff':'#8ad8ff',12);D64(lx+3*s,T.ym+2*s,s,4*s,'#a07848')}break}
+    case'Sternenkundlerin':{const S5=[[-10,-30],[-4,-36],[3,-31],[9,-38],[14,-29]],m=Math.min(5,Math.floor(p*7));for(let i=0;i<m;i++){const[a,b]=S5[i];star64(Math.round(P.x+a*s),Math.round(P.top+b*s/2),i===m-1&&blink?s:Math.max(1,s>>1)||1,'#fff6c0');if(i>0){const[c2,e2]=S5[i-1];dots64(P.x+c2*s,P.top+e2*s/2,P.x+a*s,P.top+b*s/2,2*s,Math.max(1,s>>1)||1,'#8ad8ff')}}break}
+    case'Gelehrter':{const y=head-6*s-Math.sin(Math.min(1,p*2)*Math.PI/2)*4*s,o=Math.min(1,p*2.5);D64(P.x-o*5*s,y,o*5*s,6*s,'#f8f4ea');D64(P.x,y,o*5*s,6*s,'#ece6d8');D64(P.x,y,s,6*s,'#6a4a2a');
+      for(let i=0;i<3;i++){const q=(p*2+i*.33)%1;A(env*(1-q));D64(P.x+(i-1)*4*s+Math.sin(q*9)*3*s,y-q*12*s,3*s,2*s,'#f8f4ea')}break}
+    case'Großer Weiser':for(let i=0;i<5;i++){const q=Math.max(0,Math.min(1,p*2-i*.15));A(env*q);rune64(T.x-9*s+i*4*s,T.ym-6*s+(i%2)*4*s,s,i,i%2?'#ffd84a':'#8ad8ff')}if(end)ring64(T.x,T.ym-3*s,12*s,s,'#fff2a0',14,.5);break;
+    case'Dämonenschwert':{for(let i=0;i<14;i++){const q=i/14;if(q>p*1.4)break;D64(hx+(T.x-hx)*q,hy-6*s+(T.ym-hy+6*s)*q+Math.sin(q*12+now/90)*2*s,s,s,i%2?'#c890ff':'#8a4ad8')}
+      if(p>.4)for(let k=0;k<3;k++){const r=((p-.4)*1.6+k*.33)%1*10*s;A(env*(1-r/(10*s)));ring64(T.x,T.ym,r+2*s,s,'#c890ff',12,.6)}break}
+    case'Zeithexe':{const cx=P.x,cy=head-8*s;ring64(cx,cy,6*s,s,'#f4ecd8',16);D64(cx-s/2,cy-s/2,s,s,'#f4ecd8');const an=-p*Math.PI*6;dots64(cx,cy,cx+Math.cos(an)*5*s,cy+Math.sin(an)*5*s,s,s,'#ffd84a');
+      const am=-p*Math.PI*1.5;dots64(cx,cy,cx+Math.cos(am)*3*s,cy+Math.sin(am)*3*s,s,s,'#c890ff');A(env*.35);for(let i=1;i<=3;i++)D64(P.l+f*i*5*s,P.top+6*s,P.FW,P.FH-8*s,'#c890ff');break}
+    case'Zauberin':{if(p<.12&&!no){A(.18);D64(P.x-wW(),0,wW()*3,FLOOR+40,'#fff6c0');A(env)}for(let i=0;i<16;i++){const an=i/16*Math.PI*2,r=4*s+p*22*s;D64(hx+Math.cos(an)*r,hy-8*s+Math.sin(an)*r*.7+p*p*10*s,s,s,['#fff2a0','#ff9ad8','#8ad8ff','#ffffff'][i%4])}break}
+    case'Rentner':{const k=Math.min(4,Math.floor(p*5));for(let i=0;i<k;i++){const bx=P.x+f*(6+i*3)*s,by=head-6*s-i*6*s;A(env*(i===k-1?1:.5));D64(bx-4*s,by-3*s,9*s,5*s,'#f4ecd8');D64(bx-f*3*s,by+2*s,s,2*s,'#f4ecd8');
+      if(i<3)[-2,0,2].forEach(o=>D64(bx+o*s,by-s,s,s,'#3a3346'));else{D64(bx,by-2*s,s,2*s,'#e04a3a');D64(bx,by+s,s,s,'#e04a3a')}}break}
+    case'Waldläuferin':case'Fuchsjägerin':if(p>.55){const y=TD&&d.tyTD!=null?d.tyTD-10*s:T.yg-14*s;D64(T.x-s,y,2*s,6*s,'#ffd84a');D64(T.x-3*s,y+4*s,6*s,s,'#ffd84a');D64(T.x-2*s,y+5*s,4*s,s,'#ffd84a');D64(T.x-s,y+6*s,2*s,s,'#ffd84a')}break;
+    case'Botin':{const ex=d.tx!=null?d.tx:(f>0?wW()-30:30),y=P.base-2*s;dots64(P.x,y,ex,y,4*s,s,'#f4ecd8',Math.min(1,p*1.6));
+      const q=Math.min(1,p*1.3),lx=P.x+(ex-P.x)*q,ly=P.top-4*s-Math.sin(q*Math.PI)*8*s+Math.sin(now/90)*s;D64(lx-3*s,ly,6*s,4*s,'#f8f4ea');dots64(lx-3*s,ly,lx,ly+2*s,s,Math.max(1,s>>1)||1,'#c84a4a');dots64(lx+3*s,ly,lx,ly+2*s,s,Math.max(1,s>>1)||1,'#c84a4a');break}
+    case'Wachmann':{const y=head-7*s,ox=Math.sin(now/180)*2*s;D64(P.x-4*s,y,9*s,s,'#f4ecd8');D64(P.x-5*s,y+s,11*s,3*s,'#f4ecd8');D64(P.x-4*s,y+4*s,9*s,s,'#f4ecd8');D64(P.x-s+ox,y+s,3*s,3*s,'#3a6ad8');D64(P.x+ox,y+2*s,s,s,'#141210');break}
+    case'Bauer':{A(env*.8);D64(T.x-6*s,T.yg-s,12*s,2*s,'#3a2a1a');D64(T.x-4*s,T.yg-2*s,8*s,s,'#5a3a22');for(let i=0;i<8;i++){const q=(p*1.6+i*.12)%1,side=i%2?1:-1;A(env*(1-q));D64(T.x+side*q*(6+i*2)*s,T.yg-3*s-Math.sin(q*Math.PI)*16*s,2*s,2*s,i%3?'#7a5a3a':'#a07848')}break}
+    case'Bogenschütze':{const q=Math.min(1,p*2.2),ax=hx+(T.x-hx)*q,ay=hy-6*s+(T.ym-hy+6*s)*q-Math.sin(q*Math.PI)*10*s;if(q<1){D64(ax-f*5*s,ay,6*s,s,'#c8a068');D64(ax+f*s,ay-s,s,3*s,'#e8e8f0');D64(ax-f*5*s,ay-s,s,3*s,'#7ad36a')}
+      else{D64(T.x-f*5*s,T.ym,6*s,s,'#c8a068');if(!no)star64(Math.round(T.x),Math.round(T.ym),blink?3*s:2*s,'#fff2a0')}break}
+    case'Seefahrerin':{dots64(hx,hy,T.x,T.ym,3*s,s,'#c8a060',Math.min(1,p*2));if(p>.4){const r=Math.max(2*s,(1-(p-.4)/.6)*9*s);ring64(T.x,T.ym,r,s,'#c8a060',14,.6);if(end&&r<=3*s)star64(Math.round(T.x),Math.round(T.ym),s,'#fff6c0')}break}
+    case'Froschwanderer':{A(env*.8);const q=Math.min(1,p*1.5);for(let i=0;i<6;i++){const side=i%2?1:-1;puff64(P.x+side*(4+q*10+i)*s,P.base-2*s-q*3*s,2*s,'#b8a890')}
+      if(!no&&p<.5){ring64(P.x,P.base-s,6*s+p*16*s,s,'#8ad8ff',16,.3)}if(no){for(let i=0;i<6;i++)D64(P.x+(i-3)*3*s,P.base-3*s-Math.sin(p*Math.PI+i)*8*s,s,2*s,'#8ad8ff')}break}
+    case'Hohepriesterin':PARTY.filter(q=>q.hp>0).forEach((q,i)=>{const Q=figPos64(q,true);A(env*.32);D64(Q.x-3*s,0,6*s,Q.top,'#fff2b0');A(env*.6);D64(Q.x-s,0,2*s,Q.top,'#fffbe6');A(env);for(let k=0;k<3;k++){const z=(p*1.4+k*.33+i*.1)%1;D64(Q.x+(k-1)*3*s,Q.top-z*30*s,s,s,'#ffffff')}});break;
+    case'Mönch':PARTY.filter(q=>q.hp>0).forEach((q,i)=>{const Q=figPos64(q,true);for(let k=0;k<2;k++){const z=(p*.8+k*.5)%1;A(env*(1-z)*.9);ring64(Q.x,Q.base-2*s,4*s+z*10*s,s,'#9ad8ff',18,.35)}});break;
+    case'Alchemistin':{D64(hx-2*s,hy-6*s,4*s,5*s,'#c8f0e8');D64(hx-s,hy-8*s,2*s,2*s,'#c8f0e8');D64(hx-2*s,hy-4*s,4*s,3*s,['#f06ad8','#6af0d8','#f0e06a'][((now/240)|0)%3]);
+      for(let i=0;i<6;i++){const q=(p*1.5+i*.17)%1,r=Math.max(1,s>>1)+(i%2);A(env*(1-q));ring64(hx+Math.sin(q*7+i)*4*s,hy-9*s-q*16*s,r+1,1,['#f06ad8','#6af0d8','#f0e06a'][i%3],6)}break}
+    case'Heilerin':case'Sanitäterin':{const x=T.x,y=T.ym-6*s;if(d.cls==='Sanitäterin'){for(let k=0;k<3;k++){const z=Math.min(1,p*2-k*.25);if(z>0)D64(x-5*s,y+6*s+k*3*s,10*s*z,s,'#f8f4ea')}}
+      for(let i=0;i<4;i++){const q=(p*1.3+i*.25)%1;A(env*(1-q));cross64(x-5*s+i*3.5*s,y-q*14*s,Math.max(1,s>>1)||1,'#7af07a')}break}
+    case'Hexe':for(let i=0;i<18;i++){const q=i/18,an=q*Math.PI*4+now/200,r=(2+q*7)*s;if(q>p*1.3)break;A(env*(1-q*.6));D64(hx+Math.cos(an)*r,hy-6*s-q*18*s+Math.sin(an)*r*.3,s+(i%3===0?s:0),s,i%2?'#7af07a':'#b8f0a0')}break;
+    case'Kräuterkundige':for(let i=0;i<6;i++){const an=p*Math.PI*3+i*1.05,r=(6+p*4)*s,lit=i===2&&p>.55&&!no;D64(P.x+Math.cos(an)*r,P.top+10*s+Math.sin(an)*r*.5,2*s,s,lit?(blink?'#ffffa0':'#d8ff70'):(i%2?'#7ad36a':'#4a9a3a'));if(lit)star64(Math.round(P.x+Math.cos(an)*r),Math.round(P.top+10*s+Math.sin(an)*r*.5),s,'#ffffe0')}break;
+    case'Drachenkönigin':{const W2=wW(),x=-60+(W2+120)*Math.min(1,p*1.1),y=12+Math.sin(p*Math.PI*2)*6;A(env*.42);const c='#1a1424';D64(x-14,y,28,6,c);D64(x-8,y-3,16,12,c);D64(x+14,y-1,10,4,c);D64(x-26,y+2,12,3,c);
+      const fl=Math.sin(now/120)>0;D64(x-12,y-(fl?12:4),10,fl?12:4,c);D64(x+2,y-(fl?12:4),10,fl?12:4,c);A(env*.25);D64(x-30,FLOOR-2,60,4,c);if(!no&&p>.4&&p<.8){A(env);star64(Math.round(hx),Math.round(hy-10*s),s,'#ffd84a')}break}
+    case'Held':{for(let i=0;i<9;i++){const an=-Math.PI+i/8*Math.PI,r1=8*s,r2=(10+p*10)*s;dots64(P.x+Math.cos(an)*r1,P.top+4*s+Math.sin(an)*r1,P.x+Math.cos(an)*r2,P.top+4*s+Math.sin(an)*r2,2*s,s,'#ffd84a')}D64(P.x+f*3*s,head-6*s-Math.min(1,p*3)*3*s,3*s,3*s,'#f0c8a0');break}
+    case'König ohne Land':crown64(P.x,head-6*s,s,blink?'#fff2a0':'#e8ba52','#e04a3a');if(end)star64(Math.round(P.x+3*s),Math.round(head-8*s),s,'#ffffff');break;
+    case'Ritterin':case'Schildmaid':{const L=PARTY.filter(q=>q.hp>0).map(q=>figPos64(q,true)),x0=Math.min(...L.map(q=>q.l))-4*s,x1=Math.max(...L.map(q=>q.l+q.FW))+4*s,cx=(x0+x1)/2,rx=(x1-x0)/2,top=Math.min(...L.map(q=>q.top))-4*s;
+      const k=Math.floor(Math.min(1,p*1.6)*24);for(let i=0;i<=k;i++){const an=Math.PI+i/24*Math.PI;D64(cx+Math.cos(an)*rx,P.base-2*s+Math.sin(an)*(P.base-top),s,s,d.cls==='Ritterin'?'#8ab8ff':'#6ad8f0')}star64(Math.round(hx),Math.round(hy-4*s),blink?2*s:s,'#ffffff');break}
+    case'Assassine':{A(env*.85);for(let i=0;i<6;i++){const q=Math.min(1,p*1.8);puff64(P.x+(i-2.5)*3*s+Math.sin(i)*2*s,P.top+10*s+(i%3)*4*s-q*6*s,(2+q*3)*s,i%2?'#3a3048':'#5a5068')}if(p>.7&&!no){A(1);star64(Math.round(P.x+f*6*s),Math.round(P.top+6*s),blink?2*s:s,'#fff6c0')}break}
+    case'Schattenläufer':if(p>.6&&!no){star64(Math.round(P.x),Math.round(P.top+4*s),s,'#fff6c0')}break;
+    case'Sträfling':{const lx=T.x,ly=T.ym;D64(lx-3*s,ly-s,3*s,s,'#c8c8d8');D64(lx-4*s,ly-2*s,s,s,'#c8c8d8');for(let i=0;i<4;i++){const q=(p*2+i*.25)%1;D64(lx+Math.cos(i*1.7)*q*6*s,ly+Math.sin(i*1.7)*q*5*s,s,s,'#fff6c0')}
+      if(p>.55){if(!no&&!d.zu)star64(Math.round(lx),Math.round(ly),blink?3*s:2*s,'#ffd84a');else D64(lx-s,ly-3*s,2*s,2*s,'#e04a3a')}break}
+    case'Waldwicht':if(p>.75&&!no){ring64(P.x+f*10*s,P.top+12*s,(p-.75)*40*s,s,'#c8f0a0',12,.8)}break;
+    case'Bardin':case'Wolfsbarde':{if(d.cls==='Wolfsbarde'){const mx=P.x+f*14*s,my=P.top-16*s;ring64(mx,my,5*s,s,'#fff6c0',16);D64(mx-3*s,my-3*s,6*s,6*s,'#f4ecd8');D64(mx-1*s,my-3*s,4*s,4*s,'#e4dcc0');
+        for(let k=0;k<3;k++){const z=(p*1.5+k*.33)%1;A(env*(1-z));for(let i=-2;i<=2;i++){const an=-Math.PI/2+i*.35;D64(P.x+Math.cos(an)*(4+z*16)*s*f,P.top+2*s+Math.sin(an)*(4+z*16)*s,s,s,'#c8b0ff')}}}
+      else for(let i=0;i<6;i++){const an=p*Math.PI*3+i*1.05,r=(5+i)*s;note64(P.x+Math.cos(an)*r,P.top+4*s+Math.sin(an)*r*.5-p*8*s,Math.max(1,s>>1),['#ffd84a','#8ad8ff','#ff9ad8'][i%3])}break}
+    case'Baron':{const fx=P.x+f*10*s,up=Math.min(1,p*2.5);D64(fx,P.base-up*22*s,s,up*22*s,'#6a4a2a');if(up>=1){const wv=Math.sin(now/120)*s;D64(fx+f*s,P.base-22*s,f*8*s+wv,2*s,'#d84a4a');D64(fx+f*s,P.base-20*s,f*6*s+wv,2*s,'#d84a4a');D64(fx+f*s,P.base-18*s,f*3*s,2*s,'#d84a4a')}break}
+    case'Gaukler':for(let i=0;i<3;i++){const an=p*Math.PI*5+i*2.09;D64(P.x+Math.cos(an)*7*s-s,P.top-2*s-Math.abs(Math.sin(an))*12*s,2*s+1,2*s+1,['#e04a3a','#f6d84a','#4a8ae0'][i])}break;
+    case'Monsterflüsterer':for(let i=0;i<4;i++){const q=(p*1.3+i*.25)%1,x=P.x+(T.x-P.x)*q,y=P.top+6*s+(T.ym-P.top-6*s)*q-Math.sin(q*Math.PI)*10*s;if(i%2)glyph64('herz',Math.round(x),Math.round(y),Math.max(1,s>>1),'#ff7a9a');else note64(x,y,Math.max(1,s>>1),'#ffd84a')}break;
+    case'Prinzessin a.D.':crown64(P.x,head-5*s,Math.max(1,s>>1)||1,blink?'#fff2a0':'#e8ba52','#8ad8ff');if(end)star64(Math.round(P.x),Math.round(head-8*s),s,'#ffffff');break;
+    case'Söldner':{const q=Math.min(1,p*1.4),y=hy-Math.sin(q*Math.PI)*22*s;coin64(hx,y,s,now);if(end)star64(Math.round(P.x+f*2*s),Math.round(P.top+6*s),blink?2*s:s,'#fff6c0');break}
+    case'Söldnerin':{for(let i=0;i<3;i++)D64(hx-3*s,hy-i*2*s-2*s,6*s,2*s,i%2?'#e8ba52':'#c89a32');if(blink)D64(hx-3*s,hy-6*s,2*s,s,'#fff2a0');break}
+    default:star64(Math.round(T.x),Math.round(T.ym),s,'#fff2a0')}
+  g.globalAlpha=1}
+// Figuren: Sprung über die Szene (jmp64), schmal werden (sq64), Salto (spin64), kurzes Versetzen (off64)
+{const _df64b=drawFigure;drawFigure=function(img,o,isHero){const n=now64();let tr=false;
+  try{if(o&&(o.jmp64||o.sq64||o.spin64||o.off64)){const P=figPos64(o,isHero);let dx=0,dy=0,sx=1,rot=0;
+    if(o.jmp64){const J=o.jmp64,p=Math.max(0,Math.min(1,(n-J.t0)/J.dur));o.x=o.tx=J.x0+(J.x1-J.x0)*(p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2);dy-=Math.sin(p*Math.PI)*(TD?18:36)}
+    if(o.sq64){const p=(n-o.sq64.t0)/o.sq64.dur;if(p>=1)o.sq64=null;else if(p>0)sx=1-.62*Math.sin(Math.min(1,p*1.25)*Math.PI)}
+    if(o.spin64){const p=(n-o.spin64.t0)/o.spin64.dur;if(p>=1)o.spin64=null;else if(p>0)rot=(o.face||1)*p*Math.PI*2}
+    if(o.off64){const O=o.off64,p=(n-O.t0)/O.dur;if(p>=1)o.off64=null;else if(p>0){const e=O.osc?Math.sin(p*Math.PI*2*O.osc)*(1-p):Math.sin(p*Math.PI);dx+=(O.dx||0)*e*P.s;dy+=(O.dy||0)*e*P.s}}
+    if(dx||dy||sx!==1||rot){const cx=P.x,cy=P.top+P.FH/2;g.save();tr=true;g.translate(Math.round(cx+dx),Math.round(cy+dy));if(rot)g.rotate(rot);if(sx!==1)g.scale(sx,1);g.translate(-cx,-cy)}}}catch(e){}
+  try{return _df64b.apply(this,arguments)}finally{if(tr)g.restore()}}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
