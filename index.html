@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 64 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 65 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -4495,7 +4495,7 @@ function tacLoop(){if(!TAC){tacRAF=0;return}TAC.t++;const W2=TW,H2=THH;
   const[ax,ay]=tScr(TAC.cols/2-.5,TAC.rows/2-.5,0);TG.globalAlpha=.25;TG.fillStyle=TAC.M.floor==='gras'?'#2a5a2a':'#5a5040';TG.beginPath();TG.ellipse(ax,ay+10,TAC.cols>12?232:165,TAC.cols>12?108:78,0,0,7);TG.fill();TG.globalAlpha=1;
   tCrowdDraw(false);
   const u=TAC.cur,R=(u&&u.side==='held'&&!u.frog&&!TAC.busy&&TAC.mode==='move'&&!TAC.moved)?tReach(u):null;
-  const cells=[];for(let r=0;r<TAC.rows;r++)for(let c=0;c<TAC.cols;c++)cells.push([c,r]);cells.sort((a,b)=>(a[0]+a[1])-(b[0]+b[1])||a[0]-b[0]);
+  const cells=[];for(let r=0;r<TAC.rows;r++)for(let c=0;c<TAC.cols;c++)cells.push([c,r]);cells.sort(tDepth65);
   cells.forEach(([c,r])=>{const T=tTile(c,r);tTileDraw(c,r,T);const[sx,sy]=tScr(c,r,T.h);
     if(R&&R[tKey(c,r)]&&!R[tKey(c,r)].occ&&!(c===u.c&&r===u.r))tDiamond(sx,sy,'#3ad8c8',.45);
     if(u&&u.side==='held'&&!u.frog&&!TAC.busy&&!TAC.acted&&(TAC.mode==='attack'||TAC.mode==='move')){const o=tUnitAt(c,r);if(o&&o.side==='feind'&&tInRange(u,o))tDiamond(sx,sy,'#e83a4a',.55);}
@@ -14127,8 +14127,8 @@ function egChips45(chip){const T=T45(),nm=npcByName('Wachhabende Irmel'),near=nm
       setTimeout(()=>{const id=sceneIdByName('Goldener Platz');if(id){window.__noTravel=true;try{switchScene(id)}finally{window.__noTravel=false}}renderAll()},1400);hudUpd();renderAll()},'spont');
     chip('Durch das Tor fliehen (Geschick 14)',()=>{const best=PARTY.filter(h=>h.hp>0).sort((a,b)=>(b.mods.dex||0)-(a.mods.dex||0))[0]||hero;if(best!==hero){const i=PARTY.indexOf(best);if(i>=0)setActive(i,true)}
       if(check('dex',14-(ROGUE26.test(best.cls||'')?2:0),'Durch das Tor')){S.prison26.stage='frei';S.flags.prisonEscaped=true;S.facts.turm45_offen=true;
-        say('Ihr wartet, bis die Torwache gähnt, und seid draußen. Schnee. Ihr lauft nicht in die Stadt, sondern den Berg hinauf – Olafs Nachschubweg.','dm');addChron('Aus dem Gefängnisturm von Duppelbach entkommen.',['ruf+']);
-        setTimeout(()=>{say('Drei Tage Marsch durch Schnee später kommt ihr von Norden über den Pass – direkt hinter Olafs Lager.','sys');PARTY.forEach(h=>{h.hp=Math.max(h.hp,Math.ceil(h.max*.75))});const id=sceneIdByName('Sattel');window.__noTravel=true;try{if(id){S.noAmbush26=1;switchScene(id)}}finally{window.__noTravel=false}renderAll()},2600)}
+        say('Ihr wartet, bis die Torwache gähnt, und seid draußen. Schnee, Pflaster, hinter euch eine Glocke. Ihr lauft durch die Gassen, bis die Mauern von Duppelbach hinter euch liegen.','dm');addChron('Aus dem Gefängnisturm von Duppelbach entkommen.',['ruf+']);
+        setTimeout(()=>{PARTY.forEach(h=>{h.hp=Math.max(h.hp,Math.ceil(h.max*.75))});const id=sceneIdByName(TOR47);window.__noTravel=true;try{if(id){S.noAmbush26=1;switchScene(id)}}finally{window.__noTravel=false}say('Ihr bleibt vor dem Zollhaus stehen und atmet durch. Niemand folgt euch – noch nicht. Wer hinauf zu Olafs Lager will, nimmt die Karte.','sys');renderAll()},2400)}
       else patrol45();renderAll()},'spont')}}
 // ---------- Ebene −1 und −2: Kaspar, Romy, Theo, Fritz, Ilka, Ivo ----------
 function nearN45(nm,d){const n=npcByName(nm);return n&&n.scene===S.scene&&Math.abs(hero.x-n.x)<(d||70)}
@@ -17375,8 +17375,8 @@ function tuer52(raus){const D=D52();if(!tuerFrei52()||SEQ46)return;D.tuer=day43(
     seq46(L,()=>{addChron('Tür auf −4: Der normale Typ hat aufgemacht, gespottet und wieder zugemacht.',[]);renderAll()},true)}
   renderAll()}
 function tuerRaus52(pris){const go=nm=>{const id=sceneIdByName(nm);if(!id)return;window.__noTravel=true;try{S.noAmbush26=1;switchScene(id)}finally{window.__noTravel=false}};
-  if(pris){S.prison26.stage='frei';S.flags.prisonEscaped=true;S.facts.turm45_offen=true;go('Sattel');
-    setTimeout(()=>{say('Puff. Schnee unter den Füßen. Ihr steht am Sattel, hinter Olafs Lager. Hinter euch ist niemand, nur ein bisschen goldener Staub.','dm');addChron('Der normale Typ hat die Gruppe aus dem Turm geholt (Tür auf −4): Sie steht am Sattel und gilt als geflohen.',['ruf+']);renderAll()},700)}
+  if(pris){S.prison26.stage='frei';S.flags.prisonEscaped=true;S.facts.turm45_offen=true;go(TOR47);
+    setTimeout(()=>{say('Puff. Schnee unter den Füßen und eine hohe Steinmauer im Rücken. Ihr steht vor den Mauern von Duppelbach, neben dem Zollhaus. Hinter euch ist niemand, nur ein bisschen goldener Staub.','dm');addChron('Der normale Typ hat die Gruppe aus dem Turm geholt (Tür auf −4): Sie steht vor den Mauern von Duppelbach und gilt als geflohen.',['ruf+']);renderAll()},700)}
   else{go('Goldener Platz');setTimeout(()=>{say('Puff. Ihr steht auf dem Goldenen Platz. Die Tauben fliegen auf, und ein Makler lässt seine Zeitung fallen.','dm');addChron('Der normale Typ hat die Gruppe aus dem Turm teleportiert (Tür auf −4).',[]);renderAll()},700)}
   renderAll()}
 
@@ -18089,7 +18089,7 @@ function dvFrei54(){const D=DV54();D.done=day43();S.facts.dienst54_frei=true;if(
         chip('Den Dienstvertrag ansehen',dvOpen54,'learned')}}
     if(dvAktiv54()&&inArena45()){if(D.fought!==d0&&abend45())chip('Antreten (Dienstvertrag, ohne Anmeldung)',dvFight54,'spont');
       chip('Durch den Spielereingang fliehen (Geschick 14)',()=>{const best=PARTY.filter(h=>h.hp>0).sort((a,b)=>(b.mods.dex||0)-(a.mods.dex||0))[0]||hero;if(best!==hero){const i=PARTY.indexOf(best);if(i>=0)setActive(i,true)}
-        if(check('dex',14-(ROGUE26.test(best.cls||'')?2:0),'Durch den Spielereingang')){D.esc=1;D.done=-1;S.prison26.stage='frei';S.flags.prisonEscaped=true;S.facts.turm45_offen=true;say('Ihr taucht unter den Rängen durch, an der Sanitäterin vorbei, hinaus in den Schnee. Weglaufen gilt als Flucht. Steht so im Vertrag.','dm');addChron('Aus dem Dienst des Fürsten geflohen (gilt als Flucht).',['ruf-'],true)}
+        if(check('dex',14-(ROGUE26.test(best.cls||'')?2:0),'Durch den Spielereingang')){D.esc=1;D.done=-1;S.prison26.stage='frei';S.flags.prisonEscaped=true;S.facts.turm45_offen=true;say('Ihr taucht unter den Rängen durch, an der Sanitäterin vorbei, hinaus in den Schnee. Weglaufen gilt als Flucht. Steht so im Vertrag.','dm');addChron('Aus dem Dienst des Fürsten geflohen (gilt als Flucht).',['ruf-'],true);setTimeout(()=>{try{const id=sceneIdByName(TOR47);if(id&&S.scene!==id){window.__noTravel=true;try{S.noAmbush26=1;switchScene(id)}finally{window.__noTravel=false}say('Ihr kommt vor den Mauern wieder zu Atem, neben dem Zollhaus. Der Dienstvertrag raschelt in der Tasche. Weglaufen gilt als Flucht – aber hier draußen ist gerade niemand, der es euch vorhält.','sys')}}catch(e){console.warn('p65',e)}renderAll()},2000)}
         else dvToTurm54('Wache Ivo hat euch am Kragen, bevor ihr den Gang erreicht. „Dienst ist Dienst.“');renderAll()},'spont')}}catch(e){console.warn('p54v chips',e)}return r}}
 // Im Dienst geht es aus der Arena nur mit Ivo hinaus
 {const _sw54v=switchScene;switchScene=function(sc){try{if(dvAktiv54()&&inArena45()&&sc!==S.scene&&!window.__noTravel){say('Wache Ivo steht im Ausgang. „Dienst ist Dienst. Zurück geht’s mit mir.“','npc','Wache Ivo');return renderAll()}}catch(e){}return _sw54v.apply(this,arguments)}}
@@ -23712,6 +23712,180 @@ function cue64(who,p){const t=Date.now();const gap=t-(CUE64.last[who]||0);CUE64.
   clearTimeout(CUE64.tmr);clearTimeout(CUE64.tmr2);CUE64.tmr=setTimeout(()=>el.classList.remove('an'),2500);CUE64.tmr2=setTimeout(()=>{el.style.display='none'},2900);
   try{sfx64('ding64')}catch(e){}return true}
 {const _say=say;say=function(text,cls,who){const p=_say.apply(this,arguments);try{if(cls==='npc'&&who&&!talk&&!TAC&&!inFight())cue64(who,p)}catch(e){}return p}}
+
+
+// ================= Prototyp 65 (t): Taktik-Kamera, scharfer Erzähltext im Finale, Akt-Karten, mehr Lebenspunkte für Gegner =================
+// Pauls Meldung vom 25.10. (19:17 / 19:25):
+//  1. Taktik-Kampf: Kamera drehen und verschieben, damit man auch Gegner hinter dem Ansager anklicken kann.
+//  2. Im Taktik-Kampf war der Erzähltext des Finales verschwommen (er wurde auf die kleine Zeichenfläche gemalt und dann vergrößert).
+//     Jetzt: scharfer Text als eigenes Fenster über dem Raster, mit Namensschild, Lesezeit und Weiter-Klick (Leertaste).
+//  3. Bessere Unterteilung im Finale: Akt-Karten vor den großen Szenen, Pause beim Sprecherwechsel, Lesezeit nach Textlänge.
+//  4. Alle Gegner 50 bis 100 % mehr Lebenspunkte (Handlanger mehr als Bosse).
+// Nichts davon ändert Regeln oder Story – nur Darstellung, Tempo und Leben der Gegner.
+
+// ---------- 1. Kamera ----------
+function rot65(c,r){const T=TAC;if(!T||!T.rot65||T.norot65)return[c,r];const cc=(T.cols-1)/2,rc=(T.rows-1)/2;let dx=c-cc,dy=r-rc;for(let i=0;i<T.rot65;i++){const t0=dx;dx=-dy;dy=t0}return[cc+dx,rc+dy]}
+function tDepth65(a,b){const A=rot65(a[0],a[1]),B=rot65(b[0],b[1]);return(A[0]+A[1])-(B[0]+B[1])||A[0]-B[0]}
+{const _s=tScr;tScr=function(c,r,h){if(!TAC)return _s(c,r,h);const p=rot65(c,r),s=_s(p[0],p[1],h);return[s[0]+(TAC.px65||0),s[1]+(TAC.py65||0)]}}
+function clampCam65(){const T=TAC;if(!T)return;T.px65=Math.max(-TW*.45,Math.min(TW*.45,T.px65||0));T.py65=Math.max(-THH*.45,Math.min(THH*.45,T.py65||0))}
+function rotate65(d){const T=TAC;if(!T)return;T.rot65=(((T.rot65||0)+d)%4+4)%4;const m=['Grundansicht','90° gedreht','von hinten','270° gedreht'][T.rot65];try{TOV.querySelector('.ttile').textContent='Kamera: '+m}catch(e){}camUI65()}
+function pan65(dx,dy){const T=TAC;if(!T)return;T.px65=(T.px65||0)+dx;T.py65=(T.py65||0)+dy;clampCam65()}
+function center65(){const T=TAC;if(!T)return;const u=T.cur||T.units.find(x=>x.hero);if(!u)return;const Tl=tTile(u.c,u.r)||{h:0},s=tScr(u.x!=null?u.x:u.c,u.y!=null?u.y:u.r,Tl.h);T.px65=(T.px65||0)+TW/2-s[0];T.py65=(T.py65||0)+THH/2-18-s[1];clampCam65()}
+function resetCam65(){const T=TAC;if(!T)return;T.rot65=0;T.px65=0;T.py65=0;camUI65()}
+function camUI65(){const b=TOV.querySelector('.cam65 [data-c="r0"]');if(b)b.classList.toggle('on',!!(TAC&&(TAC.rot65||TAC.px65||TAC.py65)))}
+// Ziele durchschalten (T): auch Gegner, die hinter etwas stehen
+function tab65(dir){const T=TAC;if(!T)return;const L=T.units.filter(u=>u.side==='feind'&&u.hp>0&&!u.gone);if(!L.length)return;
+  L.sort((a,b)=>{const A=tScr(a.c,a.r,0),B=tScr(b.c,b.r,0);return A[0]-B[0]||A[1]-B[1]});
+  const cur=T.hover?L.findIndex(u=>u.c===T.hover[0]&&u.r===T.hover[1]):-1;const i=((cur<0?(dir<0?L.length-1:0):cur+dir)%L.length+L.length)%L.length,u=L[i];
+  T.hover=[u.c,u.r];T.tab65=1;try{TOV.querySelector('.ttile').textContent=u.name+' · LP '+u.hp+'/'+u.max+' · RK '+u.ac+'  (Enter wählt)'}catch(e){}}
+// Bild: Aufbauten werden durchsichtig, wenn dahinter jemand steht
+{const _o=tObjDraw;tObjDraw=function(c,r,T){let a=0;try{if(TAC&&'BXT'.includes(T.obj)){const q=rot65(c,r);for(const u of TAC.units){if(u.hp<=0||u.gone)continue;const w=rot65(u.c,u.r),dc=w[0]-q[0],dr=w[1]-q[1];if(dc<=0&&dr<=0&&dc>=-1&&dr>=-1&&(dc||dr)){a=1;break}}}}catch(e){}
+  if(a)TG.globalAlpha=.42;const r0=_o.apply(this,arguments);TG.globalAlpha=1;return r0}}
+// Publikum bleibt an seinem Platz (nur verschiebbar)
+{const _c=tCrowdDraw;tCrowdDraw=function(){const T=TAC;if(T)T.norot65=1;try{return _c.apply(this,arguments)}finally{if(T)T.norot65=0}}}
+// Blickrichtung passend zum Bild (nach dem Drehen zeigt „rechts“ im Raster nicht mehr nach rechts)
+{const _a=tAttack;tAttack=function(a,b,opt){const r=_a.apply(this,arguments);try{if(TAC&&TAC.rot65&&a&&b){const pa=tScr(a.c,a.r,0),pb=tScr(b.c,b.r,0);if(Math.abs(pb[0]-pa[0])>1)a.face=pb[0]>pa[0]?1:-1}}catch(e){}return r}}
+{const _u=tUnitDraw;tUnitDraw=function(u){try{if(TAC&&TAC.rot65&&u&&(Math.abs(u.c-u.x)>.01||Math.abs(u.r-u.y)>.01)){const a=tScr(u.x,u.y,0),b=tScr(u.c,u.r,0);if(Math.abs(b[0]-a[0])>.3)u.face=b[0]>a[0]?1:-1}}catch(e){}return _u.apply(this,arguments)}}
+// Anklicken: gleiche Regeln wie vorher, aber „vorne“ richtet sich nach der Drehung
+tPick=function(e){const r=TCV.getBoundingClientRect(),mx=(e.clientX-r.left)/r.width*TW,my=(e.clientY-r.top)/r.height*THH;let best=null,bd=-1e9;
+  for(let rr=0;rr<TAC.rows;rr++)for(let c=0;c<TAC.cols;c++){const T=tTile(c,rr),s=tScr(c,rr,T.h);if(T.block)continue;if(Math.abs(mx-s[0])/16+Math.abs(my-s[1])/8<=1){const q=rot65(c,rr),dp=q[0]+q[1];if(dp>bd){bd=dp;best=[c,rr]}}}
+  if(!best)TAC.units.forEach(u=>{if(u.hp<=0||u.gone)return;const T=tTile(u.c,u.r),s=tScr(u.c,u.r,T.h);if(mx>s[0]-8&&mx<s[0]+8&&my>s[1]-26&&my<s[1])best=[u.c,u.r]});return best};
+// Bedienung
+{const cam=document.createElement('span');cam.className='cam65';
+  cam.innerHTML='<button type="button" data-c="l" title="Kamera links herum drehen (Q)">⟲</button><button type="button" data-c="r" title="Kamera rechts herum drehen (E)">⟳</button><button type="button" data-c="z" title="Auf die Figur am Zug zentrieren (C)">◎</button><button type="button" data-c="r0" title="Kamera zurücksetzen (R)">Reset</button><button type="button" data-c="t" title="Nächstes Ziel anwählen (T), mit Enter bestätigen">Ziel (T)</button><span class="hint65k">Kamera: Q/E drehen · Ziehen oder Pfeiltasten verschieben · T wählt Ziele</span>';
+  const top=TOV.querySelector('.ttop'),dm=TOV.querySelector('.tdm');if(top)top.insertBefore(cam,dm||null);
+  cam.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b||!TAC)return;const k=b.dataset.c;if(k==='l')rotate65(-1);else if(k==='r')rotate65(1);else if(k==='z')center65();else if(k==='r0')resetCam65();else if(k==='t')tab65(1);e.stopPropagation()});
+  const st=document.createElement('style');st.textContent='#tacOv .cam65{display:inline-flex;gap:4px;align-items:center;margin-left:10px;flex-wrap:wrap}#tacOv .cam65 button{font-size:13px;padding:2px 8px;cursor:pointer}#tacOv .cam65 button.on{outline:2px solid #f6c84a}#tacOv .cam65 .hint65k{font-size:11px;color:#a89fb8;margin-left:6px}@media (max-width:900px){#tacOv .cam65 .hint65k{display:none}}';document.head.appendChild(st);
+  let DR=null;
+  TCV.addEventListener('mousedown',e=>{if(!TAC)return;DR={x:e.clientX,y:e.clientY,px:TAC.px65||0,py:TAC.py65||0,moved:false,btn:e.button,up:false}});
+  window.addEventListener('mousemove',e=>{if(!DR||DR.up||!TAC)return;const r=TCV.getBoundingClientRect(),dx=e.clientX-DR.x,dy=e.clientY-DR.y;if(!DR.moved&&Math.hypot(dx,dy)<8&&DR.btn===0)return;DR.moved=true;TAC.px65=DR.px+dx/r.width*TW;TAC.py65=DR.py+dy/r.height*THH;clampCam65()});
+  window.addEventListener('mouseup',()=>{if(!DR)return;if(DR.moved){DR.up=true;DR.swallow=true;setTimeout(()=>{DR=null},0)}else DR=null});
+  TCV.addEventListener('click',e=>{if(DR&&DR.swallow){e.stopImmediatePropagation();e.preventDefault()}},true);
+  TCV.addEventListener('contextmenu',e=>e.preventDefault());
+  TCV.addEventListener('mousemove',()=>{if(TAC)TAC.tab65=0});
+  window.addEventListener('keydown',e=>{if(!TAC||TOV.hidden||e.ctrlKey||e.metaKey||e.altKey)return;if(/^(INPUT|TEXTAREA|SELECT)$/.test((e.target||{}).tagName||''))return;
+    const k=e.key;let used=true;
+    if(k==='q'||k==='Q')rotate65(-1);else if(k==='e'||k==='E')rotate65(1);else if(k==='c'||k==='C')center65();else if(k==='r'||k==='R')resetCam65();
+    else if(k==='ArrowLeft')pan65(16,0);else if(k==='ArrowRight')pan65(-16,0);else if(k==='ArrowUp')pan65(0,12);else if(k==='ArrowDown')pan65(0,-12);
+    else if(k==='t'||k==='T')tab65(k==='T'?-1:1);
+    else if(k==='Enter'&&TAC.hover&&TAC.tab65&&!TAC.busy){tClick(TAC.hover[0],TAC.hover[1])}
+    else if((k===' '||k==='Enter')&&skipTalk65())used=true;
+    else used=false;
+    if(used){e.preventDefault();e.stopImmediatePropagation()}},true)}
+{const _s=tacStart;tacStart=function(o){const r=_s.apply(this,arguments);try{if(TAC){TAC.rot65=0;TAC.px65=0;TAC.py65=0;camUI65();TAC.units.forEach(scale65u)}}catch(e){console.warn('p65t',e)}return r}}
+
+// ---------- 2. Scharfer Erzähltext (statt Text auf der vergrößerten Zeichenfläche) ----------
+let OV65=null;
+function col65(w){if(!w)return'#b8b0c8';if(/^\?\?\?\?/.test(w))return'#f6e27a';try{if(PARTY.some(h=>h.name===w))return'#8fd0ff'}catch(e){}if(w==='L.')return'#9ae6a0';if(w==='Der normale Typ')return'#ffb070';if(w==='Sanlep')return'#e8a8ff';
+  const P=['#ffb0b0','#b0e0ff','#ffe0a0','#c8ffb0','#e0b8ff','#ffc8e8','#a8f0e0'];let n=0;for(const ch of String(w))n=(n*31+ch.charCodeAt(0))>>>0;return P[n%P.length]}
+function ov65(){if(OV65)return OV65;const st=TOV.querySelector('.tstage');if(!st)return null;st.style.position='relative';OV65=document.createElement('div');OV65.id='ov65';
+  OV65.innerHTML='<div class="bub65"></div><div class="act65" hidden><b></b><span></span></div><div class="talk65" hidden role="status" aria-live="polite"><div class="who65"></div><div class="txt65"></div><div class="hint65"></div><i class="bar65"></i></div>';st.appendChild(OV65);
+  OV65.querySelector('.talk65').addEventListener('click',e=>{e.stopPropagation();skipTalk65()});
+  const css=document.createElement('style');css.textContent='#ov65{position:absolute;pointer-events:none;z-index:3;font-family:var(--f-text,system-ui),system-ui,sans-serif}#ov65 [hidden]{display:none!important}'
+  +'#ov65 .talk65{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);width:min(84%,840px);box-sizing:border-box;background:rgba(16,12,22,.96);border:2px solid #6a5a3a;border-radius:6px;padding:9px 16px 13px;color:#f3ead6;font-size:clamp(15px,1.85vw,22px);line-height:1.38;pointer-events:auto;cursor:pointer;box-shadow:0 4px 18px #000a;animation:in65 .22s ease-out}'
+  +'#ov65 .talk65.erz .txt65{font-style:italic;color:#e4dcee}#ov65 .who65{display:inline-block;font-weight:700;font-size:.78em;letter-spacing:.04em;padding:1px 9px;border-radius:3px;margin-bottom:5px;background:#2a2433;border:1px solid currentColor}'
+  +'#ov65 .hint65{position:absolute;right:12px;bottom:3px;font-size:.6em;opacity:.7;color:#c8c0d0}#ov65 .bar65{position:absolute;left:0;bottom:0;height:3px;background:#f6c84a;width:0}'
+  +'#ov65 .bub65>div{position:absolute;transform:translate(-50%,-100%);background:#f8f4ea;color:#1b1820;border:2px solid #3a3346;padding:3px 9px;border-radius:5px;font-size:clamp(13px,1.5vw,19px);max-width:34%;text-align:center;box-shadow:2px 2px 0 #0007;line-height:1.25}'
+  +'#ov65 .bub65>div:after{content:"";position:absolute;left:50%;bottom:-7px;margin-left:-5px;border:5px solid transparent;border-top-color:#3a3346;border-bottom:0}'
+  +'#ov65 .act65{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,6,12,.66);color:#f6e8c0;text-align:center;animation:act65 var(--d65,2.4s) ease both}'
+  +'#ov65 .act65 b{font-size:clamp(26px,4.2vw,56px);letter-spacing:.06em}#ov65 .act65 span{margin-top:10px;font-size:clamp(14px,1.9vw,24px);color:#d8cfe0;max-width:80%}'
+  +'@keyframes act65{0%{opacity:0}14%{opacity:1}80%{opacity:1}100%{opacity:0}}@keyframes in65{from{opacity:0;transform:translateX(-50%) translateY(6px)}to{opacity:1;transform:translateX(-50%)}}';document.head.appendChild(css);return OV65}
+function readMs65(text){return Math.min(9000,1300+Math.round(String(text||'').length*46))}
+function skipTalk65(){const T=TAC;if(!T||!T.f38||!T.f38.skip65)return false;if(performance.now()-(T.p65t0||0)<650)return true;const f=T.f38.skip65;f();return true}
+function act65(title,sub,ms){const T=TAC;if(!T)return;ms=ms||2400;const dur=T38(ms);T.act65={title,sub,t0:performance.now(),ms:dur};T.actUntil65=performance.now()+dur;try{tLog('— '+title+(sub?': '+sub:'')+' —')}catch(e){}}
+function ui65(T,s,bubs){const ov=ov65();if(!ov||!T)return;
+  ov.style.left=TCV.offsetLeft+'px';ov.style.top=TCV.offsetTop+'px';ov.style.width=TCV.clientWidth+'px';ov.style.height=TCV.clientHeight+'px';
+  const tk=ov.querySelector('.talk65'),now=performance.now();
+  if(s&&s.text){const key=(s.who||'')+'|'+s.text;if(tk.dataset.k!==key){tk.dataset.k=key;T.p65t0=now;const w=tk.querySelector('.who65');w.textContent=s.who||'Erzähler';w.style.color=col65(s.who);tk.querySelector('.txt65').textContent=nameFix(s.text);tk.classList.toggle('erz',!s.who);
+      tk.style.animation='none';void tk.offsetWidth;tk.style.animation='';const bar=tk.querySelector('.bar65');bar.style.transition='none';bar.style.width='0';void bar.offsetWidth;if(T.dur65){bar.style.transition='width '+T.dur65+'ms linear';bar.style.width='100%'}}
+    tk.querySelector('.hint65').textContent=(T.f38&&T.f38.skip65)?'weiter: Klick oder Leertaste':'';tk.hidden=false}
+  else if(!tk.hidden){tk.hidden=true;tk.dataset.k=''}
+  // Sprechblasen über den Figuren
+  const host=ov.querySelector('.bub65'),live=bubs.filter(b=>b.until>now&&b.u&&!b.u.gone&&b.u.hp>0);
+  [...host.children].forEach(el=>{if(!live.some(b=>b._el===el))el.remove()});
+  live.forEach(b=>{if(!b._el||!b._el.isConnected){b._el=document.createElement('div');b._el.textContent=nameFix(b.text);host.appendChild(b._el)}
+    const u=b.u,Ti=tTile(u.c,u.r);if(!Ti)return;const p=tScr(u.x!=null?u.x:u.c,u.y!=null?u.y:u.r,Ti.h);b._el.style.left=Math.max(8,Math.min(92,p[0]/TW*100))+'%';b._el.style.top=Math.max(8,(p[1]-30)/THH*100)+'%'});
+  // Akt-Karte
+  const ac=ov.querySelector('.act65'),A=T.act65;
+  if(A&&now-A.t0<A.ms){if(ac.hidden||ac.dataset.k!==String(A.t0)){ac.dataset.k=String(A.t0);ac.querySelector('b').textContent=A.title;ac.querySelector('span').textContent=A.sub||'';ac.style.setProperty('--d65',A.ms+'ms');ac.style.animation='none';void ac.offsetWidth;ac.style.animation='';ac.hidden=false}}
+  else if(!ac.hidden)ac.hidden=true}
+{const _t=tacLoop;tacLoop=function(){const T=TAC;let s=null,bubs=[];
+  if(T){s=T.sub38||T.sub53||null;bubs=(T.bub38||[]).concat(T.bub53||[]);T._b38=T.bub38;T._b53=T.bub53;T.sub38_=T.sub38;T.sub53_=T.sub53;T.sub38=null;T.sub53=null;T.bub38=[];T.bub53=[];
+    try{T.units.forEach(scale65u)}catch(e){}}
+  let r;try{r=_t.apply(this,arguments)}finally{if(T){T.sub38=T.sub38_;T.sub53=T.sub53_;T.bub38=T._b38;T.bub53=T._b53}}
+  try{if(T&&TAC===T)ui65(T,s,bubs)}catch(e){console.warn('p65t ui',e)}return r}}
+{const _e=tacEnd;tacEnd=function(){const r=_e.apply(this,arguments);try{if(OV65){OV65.querySelector('.talk65').hidden=true;OV65.querySelector('.act65').hidden=true;OV65.querySelector('.bub65').innerHTML=''}}catch(e){}return r}}
+
+// ---------- 3. Zwischensequenzen: Lesezeit, Pause beim Sprecherwechsel, Weiterklicken ----------
+cin38=function(steps,done){const T=TAC;if(!T)return;const F=T.f38;F.seq=(F.seq||0)+1;T.busy=true;tUI();let i=0,last=undefined;
+  const go=()=>{clearTimeout(F.tm65);if(TAC!==T)return;
+    if(i>=steps.length){F.skip65=null;F.tm65=setTimeout(()=>{if(TAC!==T)return;T.sub38=null;T.dur65=0;F.seq=Math.max(0,F.seq-1);if(done)done()},T38(420));return}
+    const s=steps[i++];
+    if(typeof s==='function'){F.skip65=null;const w=s();F.tm65=setTimeout(go,T38(typeof w==='number'?w:300));return}
+    const[who,text,ms,fn]=s;
+    const show=()=>{if(TAC!==T)return;if(text)sub38(who,text);if(fn)try{fn()}catch(e){console.warn(e)}
+      const base=ms||(1500+(text||'').length*36),dur=text?Math.max(T38(base),T38(readMs65(text))):T38(base);T.dur65=text?dur:0;T.p65t0=performance.now();
+      F.skip65=text?()=>{if(TAC===T)go()}:null;F.tm65=setTimeout(go,dur)};
+    // Sprecherwechsel: Fenster kurz leer, damit klar wird, wer jetzt redet
+    if(text&&last!==undefined&&last!==(who||null)&&T.sub38){T.sub38=null;F.skip65=null;F.tm65=setTimeout(show,T38(380))}else show();
+    if(text)last=who||null};
+  const wait=Math.max(0,(T.actUntil65||0)-performance.now());if(wait>0)F.tm65=setTimeout(go,wait);else go()}
+
+// ---------- Akt-Karten vor den großen Szenen des Finales ----------
+{
+  {const _f=setup38;setup38=function(){try{act65('Das Finale','Vor dem leeren Rahmen',2600)}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=ringSeq38;ringSeq38=function(){try{act65('Der Ring','L. will den Gast aus dem Mantel ziehen.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=unleash38;unleash38=function(){try{act65('Der Mind-Beater','Er ist geladen.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=lFall38;lFall38=function(){try{const F=f38();if(F&&!F.used&&!F.lfall)act65('L. bricht zusammen','Jetzt zählt, wer ihn ruft.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=lWrite38;lWrite38=function(u){try{if(u&&u.writing38===1)act65('Der Satz','L. schreibt.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=defeat38;defeat38=function(){try{const F=f38();if(F&&!F.dseq)act65('Der Gast wankt','Er verliert die Gestalt.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=kopf38;kopf38=function(){try{act65('Der Kopfsprung','Einer von euch springt.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=final38;final38=function(){try{act65('Der letzte Schlag','Kein Würfel. Keine Probe.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=zerfall38;zerfall38=function(){try{act65('Zerfall','Alles geht dahin zurück, wo es herkam.')}catch(e){}return _f.apply(this,arguments)}}
+  {const _f=accept38;accept38=function(){try{act65('Das Ja','Das dunkle Ende beginnt.')}catch(e){}return _f.apply(this,arguments)}}}
+
+// ---------- 4. Gegner: 50 bis 100 % mehr Lebenspunkte (kleine Gegner mehr, Bosse weniger) ----------
+function hpF65(b){return b<=10?2:b<=20?1.8:b<=35?1.65:1.5}
+function scale65u(u){if(!u||u.hp65||u.side!=='feind'||u.poss38||window.__hp65off)return;u.hp65=1;const f=hpF65(u.max||u.hp||1);u.max=Math.max(1,Math.round(u.max*f));u.hp=Math.max(1,Math.round(u.hp*f))}
+function scale65e(){try{const e=enemy;if(!e||e.dead||e.hp65||window.__hp65off)return;if(!e.hp29){if(!e.seen65){e.seen65=performance.now();return}if(performance.now()-e.seen65<80)return}e.hp65=1;const f=hpF65(e.max||e.hp||1);e.max=Math.max(1,Math.round(e.max*f));e.hp=Math.max(1,Math.round(e.hp*f));if(e.def&&e.def.hp&&!e.def.hp65)e.def.hp65=e.def.hp}catch(x){}}
+{const _i=inFight;inFight=function(){scale65e();return _i.apply(this,arguments)}}
+setInterval(scale65e,120);
+
+
+// ================= Prototyp 65 (u): Übergangskarten bei Story-Wechseln, Karte beim Start eines Taktik-Kampfs, Rückblende zuverlässig =================
+// Pauls Meldung vom 25.10.: Szenenwechsel, die die Geschichte auslöst, sind zu plötzlich. Wie beim Froschkonzert soll eine Anzeige kommen.
+// Erkennung: Alle Story-Sprünge im Spiel setzen window.__noTravel um switchScene (Flucht, Verhaftung, Finale, Casino, Wachen …).
+// Wer selbst geht (Ausgang, Karte, Aufzug-Knopf), bekommt keine Karte – das bleibt schnell.
+
+const TIPS65=['Tipp: Wirte wissen mehr, als sie sagen. Fragt nach Gerüchten.','Tipp: Nicht jeder Kampf muss gekämpft werden.','Tipp: Unter „Was wir wissen“ steht, was ihr bisher herausgefunden habt.','Tipp: Jede Klasse hat eigene Aktionen. Schaut auf die Knöpfe.','Tipp: Rastet am Feuer, bevor ihr weiterzieht.','Tipp: Was ihr tut, spricht sich herum. Der Ruf folgt euch.','Tipp: Im Taktik-Kampf könnt ihr die Kamera drehen (Q/E) und verschieben.'];
+let TR65=null,TRT65=[];
+function trDom65(){if(TR65)return TR65;TR65=document.createElement('div');TR65.id='tr65';TR65.hidden=true;TR65.setAttribute('role','status');TR65.setAttribute('aria-live','polite');
+  TR65.innerHTML='<div class="in65"><small class="ort65"></small><b class="tt65"></b><span class="sub65"></span><div class="ld65"><i></i></div><em class="tip65"></em></div>';document.body.appendChild(TR65);
+  const st=document.createElement('style');st.textContent='#tr65{position:fixed;inset:0;z-index:7900;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#14101e 0%,#07050b 80%);color:#f3ead6;text-align:center;pointer-events:none;opacity:1;font-family:var(--f-text,system-ui),system-ui,sans-serif}'
+  +'#tr65[hidden]{display:none}#tr65.aus65{opacity:0;transition:opacity .65s ease}#tr65 .in65{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:86vw;animation:trin65 .5s ease-out both}'
+  +'#tr65 .ort65{font-size:clamp(12px,1.5vw,18px);letter-spacing:.22em;text-transform:uppercase;color:#a89fb8}#tr65 .tt65{font-size:clamp(26px,5vw,60px);letter-spacing:.05em;color:#f6e8c0;text-shadow:0 2px 0 #000}'
+  +'#tr65 .sub65{font-size:clamp(14px,2vw,24px);color:#d8cfe0}#tr65 .ld65{width:min(300px,60vw);height:4px;background:#2a2433;border-radius:2px;overflow:hidden;margin-top:14px}#tr65 .ld65 i{display:block;height:100%;width:0;background:#f6c84a;animation:ld65 var(--h65,1.6s) linear forwards}'
+  +'#tr65 .tip65{font-size:clamp(12px,1.4vw,17px);color:#8f86a0;margin-top:6px;max-width:70ch}@keyframes ld65{to{width:100%}}@keyframes trin65{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){#tr65 .in65{animation:none}}';document.head.appendChild(st);return TR65}
+function trShow65(o){const el=trDom65();TRT65.forEach(clearTimeout);TRT65=[];const hold=o.hold||1500;
+  el.querySelector('.ort65').textContent=o.ort||'';el.querySelector('.tt65').textContent=o.title||'';el.querySelector('.sub65').textContent=o.sub||'';el.querySelector('.tip65').textContent=o.tip||TIPS65[Math.floor(Math.random()*TIPS65.length)];
+  const bar=el.querySelector('.ld65 i');bar.style.animation='none';void bar.offsetWidth;el.style.setProperty('--h65',hold+'ms');bar.style.animation='';
+  const inn=el.querySelector('.in65');inn.style.animation='none';void inn.offsetWidth;inn.style.animation='';
+  el.style.transition='none';el.classList.remove('aus65');el.hidden=false;
+  TRT65.push(setTimeout(()=>{el.style.transition='';el.classList.add('aus65')},hold));TRT65.push(setTimeout(()=>{el.hidden=true;el.classList.remove('aus65')},hold+700))}
+function trOk65(){try{if(window.__no65||TAC||!$('startScr').hidden||!$('pickScr').hidden)return false;return true}catch(e){return false}}
+{const _sw=switchScene;switchScene=function(sc){const prev=S.scene,ort0=(function(){try{return ortOf(prev)}catch(e){return null}})(),story=!!window.__noTravel;const r=_sw.apply(this,arguments);
+  try{if(story&&S.scene!==prev&&trOk65()){const o1=ortOf(S.scene),nm=placeName27(S.scene),neu=o1!==ort0;
+      let tt=nm;try{tt=String(nm).replace(/^\s+|\s+$/g,'')}catch(e){}trShow65({ort:(ORTN43&&ORTN43[o1])||'',title:tt,hold:neu?2100:1500})}}catch(e){console.warn('p65u',e)}return r}}
+// Beginn eines Taktik-Kampfs: Karte mit Titel und Kamera-Hinweis
+{const _ts=tacStart;tacStart=function(o){const was=TAC;const r=_ts.apply(this,arguments);try{if(!was&&TAC&&!window.__no65)trShow65({ort:'Taktik-Kampf',title:(o&&o.title)||TAC.M.title,sub:'Das Kampfraster wird aufgebaut',tip:'Kamera: Q/E drehen · Ziehen oder Pfeiltasten verschieben · C zentriert · T wählt Ziele',hold:1700})}catch(e){console.warn('p65u',e)}return r}}
+
+// ---------- Rückblende (L. und Fürst Trahmes, Übergabe des Mind-Beaters) ----------
+// Bisher nur beim Wechsel nach Duppelbach (1,6 s später). Neu zusätzlich: Wird die Bedingung erfüllt, während die Gruppe schon in Duppelbach steht
+// (z. B. der Fang geschieht, während sie dort ist, oder sie kommt aus dem Turm frei), startet sie nach ein paar ruhigen Sekunden von selbst.
+let RBP65=0;
+setInterval(()=>{try{
+  const ok=typeof rbDue48==='function'&&rbDue48()&&ortOf(S.scene)==='duppelbach'&&!inTurm45()&&!isPris45()&&!AR47&&!inFight()&&!TAC&&!talk&&!RB48&&!UEB45&&!window.__noTravel&&$('startScr').hidden&&$('pickScr').hidden&&(typeof RB==='undefined'||!RB)&&!(TR65&&!TR65.hidden);
+  RBP65=ok?RBP65+1:0;if(RBP65>=4){RBP65=0;say('Eine Erinnerung drängt sich vor das Bild …','sys');rbStart48(false)}}catch(e){RBP65=0}},1000);
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
