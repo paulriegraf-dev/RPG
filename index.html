@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 65 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 66 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -11392,7 +11392,7 @@ function arrLines38(){const v=var38(),L=[['Oben auf der Kuppe ist es still. Die 
 //  - PaulMons manifestieren sich, wenn ihre Helden in Not sind, und machen Schaden auf den Geist. Leere Geist-Leiste: keine Befehle, keine Schleife.
 //  - Mosaik = Gesamtstärke des Gastes (Werte und Fähigkeiten).
 TFLOOR.stein38=['#7c7888','#706c7e','#88849a','#66627a'];
-TAC_MAPS.platz38={floor:'stein38',title:'Der leere Rahmen',grid:['.N.....N.','...1.....','.........','N...F...N','.........','.....1...','.N.....N.'],chalk:false,crowd:false};
+TAC_MAPS.platz38={floor:'stein38',title:'Der leere Rahmen',grid:['.N..F..N.','...1.....','.........','N.......N','.........','.....1...','.N.....N.'],chalk:false,crowd:false};
 const KI38='## Gegner\n- Leerer Mantel | Rolle: nahkampf | Ziel: nächster | Leben: 8 | Rüstung: 11 | Angriff: 3 | Schaden: 6 | Bewegung: 4 | Reichweite: 1\n- Flüsterstimme | Rolle: fernkampf | Ziel: schwächster | Leben: 5 | Rüstung: 12 | Angriff: 3 | Schaden: 4 | Bewegung: 3 | Reichweite: 3\n- Gastmantel | Rolle: nahkampf | Ziel: schwächster | Leben: 30 | Rüstung: 12 | Angriff: 4 | Schaden: 8 | Bewegung: 4 | Reichweite: 1\n';
 {const o=tacKiParse(KI38);Object.keys(o).forEach(k=>{TAC_KI[k]=o[k]})}
 {const _tkl38=tacKiLoad;tacKiLoad=async function(){await _tkl38.apply(this,arguments);const o=tacKiParse(KI38);Object.keys(o).forEach(k=>{if(!TAC_KI[k])TAC_KI[k]=o[k]})}}
@@ -11654,7 +11654,7 @@ function pmDraw38(u,x,y){const T=TAC;x=Math.round(x);const c=CAPS[u.cap]||CAPS.m
   if(T.t%8===0)T.fx38.push({k:'dot',x:x+(Math.random()*8-4),y:Y+12,vx:0,vy:.25,life:24,c:c.glow})}
 function mbDraw38(u,x,y){const T=TAC;x=Math.round(x);const im=(typeof RBIMG!=='undefined'&&RBIMG&&(RBIMG.mb_awake||RBIMG.mb_sleep))||null,ch=u.charge||0,full=ch>=u.need&&!u.spent,pulse=full?((T.t>>3)%2):0;
   const r=10+ch*3+Math.round(Math.sin(T.t*.15)*2);TG.globalAlpha=.18+ch*.08;TG.strokeStyle=full?'#ffe080':'#e86ad8';TG.lineWidth=1;TG.beginPath();TG.ellipse(x,y-4,r+4,(r+4)/2,0,0,7);TG.stroke();TG.globalAlpha=1;
-  if(im){TG.globalAlpha=u.spent?.55:1;TG.drawImage(im,x-16,y-30+(pulse?-1:0),32,32);TG.globalAlpha=1}
+  if(im){TG.globalAlpha=u.spent?.55:1;TG.drawImage(mbCrisp66(im),x-16,y-30+(pulse?-1:0));TG.globalAlpha=1}
   else{tq(x-10,y-18,20,14,'#d8a838');tq(x-8,y-16,16,10,'#f6d870');tq(x-3,y-24,6,6,'#3a2a3a');tq(x-2,y-23,4,4,full&&pulse?'#ffe080':'#e86ad8')}
   for(let i=0;i<u.need;i++)tq(x-u.need*3+i*6,y+2,4,2,i<ch?(full?'#ffe080':'#e86ad8'):'#3a2a3a')}
 function mantelDraw38(u,x,y,bob,big){const T=TAC;x=Math.round(x);const k=big?1.4:1,Y=y-24*k+Math.round(Math.sin(T.t*.12+u.c)*1),fl=Math.round(Math.sin(T.t*.2+u.r)*1);
@@ -11698,7 +11698,7 @@ function front38(){const T=TAC,F=T.f38;watch38();
     const L2=lines.slice(0,4),h=10+L2.length*10+(s.who?9:0),X0=TW>400?100:62,BW=TW-X0-6;tq(X0,6,BW,h,'rgba(11,10,13,.9)');tq(X0,6,BW,1,'#6a5a3a');tq(X0,6+h-1,BW,1,'#6a5a3a');let y=16;
     if(s.who){TG.fillStyle=s.who==='????'?'#f6e27a':'#f6c84a';TG.fillText(s.who,X0+6,y);y+=9}TG.fillStyle='#f3ead6';L2.forEach(l=>{TG.fillText(l,X0+6,y);y+=10})}
   // Phase / Mind-Beater-Anzeige oben rechts
-  if(F&&!s){TG.font='7px "Pixelify Sans", monospace';TG.fillStyle='#c8c0d0';TG.textAlign='right';const txt=F.ph==='gast'?'Der Gast · Geist '+F.geist+'/'+F.gmax:F.mb&&!F.used?'Mind-Beater '+F.mb.charge+'/'+F.mb.need+(F.mb.charge>=F.mb.need?' – geladen!':''):F.v==='ring'?(F.ph==='ring'?'Ring: L. muss heran!':'Ring: erst die Mäntel'):'';TG.fillText(txt,TW-6,12);TG.textAlign='start'}}
+  if(F&&!s){TG.font='7px "Pixelify Sans", monospace';TG.fillStyle='#c8c0d0';TG.textAlign='right';const txt=F.ph==='gast'?'Der Gast · Geist '+F.geist+'/'+F.gmax:F.mb&&!F.used?'Mind-Beater '+F.mb.charge+'/'+F.mb.need+(F.mb.charge>=F.mb.need?' – geladen!':''):F.v==='ring'?(F.ph==='ring'?'Ring: L. muss heran!':'Ring: erst die Mäntel'):'';try{hud66(txt)}catch(e){}TG.textAlign='start'}else{try{hud66('')}catch(e){}}}
 function fx38(k,u,c){const T=TAC;if(!T)return;T.fx38=T.fx38||[];let x=TW/2,y=THH/2;if(u&&u.c!=null){const Ti=tTile(u.c,u.r),p=tScr(u.c,u.r,Ti?Ti.h:0);x=p[0];y=p[1]-12}
   if(k==='ring'||k==='bass'){const n=k==='bass'?5:1;for(let i=0;i<n;i++)T.fx38.push({k:'ring',x,y,c:c||'#ffffff',life:40+i*12,max:40+i*12})}
   if(k==='flash')T.fx38.push({k:'flash',c:c||'#ffffff',life:14,max:14});
@@ -22178,7 +22178,7 @@ mpPush62=function(force){const gs=mpGuestsOn62();if(!gs.length)return;
   gs.forEach(G=>{const L=G.last,o={t:'view'};if(L.wait||L.pre){G.last={};}
     const mine=mpFor63(G),W=mine?Object.assign({},V,mine):V;
     ['body','stage','actions','narr','heroes','actor','fight','music'].forEach(k=>{if(force||G.last[k]!==W[k]){o[k]=W[k];G.last[k]=W[k]}});
-    const ovs={};V.ovs.forEach(x=>{let h=x.html;if(PRIV62[x.id]&&!MP62.free){const own=PRIV62[x.id]();if(own!==G.hero)h=mpPrivHtml62(x.id,own)}ovs[x.id]=h});const prev=G.last.ovs||{};const ch={};let any=false;Object.keys(ovs).forEach(id=>{if(force||prev[id]!==ovs[id]){ch[id]=ovs[id];any=true}});Object.keys(prev).forEach(id=>{if(!(id in ovs)){ch[id]=null;any=true}});if(any){o.ovs=ch;G.last.ovs=ovs}
+    const ovs={};V.ovs.forEach(x=>{let h=x.html;if(x.id==='bogen27'&&!MP62.free)return;if(PRIV62[x.id]&&!MP62.free){const own=PRIV62[x.id]();if(own!==G.hero)h=mpPrivHtml62(x.id,own)}ovs[x.id]=h});if(!MP62.free&&typeof bogenHtml66==='function'){const bo=bogenHtml66(G);if(bo!=null)ovs.bogen27=bo}const prev=G.last.ovs||{};const ch={};let any=false;Object.keys(ovs).forEach(id=>{if(force||prev[id]!==ovs[id]){ch[id]=ovs[id];any=true}});Object.keys(prev).forEach(id=>{if(!(id in ovs)){ch[id]=null;any=true}});if(any){o.ovs=ch;G.last.ovs=ovs}
     const me=JSON.stringify(mpMe62(G));if(force||G.last.me!==me){o.me=me;G.last.me=me}
     o.can=mpCan62(G);o.act=!!(hero&&hero.name===G.hero);if(G.last.can!==o.can||G.last.act!==o.act||Object.keys(o).length>3){G.last.can=o.can;G.last.act=o.act;G.conn.send(o)}
     if(lg){const kids=[...lg.children];const has=G.logSeq&&lg.querySelector('[data-m62="'+G.logSeq+'"]');let add;
@@ -22193,7 +22193,7 @@ const MPWALK63={left:[-22,0],right:[22,0],up:[0,-14],down:[0,14]};
       if(m.root==='actions'||m.root==='stage'||m.root==='narr'||m.root==='log'){
         // Klick auf ein anderes Heldenbild in der Gruppe bleibt gesperrt (regelt das Original); sonst: eigener Held wird aktiv
         if(!mpFight62()&&G.hero)mpTake63(G)}
-      else if(m.root.startsWith('ov:')&&!MP62.free&&!mpFight62()){const id=m.root.slice(3);if(!PRIV62[id]&&hero&&hero.name!==G.hero&&id!=='mapOv')return G.conn.send({t:'note',text:'Das gehört gerade zu '+hero.name+'.'})}}
+      else if(m.root.startsWith('ov:')&&!MP62.free&&!mpFight62()){const id=m.root.slice(3);if(!PRIV62[id]&&hero&&hero.name!==G.hero&&id!=='mapOv'&&!(id==='bogen27'&&window.__bg66))return G.conn.send({t:'note',text:'Das gehört gerade zu '+hero.name+'.'})}}
     if(m.t==='cmd'&&!mpFight62()&&G.hero)mpTake63(G);   // Freitext: mit dem eigenen Helden
     if(m.t==='walk'){const d=MPWALK63[m.k];if(!d||mpFight62()||!G.hero)return;mpTake63(G);if(!hero||hero.name!==G.hero||hero.hp<=0)return;hero.queue=[];try{walk(hero.tx+d[0],()=>{},hero.ty+d[1])}catch(e){}return}
     if(m.t==='td'){G.td=m.on==null?null:!!m.on;return}
@@ -23886,6 +23886,114 @@ let RBP65=0;
 setInterval(()=>{try{
   const ok=typeof rbDue48==='function'&&rbDue48()&&ortOf(S.scene)==='duppelbach'&&!inTurm45()&&!isPris45()&&!AR47&&!inFight()&&!TAC&&!talk&&!RB48&&!UEB45&&!window.__noTravel&&$('startScr').hidden&&$('pickScr').hidden&&(typeof RB==='undefined'||!RB)&&!(TR65&&!TR65.hidden);
   RBP65=ok?RBP65+1:0;if(RBP65>=4){RBP65=0;say('Eine Erinnerung drängt sich vor das Bild …','sys');rbStart48(false)}}catch(e){RBP65=0}},1000);
+
+
+// ================= Prototyp 66 (a): Lesetempo im Log, 60-Bilder-Grenze, Mitspielen (Heldenbogen je Gast, Verbindungsanzeige, Ansicht-Knopf), Finale (scharfe Anzeige) =================
+// Pauls Meldungen vom 31.10. (00:08):
+//  1. Story-Text im Chatlog nicht auf einmal ablegen, sondern im Lesetempo erscheinen lassen.
+//  2. Die Animationen laufen auf 144/240-Hz-Bildschirmen zu schnell: Bildfrequenz auf 60 begrenzen.
+//  3. Heldenbogen (und Gepäck) sollen bei jedem Mitspieler unabhängig vom Spielleiter aufgehen.
+//  4. Anzeige, ob die Verbindung direkt oder über den Umweg-Server läuft. Deutlicherer „Ansicht“-Knopf.
+//  5. Finale: Rahmen nicht mehr mitten im Feld, Mind-Beater und seine Anzeige scharf.
+
+// ---------- 2. Höchstens ~60 Bilder pro Sekunde ----------
+// Jede Schleife (je Funktion) darf frühestens nach 15,5 ms wieder dran sein. Bei 60 Hz ändert sich nichts,
+// bei 120/240 Hz läuft alles wie bei 60 Hz, bei 144 Hz nur noch jedes dritte Bild.
+(function(){if(window.__raf66||!window.requestAnimationFrame)return;window.__raf66=1;
+  const raf=window.requestAnimationFrame.bind(window),caf=window.cancelAnimationFrame?window.cancelAnimationFrame.bind(window):()=>{};
+  const last=new WeakMap(),pend=new Map();let n=0;const MIN=15.5;
+  window.requestAnimationFrame=function(cb){if(typeof cb!=='function')return raf(cb);const id=++n;
+    const run=t=>{const l=last.get(cb);if(l!=null&&t>=l&&t-l<MIN){pend.set(id,raf(run));return}last.set(cb,t);pend.delete(id);cb(t)};
+    pend.set(id,raf(run));return id};
+  window.cancelAnimationFrame=function(id){const r=pend.get(id);if(r!=null){pend.delete(id);caf(r)}else caf(id)}})();
+
+// ---------- 1. Story-Text im Lesetempo ----------
+// Erzähler („dm“) und Figuren („npc“) kommen nacheinander: Folgt eine längere Zeile auf eine andere, wartet sie, bis die vorige gelesen werden konnte.
+// Lange Zeilen erscheinen Satz für Satz. „Alles zeigen“ (Knopf, Klick auf eine Aktion, Absenden) zeigt sofort alles.
+let TEMPO66=(function(){try{return localStorage.getItem('p66tempo')||'normal'}catch(e){return'normal'}})();
+const TEMPO_MS66={normal:34,ruhig:50};
+let Q66=[],TM66=0,BUSY66=0;                    // Warteschlange, Zeitgeber, „belegt bis“ (ms)
+const NEUTRAL66=/^(sys|player|new|roll|note)$/;
+function aktiv66(){return !window.__no65&&!window.__fast38&&TEMPO66!=='aus'&&!(typeof TAC!=='undefined'&&TAC)&&!document.body.classList.contains('gast62')}
+function dauer66(txt){const len=String(txt||'').length;return Math.min(7000,Math.max(900,len*(TEMPO_MS66[TEMPO66]||34)))}
+function sätze66(t){const a=String(t).match(/[^.!?…“]+[.!?…]+[“"]?\s*|[^.!?…]+$/g);return a&&a.length>1?a:[t]}
+function einfügen66(it){const p=it.p;log.appendChild(p);try{pinLog()}catch(e){}
+  if(it.sent&&it.sent.length>1){const tn=it.tn;tn.nodeValue=it.sent[0];let k=1;const step=()=>{if(!p.isConnected&&!log.contains(p)){return}if(k>=it.sent.length)return;tn.nodeValue+=it.sent[k++];try{pinLog()}catch(e){}
+      if(k<it.sent.length)it.tm=setTimeout(step,dauer66(it.sent[k-1]))};it.tm=setTimeout(step,dauer66(it.sent[0]))}
+  if(it.story!==false)BUSY66=Date.now()+dauer66(it.full)+350;updBtn66()}
+function weiter66(){TM66=0;if(!Q66.length){updBtn66();return}const it=Q66.shift();einfügen66(it);if(Q66.length)TM66=setTimeout(weiter66,Math.max(120,BUSY66-Date.now()));updBtn66()}
+function alles66(){clearTimeout(TM66);TM66=0;Q66.splice(0).forEach(it=>{const p=it.p;log.appendChild(p);if(it.tn)it.tn.nodeValue=it.full});
+  [...log.querySelectorAll('[data-s66]')].forEach(()=>{});BUSY66=0;try{pinLog()}catch(e){}updBtn66()}
+function zeigeAlles66(){alles66();// laufende Satz-für-Satz-Anzeigen sofort beenden
+  VOLL66.forEach(f=>{try{f()}catch(e){}});VOLL66.length=0}
+const VOLL66=[];
+{const _say=say;say=function(text,cls,who){
+  if(!aktiv66()||typeof text!=='string')return _say.apply(this,arguments);
+  const story=(cls==='dm'||cls==='npc')&&text.length>=36;
+  const waiting=Q66.length>0||Date.now()<BUSY66;
+  if(!story&&!(waiting&&Q66.length))return _say.apply(this,arguments);   // kurze Zeilen und Systemtexte gehen sofort, solange nichts wartet
+  const p=_say.apply(this,arguments);if(!p||!p.parentNode)return p;
+  const tn=p.lastChild&&p.lastChild.nodeType===3?p.lastChild:null,full=tn?tn.nodeValue:text,sent=(tn&&story&&full.length>150)?sätze66(full):null;
+  if(!waiting&&story){            // erste Zeile: sofort, ggf. satzweise
+    if(sent&&sent.length>1){const it={p,tn,full,sent,story:true};p.remove();einfügen66(it);VOLL66.push(()=>{clearTimeout(it.tm);tn.nodeValue=full})}
+    else BUSY66=Date.now()+dauer66(full)+350;
+    updBtn66();return p}
+  p.remove();const it={p,tn,full,sent,story};Q66.push(it);if(sent&&sent.length>1)VOLL66.push(()=>{clearTimeout(it.tm);if(tn)tn.nodeValue=full});
+  if(!TM66)TM66=setTimeout(weiter66,Math.max(120,BUSY66-Date.now()));updBtn66();return p}}
+let BTN66=null;
+function updBtn66(){try{if(!BTN66){BTN66=document.createElement('div');BTN66.id='tempo66';BTN66.innerHTML='<button type="button" class="alle66">⏩ Alles zeigen</button><button type="button" class="tg66" title="Wie schnell Erzähltext im Log erscheint"></button>';document.body.appendChild(BTN66);
+      const st=document.createElement('style');st.textContent='#tempo66{position:fixed;right:10px;bottom:8px;z-index:60;display:flex;gap:6px;font:12px system-ui,sans-serif}#tempo66 button{background:#2b2440;color:#f3ead6;border:1px solid #6a5a8a;border-radius:6px;padding:3px 8px;cursor:pointer;opacity:.78}#tempo66 button:hover,#tempo66 button:focus-visible{opacity:1}#tempo66 .alle66{background:#f6c84a;color:#1b1626;border-color:#f6c84a;font-weight:700;opacity:1}#tempo66 .alle66[hidden]{display:none}body.gast62 #tempo66,body.tac #tempo66{display:none}';document.head.appendChild(st);
+      BTN66.querySelector('.alle66').onclick=zeigeAlles66;
+      BTN66.querySelector('.tg66').onclick=()=>{TEMPO66=TEMPO66==='normal'?'ruhig':TEMPO66==='ruhig'?'aus':'normal';try{localStorage.setItem('p66tempo',TEMPO66)}catch(e){}if(TEMPO66==='aus')zeigeAlles66();updBtn66()}}
+    BTN66.querySelector('.alle66').hidden=!(Q66.length||VOLL66.length&&Date.now()<BUSY66);
+    BTN66.querySelector('.tg66').textContent='Lesetempo: '+(TEMPO66==='aus'?'sofort':TEMPO66)}catch(e){}}
+setTimeout(()=>{try{updBtn66()}catch(e){}},0);
+document.addEventListener('click',e=>{try{if(e.target&&e.target.closest&&e.target.closest('.actions,#chips,.chips')&&(Q66.length||VOLL66.length))zeigeAlles66()}catch(x){}},true);
+document.addEventListener('submit',()=>{try{if(Q66.length||VOLL66.length)zeigeAlles66()}catch(x){}},true);
+
+// ---------- 5. Finale: scharfe Anzeige oben rechts, scharfer Mind-Beater ----------
+let HUD66=null;
+function hud66(txt){try{const st=document.querySelector('.tstage');if(!st)return;if(!HUD66||!HUD66.isConnected){HUD66=document.createElement('div');HUD66.id='hud66';st.appendChild(HUD66);
+      const s=document.createElement('style');s.textContent='#hud66{position:absolute;right:12px;top:8px;z-index:6;pointer-events:none;color:#e8e0f4;background:rgba(14,10,22,.72);border:1px solid #5a4a7a;border-radius:6px;padding:4px 10px;font:600 15px/1.2 var(--f-text,system-ui),system-ui,sans-serif;letter-spacing:.02em}#hud66[hidden]{display:none}';document.head.appendChild(s)}
+    HUD66.textContent=txt||'';HUD66.hidden=!txt}catch(e){}}
+{const _e=tacEnd;tacEnd=function(){const r=_e.apply(this,arguments);try{if(HUD66)HUD66.hidden=true}catch(e){}return r}}
+const MBC66=new WeakMap();
+function mbCrisp66(im){let c=MBC66.get(im);if(c)return c;try{const w=im.naturalWidth||im.width||32,h=im.naturalHeight||im.height||32;c=document.createElement('canvas');c.width=32;c.height=32;const x=c.getContext('2d');x.imageSmoothingEnabled=false;
+    // Kasten-Verkleinerung: erst ganzzahlig, dann Nachbarschaft – ohne Weichzeichnen
+    x.drawImage(im,0,0,w,h,0,0,32,32);MBC66.set(im,c);return c}catch(e){return im}}
+
+// ---------- 3. Heldenbogen je Mitspieler ----------
+// Klickt ein Mitspieler auf „Heldenbogen“, öffnet sich das Fenster nur für ihn (für seinen Helden); beim Spielleiter bleibt alles zu.
+// Alle Klicks im Fenster (Reiter, Lehre, Schließen) laufen für diesen Mitspieler getrennt. Andere Fenster (Händler, Würfel …) bleiben beim handelnden Helden.
+let CLK66=null;
+function mitBogen66(G,fn){const s={h:BOG27.hidden,i:BOGI27};let r;try{BOGI27=G.bg66?G.bg66.i:BOGI27;renderBogen27();BOG27.hidden=false;r=fn()}finally{
+    if(G.bg66){G.bg66.i=BOGI27;if(BOG27.hidden)G.bg66=null}BOGI27=s.i;BOG27.hidden=s.h;if(!s.h)try{renderBogen27()}catch(e){}}return r}
+function bogenHtml66(G){if(!G||!G.bg66)return null;let h=null;try{mitBogen66(G,()=>{const hd=BOG27.hidden;BOG27.hidden=false;h=mpSer62(BOG27,true);BOG27.hidden=hd})}catch(e){console.warn('p66',e)}return h}
+{const _ob=openBogen27;openBogen27=function(i){if(CLK66&&!MP62.free){const gi=PARTY.findIndex(h=>h.name===CLK66.hero);CLK66.bg66={i:i!=null?i:gi>=0?gi:Math.max(0,PARTY.indexOf(hero))};return}return _ob.apply(this,arguments)}}
+{const _hm=mpHostMsg62;mpHostMsg62=function(G,m){
+  if(G&&G.token&&typeof GAME_STARTED!=='undefined'&&GAME_STARTED&&!MP62.free){
+    if(m.root==='ov:bogen27'&&G.bg66&&(m.t==='click'||m.t==='change')){window.__bg66=1;try{return mitBogen66(G,()=>_hm.call(this,G,m))}finally{window.__bg66=0}}
+    if(m.t==='click'&&m.root&&m.root!=='ov:bogen27'){CLK66=G;try{return _hm.apply(this,arguments)}finally{CLK66=null}}}
+  return _hm.apply(this,arguments)}}
+
+// ---------- 4. Verbindungsanzeige und deutlicherer Ansicht-Knopf ----------
+function verb66(pc){return new Promise(res=>{try{if(!pc||!pc.getStats)return res('lokal');pc.getStats().then(rep=>{let pair=null;const by={};rep.forEach(r=>{by[r.id]=r});
+      rep.forEach(r=>{if(r.type==='transport'&&r.selectedCandidatePairId&&by[r.selectedCandidatePairId])pair=by[r.selectedCandidatePairId]});
+      if(!pair)rep.forEach(r=>{if(r.type==='candidate-pair'&&(r.nominated||r.selected)&&r.state==='succeeded')pair=r});
+      if(!pair)return res('?');const l=by[pair.localCandidateId],r2=by[pair.remoteCandidateId];
+      res((l&&l.candidateType==='relay')||(r2&&r2.candidateType==='relay')?'umweg':'direkt')}).catch(()=>res('?'))}catch(e){res('?')}})}
+const VT66={direkt:'direkt ✓',umweg:'über Umweg-Server (langsamer)',lokal:'im selben Browser ✓','?':'wird geprüft …'};
+let NET66=null;
+function netBox66(){if(!NET66){NET66=document.createElement('div');NET66.id='net66';NET66.hidden=true;document.body.appendChild(NET66);const s=document.createElement('style');s.textContent='#net66{position:fixed;left:10px;bottom:8px;z-index:60;background:rgba(14,10,22,.82);color:#e8e0f4;border:1px solid #5a4a7a;border-radius:6px;padding:3px 9px;font:12px/1.4 system-ui,sans-serif;max-width:46vw}#net66[hidden]{display:none}#net66 .ok66{color:#9be39b}#net66 .sl66{color:#ffb86b;font-weight:700}';document.head.appendChild(s)}return NET66}
+setInterval(async()=>{try{const b=netBox66();
+  if(typeof MP62!=='undefined'&&MP62.role==='wirt'){const gs=[...MP62.guests.values()].filter(G=>G.on&&G.conn);if(!gs.length){b.hidden=true;return}
+    const L=[];for(const G of gs){const v=await verb66(G.conn.pc);L.push('<span class="'+(v==='umweg'?'sl66':'ok66')+'">'+String(G.name||'Gast').replace(/[<&]/g,'')+': '+VT66[v]+'</span>')}b.innerHTML='Verbindung · '+L.join(' · ');b.hidden=false}
+  else if(typeof G62!=='undefined'&&G62.on&&G62.conn){const v=await verb66(G62.conn.pc);b.innerHTML='Verbindung zum Spielleiter: <span class="'+(v==='umweg'?'sl66':'ok66')+'">'+VT66[v]+'</span>';b.hidden=false}
+  else b.hidden=true}catch(e){}},4000);
+// „◧ Ansicht“: groß, farbig, mit Zustand („Seite“ / „Draufsicht“) – gilt nur für dich; im Taktik-Kampf sehen alle dasselbe Bild
+try{const s=document.createElement('style');s.textContent='#mp63td{font-size:15px!important;font-weight:700;padding:6px 12px!important;border:2px solid #f6c84a!important;background:#2b2440!important;color:#f6e8c0!important;border-radius:8px;cursor:pointer}#mp63td.on{background:#f6c84a!important;color:#1b1626!important}#mp63td:hover,#mp63td:focus-visible{filter:brightness(1.2)}body.tac #mp63td{opacity:.45}';document.head.appendChild(s)}catch(e){}
+setInterval(()=>{try{const b=document.getElementById('mp63td');if(!b||typeof G62==='undefined')return;const td=G62.td==null?!!G62.tdHost:!!G62.td;
+  const t='◧ Ansicht: '+(td?'Draufsicht':'Seite')+' ⇄';if(b.textContent!==t)b.textContent=t;b.title='Nur für dich: zwischen Seitenansicht und Draufsicht umschalten. Im Taktik-Kampf sehen alle dasselbe Bild.'}catch(e){}},600);
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
