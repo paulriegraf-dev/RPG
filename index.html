@@ -24284,18 +24284,22 @@ function bgPick68(P,td){const s=sc68();if(!s)return null;const B=G68.bg[s[0]+(td
   if(on&&Hn.img!==F){G68.old.hennig=Hn.img;Hn.img=F}else if(!on&&Hn.img===F&&G68.old.hennig)Hn.img=G68.old.hennig}catch(e){}}}
 
 // ---------- Frösche: Entfernos (Gitarre) und der Trommelfrosch ----------
-// Normalansicht: kleine 16×16-Fassung, doppelt (gleiches Raster wie der Hintergrund). Poke: große Fassung einfach.
-function frogImg68(inst){const k=(inst==='git')?'git':(inst==='drum'||!inst)?'drum':null;if(!k)return null;return TD?G68K.frog[k]:(G68K.frog[k+'_s']||null)}
+// Paul, 31.10. (12:22): auch in der Normalansicht die große Fassung, doppelt gezeichnet (so groß wie die Helden). Poke: große Fassung einfach.
+// Die kleinen 16×16-Fassungen (frog.git_s/drum_s) bleiben in G68DATA, werden aber nicht mehr benutzt.
+function frogImg68(inst){const k=(inst==='git')?'git':(inst==='drum'||!inst)?'drum':null;if(!k)return null;return G68K.frog[k]||null}
+// Froschkonzert am Waldsee, Normalansicht: die großen Frösche stehen weiter auseinander (Verschiebung je Instrument, gilt auch fürs Herhüpfen)
+const FCX68={git:-52,drum:-6,tuba:-84};
+function fcX68(x,inst){try{if(TD||!S.fc||!S.fc.on||S.scene!=='waldsee')return x;return x+(FCX68[inst]||0)}catch(e){return x}}
 function frogDraw68(im,x,B,f,lift){const s=TD?1:2,w=im.width*s,h=im.height*s,X=Math.round(x-w/2),Y=Math.round(B-h-lift);
   g.globalAlpha=.3;px(Math.round(x-w*.35),B-1,Math.round(w*.7),2,'#000');g.globalAlpha=1;
   g.save();if(f<0){g.translate(X+w,Y);g.scale(-1,1);g.drawImage(im,0,0,w,h)}else g.drawImage(im,X,Y,w,h);g.restore();return{X,Y,w,h}}
-if(typeof cFrog==='function'){const _cf68=cFrog;cFrog=function(x,B,f,inst,bow){if(on68()){const im=frogImg68(inst);if(im){const hop=bow?0:Math.abs(Math.sin(t*.1+x))*2|0;frogDraw68(im,Math.round(x),B,f,hop-(bow?3:0));return}}return _cf68.apply(this,arguments)}}
+if(typeof cFrog==='function'){const _cf68=cFrog;cFrog=function(x,B,f,inst,bow){if(on68()){x=fcX68(x,inst);arguments[0]=x;const im=frogImg68(inst);if(im){const hop=bow?0:Math.abs(Math.sin(t*.1+x))*2|0;frogDraw68(im,Math.round(x),B,f,hop-(bow?3:0));return}}return _cf68.apply(this,arguments)}}
 if(typeof drawFrog==='function'){const _df68=drawFrog;drawFrog=function(){const e=enemy;const im=on68()&&e&&frogImg68('git');if(!im)return _df68.apply(this,arguments);
   const one=xx=>{const f=hero.x>xx?1:-1,lun=e.lunge>0?f*Math.min(e.lunge,6):0,B=TD?Math.round(e.y||110):FLOOR,hop=Math.abs(Math.sin(t*.08))*2|0;
     const r=frogDraw68(im,xx+lun,B,f,hop);if(t%30<4)float(xx+f*10,r.Y-2,'♪','#fbf236');
     if(e.hurt>0&&e.hurt%4<2){g.globalAlpha=.6;px(r.X,r.Y,r.w,r.h,'#fff');g.globalAlpha=1}
     px(Math.round(xx)-16,r.Y-8,32,3,'#3a2a2a');px(Math.round(xx)-16,r.Y-8,Math.round(32*Math.max(0,e.hp)/e.max),3,'#d9625a')};
-  one(Math.round(e.x));if(e.count>1){const side=hero.x>e.x?1:-1;one(Math.round(e.x-side*30))}}}
+  one(Math.round(e.x));if(e.count>1){const side=hero.x>e.x?1:-1;one(Math.round(e.x-side*(TD?30:58)))}}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
