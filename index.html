@@ -22882,11 +22882,11 @@ gfWin34=function(){const F=ffl34();F.gf.done='kampf';slotHide34();say('Der Gesch
 
 
 // Prototyp 64: Pauls Einträge aus Helden/heldensaetze.xlsx (Sätze, Namen, Klassen-Aktionen, Typ-Knöpfe)
-const SATZ64={};
-const KNAME64={};
-const ANAME64={};
-const KATXT64={};
-const TYPN64={};
+const SATZ64={"aldric": "Alter Magier mit noch älterem Eichenstab. Muss ein „verzaubertes“ Magiebuch haben, da er jedes Mal den Staub vom Buch pusten muss.", "oda": "Riecht nach Kamille. Weiß auch, wo die Kamille wächst.", "rieke": "Mischt alles mit allem. Was ist eine Anleitung?", "bodo": "Redet wenig, hämmert viel. Die Nachbarn lieben ihn.", "liska": "Folgt jeder Spur. Meist ihren eigenen.", "nyx": "Böse Hexe. Sie klopft heimlich ihren Besenstaub auf das Magiebuch von Aldric.", "wenzel": "Schweigt gern. Ups …", "yara": "Weiß, wohin der Wind weht.", "gerda": "Trägt einen Schild. Mag ihren Schild, sehr …", "pim": "Macht viralen Street-Magic-Content mit gekauften Schauspielern auf Paultube.", "hedda": "Kennt jeden Weg und jeden Klatsch.", "ulrich": "Stand zwanzig Jahre am Tor. Unbezahlt!", "jost": "Immer in der ersten Reihe, wenn sich eine wütende Meute bildet.", "konrad": "Sein Königreich erstreckt sich, so weit seine Sicht den Horizont erblickt. −8 und −10,5 – und „braucht“ keine Brille.", "kage": "Mag es, zuzuschauen.", "gerold": "So böse, wie der Regen feucht ist.", "linail": "Betet laut. Die Götter hören ihr zu. Machen aber nichts – meistens.", "prime": "Weiß alles, außer den Dingen des alltäglichen Lebens.", "oratio": "Gold und Silber sind seine Sprache der Wahl.", "glenys": "Ihr Schwert trashtalkt sie die ganze Zeit. Wird es einfach nicht los.", "wyvera": "Hat einen Drachen. Und jeder wird davon wissen.", "bolle": "Reparatur notwendig? Hammer! Uhr kaputt? Hammer! Es klappt am Ende irgendwie.", "eckhart": "Hat drei Burgen, einen Affen und ein Pferd. Hat Phantom-Schmerzen, wenn man ihm an seinen nicht vorhandenen Zöpfen zieht.", "morla": "Stets bemüht. Lässt Nyx in Aldrics Haus."};
+const KNAME64={"oda": "Pflanzen-Heilerin", "liska": "Spurenjägerin", "wenzel": "Schweigsamer Mönch", "pim": "Street-Magician", "oratio": "Währungs-Krieger", "glenys": "Gefäß des Dämonenschwerts", "hinnerk": "Keyboard-Warrior", "morla": "Zauber-Lehrling"};
+const ANAME64={"juno": "Troubadix Cosplay", "fenn": "Schatten-Spähung", "oda": "Blütenheilung", "kasimir": "Helden-Ansprache", "rieke": "Alchemie-Wahn", "bodo": "Amboss zücken", "yara": "Seefahrer-Gespür", "lorenz": "Quelle überprüfen", "runa": "Söldnerisches Handeln", "gerold": "Kraft sammeln", "oratio": "Preis einfordern", "hinnerk": "Seinem Namen gerecht werden", "gunther": "Back in my days…"};
+const KATXT64={"Froschwanderer": {"ok": "„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.", "no": "{Name} springt. Platsch.", "w": "bei Gräben, Wasser, Mauern, Kanten und im Gebirge"}, "Seefahrerin": {"ok": "Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.", "no": "Der Knoten ist schön. Er hält nur nicht.", "w": "bei Seilen, Booten, Leitern, Brunnen und im Gebirge"}, "Hohepriesterin": {"ok": "{Name} betet laut. Die Götter hören zu – heute schon.", "no": "{Name} betet laut. Die Götter sind gerade beschäftigt.", "w": "wenn jemandem Geist fehlt oder jemand verletzt ist"}, "Mönch": {"ok": "{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.", "no": "{Name} schweigt. Und muss niesen.", "w": "wenn jemandem Geist fehlt"}, "Alchemistin": {"ok": "{Name} mischt alles mit allem. Diesmal klappt es.", "no": "Es blubbert, es stinkt, es bleibt im Glas.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Heilerin": {"ok": "{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.", "no": "Die Hände zittern. {Name} versucht es später noch einmal.", "w": "wenn jemand verletzt ist"}, "Hexe": {"ok": "{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.", "no": "Der Dampf riecht gut. Mehr passiert nicht.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Kräuterkundige": {"ok": "{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.", "no": "Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht.", "w": "bei Pflanzen und draußen im Grünen"}, "Sanitäterin": {"ok": "Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.", "no": "Der Verband hält nicht. {Name} wickelt ihn wieder ab.", "w": "wenn jemand verletzt ist"}, "Handwerker": {"ok": "Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.", "no": "Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg.", "w": "bei Holz, Möbeln, Stegen und Kaputtem"}, "Magd": {"ok": "{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.", "no": "Zu schwer, selbst für {Name}. Für heute.", "w": "bei Schwerem: Fässer, Kisten, Säcke, Steine"}, "Mistgabel-Held": {"ok": "{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!", "no": "{Name} stochert heldenhaft. Leider nur im Heu.", "w": "bei Heu, Laub, Löchern, Gebüsch, Gruben"}, "Ritter": {"ok": "{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.", "no": "{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.", "zu": "Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker.", "w": "bei Türen, Toren, Gittern, Truhen und Kisten"}, "Schmied": {"ok": "{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.", "no": "{Name} dreht es hin und her. Ohne Werkstatt wird das nichts.", "w": "bei Mechanik und bei Kaputtem"}, "Drachenkönigin": {"ok": "{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.", "no": "{Name} ruft. Der Drache hat heute frei.", "w": "draußen, wo eine Probe oder Gefahr wartet"}, "Held": {"ok": "„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.", "no": "„Wir schaffen das …?“ Klang nicht ganz überzeugt.", "w": "wo eine Probe oder Gefahr wartet"}, "König ohne Land": {"ok": "„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.", "no": "„Aufstellung!“ Keiner stellt sich auf.", "w": "wo eine Probe oder Gefahr wartet"}, "Ritterin": {"ok": "{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.", "no": "Der Schild rutscht. Der Mut auch, ein bisschen.", "w": "wo eine Probe oder Gefahr wartet"}, "Schildmaid": {"ok": "{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.", "no": "Der Schild ist heute schwerer als sonst.", "w": "wo eine Probe oder Gefahr wartet"}, "Assassine": {"ok": "Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.", "no": "Der Schatten ist zu klein. {Name} steht einfach in der Ecke.", "w": "im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts"}, "Schattenläufer": {"ok": "{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.", "no": "Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen.", "w": "wo es Verborgenes gibt oder Leute, die man belauschen kann"}, "Sträfling": {"ok": "„Kenn ich.“ Ein Kratzen, ein Klick – offen.", "no": "Das Schloss ist neuer als {Name}s Erfahrung.", "zu": "Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf.", "w": "bei Schlössern, Truhen, Gittern, Zellen"}, "Waldwicht": {"ok": "{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.", "no": "Zu eng – sogar für {Name}.", "w": "bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren"}, "Bardin": {"ok": "{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.", "no": "{Name} stimmt an. Niemand stimmt ein.", "w": "wo Leute sind"}, "Baron": {"ok": "„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.", "no": "„Ihnen? Nein.“ Drei Burgen, kein Eindruck.", "w": "wo Leute sind"}, "Gaukler": {"ok": "{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.", "no": "Ein Ball fällt herunter. Dann noch einer.", "w": "wo Leute sind"}, "Monsterflüsterer": {"ok": "{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.", "no": "Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht.", "w": "bei Tieren und Wesen"}, "Prinzessin a.D.": {"ok": "{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.", "no": "„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof.", "w": "wo Leute sind"}, "Söldner": {"ok": "„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.", "no": "Der Preis ist zu hoch. Sogar für einen guten Witz.", "w": "wo Leute sind"}, "Söldnerin": {"ok": "„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.", "no": "„Sold? Wofür?“ Man lacht {Name} aus.", "w": "wo Leute sind"}, "Wolfsbarde": {"ok": "{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.", "no": "Ein Heuler in Moll. Nur die Hunde im Ort antworten.", "w": "draußen bei Nacht oder wo Leute sind"}, "Bauer": {"ok": "{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.", "no": "Nur Steine und ein beleidigter Wurm.", "w": "bei Erde, Feldern, Gärten, Sand – und draußen im Grünen"}, "Bogenschütze": {"ok": "{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.", "no": "Der Pfeil fliegt sehr weit. In die falsche Richtung.", "w": "draußen oder bei etwas, das man treffen kann"}, "Botin": {"ok": "{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.", "no": "Die Abkürzung ist länger als der Weg.", "w": "draußen, wo mindestens zwei Wege weiterführen"}, "Fuchsjägerin": {"ok": "{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!", "no": "Die Fährte endet einfach. Auch die falsche.", "w": "draußen und überall, wo Spuren sein können"}, "Wachmann": {"ok": "{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.", "no": "Zwanzig Jahre Erfahrung – und heute kommt wieder niemand.", "w": "an Toren, Treppen, Plätzen und wo Leute sind"}, "Waldläuferin": {"ok": "{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.", "no": "Zu viele Spuren, alle durcheinander.", "w": "draußen und überall, wo Spuren sein können"}, "Dämonenschwert": {"ok": "{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.", "no": "Die Klinge schweigt beleidigt.", "w": "bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken"}, "Gelehrter": {"ok": "{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!", "no": "{Name} findet nur Fußnoten zu Fußnoten.", "w": "bei Büchern, Schriften, Tafeln, Briefen, Inschriften"}, "Großer Weiser": {"ok": "{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.", "no": "„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte.", "w": "bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken"}, "Rentner": {"ok": "„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.", "no": "{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe.", "w": "wo Leute sind oder bei Altem"}, "Sternenkundlerin": {"ok": "{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.", "no": "Wolken. Oder {Name} hat sich verzählt.", "w": "draußen bei Nacht oder bei Sternkarten, Fernrohren"}, "Tüftlerin": {"ok": "{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.", "no": "Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus.", "w": "bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser"}, "Zauberin": {"ok": "{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.", "no": "Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht.", "w": "bei Magischem und im Dunkeln, nachts"}, "Zeithexe": {"ok": "{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.", "no": "Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts.", "w": "nach einer misslungenen Probe hier, oder bei Uhren und Glocken"}};
+const TYPN64={"Kämpfer": "Zupacken", "Flinke": "Genau hinsehen", "Gelehrte": "Nachdenken", "Stützen": "Sich kümmern"};
 
 
 // ================= Prototyp 64 (h): Pauls eigene Sätze für die Heldenauswahl =================
@@ -26529,8 +26529,8 @@ window.P70=P70;window.satzAI70=satzAI70;window.satzEnde70=satzEnde70;window.chro
 
 
 // Prototyp 71: beim Bau aus den Orts-Dateien gelesen (Ruf der Gruppe hier, ## Ruf-Folgen) und aus den NPC-Dateien (Gehört zu)
-const RUFORT71={"aida": {"fehlt": 0, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 0, "start": "neutral", "z": []}, "ffl": {"fehlt": 0, "start": "neutral", "z": []}, "grossensee": {"fehlt": 0, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 0, "start": "neutral", "z": []}, "kiefernhang": {"fehlt": 0, "start": "neutral", "z": []}, "kloster": {"fehlt": 0, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 0, "start": "neutral", "z": []}, "oase": {"fehlt": 0, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 0, "start": "neutral", "z": []}, "stahndor": {"fehlt": 0, "start": "neutral", "z": []}, "viellos": {"fehlt": 0, "start": "neutral", "z": []}, "weite": {"fehlt": 0, "start": "neutral", "z": []}};
-const GRPNPC71={};
+const RUFORT71={"aida": {"fehlt": 9, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 9, "start": "neutral", "z": []}, "ffl": {"fehlt": 9, "start": "freundlich", "z": []}, "grossensee": {"fehlt": 9, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 9, "start": "misstrauisch", "z": []}, "kiefernhang": {"fehlt": 9, "start": "neutral", "z": []}, "kloster": {"fehlt": 9, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 9, "start": "neutral", "z": []}, "oase": {"fehlt": 9, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 9, "start": "neutral", "z": []}, "stahndor": {"fehlt": 9, "start": "neutral", "z": []}, "viellos": {"fehlt": 9, "start": "neutral", "z": []}, "weite": {"fehlt": 9, "start": "neutral", "z": []}};
+const GRPNPC71={"Alt-Rat Wendelin": "Fürstenhof", "Ambros": "Mönche", "Anselm": "Mönche", "Ansgar Krall": "Fürstenhof", "Ausrufer Lambert": "Fürstenhof", "Benno": "Mönche", "Bruno": "Das Haus in Friede Freude Land", "Die Elster": "Kontor und Gassen von AIDA", "Fischer Jos": "Seeleute und Fischer", "Folio": "Mönche", "Fortunato": "Das Haus in Friede Freude Land", "Fürst Trahmes": "Fürstenhof", "General Krull": "Schneewacht", "Goldine": "Das Haus in Friede Freude Land", "Hauptmann Olaf": "Schneewacht", "Hedda": "Seeleute und Fischer", "Herold Gisbert": "Fürstenhof", "Hulda": "Mönche", "Isidor": "Schneewacht", "Jannes": "Seeleute und Fischer", "Jorinde": "Schneewacht", "Knut": "Seeleute und Fischer", "Krumm": "Gemeinderat Großensee", "Lirum": "Gemeinderat Großensee", "Lux": "Das Haus in Friede Freude Land", "Mette": "Gemeinderat Großensee", "Ole": "Seeleute und Fischer", "Ottmar": "Seeleute und Fischer", "Ruprecht": "Schneewacht", "Seilerin Ida": "Seeleute und Fischer", "Swantje": "Seeleute und Fischer", "Wache Ivo": "Schneewacht", "Wachhabende Irmel": "Schneewacht", "Wiebke": "Kontor und Gassen von AIDA", "Zöllnerin Agathe": "Schneewacht"};
 
 
 // ================= Prototyp 71 (r): Ruf je Ort – Ansehen und Furcht, Taten, reisende Gerüchte =================
@@ -26562,31 +26562,40 @@ const FADE71=5;   // Tage, bis ein Gerücht ohne Neues verblasst
 // Gruppen über Orte hinweg (Vorschlag, Paul entscheidet die endgültige Liste): Mitglieder aus „Gehört zu:“ in den NPC-Dateien, sonst nach Name/Rolle
 const GRP71={schneewacht:{n:'Schneewacht',re:/schneewacht|olaf|jorinde|wache|wächter|soldat|irmel|\bivo\b|krull|zöllner/i},
   moenche:{n:'Mönche von Glockenstill',re:/mönch|bruder|abt\b|novize|glockenstill/i},
-  haendler:{n:'Händler',re:null}};
+  haendler:{n:'Händler',re:null},
+  // seit 02.11. nachmittags (Paul: „Die vorgeschlagenen Gruppen sind gut.“): Mitglieder über „Gehört zu:“ in den NPC-Dateien
+  fuerstenhof:{n:'Fürstenhof',re:/trahmes|ansgar krall|wendelin|herold/i},
+  gemeinderat:{n:'Gemeinderat Großensee',re:/^(mette|krumm|lirum)\b/i},
+  kontor:{n:'Kontor und Gassen von AIDA',re:/^(wiebke|die elster)\b/i},
+  seeleute:{n:'Seeleute und Fischer',re:/fischer|kapitän|hafenmeister|fährjunge|windleser/i},
+  haus:{n:'Das Haus in Friede Freude Land',re:/croupier|türsteher des casinos|wechselstube|dj der glitzerkugel/i}};
+// Welche Orte Furcht „mögen“ (Paul, 02.11.: AIDA ja, Kloster nein): Furcht dort wirkt zusätzlich auf das Ansehen (Anteil des Furcht-Anstiegs)
+const FMAG71={aida:.4,kloster:-.5};
+const FDECAY71=5;   // Furcht sinkt um 5 je Woche, in der am Ort nichts Neues Furcht macht (Paul, 02.11.: „Furcht baut ab.“)
 // ---------- Taten (Konzept Ansatz B) ----------
 // a = Ansehen, f = Furcht am Ort der Tat; reach = wie weit es sich herumspricht; fern = andere Werte für die übrigen Orte (sonst a/f, schwächer mit der Entfernung);
 // rum = Gerücht für die Spieler (Platzhalter-Texte, der Story-Chat darf sie ersetzen); grp = Gruppen; cap = höchstens einmal am Tag je Ort; gegen = widerlegt diese Gerüchte
 const TAT71={
-  helfen:{n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
+  helfen:{gro:{stahndor:{seeleute:{a:4}},weite:{seeleute:{a:4}}},n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
   helfen_gross:{n:'Großes geholfen',a:18,reach:'nah',rum:'Die Fremden haben in {ORT} aufgeräumt.',gegen:['stehlen','schulden','schlecht']},
-  aushang:{n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
-  spenden:{n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
+  aushang:{gro:{grossensee:{gemeinderat:{a:8}},aida:{kontor:{a:8}}},n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
+  spenden:{gro:{grossensee:{gemeinderat:{a:6}},kloster:{moenche:{a:10}}},n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
   show:{n:'Blad(e)iatoren-Show gewonnen',a:55,f:5,reach:'nah',rum:'Blad(e)iatoren-Bezwinger',grp:{schneewacht:{a:5,f:5}}},
   frosch:{n:'Froschkonzert bis zum Ende',a:15,reach:'weit',rum:'Frog Concert Enjoyer'},
   entfernos:{n:'Mit Entfernos gesungen',a:15,reach:'weit',rum:'Die Fremden haben mit Entfernos gesungen.'},
-  befreit:{n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
-  casino:{n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
-  arena:{n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
-  boss:{n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
-  olaf_sieg:{n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
+  befreit:{gro:{ffl:{haus:{a:-15,f:10}},grossensee:{gemeinderat:{a:15}}},n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
+  casino:{gro:{ffl:{haus:{a:-10,f:5}}},n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
+  arena:{gro:{duppelbach:{fuerstenhof:{a:5,f:3}}},n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
+  boss:{gro:{ffl:{haus:{a:-10,f:15}}},n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
+  olaf_sieg:{gro:{nordstollen:{fuerstenhof:{f:5}}},n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
   olaf_vorbei:{n:'An Olaf vorbeigekommen',a:4,reach:'ort',grp:{schneewacht:{a:3}}},
   gegner:{n:'Gegner besiegt',a:1,f:1,reach:'ort',cap:1},
-  ausbruch:{n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
+  ausbruch:{gro:{duppelbach:{fuerstenhof:{a:-6}}},n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
   flucht:{n:'Vor der Wache weggerannt',a:-10,reach:'nah',rum:'In Duppelbach sucht die Wache nach Fremden.',grp:{schneewacht:{a:-5}}},
-  stehlen:{n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
+  stehlen:{gro:{duppelbach:{fuerstenhof:{a:-5}},aida:{kontor:{a:-6}}},n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
   zahlen:{n:'Rechnung bezahlt',a:6,reach:'ort',gegen:['schulden']},
   schulden:{n:'Rechnung nicht bezahlt',a:-8,reach:'ort',rum:'Die Fremden haben ihre Rechnung nicht bezahlt.'},
-  bank_ausfall:{n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
+  bank_ausfall:{gro:{duppelbach:{fuerstenhof:{a:-8}}},n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
   drohen:{n:'Gedroht',a:-3,f:8,reach:'ort',rum:'Die Fremden haben {N} bedroht.'},
   drohen_fehl:{n:'Drohung ging daneben',a:-4,reach:'ort'},
   furcht_weg:{n:'Auf den Ruf verwiesen',a:-2,f:2,reach:'ort'},
@@ -26630,14 +26639,15 @@ function dists71(){try{const sig=WROUTES.length+':'+Object.keys(WNODES).length;i
 function dist71(a,b){if(a===b)return 0;const D=dists71();return D[a]&&D[a][b]!=null?D[a][b]:null}
 function minPerPt71(){try{return ZEIT47.reiseJePunkt||3}catch(e){return 3}}
 // ---------- Werte ändern ----------
-function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
+function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;df=Math.round(df||0);if(df>0&&FMAG71[o])da=(da||0)+df*FMAG71[o];da=Math.round(da||0);if(!da&&!df)return;
+  if(df>0){R.fl=R.fl||{};R.fl[o]=today71()}
   const a0=O.a,f0=O.f,s0=aSt71(a0),t0=fSt71(f0);O.a=Math.max(-100,Math.min(100,a0+da));O.f=Math.max(0,Math.min(100,f0+df));
   if(e)e.ap.push({o,a:O.a-a0,f:O.f-f0});
   if(o===cur71()&&(aSt71(O.a)!==s0||fSt71(O.f)!==t0)){try{say('Die Stimmung der Leute hier ändert sich.','sys')}catch(x){}setTimeout(()=>{try{nickCheck71(o)}catch(x){}},400)}}
 function grpApply71(e,g,da,df){const R=R71();da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   if(g==='haendler'){try{const E=E43(),h0=E.hr;E.hr=Math.max(-5,Math.min(5,E.hr+da/20));if(e)e.ap.push({g,hr:E.hr-h0})}catch(x){}return}
-  const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
-function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const k=Object.keys(GRP71).find(k=>GRP71[k].n.toLowerCase().startsWith(GRPNPC71[n.name].toLowerCase().slice(0,6)));if(k)return k}}catch(e){}
+  if(df>0){R.fl=R.fl||{};R.fl['g:'+g]=today71()}const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
+function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const v=GRPNPC71[n.name].toLowerCase().trim();const k=Object.keys(GRP71).find(k=>k===v||GRP71[k].n.toLowerCase()===v||GRP71[k].n.toLowerCase().startsWith(v.slice(0,6)));if(k)return k}}catch(e){}
   try{if(typeof HAND43!=='undefined'&&HAND43[n.name])return'haendler'}catch(e){}const s=(n.name||'')+' '+(n.role||'');return Object.keys(GRP71).find(k=>GRP71[k].re&&GRP71[k].re.test(s))||null}
 function grpA71(g){if(g==='haendler'){try{return Math.round(E43().hr*20)}catch(e){return 0}}const G=R71().g[g];return G?G.a:0}
 function grpF71(g){if(g==='haendler')return 0;const G=R71().g[g];return G?G.f:0}
@@ -26647,7 +26657,7 @@ function tat71(key,o){o=o||{};const T=TAT71[key];if(!T)return null;const R=R71()
   const mul=o.mul==null?1:o.mul,t=now71(),nm=o.npc&&o.npc.name;
   const e={id:++R.n,k:key,ort,t,d:today71(),ap:[],n:T.n,txt:o.txt||null,npc:nm||null};
   apply71(e,ort,(T.a||0)*mul,(T.f||0)*mul);
-  const gs=Object.assign({},T.grp||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
+  const gs=Object.assign({},T.grp||{},(T.gro&&T.gro[ort])||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
   Object.keys(gs).forEach(g=>grpApply71(e,g,(gs[g].a||0)*mul,(gs[g].f||0)*mul));
   // Weitergabe an andere Orte: kommt an, wenn die Gruppe selbst dort wäre
   const rr=REACH71[T.reach||'ort']||0;if(rr>0)ORTE71.forEach(x=>{if(x===ort)return;const d=dist71(ort,x);if(d==null||d>rr)return;
@@ -26692,7 +26702,10 @@ function widerlegt71(e,o,T){negHier71(o).forEach(r=>{if((T.gegen||[]).includes(r
 function gegen71(r,o,anteil,why){const R=R71();r.dem[o]=1;let neg=0;R.log.forEach(e=>{if(r.e.includes(e.id)&&!e.undone)(e.ap||[]).forEach(x=>{if(x.o===o&&x.a<0)neg+=x.a})});
   const back=Math.round(-neg*anteil);const e={id:++R.n,k:'gegen',ort:o,t:now71(),d:today71(),ap:[],n:'Gerücht entkräftet ('+why+'): „'+r.txt+'“'};if(back)apply71(e,o,back,0);R.log.unshift(e);
   try{addChron('Ruf: '+e.n+' · '+fx71(e),['u71_'+e.id],true)}catch(x){}setWorld71();return e}
-function tick71(){const R=R71(),t=now71();if(!R.pend.length&&!R.rum.length)return;
+function decay71(){const R=R71(),d=today71();if(R.fd==null){R.fd=d;return}if(d<=R.fd)return;R.fl=R.fl||{};
+  for(let x=R.fd+1;x<=Math.min(d,R.fd+60);x++){ORTE71.forEach(o=>{const O=R.o[o],l=R.fl[o]||0;if(O&&O.f>0&&x>l&&(x-l)%7===0)O.f=Math.max(0,O.f-FDECAY71)});
+    Object.keys(R.g).forEach(g=>{const G=R.g[g],l=R.fl['g:'+g]||0;if(G&&G.f>0&&x>l&&(x-l)%7===0)G.f=Math.max(0,G.f-FDECAY71)})}R.fd=d}
+function tick71(){const R=R71(),t=now71();try{decay71()}catch(e){}if(!R.pend.length&&!R.rum.length)return;
   const due=R.pend.filter(p=>p.at<=t);if(due.length){R.pend=R.pend.filter(p=>p.at>t);due.forEach(p=>{const e=R.log.find(x=>x.id===p.e);if(e&&e.undone)return;apply71(e||null,p.o,p.a,p.f)});setWorld71()}
   R.rum.forEach(r=>{if(!r.weg&&str71(r)<=0)r.weg=1})}
 // ---------- S.world.ruf = Ansehen-Stufe des aktuellen Orts ----------
@@ -26710,6 +26723,8 @@ function parseF71(line){const P=String(line).split('|').map(s=>s.trim()).filter(
     else if(q=p.match(/^Spitzname\s*:\s*(.+)$/i))f.eff.push({t:'spitz',v:q[1].replace(/^[„"]|[“"]$/g,'')});
     else if(q=p.match(/^Preise\s*([+\-−–])\s*(\d+)\s*%/i))f.eff.push({t:'preis',v:(q[1]==='+'?1:-1)*(+q[2])});
     else if(q=p.match(/^Spielleiter\s*:\s*(.+)$/i))f.eff.push({t:'sl',v:q[1]});
+    else if(q=p.match(/^Ende\s*:\s*(.+)$/i))f.eff.push({t:'ende',v:q[1]});
+    else if(q=p.match(/^Lagerfeuer\s*:\s*(.+)$/i))f.eff.push({t:'feuer',v:q[1]});
     else f.eff.push({t:'sl',v:p})});return f}
 let FOLGEN71=null;
 function folgenAll71(o){if(!FOLGEN71){FOLGEN71={};try{Object.keys(RUFORT71).forEach(k=>{FOLGEN71[k]=(RUFORT71[k].z||[]).map(parseF71).filter(Boolean)})}catch(e){}}return FOLGEN71[o]||[]}
@@ -26815,6 +26830,32 @@ if(typeof gruppe67==='function'){const _g71=gruppe67;gruppe67=function(p){const 
 {const _rw71=renderWorld;renderWorld=function(){const r=_rw71.apply(this,arguments);try{const seg=$('segRuf');if(seg){const h=seg.previousElementSibling;const o=cur71();if(h&&h.tagName==='H2')h.textContent=o?'Ruf der Gruppe in '+ortName71(o):'Ruf der Gruppe';
     let w=$('ruf71w');if(!w){w=document.createElement('div');w.id='ruf71w';seg.after(w)}w.innerHTML='';rufPanel71(w)}}catch(e){console.warn('p71r',e)}return r}}
 (function(){const st=document.createElement('style');st.textContent='.ruf71 .pm71 .dbtn,.ruf71 .sl67line .dbtn{padding:1px 5px;min-width:0;font-size:11px}.ruf71 details{margin:4px 0}.ruf71 select{max-width:60%}.ruf71s{margin-top:10px;border-top:1px dashed #6b5a44;padding-top:6px}.ruf71s p{margin:4px 0}';document.head.appendChild(st)})();
+// ================= Ruf in den Enden und im Finale (Paul, 02.11. nachmittags: 71.F1 und 71.F2 „sehr gute Ideen“) =================
+// Was die Orte über die Gruppe erzählen: zuerst Pauls Zeilen „Ende: …“ / „Lagerfeuer: …“ aus den Ruf-Folgen der Orts-Datei,
+// sonst ein schlichter Ersatzsatz je Stufe (ENDE71, Platzhalter für den Story-Chat). Neutrale Orte schweigen; höchstens drei Orte, die deutlichsten zuerst.
+const ENDE71={nick:'In {O} heißt ihr noch lange „{N}“.',4:'In {O} erzählt man noch lange von euch. Meistens stimmt sogar die Hälfte.',3:'In {O} hebt man den Becher, wenn euer Name fällt.',
+  1:'In {O} wird man vorsichtig, wenn euer Name fällt.',0:'In {O} spuckt man aus, wenn euer Name fällt. Aber man spricht ihn.',angst:'In {O} senkt man die Stimme, wenn euer Name fällt.'};
+function rufEnde71(art){const R=S.ruf71;if(!R)return[];const L=[];ORTE71.forEach(o=>{if(!visited71(o))return;const O=R.o[o];const sa=aSt71(O.a),sf=fSt71(O.f);
+    let own=[];try{own=eff71(o,art==='feuer'?'feuer':'ende')}catch(e){}
+    let txt=own.length?own[own.length-1].v:null,w=Math.abs(O.a)+(sf>=2?O.f:0);
+    if(!txt){if(sf>=2)txt=ENDE71.angst;else if(R.nick[o]&&sa!==2)txt=ENDE71.nick;else if(sa!==2)txt=ENDE71[sa];}
+    if(txt)L.push({o,w,t:txt.replace(/\{O\}/g,ortName71(o)).replace(/\{N\}/g,R.nick[o]||'')})});
+  return L.sort((a,b)=>b.w-a.w).slice(0,3)}
+// „Was aus ihnen wurde“: vor „Und ihr?“ eine Karte „Was man über euch erzählt“
+if(typeof cardList38==='function'){const _cl71=cardList38;cardList38=function(){const L=_cl71.apply(this,arguments);try{const E=rufEnde71('ende');if(E.length){const i=L.findIndex(x=>x[0]==='Und ihr?');
+    const card=['Was man über euch erzählt',E.map(x=>x.t).join(' ')];if(i>=0)L.splice(i,0,card);else L.push(card)}}catch(e){console.warn('p71r',e)}return L}}
+// Lagerfeuer: nach „Hoffentlich laut.“ erzählen die Orte, wie laut
+function rufLines71(lines){if(!Array.isArray(lines))return lines;{
+    const k=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Alle lachen. Oben in den Ästen lacht Linde mit.');
+    if(k>=0){const E=rufEnde71('feuer');if(E.length){lines=lines.slice();lines.splice(k+1,0,['Und es wird laut geredet. '+E.map(x=>x.t).join(' ')])}}
+    // Finale: der Gast greift auf, wie über die Gruppe geredet wird (ein Satz, nur wenn man sie kennt)
+    const j=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Starker Körper. Starker Geist. Danke fürs Großziehen.');
+    if(j>=0&&S.ruf71){const R=S.ruf71;const known=ORTE71.filter(o=>visited71(o)&&R.o[o]);const angst=known.some(o=>fSt71(R.o[o].f)>=2),gut=known.some(o=>aSt71(R.o[o].a)>=3);
+      const satz=angst?GAST71.angst:gut?GAST71.gut:null;if(satz){lines=lines.slice();lines.splice(j+1,0,[satz,'npc','????'])}}
+  }return lines}
+{const _sq71=seq38;seq38=function(lines,step,done){try{lines=rufLines71(lines)}catch(e){console.warn('p71r',e)}return _sq71.call(this,lines,step,done)}}
+// Sätze des Gasts (Vorschlag aus dem Konzept, Story-Chat darf ersetzen)
+const GAST71={gut:'Sie werden euch vergessen. Bei mir nicht.',angst:'Sie haben Angst vor euch. Bei mir müsst ihr keine haben.'};
 
 
 // ================= Nachbesserung zu Prototyp 71 (w): Statisten laufen sauber (Paul 02.11., 13:28/13:30) =================
