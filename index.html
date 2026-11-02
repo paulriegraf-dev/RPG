@@ -23411,7 +23411,12 @@ const CLUB64={k:'club64'};
 // P71 (Paul, 02.11.): drittes Stück, das auch online läuft (nicht lokal): „Palm Tree Ninja (S3X Extended Mix)“ von DeltaX Music. Die beiden anderen bleiben nur lokal;
 // fehlen sie (online), spielt der Club nur dieses Stück.
 MUSIC.club64c={src:'musik/palm_tree_ninja.mp3',label:'Disco Glitzerkugel · Palm Tree Ninja',fb:'casino64'};
-const CLUBNEXT64={club64:'club64b',club64b:'club64c',club64c:'club64'};
+// P71 (Paul, 02.11.): vier weitere Stücke, ebenfalls nur lokal (Spiele-Soundtracks bzw. Album-Stücke, keine freie Lizenz belegt). Online fehlen sie und der Club fällt auf Palm Tree Ninja zurück.
+MUSIC.club64d={src:'musik/funky_town75.mp3',label:'Disco Glitzerkugel · Funky Town 75',lokal:1,fb:'club64c'};
+MUSIC.club64e={src:'musik/love_sugar.mp3',label:'Disco Glitzerkugel · LOVE² Sugar',lokal:1,fb:'club64c'};
+MUSIC.club64f={src:'musik/space_mahjong_war7.mp3',label:'Disco Glitzerkugel · Space Mahjong War 7',lokal:1,fb:'club64c'};
+MUSIC.club64g={src:'musik/perfect_zone.mp3',label:'Disco Glitzerkugel · Perfect Zone',lokal:1,fb:'club64c'};
+const CLUBNEXT64={club64:'club64b',club64b:'club64d',club64d:'club64e',club64e:'club64f',club64f:'club64g',club64g:'club64c',club64c:'club64'};
 MUSIC.dupp64={src:'musik/duppelbach.mp3',label:'Duppelbach',lokal:1};
 MUSIC.viel64={src:'musik/viellos.mp3',label:'Viellos',lokal:1};
 const GEWINN64={src:'musik/casino_gewinn.mp3',lokal:1};
@@ -23433,7 +23438,7 @@ function musOk64(k){let x=k;for(let i=0;i<3&&x;i++){if(MUSIC[x]&&!FAIL64[x])retu
 {const _sy64m=say;say=function(text){if(typeof text==='string'&&/^Die Musikdatei „/.test(text)&&Object.keys(MUSIC).some(k=>MUSIC[k].lokal&&text.includes(MUSIC[k].src)))return;return _sy64m.apply(this,arguments)}}
 {const _au64=aud;aud=function(k){const a=_au64.apply(this,arguments);
   // Club: zwei Stücke im Wechsel (kein Dauerschleifen eines einzelnen Stücks)
-  if(a&&!a._c64&&(k==='club64'||k==='club64b'||k==='club64c')){a._c64=1;a.loop=false;a.addEventListener('ended',()=>{if(musicCur!==k)return;CLUB64.k=CLUBNEXT64[k];const nx=musOk64(CLUB64.k);
+  if(a&&!a._c64&&/^club64[b-g]?$/.test(k)){a._c64=1;a.loop=false;a.addEventListener('ended',()=>{if(musicCur!==k)return;CLUB64.k=CLUBNEXT64[k];const nx=musOk64(CLUB64.k);
     if(nx===k||!nx){try{a.currentTime=0}catch(e){}tryPlay(a)}else{try{aud(nx).currentTime=0}catch(e){}}updateMusic()})}
   if(a&&!a._f64&&MUSIC[k]&&(MUSIC[k].lokal||MUSIC[k].fb)){a._f64=1;a.addEventListener('error',()=>{FAIL64[k]=1;musicErrSaid=false;try{a.pause()}catch(e){}musicCur=null;setTimeout(()=>{try{updateMusic()}catch(e){}},50)})}return a}}
 // Mitspieler: Fehlt beim Gast das Stück des Spielleiters, spielt er die Ersatzmusik
@@ -25820,7 +25825,7 @@ setInterval(()=>{try{const L=document.getElementById('log');if(!L)return;const p
 // ================= Nachbesserung zu Prototyp 69 (d): Disco Glitzerkugel (Paul 01.11., 19:52) =================
 // Licht im Takt der laufenden Musik (BPM aus den Stücken gemessen: disco_club 95, neon_circuit 126), Strahler, Bodenblitze, Kugelfunkeln.
 // Die Gäste tanzen mit je 2–3 eigenen Moves, die Helden legen beim „Tanzen“ los. DJ (PixelLab) hinter dem Pult. Nur mit „Neue Grafik“.
-const BPM69={club64:[95,.313],club64b:[126,.023],club64c:[150,.12]};
+const BPM69={club64:[95,.313],club64b:[126,.023],club64c:[150,.12],club64d:[79.75,.01],club64e:[123.75,.28],club64f:[108.5,.55],club64g:[144.5,.33]};   // d–g: Tempo aus den Dateien geschätzt (P71)
 function disco69(){try{return on68()&&typeof sceneName==='function'&&sceneName()==='disco glitzerkugel'}catch(e){return false}}
 // Taktphase: aus der laufenden Musik, sonst aus der Uhr (95 BPM)
 function beat69(){let bpm=95,off=0,tm=performance.now()/1000;try{const k=typeof musicCur!=='undefined'?musicCur:null,a=typeof G62!=='undefined'&&G62.audio;if(k&&BPM69[k]&&a&&!a.paused&&a.currentTime>0){bpm=BPM69[k][0];off=BPM69[k][1];tm=a.currentTime}}catch(e){}
