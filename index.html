@@ -26955,6 +26955,38 @@ function colHit69(L,x,y){for(const r of L)if(x>=r[0]-2&&x<=r[2]+2&&y>=r[1]&&y<=r
   }catch(e){}return r}}
 
 
+// ================= Nachbesserung zu Prototyp 71 (i): Spielleiter-Antworten geben Gegenstände, aufgehobene Dinge sind keine Dauer-Option (Paul, 02.11.) =================
+// Regel: Sagt der Spielleiter zu einer Anfrage „du hebst einen Pilz auf“ (oder nimmt, sammelt, pflückt …), landet der Gegenstand wirklich im Inventar des aktiven Helden.
+// Der Spielleiter kann ihn mit einem Satz ersetzen: „Ist doch nur eine Rübe“ gibt eine Rübe statt eines Pilzes. Eine so erledigte Aktion wird nicht als grüne
+// „Entdeckt“-Option gemerkt. Alle anderen neuen Optionen erscheinen erst, wenn die Gruppe die Szene einmal verlassen hat (sie wurden ja gerade ausgeführt).
+const PICK69=/(heb\w*\b.*\bauf\b|aufheb|aufsamm|einsamm|zusammensamm|sammel\w*|pflück\w*|mitnehm|einsteck|steck\w*\b.*\bein\b|nimm\w*|greif\w*)/i;
+function nomen69(t){t=String(t||'');let m;
+  // Ersatz durch den Spielleiter: „ist doch nur eine Rübe“
+  if((m=t.match(/\b(?:nur|bloß|bloss|doch nur|eigentlich nur|halt nur|bloß eine)\s+(?:ein(?:e|en|em)?|ne|'ne|n|der|die|das|den)?\s*([A-ZÄÖÜ][A-Za-zäöüÄÖÜß-]{2,})/)))return m[1];
+  if((m=t.match(/\b(?:hebst?|hebt|nimmst?|nimmt|sammelst?|sammelt|pflückst?|pflückt|steckst?|steckt|greifst?|greift)\s+(?:du\s+|ihr\s+|dir\s+|euch\s+)?(?:ein(?:e|en|em)?|ne|der|die|das|den|dem|einen der|eine der|eines der)?\s*([A-ZÄÖÜ][A-Za-zäöüÄÖÜß-]{2,})/)))return m[1];
+  if((m=t.match(/\b(?:ein(?:e|en)?|der|den|die|das)\s+(?:der\s+)?([A-ZÄÖÜ][A-Za-zäöüÄÖÜß-]{2,})\s+(?:auf|ein|mit|zusammen)/)))return m[1];
+  if((m=t.match(/\b(?:ein(?:e|en)?|den|die|das|der)\s+(?:der\s+)?([A-ZÄÖÜ][A-Za-zäöüÄÖÜß-]{2,})/)))return m[1];
+  return null}
+function item69(noun){const n=String(noun||'').trim();if(!n)return null;const low=n.toLowerCase().replace(/ü/g,'u').replace(/ö/g,'o').replace(/ä/g,'a').replace(/ß/g,'ss');
+  try{for(const id of Object.keys(WARE43)){const w=String(WARE43[id][0]).toLowerCase().replace(/ü/g,'u').replace(/ö/g,'o').replace(/ä/g,'a');if(low.slice(0,4)===w.slice(0,4))return{ware:id}}}catch(e){}
+  const nm=n.replace(/(en|n|e)$/,m=>n.length>5?'':m)||n;return{it:{kind:'fund',name:nm,desc:'Aufgesammelt: '+nm+'.',fund69:true}}}
+function geben69(h,noun){const g=item69(noun);if(!g)return false;h=h||hero;
+  if(g.ware){try{if(typeof room58==='function'&&typeof wItem43==='function'&&!room58(wItem43(g.ware,1))){say(h.name+' hat keinen Platz mehr für '+WARE43[g.ware][0]+'.','sys');return false}}catch(e){}giveWare43(h,g.ware,1);say(h.name+' steckt '+WARE43[g.ware][0].replace(/e$/,'')+' ein.','new');return true}
+  const it=g.it;try{if(typeof room58==='function'&&!room58(it)){floor58(it);say(h.name+' hat keinen Platz mehr: '+it.name+' liegt am Boden.','sys');return true}}catch(e){}
+  h.inv.push(it);say(h.name+' steckt „'+it.name+'“ ein.','new');try{float(h.x,(TD?h.y-30:FLOOR-56),'+ '+it.name,'#9fd6b0')}catch(e){}return true}
+{const _res=resolve;resolve=function(r,outcome,txt,keep){
+  const before=(S.custom||[]).slice(),okay=outcome!=='fail'&&outcome!=='none';
+  const pick=okay&&r&&PICK69.test(String(r.text||'')+' '+String(txt||''))&&!/\b(Weg|geh|lauf|reise)\b/i.test(String(r.text||''));
+  let got=false;
+  if(pick){try{const noun=nomen69(txt)||nomen69(r.text);if(noun){got=geben69(hero,noun);if(got)keep=false}}catch(e){console.warn('p71i',e)}}
+  const out=_res.call(this,r,outcome,txt,keep);
+  try{(S.custom||[]).forEach(c=>{if(!before.includes(c)){if(got){S.custom=S.custom.filter(x=>x!==c)}else c.hide69=S.scene}});renderChips()}catch(e){}
+  return out}}
+{const _rc=renderChips;renderChips=function(){const all=S.custom;let hid=false;try{if(all&&all.some(c=>c.hide69)){S.custom=all.filter(c=>!(c.hide69&&c.hide69===S.scene));hid=true}}catch(e){}
+  try{return _rc.apply(this,arguments)}finally{if(hid)S.custom=all}}}
+{const _sw=switchScene;switchScene=function(sc){try{(S.custom||[]).forEach(c=>{if(c.hide69&&c.hide69!==sc)delete c.hide69})}catch(e){}return _sw.apply(this,arguments)}}
+
+
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
 fresh();initRuleForm();setTD(TD);intro();renderAll();renderChron();renderRules();requestAnimationFrame(frame);
 })();
