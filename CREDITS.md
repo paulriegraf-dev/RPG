@@ -21,6 +21,7 @@ Die neuen Figuren und Szenen in Prototyp 23 sind im Hausstil nachgebaut. Diese P
 - show.mp3 – „Electronic Futuristic Cyberpunk Background Music with a touch of 8-bit“ (montogoronto, Pixabay)
 - husten.mp3 – „Cough“ (freesound_community, Pixabay)
 - casino_funk.mp3 – „Funk in the City“ (331music, Pixabay), seit P64 Musik im Casino Zum Ewigen Sonntag
+- palm_tree_ninja.mp3 – „Palm Tree Ninja (S3X Extended Mix)“ (DeltaX Music; laut Paul 02.11. lizenzfrei, Quelle und Lizenz vor der Veröffentlichung noch einmal an der Fundstelle prüfen): Disco Glitzerkugel, läuft auch online
 
 
 ## Klänge (Prototyp 35)
