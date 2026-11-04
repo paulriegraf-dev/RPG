@@ -20360,7 +20360,7 @@ function schlaf57(M){M=M||M57();const L=[];
   if(M.w<2)L.push('Waren je Ort','Preise mit Sättigung','Gold','Kontor-Aufträge','Kniffe der Gasthäuser');
   if(M.w<3)L.push('Börse','Kredit','Leitzins und Rat','Zoll','Getränkebörse');
   if(M.e<2)L.push('Stufen der Techniken','Innere Künste','Lehrmeister','Narben');
-  if(M.e<3)L.push('Waffenbaum','Material','Meisterstück');
+  if(M.e<3)L.push('großer Waffenbaum','Meisterstück');if(M.e<2)L.push('Material');
   NEB57.forEach(k=>{if(!M.nb[k])L.push(NEBN57[k])});return L}
 
 // ---------- Umschalten (Spielleiter oder Voreinstellung): schlafen legen und aufwecken ----------
@@ -20375,8 +20375,8 @@ function trans57(o,n){const M=M57();
   if(o.e>=2&&n.e<2)PARTY.forEach(h=>{try{ensure27(h);if(h.narben&&h.narben.length){h.narb57=(h.narb57||[]).concat(h.narben.filter(x=>!(h.narb57||[]).includes(x)));h.narben=[]}}catch(e){}});
   if(o.e<2&&n.e>=2)PARTY.forEach(h=>{try{if(h.narb57&&h.narb57.length){ensure27(h);h.narb57.forEach(x=>{if(!h.narben.includes(x))h.narben.push(x)});h.narb57=[]}}catch(e){}});
   // Waffenkünste (und das Meisterstück) schlafen ohne Schmiede
-  if(o.e>=3&&n.e<3)PARTY.forEach(h=>{try{const wk=(h.tech||[]).filter(t=>t.wk49);if(wk.length){h.wk57=(h.wk57||[]).concat(wk);h.tech=h.tech.filter(t=>!t.wk49)}}catch(e){}});
-  if(o.e<3&&n.e>=3){let wp=0;PARTY.forEach(h=>{try{if(h.wk57&&h.wk57.length){h.tech=(h.tech||[]).concat(h.wk57.filter(w=>!(h.tech||[]).some(t=>t.id===w.id)));h.wk57=[];try{order49(h)}catch(e){}}if(h.wp57){wp+=h.wp57;h.wp57=0}}catch(e){}});
+  if(o.e>=3&&n.e<1)PARTY.forEach(h=>{try{const wk=(h.tech||[]).filter(t=>t.wk49);if(wk.length){h.wk57=(h.wk57||[]).concat(wk);h.tech=h.tech.filter(t=>!t.wk49)}}catch(e){}});
+  if(o.e<1&&n.e>=3){let wp=0;PARTY.forEach(h=>{try{if(h.wk57&&h.wk57.length){h.tech=(h.tech||[]).concat(h.wk57.filter(w=>!(h.tech||[]).some(t=>t.id===w.id)));h.wk57=[];try{order49(h)}catch(e){}}if(h.wp57){wp+=h.wp57;h.wp57=0}}catch(e){}});
     if(wp)setTimeout(()=>{say('⚔ Der Waffenbaum ist wieder da. Waffenpunkte, die inzwischen gekommen sind: '+wp+'. (Taste U)','new');try{badge49()}catch(e){}},300)}
   if(o.e!==n.e)PARTY.forEach(h=>{try{recalc27(h)}catch(e){}});
   // Finanzherz: Kredit-Frist anhalten, Börsen-Ereignisse nachholen
@@ -20575,13 +20575,13 @@ function ger57(t){t=t.replace(/\.?$/,'.');try{rumor(t)}catch(e){}try{const o=ort
 {const _na57=narbeAll27;narbeAll27=function(id){if(el57()>=2)return _na57.apply(this,arguments);PARTY.forEach(h=>narbe27(h,id,true))}}
 
 // ---------- Heldenentwicklung unter 3: Waffenbaum, Material und Meisterstück schlafen ----------
-{const _h57=has49;has49=function(){if(el57()>=3)return _h57.apply(this,arguments);return false}}
-{const _fx57=fx49;fx49=function(){if(el57()>=3)return _fx57.apply(this,arguments);return{atk:0,dmg:0,die:0,block:0,rng:0,crit:20,artLv:0}}}
-{const _we57=gainWE49;gainWE49=function(){if(el57()>=3)return _we57.apply(this,arguments)}}
-{const _pf57=pf49;pf49=function(){if(el57()>=3)return _pf57.apply(this,arguments)}}
-{const _wp57=giveWP49;giveWP49=function(h,n,why){if(el57()>=3)return _wp57.apply(this,arguments);try{const B=wb49(h);B.wp=(B.wp||0)+n;h.wp57=(h.wp57||0)+n}catch(e){}}}
-{const _mq57=matQ49;matQ49=function(){if(el57()>=3)return _mq57.apply(this,arguments);return null}}
-{const _wo57=wbOpen49;wbOpen49=function(){if(el57()>=3)return _wo57.apply(this,arguments)}}
+{const _h57=has49;has49=function(h,id){if(typeof wbOk73==='function'?wbOk73(id):el57()>=3)return _h57.apply(this,arguments);return false}}
+{const _fx57=fx49;fx49=function(){if(el57()>=1)return _fx57.apply(this,arguments);return{atk:0,dmg:0,die:0,block:0,rng:0,crit:20,artLv:0}}}
+{const _we57=gainWE49;gainWE49=function(){if(el57()>=1)return _we57.apply(this,arguments)}}
+{const _pf57=pf49;pf49=function(){if(el57()>=1)return _pf57.apply(this,arguments)}}
+{const _wp57=giveWP49;giveWP49=function(h,n,why){if(el57()>=1)return _wp57.apply(this,arguments);try{const B=wb49(h);B.wp=(B.wp||0)+n;h.wp57=(h.wp57||0)+n}catch(e){}}}
+{const _mq57=matQ49;matQ49=function(){if(el57()>=2)return _mq57.apply(this,arguments);return null}}
+{const _wo57=wbOpen49;wbOpen49=function(){if(el57()>=1)return _wo57.apply(this,arguments)}}
 
 // ---------- Casino in Friede Freude Land: ohne Casino-Spiele nur der Glücksautomat (Auslegung 57.M8) ----------
 // (Knöpfe über hide57; das Gestern gegen Jetons, der Geschäftsführer und das Ventil bleiben.)
@@ -22882,11 +22882,11 @@ gfWin34=function(){const F=ffl34();F.gf.done='kampf';slotHide34();say('Der Gesch
 
 
 // Prototyp 64: Pauls Einträge aus Helden/heldensaetze.xlsx (Sätze, Namen, Klassen-Aktionen, Typ-Knöpfe)
-const SATZ64={"aldric": "Alter Magier mit noch älterem Eichenstab. Muss ein „verzaubertes“ Magiebuch haben, da er jedes Mal den Staub vom Buch pusten muss.", "oda": "Riecht nach Kamille. Weiß auch, wo die Kamille wächst.", "rieke": "Mischt alles mit allem. Was ist eine Anleitung?", "bodo": "Redet wenig, hämmert viel. Die Nachbarn lieben ihn.", "liska": "Folgt jeder Spur. Meist ihren eigenen.", "nyx": "Böse Hexe. Sie klopft heimlich ihren Besenstaub auf das Magiebuch von Aldric.", "wenzel": "Schweigt gern. Ups …", "yara": "Weiß, wohin der Wind weht.", "gerda": "Trägt einen Schild. Mag ihren Schild, sehr …", "pim": "Macht viralen Street-Magic-Content mit gekauften Schauspielern auf Paultube.", "hedda": "Kennt jeden Weg und jeden Klatsch.", "ulrich": "Stand zwanzig Jahre am Tor. Unbezahlt!", "jost": "Immer in der ersten Reihe, wenn sich eine wütende Meute bildet.", "konrad": "Sein Königreich erstreckt sich, so weit seine Sicht den Horizont erblickt. −8 und −10,5 – und „braucht“ keine Brille.", "kage": "Mag es, zuzuschauen.", "gerold": "So böse, wie der Regen feucht ist.", "linail": "Betet laut. Die Götter hören ihr zu. Machen aber nichts – meistens.", "prime": "Weiß alles, außer den Dingen des alltäglichen Lebens.", "oratio": "Gold und Silber sind seine Sprache der Wahl.", "glenys": "Ihr Schwert trashtalkt sie die ganze Zeit. Wird es einfach nicht los.", "wyvera": "Hat einen Drachen. Und jeder wird davon wissen.", "bolle": "Reparatur notwendig? Hammer! Uhr kaputt? Hammer! Es klappt am Ende irgendwie.", "eckhart": "Hat drei Burgen, einen Affen und ein Pferd. Hat Phantom-Schmerzen, wenn man ihm an seinen nicht vorhandenen Zöpfen zieht.", "morla": "Stets bemüht. Lässt Nyx in Aldrics Haus."};
-const KNAME64={"oda": "Pflanzen-Heilerin", "liska": "Spurenjägerin", "wenzel": "Schweigsamer Mönch", "pim": "Street-Magician", "oratio": "Währungs-Krieger", "glenys": "Gefäß des Dämonenschwerts", "hinnerk": "Keyboard-Warrior", "morla": "Zauber-Lehrling"};
-const ANAME64={"juno": "Troubadix Cosplay", "fenn": "Schatten-Spähung", "oda": "Blütenheilung", "kasimir": "Helden-Ansprache", "rieke": "Alchemie-Wahn", "bodo": "Amboss zücken", "yara": "Seefahrer-Gespür", "lorenz": "Quelle überprüfen", "runa": "Söldnerisches Handeln", "gerold": "Kraft sammeln", "oratio": "Preis einfordern", "hinnerk": "Seinem Namen gerecht werden", "gunther": "Back in my days…"};
-const KATXT64={"Froschwanderer": {"ok": "„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.", "no": "{Name} springt. Platsch.", "w": "bei Gräben, Wasser, Mauern, Kanten und im Gebirge"}, "Seefahrerin": {"ok": "Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.", "no": "Der Knoten ist schön. Er hält nur nicht.", "w": "bei Seilen, Booten, Leitern, Brunnen und im Gebirge"}, "Hohepriesterin": {"ok": "{Name} betet laut. Die Götter hören zu – heute schon.", "no": "{Name} betet laut. Die Götter sind gerade beschäftigt.", "w": "wenn jemandem Geist fehlt oder jemand verletzt ist"}, "Mönch": {"ok": "{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.", "no": "{Name} schweigt. Und muss niesen.", "w": "wenn jemandem Geist fehlt"}, "Alchemistin": {"ok": "{Name} mischt alles mit allem. Diesmal klappt es.", "no": "Es blubbert, es stinkt, es bleibt im Glas.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Heilerin": {"ok": "{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.", "no": "Die Hände zittern. {Name} versucht es später noch einmal.", "w": "wenn jemand verletzt ist"}, "Hexe": {"ok": "{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.", "no": "Der Dampf riecht gut. Mehr passiert nicht.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Kräuterkundige": {"ok": "{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.", "no": "Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht.", "w": "bei Pflanzen und draußen im Grünen"}, "Sanitäterin": {"ok": "Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.", "no": "Der Verband hält nicht. {Name} wickelt ihn wieder ab.", "w": "wenn jemand verletzt ist"}, "Handwerker": {"ok": "Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.", "no": "Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg.", "w": "bei Holz, Möbeln, Stegen und Kaputtem"}, "Magd": {"ok": "{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.", "no": "Zu schwer, selbst für {Name}. Für heute.", "w": "bei Schwerem: Fässer, Kisten, Säcke, Steine"}, "Mistgabel-Held": {"ok": "{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!", "no": "{Name} stochert heldenhaft. Leider nur im Heu.", "w": "bei Heu, Laub, Löchern, Gebüsch, Gruben"}, "Ritter": {"ok": "{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.", "no": "{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.", "zu": "Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker.", "w": "bei Türen, Toren, Gittern, Truhen und Kisten"}, "Schmied": {"ok": "{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.", "no": "{Name} dreht es hin und her. Ohne Werkstatt wird das nichts.", "w": "bei Mechanik und bei Kaputtem"}, "Drachenkönigin": {"ok": "{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.", "no": "{Name} ruft. Der Drache hat heute frei.", "w": "draußen, wo eine Probe oder Gefahr wartet"}, "Held": {"ok": "„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.", "no": "„Wir schaffen das …?“ Klang nicht ganz überzeugt.", "w": "wo eine Probe oder Gefahr wartet"}, "König ohne Land": {"ok": "„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.", "no": "„Aufstellung!“ Keiner stellt sich auf.", "w": "wo eine Probe oder Gefahr wartet"}, "Ritterin": {"ok": "{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.", "no": "Der Schild rutscht. Der Mut auch, ein bisschen.", "w": "wo eine Probe oder Gefahr wartet"}, "Schildmaid": {"ok": "{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.", "no": "Der Schild ist heute schwerer als sonst.", "w": "wo eine Probe oder Gefahr wartet"}, "Assassine": {"ok": "Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.", "no": "Der Schatten ist zu klein. {Name} steht einfach in der Ecke.", "w": "im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts"}, "Schattenläufer": {"ok": "{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.", "no": "Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen.", "w": "wo es Verborgenes gibt oder Leute, die man belauschen kann"}, "Sträfling": {"ok": "„Kenn ich.“ Ein Kratzen, ein Klick – offen.", "no": "Das Schloss ist neuer als {Name}s Erfahrung.", "zu": "Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf.", "w": "bei Schlössern, Truhen, Gittern, Zellen"}, "Waldwicht": {"ok": "{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.", "no": "Zu eng – sogar für {Name}.", "w": "bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren"}, "Bardin": {"ok": "{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.", "no": "{Name} stimmt an. Niemand stimmt ein.", "w": "wo Leute sind"}, "Baron": {"ok": "„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.", "no": "„Ihnen? Nein.“ Drei Burgen, kein Eindruck.", "w": "wo Leute sind"}, "Gaukler": {"ok": "{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.", "no": "Ein Ball fällt herunter. Dann noch einer.", "w": "wo Leute sind"}, "Monsterflüsterer": {"ok": "{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.", "no": "Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht.", "w": "bei Tieren und Wesen"}, "Prinzessin a.D.": {"ok": "{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.", "no": "„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof.", "w": "wo Leute sind"}, "Söldner": {"ok": "„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.", "no": "Der Preis ist zu hoch. Sogar für einen guten Witz.", "w": "wo Leute sind"}, "Söldnerin": {"ok": "„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.", "no": "„Sold? Wofür?“ Man lacht {Name} aus.", "w": "wo Leute sind"}, "Wolfsbarde": {"ok": "{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.", "no": "Ein Heuler in Moll. Nur die Hunde im Ort antworten.", "w": "draußen bei Nacht oder wo Leute sind"}, "Bauer": {"ok": "{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.", "no": "Nur Steine und ein beleidigter Wurm.", "w": "bei Erde, Feldern, Gärten, Sand – und draußen im Grünen"}, "Bogenschütze": {"ok": "{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.", "no": "Der Pfeil fliegt sehr weit. In die falsche Richtung.", "w": "draußen oder bei etwas, das man treffen kann"}, "Botin": {"ok": "{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.", "no": "Die Abkürzung ist länger als der Weg.", "w": "draußen, wo mindestens zwei Wege weiterführen"}, "Fuchsjägerin": {"ok": "{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!", "no": "Die Fährte endet einfach. Auch die falsche.", "w": "draußen und überall, wo Spuren sein können"}, "Wachmann": {"ok": "{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.", "no": "Zwanzig Jahre Erfahrung – und heute kommt wieder niemand.", "w": "an Toren, Treppen, Plätzen und wo Leute sind"}, "Waldläuferin": {"ok": "{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.", "no": "Zu viele Spuren, alle durcheinander.", "w": "draußen und überall, wo Spuren sein können"}, "Dämonenschwert": {"ok": "{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.", "no": "Die Klinge schweigt beleidigt.", "w": "bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken"}, "Gelehrter": {"ok": "{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!", "no": "{Name} findet nur Fußnoten zu Fußnoten.", "w": "bei Büchern, Schriften, Tafeln, Briefen, Inschriften"}, "Großer Weiser": {"ok": "{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.", "no": "„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte.", "w": "bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken"}, "Rentner": {"ok": "„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.", "no": "{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe.", "w": "wo Leute sind oder bei Altem"}, "Sternenkundlerin": {"ok": "{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.", "no": "Wolken. Oder {Name} hat sich verzählt.", "w": "draußen bei Nacht oder bei Sternkarten, Fernrohren"}, "Tüftlerin": {"ok": "{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.", "no": "Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus.", "w": "bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser"}, "Zauberin": {"ok": "{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.", "no": "Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht.", "w": "bei Magischem und im Dunkeln, nachts"}, "Zeithexe": {"ok": "{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.", "no": "Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts.", "w": "nach einer misslungenen Probe hier, oder bei Uhren und Glocken"}};
-const TYPN64={"Kämpfer": "Zupacken", "Flinke": "Genau hinsehen", "Gelehrte": "Nachdenken", "Stützen": "Sich kümmern"};
+const SATZ64={};
+const KNAME64={};
+const ANAME64={};
+const KATXT64={};
+const TYPN64={};
 
 
 // ================= Prototyp 64 (h): Pauls eigene Sätze für die Heldenauswahl =================
@@ -26539,8 +26539,8 @@ window.P70=P70;window.satzAI70=satzAI70;window.satzEnde70=satzEnde70;window.chro
 
 
 // Prototyp 71: beim Bau aus den Orts-Dateien gelesen (Ruf der Gruppe hier, ## Ruf-Folgen) und aus den NPC-Dateien (Gehört zu)
-const RUFORT71={"aida": {"fehlt": 9, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 9, "start": "neutral", "z": []}, "ffl": {"fehlt": 9, "start": "freundlich", "z": []}, "grossensee": {"fehlt": 9, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 9, "start": "misstrauisch", "z": []}, "kiefernhang": {"fehlt": 9, "start": "neutral", "z": []}, "kloster": {"fehlt": 9, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 9, "start": "neutral", "z": []}, "oase": {"fehlt": 9, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 9, "start": "neutral", "z": []}, "stahndor": {"fehlt": 9, "start": "neutral", "z": []}, "viellos": {"fehlt": 9, "start": "neutral", "z": []}, "weite": {"fehlt": 9, "start": "neutral", "z": []}};
-const GRPNPC71={"Alt-Rat Wendelin": "Fürstenhof", "Ambros": "Mönche", "Anselm": "Mönche", "Ansgar Krall": "Fürstenhof", "Ausrufer Lambert": "Fürstenhof", "Benno": "Mönche", "Bruno": "Das Haus in Friede Freude Land", "Die Elster": "Kontor und Gassen von AIDA", "Fischer Jos": "Seeleute und Fischer", "Folio": "Mönche", "Fortunato": "Das Haus in Friede Freude Land", "Fürst Trahmes": "Fürstenhof", "General Krull": "Schneewacht", "Goldine": "Das Haus in Friede Freude Land", "Hauptmann Olaf": "Schneewacht", "Hedda": "Seeleute und Fischer", "Herold Gisbert": "Fürstenhof", "Hulda": "Mönche", "Isidor": "Schneewacht", "Jannes": "Seeleute und Fischer", "Jorinde": "Schneewacht", "Knut": "Seeleute und Fischer", "Krumm": "Gemeinderat Großensee", "Lirum": "Gemeinderat Großensee", "Lux": "Das Haus in Friede Freude Land", "Mette": "Gemeinderat Großensee", "Ole": "Seeleute und Fischer", "Ottmar": "Seeleute und Fischer", "Ruprecht": "Schneewacht", "Seilerin Ida": "Seeleute und Fischer", "Swantje": "Seeleute und Fischer", "Wache Ivo": "Schneewacht", "Wachhabende Irmel": "Schneewacht", "Wiebke": "Kontor und Gassen von AIDA", "Zöllnerin Agathe": "Schneewacht"};
+const RUFORT71={"aida": {"fehlt": 0, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 0, "start": "neutral", "z": []}, "ffl": {"fehlt": 0, "start": "neutral", "z": []}, "grossensee": {"fehlt": 0, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 0, "start": "neutral", "z": []}, "kiefernhang": {"fehlt": 0, "start": "neutral", "z": []}, "kloster": {"fehlt": 0, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 0, "start": "neutral", "z": []}, "oase": {"fehlt": 0, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 0, "start": "neutral", "z": []}, "stahndor": {"fehlt": 0, "start": "neutral", "z": []}, "viellos": {"fehlt": 0, "start": "neutral", "z": []}, "weite": {"fehlt": 0, "start": "neutral", "z": []}};
+const GRPNPC71={};
 
 
 // ================= Prototyp 71 (r): Ruf je Ort – Ansehen und Furcht, Taten, reisende Gerüchte =================
@@ -26572,40 +26572,31 @@ const FADE71=5;   // Tage, bis ein Gerücht ohne Neues verblasst
 // Gruppen über Orte hinweg (Vorschlag, Paul entscheidet die endgültige Liste): Mitglieder aus „Gehört zu:“ in den NPC-Dateien, sonst nach Name/Rolle
 const GRP71={schneewacht:{n:'Schneewacht',re:/schneewacht|olaf|jorinde|wache|wächter|soldat|irmel|\bivo\b|krull|zöllner/i},
   moenche:{n:'Mönche von Glockenstill',re:/mönch|bruder|abt\b|novize|glockenstill/i},
-  haendler:{n:'Händler',re:null},
-  // seit 02.11. nachmittags (Paul: „Die vorgeschlagenen Gruppen sind gut.“): Mitglieder über „Gehört zu:“ in den NPC-Dateien
-  fuerstenhof:{n:'Fürstenhof',re:/trahmes|ansgar krall|wendelin|herold/i},
-  gemeinderat:{n:'Gemeinderat Großensee',re:/^(mette|krumm|lirum)\b/i},
-  kontor:{n:'Kontor und Gassen von AIDA',re:/^(wiebke|die elster)\b/i},
-  seeleute:{n:'Seeleute und Fischer',re:/fischer|kapitän|hafenmeister|fährjunge|windleser/i},
-  haus:{n:'Das Haus in Friede Freude Land',re:/croupier|türsteher des casinos|wechselstube|dj der glitzerkugel/i}};
-// Welche Orte Furcht „mögen“ (Paul, 02.11.: AIDA ja, Kloster nein): Furcht dort wirkt zusätzlich auf das Ansehen (Anteil des Furcht-Anstiegs)
-const FMAG71={aida:.4,kloster:-.5};
-const FDECAY71=5;   // Furcht sinkt um 5 je Woche, in der am Ort nichts Neues Furcht macht (Paul, 02.11.: „Furcht baut ab.“)
+  haendler:{n:'Händler',re:null}};
 // ---------- Taten (Konzept Ansatz B) ----------
 // a = Ansehen, f = Furcht am Ort der Tat; reach = wie weit es sich herumspricht; fern = andere Werte für die übrigen Orte (sonst a/f, schwächer mit der Entfernung);
 // rum = Gerücht für die Spieler (Platzhalter-Texte, der Story-Chat darf sie ersetzen); grp = Gruppen; cap = höchstens einmal am Tag je Ort; gegen = widerlegt diese Gerüchte
 const TAT71={
-  helfen:{gro:{stahndor:{seeleute:{a:4}},weite:{seeleute:{a:4}}},n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
+  helfen:{n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
   helfen_gross:{n:'Großes geholfen',a:18,reach:'nah',rum:'Die Fremden haben in {ORT} aufgeräumt.',gegen:['stehlen','schulden','schlecht']},
-  aushang:{gro:{grossensee:{gemeinderat:{a:8}},aida:{kontor:{a:8}}},n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
-  spenden:{gro:{grossensee:{gemeinderat:{a:6}},kloster:{moenche:{a:10}}},n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
+  aushang:{n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
+  spenden:{n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
   show:{n:'Blad(e)iatoren-Show gewonnen',a:55,f:5,reach:'nah',rum:'Blad(e)iatoren-Bezwinger',grp:{schneewacht:{a:5,f:5}}},
   frosch:{n:'Froschkonzert bis zum Ende',a:15,reach:'weit',rum:'Frog Concert Enjoyer'},
   entfernos:{n:'Mit Entfernos gesungen',a:15,reach:'weit',rum:'Die Fremden haben mit Entfernos gesungen.'},
-  befreit:{gro:{ffl:{haus:{a:-15,f:10}},grossensee:{gemeinderat:{a:15}}},n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
-  casino:{gro:{ffl:{haus:{a:-10,f:5}}},n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
-  arena:{gro:{duppelbach:{fuerstenhof:{a:5,f:3}}},n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
-  boss:{gro:{ffl:{haus:{a:-10,f:15}}},n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
-  olaf_sieg:{gro:{nordstollen:{fuerstenhof:{f:5}}},n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
+  befreit:{n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
+  casino:{n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
+  arena:{n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
+  boss:{n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
+  olaf_sieg:{n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
   olaf_vorbei:{n:'An Olaf vorbeigekommen',a:4,reach:'ort',grp:{schneewacht:{a:3}}},
   gegner:{n:'Gegner besiegt',a:1,f:1,reach:'ort',cap:1},
-  ausbruch:{gro:{duppelbach:{fuerstenhof:{a:-6}}},n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
+  ausbruch:{n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
   flucht:{n:'Vor der Wache weggerannt',a:-10,reach:'nah',rum:'In Duppelbach sucht die Wache nach Fremden.',grp:{schneewacht:{a:-5}}},
-  stehlen:{gro:{duppelbach:{fuerstenhof:{a:-5}},aida:{kontor:{a:-6}}},n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
+  stehlen:{n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
   zahlen:{n:'Rechnung bezahlt',a:6,reach:'ort',gegen:['schulden']},
   schulden:{n:'Rechnung nicht bezahlt',a:-8,reach:'ort',rum:'Die Fremden haben ihre Rechnung nicht bezahlt.'},
-  bank_ausfall:{gro:{duppelbach:{fuerstenhof:{a:-8}}},n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
+  bank_ausfall:{n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
   drohen:{n:'Gedroht',a:-3,f:8,reach:'ort',rum:'Die Fremden haben {N} bedroht.'},
   drohen_fehl:{n:'Drohung ging daneben',a:-4,reach:'ort'},
   furcht_weg:{n:'Auf den Ruf verwiesen',a:-2,f:2,reach:'ort'},
@@ -26649,15 +26640,14 @@ function dists71(){try{const sig=WROUTES.length+':'+Object.keys(WNODES).length;i
 function dist71(a,b){if(a===b)return 0;const D=dists71();return D[a]&&D[a][b]!=null?D[a][b]:null}
 function minPerPt71(){try{return ZEIT47.reiseJePunkt||3}catch(e){return 3}}
 // ---------- Werte ändern ----------
-function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;df=Math.round(df||0);if(df>0&&FMAG71[o])da=(da||0)+df*FMAG71[o];da=Math.round(da||0);if(!da&&!df)return;
-  if(df>0){R.fl=R.fl||{};R.fl[o]=today71()}
+function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   const a0=O.a,f0=O.f,s0=aSt71(a0),t0=fSt71(f0);O.a=Math.max(-100,Math.min(100,a0+da));O.f=Math.max(0,Math.min(100,f0+df));
   if(e)e.ap.push({o,a:O.a-a0,f:O.f-f0});
   if(o===cur71()&&(aSt71(O.a)!==s0||fSt71(O.f)!==t0)){try{say('Die Stimmung der Leute hier ändert sich.','sys')}catch(x){}setTimeout(()=>{try{nickCheck71(o)}catch(x){}},400)}}
 function grpApply71(e,g,da,df){const R=R71();da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   if(g==='haendler'){try{const E=E43(),h0=E.hr;E.hr=Math.max(-5,Math.min(5,E.hr+da/20));if(e)e.ap.push({g,hr:E.hr-h0})}catch(x){}return}
-  if(df>0){R.fl=R.fl||{};R.fl['g:'+g]=today71()}const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
-function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const v=GRPNPC71[n.name].toLowerCase().trim();const k=Object.keys(GRP71).find(k=>k===v||GRP71[k].n.toLowerCase()===v||GRP71[k].n.toLowerCase().startsWith(v.slice(0,6)));if(k)return k}}catch(e){}
+  const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
+function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const k=Object.keys(GRP71).find(k=>GRP71[k].n.toLowerCase().startsWith(GRPNPC71[n.name].toLowerCase().slice(0,6)));if(k)return k}}catch(e){}
   try{if(typeof HAND43!=='undefined'&&HAND43[n.name])return'haendler'}catch(e){}const s=(n.name||'')+' '+(n.role||'');return Object.keys(GRP71).find(k=>GRP71[k].re&&GRP71[k].re.test(s))||null}
 function grpA71(g){if(g==='haendler'){try{return Math.round(E43().hr*20)}catch(e){return 0}}const G=R71().g[g];return G?G.a:0}
 function grpF71(g){if(g==='haendler')return 0;const G=R71().g[g];return G?G.f:0}
@@ -26667,7 +26657,7 @@ function tat71(key,o){o=o||{};const T=TAT71[key];if(!T)return null;const R=R71()
   const mul=o.mul==null?1:o.mul,t=now71(),nm=o.npc&&o.npc.name;
   const e={id:++R.n,k:key,ort,t,d:today71(),ap:[],n:T.n,txt:o.txt||null,npc:nm||null};
   apply71(e,ort,(T.a||0)*mul,(T.f||0)*mul);
-  const gs=Object.assign({},T.grp||{},(T.gro&&T.gro[ort])||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
+  const gs=Object.assign({},T.grp||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
   Object.keys(gs).forEach(g=>grpApply71(e,g,(gs[g].a||0)*mul,(gs[g].f||0)*mul));
   // Weitergabe an andere Orte: kommt an, wenn die Gruppe selbst dort wäre
   const rr=REACH71[T.reach||'ort']||0;if(rr>0)ORTE71.forEach(x=>{if(x===ort)return;const d=dist71(ort,x);if(d==null||d>rr)return;
@@ -26712,10 +26702,7 @@ function widerlegt71(e,o,T){negHier71(o).forEach(r=>{if((T.gegen||[]).includes(r
 function gegen71(r,o,anteil,why){const R=R71();r.dem[o]=1;let neg=0;R.log.forEach(e=>{if(r.e.includes(e.id)&&!e.undone)(e.ap||[]).forEach(x=>{if(x.o===o&&x.a<0)neg+=x.a})});
   const back=Math.round(-neg*anteil);const e={id:++R.n,k:'gegen',ort:o,t:now71(),d:today71(),ap:[],n:'Gerücht entkräftet ('+why+'): „'+r.txt+'“'};if(back)apply71(e,o,back,0);R.log.unshift(e);
   try{addChron('Ruf: '+e.n+' · '+fx71(e),['u71_'+e.id],true)}catch(x){}setWorld71();return e}
-function decay71(){const R=R71(),d=today71();if(R.fd==null){R.fd=d;return}if(d<=R.fd)return;R.fl=R.fl||{};
-  for(let x=R.fd+1;x<=Math.min(d,R.fd+60);x++){ORTE71.forEach(o=>{const O=R.o[o],l=R.fl[o]||0;if(O&&O.f>0&&x>l&&(x-l)%7===0)O.f=Math.max(0,O.f-FDECAY71)});
-    Object.keys(R.g).forEach(g=>{const G=R.g[g],l=R.fl['g:'+g]||0;if(G&&G.f>0&&x>l&&(x-l)%7===0)G.f=Math.max(0,G.f-FDECAY71)})}R.fd=d}
-function tick71(){const R=R71(),t=now71();try{decay71()}catch(e){}if(!R.pend.length&&!R.rum.length)return;
+function tick71(){const R=R71(),t=now71();if(!R.pend.length&&!R.rum.length)return;
   const due=R.pend.filter(p=>p.at<=t);if(due.length){R.pend=R.pend.filter(p=>p.at>t);due.forEach(p=>{const e=R.log.find(x=>x.id===p.e);if(e&&e.undone)return;apply71(e||null,p.o,p.a,p.f)});setWorld71()}
   R.rum.forEach(r=>{if(!r.weg&&str71(r)<=0)r.weg=1})}
 // ---------- S.world.ruf = Ansehen-Stufe des aktuellen Orts ----------
@@ -26733,8 +26720,6 @@ function parseF71(line){const P=String(line).split('|').map(s=>s.trim()).filter(
     else if(q=p.match(/^Spitzname\s*:\s*(.+)$/i))f.eff.push({t:'spitz',v:q[1].replace(/^[„"]|[“"]$/g,'')});
     else if(q=p.match(/^Preise\s*([+\-−–])\s*(\d+)\s*%/i))f.eff.push({t:'preis',v:(q[1]==='+'?1:-1)*(+q[2])});
     else if(q=p.match(/^Spielleiter\s*:\s*(.+)$/i))f.eff.push({t:'sl',v:q[1]});
-    else if(q=p.match(/^Ende\s*:\s*(.+)$/i))f.eff.push({t:'ende',v:q[1]});
-    else if(q=p.match(/^Lagerfeuer\s*:\s*(.+)$/i))f.eff.push({t:'feuer',v:q[1]});
     else f.eff.push({t:'sl',v:p})});return f}
 let FOLGEN71=null;
 function folgenAll71(o){if(!FOLGEN71){FOLGEN71={};try{Object.keys(RUFORT71).forEach(k=>{FOLGEN71[k]=(RUFORT71[k].z||[]).map(parseF71).filter(Boolean)})}catch(e){}}return FOLGEN71[o]||[]}
@@ -26840,32 +26825,6 @@ if(typeof gruppe67==='function'){const _g71=gruppe67;gruppe67=function(p){const 
 {const _rw71=renderWorld;renderWorld=function(){const r=_rw71.apply(this,arguments);try{const seg=$('segRuf');if(seg){const h=seg.previousElementSibling;const o=cur71();if(h&&h.tagName==='H2')h.textContent=o?'Ruf der Gruppe in '+ortName71(o):'Ruf der Gruppe';
     let w=$('ruf71w');if(!w){w=document.createElement('div');w.id='ruf71w';seg.after(w)}w.innerHTML='';rufPanel71(w)}}catch(e){console.warn('p71r',e)}return r}}
 (function(){const st=document.createElement('style');st.textContent='.ruf71 .pm71 .dbtn,.ruf71 .sl67line .dbtn{padding:1px 5px;min-width:0;font-size:11px}.ruf71 details{margin:4px 0}.ruf71 select{max-width:60%}.ruf71s{margin-top:10px;border-top:1px dashed #6b5a44;padding-top:6px}.ruf71s p{margin:4px 0}';document.head.appendChild(st)})();
-// ================= Ruf in den Enden und im Finale (Paul, 02.11. nachmittags: 71.F1 und 71.F2 „sehr gute Ideen“) =================
-// Was die Orte über die Gruppe erzählen: zuerst Pauls Zeilen „Ende: …“ / „Lagerfeuer: …“ aus den Ruf-Folgen der Orts-Datei,
-// sonst ein schlichter Ersatzsatz je Stufe (ENDE71, Platzhalter für den Story-Chat). Neutrale Orte schweigen; höchstens drei Orte, die deutlichsten zuerst.
-const ENDE71={nick:'In {O} heißt ihr noch lange „{N}“.',4:'In {O} erzählt man noch lange von euch. Meistens stimmt sogar die Hälfte.',3:'In {O} hebt man den Becher, wenn euer Name fällt.',
-  1:'In {O} wird man vorsichtig, wenn euer Name fällt.',0:'In {O} spuckt man aus, wenn euer Name fällt. Aber man spricht ihn.',angst:'In {O} senkt man die Stimme, wenn euer Name fällt.'};
-function rufEnde71(art){const R=S.ruf71;if(!R)return[];const L=[];ORTE71.forEach(o=>{if(!visited71(o))return;const O=R.o[o];const sa=aSt71(O.a),sf=fSt71(O.f);
-    let own=[];try{own=eff71(o,art==='feuer'?'feuer':'ende')}catch(e){}
-    let txt=own.length?own[own.length-1].v:null,w=Math.abs(O.a)+(sf>=2?O.f:0);
-    if(!txt){if(sf>=2)txt=ENDE71.angst;else if(R.nick[o]&&sa!==2)txt=ENDE71.nick;else if(sa!==2)txt=ENDE71[sa];}
-    if(txt)L.push({o,w,t:txt.replace(/\{O\}/g,ortName71(o)).replace(/\{N\}/g,R.nick[o]||'')})});
-  return L.sort((a,b)=>b.w-a.w).slice(0,3)}
-// „Was aus ihnen wurde“: vor „Und ihr?“ eine Karte „Was man über euch erzählt“
-if(typeof cardList38==='function'){const _cl71=cardList38;cardList38=function(){const L=_cl71.apply(this,arguments);try{const E=rufEnde71('ende');if(E.length){const i=L.findIndex(x=>x[0]==='Und ihr?');
-    const card=['Was man über euch erzählt',E.map(x=>x.t).join(' ')];if(i>=0)L.splice(i,0,card);else L.push(card)}}catch(e){console.warn('p71r',e)}return L}}
-// Lagerfeuer: nach „Hoffentlich laut.“ erzählen die Orte, wie laut
-function rufLines71(lines){if(!Array.isArray(lines))return lines;{
-    const k=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Alle lachen. Oben in den Ästen lacht Linde mit.');
-    if(k>=0){const E=rufEnde71('feuer');if(E.length){lines=lines.slice();lines.splice(k+1,0,['Und es wird laut geredet. '+E.map(x=>x.t).join(' ')])}}
-    // Finale: der Gast greift auf, wie über die Gruppe geredet wird (ein Satz, nur wenn man sie kennt)
-    const j=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Starker Körper. Starker Geist. Danke fürs Großziehen.');
-    if(j>=0&&S.ruf71){const R=S.ruf71;const known=ORTE71.filter(o=>visited71(o)&&R.o[o]);const angst=known.some(o=>fSt71(R.o[o].f)>=2),gut=known.some(o=>aSt71(R.o[o].a)>=3);
-      const satz=angst?GAST71.angst:gut?GAST71.gut:null;if(satz){lines=lines.slice();lines.splice(j+1,0,[satz,'npc','????'])}}
-  }return lines}
-{const _sq71=seq38;seq38=function(lines,step,done){try{lines=rufLines71(lines)}catch(e){console.warn('p71r',e)}return _sq71.call(this,lines,step,done)}}
-// Sätze des Gasts (Vorschlag aus dem Konzept, Story-Chat darf ersetzen)
-const GAST71={gut:'Sie werden euch vergessen. Bei mir nicht.',angst:'Sie haben Angst vor euch. Bei mir müsst ihr keine haben.'};
 
 
 // ================= Nachbesserung zu Prototyp 71 (w): Statisten laufen sauber (Paul 02.11., 13:28/13:30) =================
@@ -28112,6 +28071,336 @@ if(typeof gruppe67==='function'){const _g73=gruppe67;gruppe67=function(p){const 
   box.appendChild(el67('p','Techniken und Innere Kunst springen direkt eine Stufe weiter (die Stufen 1–10 gelten auch ohne Lehrmeister). Waffenpunkte gibt man im Waffenbaum aus (Taste U). „Waffenstufe +1“ schaltet die nächsten Knoten gleich frei (ohne Punkte, Material, Werkbank), „Waffenbaum ganz“ alle Knoten der aktuellen Baumgröße.','small'));
   const g=[...p.querySelectorAll('h3')].find(x=>x.textContent==='Geld');if(g)p.insertBefore(box,g);else p.appendChild(box)}catch(e){console.warn('p73 Erfahrung',e)}return r}}
 {const st=document.createElement('style');st.textContent='.xp73 select{margin:2px 0 4px;font:inherit;background:#1b1626;color:#f3ead6;border:1px solid #6a5a8a;border-radius:4px;padding:2px 4px}';document.head.appendChild(st)}
+
+
+// ================= Prototyp 73 (a): Ausrichtungen, Weg-Lektion, Durchbruch beim Lehrmeister (Phase 3, Lieferung 2) =================
+// Paul (04.11., Block 2.2 der Besprechung): Jede Weg-Technik hat Stufen 1–10. Hat sie Stufe 5, bietet der nächste Lehrmeister
+// die Wahl zwischen zwei Ausrichtungen des Wegs an (32 insgesamt). Die Ausrichtung
+//   - gibt eine Signaturtechnik (normale Technik mit eigenem Platz),
+//   - tauscht im Waffenbaum die Waffenkunst B (Knoten k4) gegen eine eigene Kunst,
+//   - und der Weg heißt im Heldenbogen „Weg · Ausrichtung“.
+// Zurücksetzen an einer Werkbank gegen Silber. Dazu bei jedem Lehrmeister:
+//   - „Weg-Lektion“: die nächste Technik der eigenen Linie lernen (Lieferung 1 hatte die Linie nur angezeigt),
+//   - „Durchbruch“: eine Methode (Innere Kunst), die auf Stufe 4 oder 9 stockt, durchbrechen (Weisheit SG 13, p73m.js).
+// Die 64 Fähigkeiten laufen über einen kleinen Baukasten (FX73): Angriff/Zauber/Wirken/Stärken + Zusätze. Werte sind ein erster Entwurf.
+// ---------- Baukasten ----------
+const lvB73=L=>Math.floor(L/4),lvV73=(v,L)=>v+(L>=6?1:0),lvN73=(n,L)=>n+(L>=8?1:0),lvP73=(p,L)=>Math.min(.85,p+.04*L);
+function xd73(x,L){if(!x)return 0;if(x==='st')return dstep31(L,true);const m=/^w(\d+)$/.exec(x);return m?d(+m[1])+Math.floor(L/3):0}
+function xdT73(x,L){if(!x)return'';if(x==='st')return dstepT31(L,true);const m=/^w(\d+)$/.exec(x);return m?'W'+m[1]+(Math.floor(L/3)?'+'+Math.floor(L/3):''):''}
+function rTxt73(R,L){const[k,a,b]=R;switch(k){
+  case'spott':return'Ziel −'+lvV73(a,L)+' Treffen ('+lvN73(b,L)+' Züge)';case'ac':return'Ziel −'+lvV73(a,L)+' RK ('+lvN73(b,L)+' Züge)';case'mark':return'alle +'+lvV73(a,L)+' gegen das Ziel ('+lvN73(b,L)+' Runden)';
+  case'skip':return Math.round(lvP73(a,L)*100)+' % setzt aus';case'dot':return lvV73(a,L)+' Schaden pro Zug ('+lvN73(b,L)+' Züge)';case'nb':return(a+(L>=7?1:0))+' Nachbar'+(a+(L>=7?1:0)>1?'n':'')+' halber Schaden';
+  case'push':return(a+(L>=6?1:0))+' Feld zurück (Taktik)';case'rk':return'+'+lvV73(a,L)+' RK bis zum nächsten Zug';case'rkall':return'alle +'+lvV73(a,L)+' RK bis zum nächsten Zug';
+  case'dodge':return'Ausweichen +'+lvV73(a,L);case'dodgeall':return'alle Ausweichen +'+lvV73(a,L);case'zus':return'alle +'+lvV73(a,L)+' auf den nächsten Angriff';
+  case'heal':return'der Schwächste heilt W'+a+'+'+Math.floor(L/3);case'healall':return'alle heilen W'+a+'+'+Math.floor(L/4);case'healself':return'heilt selbst W'+a+'+'+Math.floor(L/3);case'geist':return'alle +1 Geist';
+  case'baer':return'Bärengestalt (Taktik: 3 Runden)';default:return''}}
+function lvd73(F){return L=>{const p=[];if(F.k==='atk'||F.k==='spell'){p.push((F.k==='spell'?'Zauber':'Angriff')+((F.b||0)+lvB73(L)?' '+sgn((F.b||0)+lvB73(L)):'')+(F.adv?' mit Vorteil':'')+(F.crit?', kritisch ab '+Math.max(16,F.crit-(L>=8?1:0)):'')+(F.x?', +'+xdT73(F.x,L)+' Schaden':''))}
+  else if(F.k==='cast')p.push('kein Wurf');else if(F.k==='tier')p.push('Tierruf, eine Stufe stärker');
+  const R=(F.r||[]).map(r=>rTxt73(r,L)).filter(Boolean);return p.concat(R.length?[(F.k==='atk'||F.k==='spell'?'Treffer: ':'')+R.join(', ')]:[]).join('; ')}}
+const TGT73=['spott','ac','mark','skip','dot','nb','push'];
+// normaler Kampf: Zusätze auf das Ziel (e) und auf die eigene Seite
+function rNorm73(h,F,L,e,dmg,hit){let txt=[];(F.r||[]).forEach(R=>{const[k,a,b]=R;try{
+    if(TGT73.includes(k)){if(!hit||!e||e.hp<=0)return;
+      if(k==='spott'){e.spott27={v:lvV73(a,L),n:lvN73(b,L)}}else if(k==='ac'){e.ac27={v:lvV73(a,L),n:lvN73(b,L)}}else if(k==='mark'){e.mark31={v:lvV73(a,L),n:lvN73(b,L)}}
+      else if(k==='skip'){if(Math.random()<lvP73(a,L)){e.skip=1;txt.push(enemyName(e)+' setzt aus')}}else if(k==='dot'){e.dot49={v:lvV73(a,L),n:lvN73(b,L),by:h.id,why:F.n}}
+      else if(k==='nb'){rotTargets31(a+(L>=7?1:0)).forEach(o=>{const m=Math.max(1,Math.ceil((dmg||d(4))/2));dmgFoe31(o,m);txt.push(enemyName(o)+' '+m)})}return}
+    const al=PARTY.filter(p=>p.hp>0);
+    if(k==='rk')untilNext49(h,'rk',lvV73(a,L),h.id);else if(k==='rkall')al.forEach(p=>untilNext49(p,'rk',lvV73(a,L),h.id));
+    else if(k==='dodge'){h.stance31='dodge';h.strom31=(h.strom31||0)+lvV73(a,L)}else if(k==='dodgeall')al.forEach(p=>{p.strom31=(p.strom31||0)+lvV73(a,L)});
+    else if(k==='zus')al.forEach(p=>{p.zus27=Math.max(+p.zus27||0,lvV73(a,L))});
+    else if(k==='heal'||k==='healself'||k==='healall'){const T=k==='heal'?[al.slice().sort((x,y)=>x.hp/x.max-y.hp/y.max)[0]||h]:k==='healself'?[h]:al;T.forEach(p=>{const n=Math.min(d(a)+Math.floor(L/(k==='healall'?4:3)),p.max-p.hp);if(n>0){p.hp+=n;try{float(p.x,FLOOR-52,'+'+n,'#8fcf8a')}catch(x){}ev31(h,'heal',n)}})}
+    else if(k==='geist')al.forEach(p=>{if(p.gmax!=null)p.geist=Math.min(p.gmax,(p.geist||0)+1)});
+    else if(k==='baer'){h.stance31='block';untilNext49(h,'rk',2,h.id)}}catch(x){console.warn('p73 Zusatz',k,x)}});return txt}
+// Taktik: Zusätze auf o (Ziel) und die eigene Seite
+function rTac73(u,F,L,o,dmg,hit,c){const h=u.hero,by='u'+(h?h.id:u.name);(F.r||[]).forEach(R=>{const[k,a,b]=R;try{
+    if(TGT73.includes(k)){if(!hit||!o||o.hp<=0)return;
+      if(k==='spott')o.spott27={v:lvV73(a,L),n:lvN73(b,L)};else if(k==='ac')o.ac27={v:lvV73(a,L),n:lvN73(b,L)};else if(k==='mark')o.mark31={v:lvV73(a,L),n:lvN73(b,L)};
+      else if(k==='skip'){if(Math.random()<lvP73(a,L)){o.stun31=1;tFloat(o,'benommen','#f6c84a')}}else if(k==='dot')o.dot49={v:lvV73(a,L),n:lvN73(b,L),why:F.n};
+      else if(k==='push'){const m=tPush27(o,dir27(u,o),a+(L>=6?1:0));if(m)c.log(o.name+' fliegt '+m+' Feld'+(m>1?'er':'')+' zurück.')}
+      else if(k==='nb'){TAC.units.filter(q=>q.side!==u.side&&q.hp>0&&!q.gone&&q!==o&&tDist(q,o)===1).slice(0,a+(L>=7?1:0)).forEach(q=>{const m=Math.max(1,Math.ceil((dmg||d(4))/2));c.log(q.name+' wird mitgetroffen: '+m+'.'+tDmg27(u,q,m,'',{}))})}return}
+    const al=tAllies(u).filter(q=>tDist(q,u)<=3);
+    if(k==='rk')untilNext49(u,'def',lvV73(a,L),by);else if(k==='rkall')al.forEach(q=>untilNext49(q,'def',lvV73(a,L),by));
+    else if(k==='dodge'){u.stance31='dodge';u.strom31=(u.strom31||0)+lvV73(a,L)}else if(k==='dodgeall')al.forEach(q=>{q.strom31=(q.strom31||0)+lvV73(a,L)});
+    else if(k==='zus')al.forEach(q=>{q.zus27=Math.max(+q.zus27||0,lvV73(a,L))});
+    else if(k==='heal'||k==='healself'||k==='healall'){const T=k==='heal'?[al.filter(q=>q.hp<q.max).sort((x,y)=>x.hp/x.max-y.hp/y.max)[0]||u]:k==='healself'?[u]:al;T.forEach(q=>{const n=Math.min(d(a)+Math.floor(L/(k==='healall'?4:3)),q.max-q.hp);if(n>0){q.hp+=n;if(q.hero)q.hero.hp=q.hp;tFloat(q,'+'+n,'#7af07a')}})}
+    else if(k==='geist')al.forEach(q=>{if(q.hero&&q.gmax!=null){q.geist=Math.min(q.gmax,(q.geist||0)+1);q.hero.geist=q.geist}});
+    else if(k==='baer'){u.gestalt='baer';u.gestaltN73=3;untilNext49(u,'def',2,by);tFloat(u,'Bär!','#5ad0b0')}}catch(x){console.warn('p73 Zusatz (Taktik)',k,x)}})}
+function mkTech73(id,F,art){const kost=art?1:2,cd=art?(F.k==='atk'||F.k==='spell'?2:3):3,ziel=F.k==='buff'?'selbst':'feind',rng=F.k==='spell'?3:F.k==='cast'||F.k==='tier'?4:undefined;
+  TECH27[id]={n:F.n,kost,cd,ziel,rng,von:art?'Waffenbaum (Ausrichtung)':'Ausrichtung',desc:F.d};const nat=F.k==='atk'||F.k==='spell'?'glut':F.k==='cast'?'strom':'stein';
+  TX31[id]={nat,tags:F.k==='spell'?['magic','p_int']:F.k==='atk'?['atk']:['help'],lvd:lvd73(F)};if(art){TX31[id].req=OWNREQ49;TX31[id].reqT='die eigene Waffe';ART49[id]={n:F.n,nat,kost,cd,ziel,ic:'star',desc:F.d,lvd:lvd73(F)};WK49[id]=ART49[id]}
+  TN31[id]=(h,T,L,c)=>{if(F.k==='atk'||F.k==='spell'){const W=F.k==='spell'?wpn27(h,true):c.W;doAtk27({W,spellFx:F.k==='spell',bonus:(F.b||0)+lvB73(L),bonusTxt:F.n,how:F.n,adv:!!F.adv,crit:F.crit?Math.max(16,F.crit-(L>=8?1:0)):undefined,extra:()=>xd73(F.x,L),
+        done:(x,dmg)=>{const e=enemy;const t=rNorm73(h,F,L,e,dmg,x);if(t.length)say(F.n+': '+t.join(', ')+'.','roll');c.use(x);c.next()}});return}
+    if(F.k==='tier'){const T2=Object.assign({},T);return TN31.tierruf(h,T2,L+1,c)}
+    const e=enemy;const t=rNorm73(h,F,L,e,0,true);say(h.name+': '+F.n+' – '+lvd73(F)(L)+'.'+(t.length?' '+t.join(', ')+'.':''),'roll');c.use(true);c.end()};
+  TT31[id]=(u,T,L,o,cell,c)=>{if(F.k==='atk'||F.k==='spell'){tAttack(u,o,{__noCount31:1,spell:F.k==='spell'&&!!u.sp,bonus:(F.b||0)+lvB73(L),bonusTxt:F.n,how:F.n,adv:!!F.adv,crit:F.crit?Math.max(16,F.crit-(L>=8?1:0)):undefined,extra:()=>xd73(F.x,L),noForm:true,
+        after:(x,dmg)=>{rTac73(u,F,L,o,dmg,x,c);c.use(x)}});return}
+    if(F.k==='tier')return TT31.tierruf(u,T,L+1,o,cell,c);
+    rTac73(u,F,L,o,0,true,c);c.log(u.name+': '+F.n+' – '+lvd73(F)(L)+'.');c.use(true)}}
+// Bärengestalt endet nach 3 eigenen Zügen
+{const _tn73a=tNext;tNext=function(){const r=_tn73a.apply(this,arguments);try{const u=TAC&&TAC.cur;if(u&&u.gestalt&&u.gestaltN73!=null){u.gestaltN73--;if(u.gestaltN73<=0){u.gestalt=null;u.gestaltN73=null;tLog(u.name+' ist wieder in eigener Gestalt.')}}}catch(e){}return r}}
+// ---------- Die 32 Ausrichtungen: [Weg, A/B, Name, Kurztext, Signaturtechnik, Waffenkunst] ----------
+const AUS73=[
+ ['bollwerk','a','Mauer','Hält die Linie für die anderen.',{n:'Schildwall-Ruf',k:'buff',d:'Ein Ruf, und alle rücken hinter den Schild.',r:[['rkall',1]]},{n:'Wallschlag',k:'atk',d:'Ein Schlag, der den Gegner auf dich lenkt und ihn schlechter treffen lässt.',r:[['spott',1,2]]}],
+ ['bollwerk','b','Rammbock','Der Schild ist die Waffe.',{n:'Rammstoß',k:'atk',x:'w4',d:'Mit voller Wucht hinein: das Ziel fliegt zurück und taumelt.',r:[['push',1],['skip',.25]]},{n:'Schildkante',k:'atk',b:1,d:'Die Kante des Schilds bricht die Deckung auf.',r:[['ac',1,2]]}],
+ ['wucht','a','Brecher','Rüstung ist nur eine Frage der Zeit.',{n:'Panzerknacker',k:'atk',b:-1,x:'st',d:'Ein Schlag gegen die Rüstung: das Ziel verliert lange seine Deckung.',r:[['ac',2,2]]},{n:'Splitterhieb',k:'atk',x:'w4',d:'Splitter fliegen: mehr Schaden, die Deckung leidet.',r:[['ac',1,2]]}],
+ ['wucht','b','Erdstampfer','Der Boden bebt mit.',{n:'Erdstoß',k:'atk',b:-1,d:'Der Boden bricht auf: die Nachbarn bekommen etwas ab, das Ziel kann aussetzen.',r:[['nb',2],['skip',.15]]},{n:'Stampfer',k:'atk',d:'Ein Stampfen, das bis zum Nachbarn reicht.',r:[['nb',1]]}],
+ ['klinge','a','Duell','Einer gegen einen, mit allen Regeln.',{n:'Herausforderung',k:'atk',b:2,crit:19,d:'Ein genauer Stoß – und eine Herausforderung, die das Ziel schlechter treffen lässt.',r:[['spott',1,2]]},{n:'Riposte',k:'buff',d:'Die Klinge bleibt vorn: mehr Rüstung bis zum nächsten Zug.',r:[['rk',2]]}],
+ ['klinge','b','Sturm','Nie stehen bleiben, immer nach vorn.',{n:'Sturmlauf',k:'atk',b:1,x:'st',d:'Anlauf und Stoß in einem.'},{n:'Durchzug',k:'atk',d:'Der Schwung trägt die Klinge bis zum Nächsten.',r:[['nb',1]]}],
+ ['schatten','a','Meuchler','Ein Stich, der zählt.',{n:'Lautloser Stich',k:'atk',adv:1,x:'w6',crit:19,d:'Aus dem Nichts, mit Vorteil und viel Schaden.'},{n:'Kehlschnitt',k:'atk',x:'w4',d:'Schnell und tief.'}],
+ ['schatten','b','Gift','Was einmal trifft, wirkt lange.',{n:'Schleichendes Gift',k:'atk',d:'Ein Kratzer genügt: das Ziel verliert lange Lebenspunkte.',r:[['dot',2,3]]},{n:'Giftnebel',k:'atk',b:-1,d:'Ein Hauch Gift für das Ziel, etwas auch für den Nachbarn.',r:[['dot',1,2],['nb',1]]}],
+ ['jagd','a','Scharfschütze','Ein Schuss, ein Treffer.',{n:'Meisterschuss',k:'atk',b:3,crit:18,x:'w4',d:'Lange zielen, einmal loslassen.'},{n:'Kopfschuss',k:'atk',b:1,crit:19,d:'Auf die verletzliche Stelle.'}],
+ ['jagd','b','Fallensteller','Wer läuft, läuft hinein.',{n:'Netzwurf',k:'atk',b:1,d:'Ein Netz: das Ziel verheddert sich und steht offen.',r:[['skip',.35],['ac',1,2]]},{n:'Fußangel',k:'atk',d:'Ein Draht am Boden: das Ziel stolpert und trifft schlechter.',r:[['spott',1,2]]}],
+ ['lauf','a','Springer','Über alles hinweg.',{n:'Hechtsprung',k:'atk',adv:1,x:'st',d:'Ein Sprung von oben, mit Vorteil.'},{n:'Überschlag',k:'buff',d:'Ein Überschlag aus der Gefahr: viel leichter auszuweichen.',r:[['dodge',3]]}],
+ ['lauf','b','Ausweicher','Nie da, wo der Schlag ankommt.',{n:'Wirbelschritt',k:'buff',d:'Ein Tanz aus Schritten: kaum zu treffen bis zum nächsten Zug.',r:[['dodge',4]]},{n:'Konterschritt',k:'atk',b:1,d:'Zuschlagen und schon wieder weg.',r:[['dodge',2]]}],
+ ['kunststueck','a','Blender','Wer hinsieht, sieht das Falsche.',{n:'Taschenspiel',k:'atk',d:'Ein Trick vor den Augen: das Ziel trifft lange schlechter.',r:[['spott',2,2]]},{n:'Funkenwerk',k:'atk',d:'Knall und Funken: das Ziel kann aussetzen.',r:[['skip',.25]]}],
+ ['kunststueck','b','Glück','Die Würfel lieben dich. Meistens.',{n:'Glückswurf',k:'atk',x:'w6',crit:18,d:'Alles auf eine Karte: viel Schaden, früh kritisch.'},{n:'Doppelt oder nichts',k:'atk',b:-2,x:'w8',d:'Schwerer zu treffen, dafür doppelter Einsatz.'}],
+ ['funken','a','Feuer','Flammen für alle.',{n:'Feuerwand',k:'spell',d:'Eine Wand aus Feuer: Ziel und Nachbarn brennen.',r:[['nb',2],['dot',1,2]]},{n:'Glutstoß',k:'spell',x:'w4',d:'Ein Stoß aus Glut, der nachbrennt.',r:[['dot',1,2]]}],
+ ['funken','b','Frost','Kälte, die langsam macht.',{n:'Frostlanze',k:'spell',b:1,x:'w4',d:'Eine Lanze aus Eis: das Ziel wird steif und trifft schlechter.',r:[['spott',2,2]]},{n:'Reif',k:'spell',d:'Reif auf den Gliedern: das Ziel kann aussetzen.',r:[['skip',.25]]}],
+ ['hexerei','a','Fluch','Flüche stapeln sich.',{n:'Fluchkette',k:'cast',d:'Ein Fluch an einer Kette: trifft schlechter und verliert Lebenspunkte.',r:[['spott',2,2],['dot',1,3]]},{n:'Böser Blick',k:'cast',d:'Ein Blick, der die Deckung nimmt.',r:[['ac',1,2]]}],
+ ['hexerei','b','Zeit','Züge kommen und gehen.',{n:'Zeitschleife',k:'cast',d:'Das Ziel hängt einen Augenblick in der Zeit fest.',r:[['skip',.5]]},{n:'Vorgriff',k:'buff',d:'Ein Blick nach vorn: alle treffen beim nächsten Angriff besser.',r:[['zus',2]]}],
+ ['wissen','a','Analyse','Jeder Gegner hat eine Lücke.',{n:'Schwachstellenkarte',k:'cast',d:'Alle Lücken des Ziels, auf einen Blick.',r:[['mark',2,3]]},{n:'Lehrbuchschlag',k:'atk',b:2,d:'Genau wie im Buch.'}],
+ ['wissen','b','Vorhersage','Wer früher weiß, handelt früher.',{n:'Vorahnung',k:'buff',d:'Du sagst den nächsten Schlag voraus: alle weichen leichter aus.',r:[['dodgeall',2]]},{n:'Kalkül',k:'buff',d:'Ein kurzer Plan: alle treffen beim nächsten Angriff besser.',r:[['zus',1]]}],
+ ['werkstatt','a','Apparate','Zahnräder statt Muskeln.',{n:'Federfalle',k:'cast',d:'Eine Falle schnappt zu: das Ziel hängt fest und steht offen.',r:[['skip',.4],['ac',1,2]]},{n:'Zahnradschlag',k:'atk',x:'w4',d:'Mit dem Werkzeug, das gerade zur Hand ist.'}],
+ ['werkstatt','b','Tränke','Für jede Lage ein Fläschchen.',{n:'Heiltrank-Wurf',k:'buff',d:'Ein Trank fliegt zum Verletztesten.',r:[['heal',6]]},{n:'Rauchphiole',k:'buff',d:'Rauch über der Gruppe: alle weichen leichter aus.',r:[['dodgeall',1]]}],
+ ['heilkunst','a','Feldlazarett','Niemand bleibt liegen.',{n:'Großer Verband',k:'buff',d:'Alle werden versorgt.',r:[['healall',4]]},{n:'Druckverband',k:'buff',d:'Schnell und fest: der Verletzteste heilt.',r:[['heal',4]]}],
+ ['heilkunst','b','Giftmischer','Heilen und Vergiften sind Nachbarn.',{n:'Gegengift-Pfeil',k:'atk',b:1,d:'Gift für den Feind, Gegengift für die eigenen Leute.',r:[['dot',2,2],['heal',4]]},{n:'Bittere Salbe',k:'buff',d:'Brennt, heilt und macht wach.',r:[['heal',4],['zus',1]]}],
+ ['glaube','a','Stille','Ruhe ist eine Rüstung.',{n:'Stilles Gebet',k:'buff',d:'Ein Atemzug Stille: alle +1 Geist und mehr Rüstung.',r:[['geist',1],['rkall',1]]},{n:'Ruhe',k:'buff',d:'Der Verletzteste kommt zur Ruhe und heilt.',r:[['heal',4]]}],
+ ['glaube','b','Bann','Gegen alles, was nicht hierher gehört.',{n:'Bannwort',k:'cast',d:'Ein Wort, das die Deckung bricht und lähmen kann.',r:[['ac',2,2],['skip',.3]]},{n:'Lichtschlag',k:'atk',b:1,x:'w4',d:'Ein Schlag mit Licht im Holz.'}],
+ ['lied','a','Marsch','Alle im selben Schritt.',{n:'Marschlied',k:'buff',d:'Ein Marsch: alle treffen besser und weichen leichter aus.',r:[['zus',2],['dodgeall',1]]},{n:'Trommelschlag',k:'atk',d:'Im Takt geschlagen, alle hören ihn.',r:[['zus',1]]}],
+ ['lied','b','Schlaflied','Wer schläft, kämpft nicht.',{n:'Wiegenlied',k:'cast',d:'Die Augen des Ziels werden schwer.',r:[['skip',.5]]},{n:'Gähnen',k:'cast',d:'Gähnen steckt an: das Ziel trifft schlechter.',r:[['spott',1,2]]}],
+ ['fuehrung','a','Feldherr','Ein Befehl, und alle wissen, was zu tun ist.',{n:'Angriffsbefehl',k:'buff',d:'Alle schlagen beim nächsten Mal härter zu.',r:[['zus',2]]},{n:'Formation halten',k:'buff',d:'Alle rücken zusammen: mehr Rüstung.',r:[['rkall',1]]}],
+ ['fuehrung','b','Schatzmeister','Sold hält die Moral.',{n:'Kriegskasse',k:'buff',d:'Ein Griff in die Kasse: alle +1 Geist und mehr Mut.',r:[['geist',1],['zus',1]]},{n:'Bestechung',k:'cast',d:'Ein paar Münzen, und das Ziel zögert.',r:[['skip',.35]]}],
+ ['wildnis','a','Rudel','Nie allein.',{n:'Rudelangriff',k:'tier',d:'Das PaulMon oder ein Tier aus der Gegend greift an, eine Stufe stärker.'},{n:'Krallenhieb',k:'atk',x:'w4',d:'Wie ein Tier, nur mit Waffe.'}],
+ ['wildnis','b','Gestalt','Mehr Tier als Mensch.',{n:'Bärengestalt',k:'buff',d:'Fell und Kraft: mehr Rüstung, Wunden schließen sich (Taktik: als Bär, 3 Runden).',r:[['baer',1],['healself',4]]},{n:'Fuchssprung',k:'atk',adv:1,d:'Flink wie ein Fuchs, mit Vorteil.'}]];
+const AUSD73={};AUS73.forEach(([w,ab,n,txt,S1,A1])=>{const key=w+'_'+ab,sid='sig_'+key,aid='ark_'+key;AUSD73[key]={w,ab,n,txt,sid,aid};mkTech73(sid,S1,false);mkTech73(aid,A1,true)});
+try{if(typeof nbFix73==='function')nbFix73()}catch(e){}
+function aus73(h){return h&&h.aus73&&AUSD73[h.aus73]?AUSD73[h.aus73]:null}
+function wegTech73(h){const w=weg73(h),W=WEG73[w];return W?(h.tech||[]).find(t=>t.id===W.start):null}
+function ausBereit73(h){if(!h||aus73(h)||el57()<2)return false;const T=wegTech73(h);if(!T)return false;try{mig31(T)}catch(e){}return(T.lv||1)>=5}
+// Waffenkunst B wird zur Kunst der Ausrichtung
+{const _ai73=artId49;artId49=function(h,ab){const A=aus73(h);if(A&&ab==='b')return A.aid;return _ai73.apply(this,arguments)}}
+function ausWahl73(h,key,src){const A=AUSD73[key];if(!A)return;const oldId=artId49(h,'b');h.aus73=key;
+  (h.tech||[]).forEach(t=>{if(t.id===oldId)t.id=A.aid});
+  say(h.name+' wählt die Ausrichtung „'+A.n+'“ ('+WEG73[A.w].n+'). '+A.txt,'new');addChron(h.name+': Ausrichtung „'+WEG73[A.w].n+' · '+A.n+'“'+(src?' ('+src+')':''),[],false,'learn');
+  setTimeout(()=>{try{learnTech27(h,A.sid,src||'Ausrichtung')}catch(e){console.warn(e)}renderAll()},400);renderAll()}
+function ausAblegen73(h){const A=aus73(h);if(!A)return;const wb=werkbank49(h);if(!wb)return say('Eine Ausrichtung legt man an einer Werkbank ab.','sys');const fee=20;if(wallet43()<fee)return say('Ablegen kostet '+fmt43(fee)+'.','sys');
+  choose27('Ausrichtung „'+A.n+'“ von '+h.name+' ablegen? Die Signaturtechnik geht verloren, die Waffenkunst B wird wieder die alte. Kosten: '+fmt43(fee)+'.',[['Ja, ablegen',()=>{pay43(fee);h.tech=(h.tech||[]).filter(t=>t.id!==A.sid);h.aus73=null;const nb=artId49(h,'b');(h.tech||[]).forEach(t=>{if(t.id===A.aid)t.id=nb});
+      say(h.name+' legt die Ausrichtung „'+A.n+'“ ab ('+wb+').','sys');renderAll()}],['Nein',()=>{}]])}
+{const _sc73a=sceneChips;sceneChips=function(chip){const r=_sc73a.apply(this,arguments);try{if(talk||inFight()||TAC)return r;PARTY.forEach(h=>{if(aus73(h)&&werkbank49(h))chip('Ausrichtung ablegen: '+h.name,()=>ausAblegen73(h),'spont')})}catch(e){}return r}}
+// ---------- Weg-Lektion: die nächste Technik der eigenen Linie ----------
+function wegNext73(h){const w=weg73(h);if(!w)return null;return WEG73[w].linie.find(id=>TECH27[id]&&!(h.tech||[]).some(t=>t.id===id))||null}
+function wegLKey73(tid,h){return tid+'|'+(h.heroId||h.name)}
+// ---------- Gesprächsthemen beim Lehrmeister ----------
+function l73(){S.l73=S.l73||{done:{},db:{}};return S.l73}
+function lTopics73(tid){const s=l73(),sel=s.sel,r=[];const T=TEACH31[tid];
+  if(sel.step==='weg'){PARTY.filter(h=>h.hp>0).forEach(h=>{const id=wegNext73(h);if(id&&!s.done[wegLKey73(tid,h)])r.push([h.name+': „'+TECH27[id].n+'“ ('+WEG73[weg73(h)].n+')','l73_wl:'+(h.heroId||h.name)])});}
+  else if(sel.step==='aus'){PARTY.filter(ausBereit73).forEach(h=>r.push([h.name+' ('+WEG73[weg73(h)].n+')','l73_ah:'+(h.heroId||h.name)]))}
+  else if(sel.step==='aus2'){const h=hBy31(sel.h);if(h){const w=weg73(h);['a','b'].forEach(ab=>{const A=AUSD73[w+'_'+ab];if(A)r.push(['„'+A.n+'“ – '+A.txt+' (Technik „'+TECH27[A.sid].n+'“, Waffenkunst „'+TECH27[A.aid].n+'“)','l73_aw:'+w+'_'+ab])})}}
+  else if(sel.step==='db'){PARTY.filter(h=>h.hp>0&&typeof stockt73==='function'&&stockt73(h)).forEach(h=>r.push([h.name+': „'+KUNST31[h.lehre].n+'“ (Stufe '+kl31(h,h.lehre).lv+')','l73_db:'+(h.heroId||h.name)]))}
+  r.push(['Zurück','l73_x']);return r}
+{const _tt73=talkTopics;talkTopics=function(){const r=_tt73.apply(this,arguments);try{const n=NPCS[talk],tid=tidOf31(n);if(!tid||!teachOpen31(tid))return r;const s=l73();
+    if(s.sel&&s.sel.tid===tid)return lTopics73(tid);if(s.sel)s.sel=null;const add=[];
+    if(PARTY.some(h=>h.hp>0&&wegNext73(h)&&!s.done[wegLKey73(tid,h)]))add.push(['Weg-Lektion: Techniken unseres Wegs','l73_weg']);
+    if(PARTY.some(ausBereit73))add.push(['Ausrichtung wählen (Weg-Technik Stufe 5)','l73_aus']);
+    if(typeof stockt73==='function'&&PARTY.some(h=>h.hp>0&&stockt73(h)))add.push(['Durchbruch: eine Methode stockt','l73_dbm']);
+    if(add.length){const at=Math.max(0,r.length-2);r.splice(at,0,...add)}}catch(e){console.warn('p73 Lehrmeister',e)}return r}}
+{const _tp73=topic;topic=function(k){if(typeof k!=='string'||!/^l73_/.test(k))return _tp73.apply(this,arguments);if(typeof busy27==='function'&&busy27())return renderAll();
+  try{const n=NPCS[talk],tid=tidOf31(n),s=l73();if(!tid)return renderAll();const nm=tName31(tid);
+    if(k==='l73_x'){s.sel=null}
+    else if(k==='l73_weg'){s.sel={tid,step:'weg'};say31(tid,['Zeigt mir, wie ihr kämpft. Dann zeige ich euch, wohin euer Weg führt.'])}
+    else if(k==='l73_aus'){s.sel={tid,step:'aus'};say31(tid,['Wer seinen Weg kennt, muss irgendwann wählen, wie er ihn geht. Wer von euch?'])}
+    else if(k==='l73_dbm'){s.sel={tid,step:'db'};say31(tid,['Wer steckt fest? Komm her. Atme.'])}
+    else if(k.startsWith('l73_wl:')){const h=hBy31(k.slice(7));const id=h&&wegNext73(h);if(h&&id){s.done[wegLKey73(tid,h)]=1;s.sel=null;const t=say31(tid,[pick(['So, nicht so. Noch einmal.','Langsamer. Jetzt schneller. Gut.','Das gehört zu deinem Weg. Merk es dir.'])]);
+        setTimeout(()=>{try{learnTech27(h,id,nm+' (Weg-Lektion)');if(typeof setClock==='function'&&typeof clk==='function')setClock(clk()+60,true)}catch(e){console.warn(e)}renderAll()},t)}}
+    else if(k.startsWith('l73_ah:')){s.sel={tid,step:'aus2',h:k.slice(7)};const h=hBy31(s.sel.h);say31(tid,[(h?h.name+', ':'')+'zwei Wege führen von hier weiter. Welcher ist deiner?'])}
+    else if(k.startsWith('l73_aw:')){const h=hBy31(s.sel&&s.sel.h);const key=k.slice(7);s.sel=null;if(h&&ausBereit73(h)){const t=say31(tid,['Dann geh ihn. Ich zeige dir den ersten Schritt.']);setTimeout(()=>ausWahl73(h,key,nm),t)}}
+    else if(k.startsWith('l73_db:')){const h=hBy31(k.slice(7));s.sel=null;if(h&&typeof durch73==='function')durch73(h,tid)}
+  }catch(e){console.warn('p73 Thema',e)}renderAll()}}
+// ---------- Heldenbogen: „Weg · Ausrichtung“ ----------
+{const _bh73a=bogenHtml31;bogenHtml31=function(h){let s=_bh73a.apply(this,arguments);try{const A=aus73(h);const w=weg73(h);if(!w)return s;const W=WEG73[w];const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    if(A){s=s.replace('Weg: <b>'+e(W.n)+'</b>','Weg: <b>'+e(W.n)+' · '+e(A.n)+'</b>');s=s.replace('<h3>Weg: '+e(W.n)+'</h3>','<h3>Weg: '+e(W.n)+' · '+e(A.n)+'</h3><p class="small">Ausrichtung „'+e(A.n)+'“: '+e(A.txt)+' Signaturtechnik „'+e(TECH27[A.sid].n)+'“, Waffenkunst B „'+e(TECH27[A.aid].n)+'“. Ablegen an einer Werkbank (20 Silber).</p>')}
+    else{const T=wegTech73(h);const lv=T?(T.lv||1):0;const opts=['a','b'].map(ab=>AUSD73[w+'_'+ab]).filter(Boolean).map(x=>e(x.n)).join(' oder ');
+      s=s.replace('<h3>Weg: '+e(W.n)+'</h3>','<h3>Weg: '+e(W.n)+'</h3><p class="small">Ausrichtung: '+opts+' – '+(lv>=5?'<b>jetzt wählbar</b> bei einem Lehrmeister.':'wählbar, wenn „'+e(TECH27[W.start].n)+'“ Stufe 5 hat (jetzt '+lv+').')+'</p>')}
+    s=s.replace(/<li>○ <b>([^<]+)<\/b> <span class="small">– lernbar bei ([^<]+)<\/span><\/li>/g,(m,a,b)=>'<li>○ <b>'+a+'</b> <span class="small">– lernbar bei '+b+' oder als Weg-Lektion bei jedem Lehrmeister</span></li>')}catch(e){console.warn('p73 Bogen (Ausrichtung)',e)}return s}}
+
+
+// ================= Prototyp 73 (m): Methoden (Innere Künste) – volle Fassung (Phase 3, Lieferung 2) =================
+// Paul (04.11., Block 2.3, „Volle Fassung“):
+//  1. Eine aktive Methode je Held, Wechsel beim Rasten. Nur sie wirkt und wächst (wie bisher), die übrigen ruhen.
+//  2. Werte je Stufe nach Natur (zusätzlich zur bisherigen Wirkung). Auslegung beim Bau (vorschlaege-p73.md 73.L3), damit es nicht
+//     ausufert: Stein +1 LP je Stufe, Strom +1 Geist je 2 Stufen, Glut +1 Schaden unter halben LP je 3 Stufen.
+//  3. Atemnetz: jede Stufe aller gelernten Methoden gibt einen Atempunkt; sechs Äste à 3 Knoten (Stärke, Geschick, Intelligenz,
+//     Weisheit, Charisma, Mischung), Knoten der Reihe nach. Im Heldenbogen, Karte „Atemnetz“.
+//  4. Durchbruch auf Stufe 5 und 10: Die Methode stockt auf Stufe 4 bzw. 9, bis ein Lehrmeister den Durchbruch abnimmt
+//     (Gesprächsthema „Durchbruch“, Weisheit SG 13; misslingt er, an diesem Tag nicht noch einmal bei diesem Lehrmeister).
+// Alles gehört zur Heldenentwicklung ab Stufe 2 („Lehrmeister“).
+// ---------- 1. Wechsel nur beim Rasten ----------
+{const _sl73=setLehre27;setLehre27=function(h,id,now){try{if(!now&&h&&h.lehre&&id&&id!==h.lehre&&!window.__rast73){h.lehreNext73=id;say(h.name+' will künftig „'+KUNST31[id].n+'“ üben. Die Methode wechselt bei der nächsten Rast.','sys');renderAll();return}}catch(e){}
+  if(h)h.lehreNext73=null;return _sl73.apply(this,arguments)}}
+{const _r73m=rest47;rest47=function(){const was=typeof REST47!=='undefined'&&REST47;const r=_r73m.apply(this,arguments);try{if(!was)PARTY.forEach(h=>{if(h.lehreNext73&&KUNST31[h.lehreNext73]){const id=h.lehreNext73;window.__rast73=1;try{setLehre27(h,id,true)}finally{window.__rast73=0}say(h.name+' übt ab jetzt „'+KUNST31[id].n+'“.','sys')}})}catch(e){}return r}}
+// ---------- 2. Werte je Stufe nach Natur ----------
+function natW73(h){const id=kAct31(h);if(!id||!KUNST31[id])return{lp:0,geist:0,glut:0};const K=KUNST31[id],L=kl31(h,id).lv;return{lp:K.nat==='stein'?L:0,geist:K.nat==='strom'?Math.floor(L/2):0,glut:K.nat==='glut'?Math.floor(L/3):0}}
+{const _ks73=kStat31;kStat31=function(h){const r=_ks73.apply(this,arguments);try{const w=natW73(h);r.lp+=w.lp;r.geist+=w.geist}catch(e){}return r}}
+function addMod73(r,bon,note,dmg){if(bon){r.bon+=bon;if(note)r.notes.push(sgn(bon)+' '+note)}if(dmg){const f=r.dmg;r.dmg=c=>(f?f(c):0)+dmg}}
+// ---------- 3. Atemnetz ----------
+const ATEM73={
+  str:{n:'Stärke',k:[['Kraftatem','Nahkampf +1 Schaden.'],['Panzerbrecher','Nahkampf +1 Treffen gegen Gegner mit RK 14 oder mehr.'],['Wuchten','Zurückstoßen geht ein Feld weiter (Taktik).']]},
+  dex:{n:'Geschick',k:[['Leichter Fuß','Ausweichwert +1.'],['Weiter Schritt','Bewegung +1 (Taktik).'],['Flankenblick','+1 Treffen, wenn ein Verbündeter neben dem Ziel steht (normaler Kampf: wenn ihr zu zweit oder mehr steht).']]},
+  int:{n:'Intelligenz',k:[['Klarer Kopf','Zauber +1 Treffen.'],['Sparsamer Geist','Jede dritte Technik in einem Kampf kostet keinen Geist.'],['Weiter Blick','Reichweite von Zaubern und Fernwaffen +1 (Taktik).']]},
+  wis:{n:'Weisheit',k:[['Tiefer Atem','Durchatmen heilt 1 LP mehr.'],['Wachsam','Initiative +2.'],['Erster Blick','Zu Kampfbeginn ist ein Gegner markiert: alle +1 gegen ihn, 2 Runden.']]},
+  cha:{n:'Charisma',k:[['Gute Worte','Charisma-Proben +1.'],['Vorbild','Verbündete +1 Treffen (Taktik: direkt neben dir; normaler Kampf: der erste Angriff jedes Verbündeten).'],['Ein Wort genügt','Die erste Technik jedes Kampfes kostet keinen Geist.']]},
+  mix:{n:'Mischung',k:[['Band zum PaulMon','Das PaulMon macht +1 Schaden.'],['Sicherer Griff','Alle Proben +1.'],['Händlerblick','Feilschen (Charisma) +2.']]}};
+const AORD73=['str','dex','int','wis','cha','mix'];
+function an73(h){h.atem73=h.atem73||{};return h.atem73}
+function aHas73(h,br,i){try{if(el57()<2)return false}catch(e){}const A=h&&h.atem73;return!!(A&&(A[br]||0)>i)}
+function aPts73(h){let s=0;try{kKnown31(h).forEach(id=>{s+=(h.kl31&&h.kl31[id]?h.kl31[id].lv:1)})}catch(e){}return s}
+function aUsed73(h){const A=an73(h);return AORD73.reduce((a,k)=>a+(A[k]||0),0)}
+function aFree73(h){return Math.max(0,aPts73(h)-aUsed73(h))}
+function aLearn73(h,br){const A=an73(h),i=A[br]||0;if(i>=3)return;if(aFree73(h)<1)return say(h.name+' hat keinen freien Atempunkt. Jede Stufe einer Methode gibt einen.','sys');A[br]=i+1;const K=ATEM73[br].k[i];say(h.name+' – Atemnetz, '+ATEM73[br].n+': „'+K[0]+'“ – '+K[1],'new');try{recalc27(h)}catch(e){}renderAll()}
+// Wirkungen im normalen Kampf
+const MELEE73=W=>W&&!W.ranged&&W.art!=='zauber'&&W.form!=='fern';
+{const _am73=atkMod31;atkMod31=function(h,o,e,W){const r=_am73.apply(this,arguments);try{if(!h)return r;const sp=(o&&o.spellFx)||(W&&W.art==='zauber');
+    if(aHas73(h,'str',0)&&MELEE73(W)&&!sp)addMod73(r,0,null,1);
+    if(aHas73(h,'str',1)&&MELEE73(W)&&!sp&&e&&(e.ac||0)>=14)addMod73(r,1,'Panzerbrecher');
+    if(aHas73(h,'dex',2)&&PARTY.filter(p=>p.hp>0).length>=2)addMod73(r,1,'Flankenblick');
+    if(aHas73(h,'int',0)&&sp)addMod73(r,1,'Klarer Kopf');
+    const g=natW73(h).glut;if(g&&h.hp<=h.max/2)addMod73(r,0,null,g);
+    if(!h.vb73&&PARTY.some(p=>p!==h&&p.hp>0&&aHas73(p,'cha',1))){h.vb73=1;addMod73(r,1,'Vorbild')}}catch(x){}return r}}
+{const _ta73=tAtkMod31;tAtkMod31=function(a,b,opt){const r=_ta73.apply(this,arguments);try{const h=a&&a.hero;if(!h)return r;const sp=!!(opt&&opt.spell);const W=a.w;
+    if(aHas73(h,'str',0)&&!sp&&(a.rng||1)<=2)addMod73(r,0,null,1);
+    if(aHas73(h,'str',1)&&!sp&&(a.rng||1)<=2&&b&&(b.ac||0)>=14)addMod73(r,1,'Panzerbrecher');
+    if(aHas73(h,'dex',2)&&b&&tAllies(a).some(q=>q!==a&&tDist(q,b)===1))addMod73(r,1,'Flankenblick');
+    if(aHas73(h,'int',0)&&sp)addMod73(r,1,'Klarer Kopf');
+    const g=natW73(h).glut;if(g&&a.hp<=a.max/2)addMod73(r,0,null,g);
+    if(tAllies(a).some(q=>q!==a&&q.hero&&tDist(q,a)===1&&aHas73(q.hero,'cha',1)))addMod73(r,1,'Vorbild')}catch(x){}return r}}
+{const _dv73=dodgeVal31;dodgeVal31=function(h){let v=_dv73.apply(this,arguments);try{if(aHas73(h,'dex',0))v+=1}catch(e){}return v}}
+{const _br73=breathe27;breathe27=function(h){const r=_br73.apply(this,arguments);try{if(aHas73(h,'wis',0)&&h.hp<h.max){h.hp+=1}}catch(e){}return r}}
+{const _tb73=tBreath27;tBreath27=function(u){const r=_tb73.apply(this,arguments);try{if(u&&u.hero&&aHas73(u.hero,'wis',0)&&u.hp<u.max){u.hp+=1;u.hero.hp=u.hp}}catch(e){}return r}}
+{const _b73=bonus27;bonus27=function(stat,label){const r=_b73.apply(this,arguments);try{const h=hero;if(!h)return r;let[b,why]=r;why=why.slice();
+    if(stat==='cha'&&aHas73(h,'cha',0)){b+=1;why.push('Gute Worte')}if(aHas73(h,'mix',1)){b+=1;why.push('Sicherer Griff')}if(aHas73(h,'mix',2)&&/feilsch|handel|preis/.test(nk(label||''))){b+=2;why.push('Händlerblick')}return[b,why]}catch(e){return r}}}
+if(typeof pmBonus28==='function'){const _pb73=pmBonus28;pmBonus28=function(h){return(_pb73.apply(this,arguments)||0)+(h&&aHas73(h,'mix',0)?1:0)}}
+// Initiative +2 (normaler Kampf und Taktik: Geschick kurz anheben)
+function iniBump73(fn){const L=PARTY.filter(h=>aHas73(h,'wis',1));L.forEach(h=>{h.mods.dex=(h.mods.dex||0)+2});try{return fn()}finally{L.forEach(h=>{h.mods.dex-=2})}}
+{const _is73=iniStart;iniStart=function(){const a=arguments,t=this;return iniBump73(()=>_is73.apply(t,a))}}
+{const _ts73=tacStart;tacStart=function(){const a=arguments,t=this;const r=iniBump73(()=>_ts73.apply(t,a));try{if(TAC)PARTY.forEach(h=>{h.tc73=0;h.vb73=0});
+    if(TAC&&PARTY.some(h=>h.hp>0&&aHas73(h,'wis',2))){const f=TAC.units.find(u=>u.side!=='held'&&u.hp>0);if(f){f.mark31={v:1,n:2};tLog('Erster Blick: '+f.name+' ist markiert (alle +1, 2 Runden).')}}}catch(e){}return r}}
+// Erster Blick und Kampfbeginn im normalen Kampf
+let FS73=false;setInterval(()=>{try{const f=inFight()&&!TAC&&enemy&&!enemy.dead;if(f&&!FS73){PARTY.forEach(h=>{h.tc73=0;h.vb73=0});if(PARTY.some(h=>h.hp>0&&aHas73(h,'wis',2))&&!enemy.mark31){enemy.mark31={v:1,n:2};say('Erster Blick: '+enemyName()+' ist markiert (alle +1, 2 Runden).','roll')}}FS73=f}catch(e){}},250);
+// Weiter Schritt, Weiter Blick
+{const _tfh73=tFromHero;tFromHero=function(h){const u=_tfh73.apply(this,arguments);try{if(u&&h){if(aHas73(h,'dex',1))u.mov=(u.mov||3)+1;if(aHas73(h,'int',2)&&(u.rng||1)>1)u.rng+=1}}catch(e){}return u}}
+// Wuchten: Zurückstoßen ein Feld weiter (der zuletzt angreifende Held)
+let TAT73=null;{const _tat73=tAttack;tAttack=function(a){TAT73=a;return _tat73.apply(this,arguments)}}
+{const _tp73=tPush27;tPush27=function(b,dir,n){try{if(TAT73&&TAT73.hero&&TAT73.side!==b.side&&aHas73(TAT73.hero,'str',2))n=(n||0)+1}catch(e){}return _tp73.call(this,b,dir,n)}}
+// Sparsamer Geist (jede dritte Technik) und „Ein Wort genügt“ (die erste je Kampf): Geist zurück
+function freeTech73(h){h.tc73=(h.tc73||0)+1;if(aHas73(h,'cha',2)&&h.tc73===1)return'Ein Wort genügt';if(aHas73(h,'int',1)&&h.tc73%3===0)return'Sparsamer Geist';return null}
+{const _tn73m=techNormal27;techNormal27=function(T){const h=hero;const g0=h?h.geist:0;const why=h?freeTech73(h):null;const r=_tn73m.apply(this,arguments);try{if(why&&h.geist<g0){h.geist=g0;say(why+': Die Technik kostet keinen Geist.','sys')}}catch(e){}return r}}
+{const _td73=tTechDo27;tTechDo27=function(u){const h=u&&u.hero;const g0=u?u.geist:0;const why=h?freeTech73(h):null;const r=_td73.apply(this,arguments);try{if(why&&u.geist<g0){u.geist=g0;h.geist=g0;tLog(why+': Die Technik kostet keinen Geist.')}}catch(e){}return r}}
+// ---------- 4. Durchbruch ----------
+function stockt73(h){const id=h&&kAct31(h);if(!id)return false;const K=kl31(h,id);return(K.lv===4&&!K.d5)||(K.lv===9&&!K.d10)}
+{const _gk73=gainKunst31;gainKunst31=function(h,id,n){try{const K=h&&KUNST31[id]?kl31(h,id):null;if(K&&((K.lv===4&&!K.d5)||(K.lv===9&&!K.d10))){K.xp=Math.min(needK31(K.lv)-1,(K.xp||0)+n);
+      if(K.xp>=needK31(K.lv)-1&&!K.stockMsg73){K.stockMsg73=K.lv;say(h.name+': „'+KUNST31[id].n+'“ stockt auf Stufe '+K.lv+'. Für Stufe '+(K.lv+1)+' braucht es einen Durchbruch bei einem Lehrmeister.','sys')}return}
+    const lv0=K?K.lv:0;const r=_gk73.apply(this,arguments);
+    if(K&&lv0<4&&K.lv>4&&!K.d5){K.lv=4;K.xp=needK31(4)-1;try{recalc27(h)}catch(e){}}if(K&&lv0<9&&K.lv>9&&!K.d10){K.lv=9;K.xp=needK31(9)-1;try{recalc27(h)}catch(e){}}return r}catch(e){console.warn('p73 Durchbruch',e)}return _gk73.apply(this,arguments)}}
+function durch73(h,tid){const s=l73(),id=h.lehre,K=kl31(h,id),key=(h.heroId||h.name)+'|'+tid,day=typeof day43==='function'?day43():0;
+  if(s.db[key]===day)return say31(tid,['Heute nicht mehr. Schlaf darüber.']);s.db[key]=day;const nm=tName31(tid);
+  const t=say31(tid,[pick(['Setz dich. Atme. Und jetzt hör auf zu atmen, als wäre es Arbeit.','Du hältst fest. Lass los. Nur einen Augenblick.','Zeig mir die Stelle, an der es hakt.'])]);
+  setTimeout(()=>{const o=hero;let ok=false;try{hero=h;ok=check('wis',13,'Durchbruch ('+KUNST31[id].n+')')}finally{hero=o}
+    if(ok){if(K.lv===4)K.d5=1;if(K.lv===9)K.d10=1;K.stockMsg73=0;say(h.name+' bricht durch: „'+KUNST31[id].n+'“ kann weiter wachsen.','new');addChron(h.name+': Durchbruch in „'+KUNST31[id].n+'“ ('+nm+')',[],false,'learn');try{gainKunst31(h,id,1)}catch(e){}}
+    else say(nm+': „Noch nicht. Komm morgen wieder.“','npc',nm);renderAll()},t)}
+// ---------- Heldenbogen: Karte „Atemnetz“, Hinweise zu Wechsel und Durchbruch ----------
+{const _bh73m=bogenHtml31;bogenHtml31=function(h){let s=_bh73m.apply(this,arguments);try{if(el57()<2)return s;const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const A=an73(h),free=aFree73(h);let c='<div class="card2 atem73" style="grid-column:1/-1"><h3>Atemnetz</h3><p class="small">Jede Stufe einer gelernten Methode gibt einen Atempunkt. Frei: <b>'+free+'</b> von '+aPts73(h)+'. Knoten eines Asts der Reihe nach.</p><div class="an73">';
+    AORD73.forEach(br=>{const B=ATEM73[br],i=A[br]||0;c+='<div class="ar73"><b>'+B.n+'</b>'+B.k.map((K,j)=>{const on=j<i,can=j===i&&free>0;return'<button type="button" data-atem73="'+br+'" class="'+(on?'on':can?'can':'')+'" '+(can?'':'disabled')+' title="'+e(K[1])+'" data-tip64="'+e(K[0])+'|'+e(K[1])+'">'+(on?'● ':'○ ')+e(K[0])+'</button>'}).join('')+'</div>'});
+    c+='</div>';const w=natW73(h);if(w.lp||w.geist||w.glut)c+='<p class="small">Natur der Methode: '+[w.lp?'+'+w.lp+' LP':'',w.geist?'+'+w.geist+' Geist':'',w.glut?'+'+w.glut+' Schaden unter halben LP':''].filter(Boolean).join(', ')+'.</p>';
+    if(h.lehreNext73)c+='<p class="small">Wechselt bei der nächsten Rast zu „'+e(KUNST31[h.lehreNext73].n)+'“.</p>';if(stockt73(h))c+='<p class="small" style="color:#ffcf5a">Die Methode stockt: Durchbruch bei einem Lehrmeister (Weisheit SG 13).</p>';c+='</div>';
+    const mk='<div class="card2"><h3>Spielstil';const k=s.indexOf(mk);s=k>=0?s.slice(0,k)+c+s.slice(k):s+c}catch(e){console.warn('p73 Atemnetz',e)}return s}}
+{const _rb73=renderBogen27;renderBogen27=function(){const r=_rb73.apply(this,arguments);try{const h=PARTY[BOGI27]||hero;BOG27.querySelectorAll('[data-atem73]').forEach(b=>b.onclick=()=>{aLearn73(h,b.dataset.atem73);try{renderBogen27()}catch(e){}})}catch(e){}return r}}
+{const st=document.createElement('style');st.textContent='.atem73 .an73{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 10px}.atem73 .ar73{display:flex;flex-wrap:wrap;align-items:center;gap:3px}.atem73 .ar73 b{flex:0 0 100%;font-size:12px}'+
+  '.atem73 button{font-size:11.5px;padding:1px 6px;border-radius:4px;background:#241e30;color:#a8a0b4;border:1px solid #3a3346}.atem73 button.on{background:#3a5a3a;color:#d8f0d0;border-color:#6ab06a}.atem73 button.can{background:#2b2440;color:#f6c84a;border-color:#f6c84a;cursor:pointer}';document.head.appendChild(st)}
+
+
+// ================= Prototyp 73 (b): Waffenbaum klein/mittel/groß und Fenster „Fähigkeiten“ (Phase 3, Lieferung 2) =================
+// Paul (04.11., Block 2.4 und 3.5):
+//  - Waffenbaum je Spielart (Heldenentwicklung im Wahlmodul):
+//      1 „Klassen“ (Erzählabend):   kleiner Baum, 6 Knoten (Griff, Waffenkunst A, Eigenheit, Geübte Hand, Wesen 1, Scharfe Kante), nur Waffenpunkte, kein Material;
+//      2 „Lehrmeister“ (Abenteuer): mittlerer Baum = die bisherigen 17 Knoten;
+//      3 „Schmiede“ (Alles):        großer Baum, 25 Knoten: dazu Ausrichtungs-Ast (2), Kombi-Knoten (2), wachsende Veredelung (2),
+//                                   „Waffe mit Erinnerung“ und „Vermächtnis“ über dem Meisterstück.
+//    Knoten bleiben beim Wechsel der Spielart erhalten; die größeren schlafen nur. Bis P72 gab es den Baum nur in Stufe 3.
+//  - Fenster „Fähigkeiten“ (Taste F): je Held alles Gelernte und was man noch lernen kann, mit Fundort (nur bekannte Lehrmeister und Orte).
+// ---------- Baumgrößen ----------
+const WBS73=['k1','k2','k3','c1','w1','q1','m'];
+const WBM73=['k1','k2','k3','k4','k5','k6','s1','s2','s3','s4','c1','c2','c3','w1','w2','w3','m'];
+const WBN73=['a1','a2','x1','x2','v2','v3','e1','V'];
+function wbSet73(){const e=typeof el57==='function'?el57():3;return e<=1?WBS73:e===2?WBM73:WBM73.concat(WBN73)}
+function wbOk73(id){return wbSet73().includes(id)}
+function wbGr73(){const e=typeof el57==='function'?el57():3;return e<=1?'klein':e===2?'mittel':'groß'}
+Object.assign(PRE49,{q1:[],a1:['k4'],a2:['a1'],x1:['c2'],x2:['x1'],v2:['s3'],v3:['v2'],e1:['w2'],V:['m']});
+Object.assign(COST49,{q1:1,a1:2,a2:3,x1:2,x2:2,v2:2,v3:3,e1:2,V:3});
+Object.assign(BR49,{q:'Kunst',a:'Ausrichtung',x:'Kombi',v:'Schmiede',e:'Wesen',V:'Vermächtnis'});
+const POSALL73=Object.assign({},POS49,{q1:[252,140],a1:[124,28],a2:[84,28],x1:[108,190],x2:[68,190],v2:[332,214],v3:[372,214],e1:[244,232],V:[150,108]});
+const LINKALL73=LINK49.slice().concat([['m','q1'],['k4','a1'],['a1','a2'],['c2','x1'],['x1','x2'],['s3','v2'],['v2','v3'],['w2','e1'],['m','V']]);
+function wbSync73(){const set=wbSet73();Object.keys(POS49).forEach(k=>{if(!set.includes(k))delete POS49[k]});set.forEach(k=>{if(POSALL73[k])POS49[k]=POSALL73[k]});
+  LINK49.length=0;LINKALL73.filter(([a,b])=>set.includes(a)&&set.includes(b)).forEach(x=>LINK49.push(x))}
+{const _nd73=node49;node49=function(h,id){
+  if(id==='q1')return{n:'Scharfe Kante',ic:'whet',d:'+1 Schaden mit der eigenen Waffe. Kleiner Baum: ohne Material und Werkbank.',fx:wbOk73('q1')?{dmg:1}:null};
+  if(id==='a1'){const A=typeof aus73==='function'&&aus73(h);return{n:'Ausrichtung: Übung',ic:'star',d:'Die Signaturtechnik der Ausrichtung'+(A?' („'+TECH27[A.sid].n+'“)':'')+' wirkt eine Stufe stärker. Braucht eine Ausrichtung (Weg-Technik Stufe 5, beim Lehrmeister).'}}
+  if(id==='a2')return{n:'Ausrichtung: Meisterschaft',ic:'crown',d:'Die Signaturtechnik wirkt noch eine Stufe stärker.'};
+  if(id==='x1')return{n:'Seite an Seite',ic:'hand',d:'Kombi-Knoten: +1 Treffen, solange ein anderer Held der Gruppe ebenfalls „Seite an Seite“ hat und steht.'};
+  if(id==='x2')return{n:'Eingespielt',ic:'hand',d:'Mit einem Kombi-Partner (siehe „Seite an Seite“) zusätzlich +1 Schaden.'};
+  if(id==='v2')return{n:'Veredelung II',ic:'gem',d:'Die Veredelung wächst mit: +1 Schaden. Braucht eine Werkbank.',fx:wbOk73('v2')?{dmg:1}:null};
+  if(id==='v3')return{n:'Veredelung III',ic:'gem',d:'Kritisch schon ab 19. Braucht eine Werkbank.',fx:wbOk73('v3')?{crit:19}:null};
+  if(id==='e1')return{n:'Waffe mit Erinnerung',ic:'book',d:'Die Waffe erinnert sich an jeden Kampf: Waffenerfahrung +50 %.'};
+  if(id==='V')return{n:'Vermächtnis',ic:'crown',d:'Über dem Meisterstück: +1 Treffen und +1 Schaden. Die Ultimate der Klasse wird damit stärker (kommt mit Lieferung 4). Braucht eine Werkbank.',fx:wbOk73('V')?{atk:1,dmg:1}:null};
+  const N=_nd73.apply(this,arguments);if(N&&N.fx&&!wbOk73(id)&&wb49(h).n[id])return Object.assign({},N,{fx:null});return N}}
+{const _wy73=why49;why49=function(h,id){if(!wbOk73(id))return'erst: größerer Waffenbaum (Heldenentwicklung „'+(WBN73.includes(id)?'Schmiede':'Lehrmeister')+'“)';
+  if(id==='a1'&&!wb49(h).n.a1&&!(typeof aus73==='function'&&aus73(h)))return'erst eine Ausrichtung wählen';
+  const w=_wy73.apply(this,arguments);if(w)return w;if(['v2','v3','V'].includes(id)&&!werkbank49(h))return'keine Werkbank hier';return''}}
+{const _el73b=effL31;effL31=function(h,T){let v=_el73b.apply(this,arguments);try{const A=typeof aus73==='function'&&aus73(h);if(A&&T&&T.id===A.sid){if(has49(h,'a1'))v+=1;if(has49(h,'a2'))v+=1}}catch(e){}return v}}
+{const _we73=gainWE49;gainWE49=function(h,n){const a=[...arguments];try{if(h&&n>0&&has49(h,'e1'))a[1]=Math.ceil(n*1.5)}catch(e){}return _we73.apply(this,a)}}
+function kombi73(h){try{return has49(h,'x1')&&PARTY.some(p=>p!==h&&p.hp>0&&has49(p,'x1'))}catch(e){return false}}
+{const _am73b=atkMod31;atkMod31=function(h){const r=_am73b.apply(this,arguments);try{if(h&&kombi73(h)){r.bon+=1;r.notes.push('+1 Seite an Seite');if(has49(h,'x2')){const f=r.dmg;r.dmg=c=>(f?f(c):0)+1}}}catch(e){}return r}}
+{const _ta73b=tAtkMod31;tAtkMod31=function(a){const r=_ta73b.apply(this,arguments);try{const h=a&&a.hero;if(h&&kombi73(h)){r.bon+=1;r.notes.push('+1 Seite an Seite');if(has49(h,'x2')){const f=r.dmg;r.dmg=c=>(f?f(c):0)+1}}}catch(e){}return r}}
+// Ansicht: nur die Knoten der aktuellen Größe, Überschrift mit Größe
+{const _wo73=wbOpen49;wbOpen49=function(){wbSync73();return _wo73.apply(this,arguments)}}
+{const _wr73=wbRender49;wbRender49=function(){wbSync73();const r=_wr73.apply(this,arguments);try{const h2=WB49.querySelector('.wbh h2');if(h2&&!/\(/.test(h2.textContent))h2.textContent='WAFFENBAUM ('+wbGr73()+')'}catch(e){}return r}}
+{const _av73=avail49;avail49=function(){wbSync73();return _av73.apply(this,arguments)}}
+try{ET57[1]='Klassen-Aktionen und feste Techniken, dazu ein kleiner Waffenbaum (6 Knoten, ohne Material).';ET57[2]='Techniken mit Stufen, Innere Künste mit Atemnetz, Lehrmeister, Narben, Ausrichtungen, Waffenbaum (17 Knoten mit Material).';ET57[3]='Wie „Lehrmeister“, dazu der große Waffenbaum (25 Knoten: Ausrichtung, Kombi, Veredelung II/III, Erinnerung, Vermächtnis) und das Meisterstück.'}catch(e){}
+{const st=document.createElement('style');st.textContent='body.m57-wb .wb49b{display:block!important}';document.head.appendChild(st)}
+// ---------- Fenster „Fähigkeiten“ (Taste F) ----------
+let FH73=null,FHI73=0;
+function srcMap73(){const M={};try{Object.keys(TEACH31).forEach(tid=>{(TEACH31[tid].lessons||[]).forEach(Ls=>{const ids=[];if((Ls.kind==='tech'||Ls.kind==='meister'||Ls.kind==='kunst')&&Ls.id)ids.push(Ls.id);if(Ls.gives){try{(Ls.gives(hero)||[]).forEach(x=>ids.push(x))}catch(e){}}
+    ids.forEach(id=>{(M[id]=M[id]||[]).push(tid)})})})}catch(e){}return M}
+function tKnown73(tid){try{const s=L31();if(s.met[tid]||s.rev[tid])return true;const n=npcOf31(tid);return!!(n&&S.metOnce&&S.metOnce[n.id])}catch(e){return false}}
+function fhHtml73(h){const e=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));ensure27(h);const M=srcMap73();
+  const w=weg73(h),W=WEG73[w],A=typeof aus73==='function'?aus73(h):null;let s='<p class="fw73">'+e(h.name)+' · '+e(h.cls)+' · Typ <b>'+e(h.typ)+'</b> · Weg <b>'+e(W?W.n:'?')+(A?' · '+A.n:'')+'</b> · Heldenentwicklung „'+e(EN57[el57()]||'')+'“</p>';
+  const row=(n,lv,t,extra)=>'<tr><td><b>'+e(n)+'</b>'+(extra?' <span class="s73">'+e(extra)+'</span>':'')+'</td><td>'+(lv!=null?'St. '+lv:'')+'</td><td class="s73">'+e(t)+'</td></tr>';
+  const tl=(h.tech||[]).filter(t=>TECH27[t.id]&&!t.wk49&&!/^ka_|^ka69/.test(t.id)&&t.id!=='meister49');
+  s+='<h4>Techniken ('+tl.length+'/'+TSLOTS27+')</h4><table>'+tl.map(t=>{try{mig31(t)}catch(x){}const D=TECH27[t.id],X=TX31[t.id];const L=effL31(h,t);return row(D.n,t.lv||1,X&&X.lvd?X.lvd(L):D.desc,(W&&W.linie.includes(t.id)?'Linie ':'')+(W&&W.start===t.id?'Weg ':'')+(A&&A.sid===t.id?'Ausrichtung ':'')+D.kost+' Geist')}).join('')+'</table>';
+  const ar=(h.tech||[]).filter(t=>t.wk49&&TECH27[t.id]&&t.id!=='meister49'&&!/^ka/.test(t.id));if(ar.length)s+='<h4>Waffenkünste</h4><table>'+ar.map(t=>{const D=TECH27[t.id],X=TX31[t.id];return row(D.n,t.lv||1,X&&X.lvd?X.lvd(effL31(h,t)):D.desc,D.kost+' Geist')}).join('')+'</table>';
+  const ka=(h.tech||[]).filter(t=>/^ka/.test(t.id)&&TECH27[t.id]);if(ka.length)s+='<h4>Klassen-Aktion im Kampf</h4><table>'+ka.map(t=>row(TECH27[t.id].n,null,TECH27[t.id].desc,'einmal je Kampf')).join('')+'</table>';
+  if(el57()>=2){const kn=kKnown31(h);s+='<h4>Methoden (Innere Künste)</h4>'+(kn.length?'<table>'+kn.map(id=>{const K=KUNST31[id],Q=kl31(h,id);return row(K.n,Q.lv,K.desc,(h.lehre===id?'aktiv':'ruht')+(typeof stockt73==='function'&&h.lehre===id&&stockt73(h)?' · stockt':''))}).join('')+'</table>':'<p class="s73">Noch keine.</p>')+
+    (typeof aFree73==='function'?'<p class="s73">Atemnetz: '+aUsed73(h)+' Knoten, '+aFree73(h)+' Atempunkte frei (Heldenbogen).</p>':'')}
+  // Lernbar
+  let L2='';if(W){W.linie.forEach(id=>{if((h.tech||[]).some(t=>t.id===id))return;const src=(M[id]||[]).filter(tKnown73).map(tid=>TEACH31[tid].short+' ('+(TEACH31[tid].ort||'?')+')');L2+=row(TECH27[id].n,null,'Linie '+W.n+': Weg-Lektion bei jedem Lehrmeister'+(src.length?' oder bei '+src.join(', '):''))});
+    L2+=row('Lehrstück: '+W.lehr.split(' (')[0],null,'kommt mit Lieferung 3 ('+(W.lehr.split(' (')[1]||'').replace(/\)$/,'')+')');
+    if(!A&&el57()>=2){const T=(h.tech||[]).find(t=>t.id===W.start);const opts=['a','b'].map(ab=>AUSD73&&AUSD73[w+'_'+ab]).filter(Boolean);L2+=row('Ausrichtung',null,opts.map(x=>x.n).join(' oder ')+' – bei einem Lehrmeister, wenn „'+TECH27[W.start].n+'“ Stufe 5 hat (jetzt '+(T?T.lv||1:0)+')')}}
+  let hidden=0;const other=[];Object.keys(TECH27).forEach(id=>{if(!M[id]||(h.tech||[]).some(t=>t.id===id)||(W&&W.linie.includes(id)))return;const kn=M[id].filter(tKnown73);if(kn.length)other.push(row(TECH27[id].n,null,'bei '+kn.map(tid=>TEACH31[tid].short+' ('+(TEACH31[tid].ort||'?')+')').join(', ')));else hidden++});
+  if(el57()>=2)Object.keys(KUNST31).forEach(id=>{if(kKnown31(h).includes(id)||!M[id])return;const kn=M[id].filter(tKnown73);if(kn.length)other.push(row(KUNST31[id].n,null,'Methode: bei '+kn.map(tid=>TEACH31[tid].short).join(', ')));else hidden++});
+  s+='<h4>Lernbar</h4><table>'+L2+other.join('')+'</table>'+(hidden?'<p class="s73">… und '+hidden+' weitere, deren Lehrmeister ihr noch nicht kennt.</p>':'');return s}
+function fhOpen73(i){if(!FH73){FH73=document.createElement('div');FH73.id='faeh73';FH73.setAttribute('role','dialog');FH73.setAttribute('aria-label','Fähigkeiten');document.body.appendChild(FH73)}
+  if(i!=null)FHI73=i;else FHI73=Math.max(0,PARTY.indexOf(hero));const h=PARTY[FHI73]||hero;const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  FH73.innerHTML='<div class="fx73"><div class="fh73"><h2>FÄHIGKEITEN</h2><span class="s73">Taste F</span><button type="button" class="x73" aria-label="Schließen">✕</button></div><div class="ft73">'+PARTY.map((p,j)=>'<button type="button" data-i="'+j+'" class="'+(j===FHI73?'on':'')+'">'+e(p.name)+'</button>').join('')+'</div><div class="fb73">'+fhHtml73(h)+'</div></div>';
+  FH73.hidden=false;FH73.querySelector('.x73').onclick=()=>{FH73.hidden=true};FH73.querySelectorAll('.ft73 button').forEach(b=>b.onclick=()=>fhOpen73(+b.dataset.i))}
+document.addEventListener('keydown',e=>{try{if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;if(FH73&&!FH73.hidden&&e.key==='Escape'){FH73.hidden=true;return}
+  if(e.key==='f'||e.key==='F'){const s=$('startScr'),p=$('pickScr');if((s&&!s.hidden)||(p&&!p.hidden)||TAC)return;if(FH73&&!FH73.hidden)FH73.hidden=true;else fhOpen73();e.preventDefault()}}catch(x){}});
+{const _rh73b=renderHero;renderHero=function(){const r=_rh73b.apply(this,arguments);try{const box=$('heroCard');if(box&&!box.querySelector('.fh73b')){const b=document.createElement('button');b.type='button';b.className='fh73b';b.textContent='✦ Fähigkeiten';b.setAttribute('data-tip64','Fähigkeiten|Alles Gelernte und was man noch lernen kann, mit Fundort (Taste F).');b.onclick=()=>fhOpen73();box.appendChild(b)}}catch(e){}return r}}
+{const st=document.createElement('style');st.textContent='#faeh73{position:fixed;inset:0;z-index:70;background:rgba(8,6,12,.72);display:flex;align-items:center;justify-content:center}#faeh73[hidden]{display:none}'+
+  '#faeh73 .fx73{width:min(900px,calc(100vw - 32px));max-height:calc(100vh - 40px);overflow:auto;background:#1b1626;color:#f3ead6;border:2px solid #6a5a8a;border-radius:8px;padding:10px 14px;font:13px system-ui,sans-serif}'+
+  '#faeh73 .fh73{display:flex;align-items:center;gap:10px}#faeh73 h2{margin:0;font:700 18px "Pixelify Sans",monospace;color:#f6c84a;flex:1}#faeh73 .x73{background:none;border:0;color:#f3ead6;font-size:16px;cursor:pointer}'+
+  '#faeh73 .ft73{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}#faeh73 .ft73 button{background:#2b2440;color:#f3ead6;border:1px solid #6a5a8a;border-radius:5px;padding:3px 9px;cursor:pointer}#faeh73 .ft73 button.on{background:#f6c84a;color:#1b1626}'+
+  '#faeh73 h4{margin:10px 0 3px;color:#c8b0f0;font-size:13px}#faeh73 table{width:100%;border-collapse:collapse}#faeh73 td{padding:2px 6px;border-bottom:1px solid #2e2840;vertical-align:top}#faeh73 td:nth-child(2){white-space:nowrap;width:48px}'+
+  '#faeh73 .s73{color:#a8a0b4;font-size:12px}#faeh73 .fw73{margin:0 0 4px}#heroCard .fh73b{display:block;width:100%;margin-top:4px}';document.head.appendChild(st)}
 
 
 // ================= Grafik zu Prototyp 73 (n): feine Kampf-Figuren für die bisherigen Helden, Faust-Animationen (Paul 04.11., 22:44) =================
