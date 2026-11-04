@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 72 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 73 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -617,7 +617,7 @@ const cv=document.getElementById('scene'),g=cv.getContext('2d');g.imageSmoothing
 const mcv=document.getElementById('map'),mg=mcv.getContext('2d');
 const $=id=>document.getElementById(id);
 const norm=s=>s.replace(/\u2060/g,'').toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
-const d=n=>{let v=n===20&&typeof D20_56==='function'?D20_56():0;if(!v)v=1+Math.floor(Math.random()*n);if(n===20&&typeof D20R_56==='function')D20R_56(v);return v};
+const d=n=>{let v=n===20&&typeof D20_56==='function'?D20_56():0;if(!v)v=1+Math.floor(Math.random()*n);if(n===20&&typeof D20R_56==='function')D20R_56(v);if(typeof DREC73==='function')DREC73(n,v);return v};
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const sgn=n=>n>=0?'+'+n:''+n;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -1790,7 +1790,7 @@ function drawEnemy(){
   px(x-7,y+1,14,6,'#8f563b');px(x-6,y,12,1,'#b8702f');px(x-5,y+2,3,1,'#b8702f');px(x+1,y+3,2,1,'#b8702f');
   px(x+f*7,y+2,2,2,'#5a3020');px(x+f*8,y+2,1,1,'#fbf236');px(x+f*9,y+4,2,1,'#c9b79a');
   if(enemy.hurt>0&&enemy.hurt%4<2){g.globalAlpha=.7;px(x-7,y,14,7,'#fff');g.globalAlpha=1}
-  for(let i=0;i<enemy.max;i++)px(x-8+i*3,y-5,2,2,i<enemy.hp?'#d9625a':'#3a2a2a');
+  if(!window.ZW73on)for(let i=0;i<enemy.max;i++)px(x-8+i*3,y-5,2,2,i<enemy.hp?'#d9625a':'#3a2a2a');
   g.globalAlpha=1;
 }
 function drawPet(){
@@ -18701,7 +18701,7 @@ function kampf55(force){const p=$('tab-kampf55');if(!p||(!force&&!p.classList.co
   slider('Lebenspunkte der Gegner','lp',50,200,10,v=>v+' %');slider('Rüstung (RK) der Gegner','rk',-4,4,1,pm);slider('Angriff der Gegner','atk',-4,4,1,pm);
   const bt=(t,f,cls)=>{const b=document.createElement('button');b.type='button';b.className=cls||'dbtn';b.textContent=t;b.onclick=f;p.appendChild(b);return b};
   if(!rStd55())bt('Alle Regler zurücksetzen',()=>{R.lp=100;R.rk=0;R.atk=0;rAll55();say('(Spielleiter: Regler zurückgesetzt.)','sys');kampf55(true)});
-  if(TAC||inFight()){const u=TAC?TAC.units.filter(x=>x.side!=='held'&&!x.hero&&x.hp>0):[enemy].filter(Boolean);para('Jetzt im Kampf: '+u.map(o=>((TAC?o.name:enemyName(o))+' '+o.hp+'/'+o.max+' LP, RK '+o.ac)).join(' · '))}
+  if(TAC||inFight()){const u=TAC?TAC.units.filter(x=>x.side!=='held'&&!x.hero&&x.hp>0):[enemy].concat((typeof rot29==='function'&&rot29())?rot29().list:[]).filter(o=>o&&!o.dead);para('Jetzt im Kampf: '+u.map(o=>((TAC?o.name:enemyName(o))+' '+o.hp+'/'+o.max+' LP, RK '+o.ac)).join(' · '))}
   h('Kampfprotokoll');
   const W=L.filter(x=>x.res==='Sieg').length,N=L.filter(x=>/Niederlage|Typ gewinnt/.test(x.res)).length;
   para(L.length?L.length+' Kämpfe: '+W+' Siege, '+N+' Niederlagen, '+(L.length-W-N)+' andere (Flucht, Abbruch). '+(CUR55?'Ein Kampf läuft gerade.':''):'Noch keine Kämpfe aufgezeichnet. Jeder Kampf ab jetzt wird hier notiert.'+(CUR55?' Ein Kampf läuft gerade.':''),'small k55sum');
@@ -22882,11 +22882,11 @@ gfWin34=function(){const F=ffl34();F.gf.done='kampf';slotHide34();say('Der Gesch
 
 
 // Prototyp 64: Pauls Einträge aus Helden/heldensaetze.xlsx (Sätze, Namen, Klassen-Aktionen, Typ-Knöpfe)
-const SATZ64={"aldric": "Alter Magier mit noch älterem Eichenstab. Muss ein „verzaubertes“ Magiebuch haben, da er jedes Mal den Staub vom Buch pusten muss.", "oda": "Riecht nach Kamille. Weiß auch, wo die Kamille wächst.", "rieke": "Mischt alles mit allem. Was ist eine Anleitung?", "bodo": "Redet wenig, hämmert viel. Die Nachbarn lieben ihn.", "liska": "Folgt jeder Spur. Meist ihren eigenen.", "nyx": "Böse Hexe. Sie klopft heimlich ihren Besenstaub auf das Magiebuch von Aldric.", "wenzel": "Schweigt gern. Ups …", "yara": "Weiß, wohin der Wind weht.", "gerda": "Trägt einen Schild. Mag ihren Schild, sehr …", "pim": "Macht viralen Street-Magic-Content mit gekauften Schauspielern auf Paultube.", "hedda": "Kennt jeden Weg und jeden Klatsch.", "ulrich": "Stand zwanzig Jahre am Tor. Unbezahlt!", "jost": "Immer in der ersten Reihe, wenn sich eine wütende Meute bildet.", "konrad": "Sein Königreich erstreckt sich, so weit seine Sicht den Horizont erblickt. −8 und −10,5 – und „braucht“ keine Brille.", "kage": "Mag es, zuzuschauen.", "gerold": "So böse, wie der Regen feucht ist.", "linail": "Betet laut. Die Götter hören ihr zu. Machen aber nichts – meistens.", "prime": "Weiß alles, außer den Dingen des alltäglichen Lebens.", "oratio": "Gold und Silber sind seine Sprache der Wahl.", "glenys": "Ihr Schwert trashtalkt sie die ganze Zeit. Wird es einfach nicht los.", "wyvera": "Hat einen Drachen. Und jeder wird davon wissen.", "bolle": "Reparatur notwendig? Hammer! Uhr kaputt? Hammer! Es klappt am Ende irgendwie.", "eckhart": "Hat drei Burgen, einen Affen und ein Pferd. Hat Phantom-Schmerzen, wenn man ihm an seinen nicht vorhandenen Zöpfen zieht.", "morla": "Stets bemüht. Lässt Nyx in Aldrics Haus."};
-const KNAME64={"oda": "Pflanzen-Heilerin", "liska": "Spurenjägerin", "wenzel": "Schweigsamer Mönch", "pim": "Street-Magician", "oratio": "Währungs-Krieger", "glenys": "Gefäß des Dämonenschwerts", "hinnerk": "Keyboard-Warrior", "morla": "Zauber-Lehrling"};
-const ANAME64={"juno": "Troubadix Cosplay", "fenn": "Schatten-Spähung", "oda": "Blütenheilung", "kasimir": "Helden-Ansprache", "rieke": "Alchemie-Wahn", "bodo": "Amboss zücken", "yara": "Seefahrer-Gespür", "lorenz": "Quelle überprüfen", "runa": "Söldnerisches Handeln", "gerold": "Kraft sammeln", "oratio": "Preis einfordern", "hinnerk": "Seinem Namen gerecht werden", "gunther": "Back in my days…"};
-const KATXT64={"Froschwanderer": {"ok": "„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.", "no": "{Name} springt. Platsch.", "w": "bei Gräben, Wasser, Mauern, Kanten und im Gebirge"}, "Seefahrerin": {"ok": "Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.", "no": "Der Knoten ist schön. Er hält nur nicht.", "w": "bei Seilen, Booten, Leitern, Brunnen und im Gebirge"}, "Hohepriesterin": {"ok": "{Name} betet laut. Die Götter hören zu – heute schon.", "no": "{Name} betet laut. Die Götter sind gerade beschäftigt.", "w": "wenn jemandem Geist fehlt oder jemand verletzt ist"}, "Mönch": {"ok": "{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.", "no": "{Name} schweigt. Und muss niesen.", "w": "wenn jemandem Geist fehlt"}, "Alchemistin": {"ok": "{Name} mischt alles mit allem. Diesmal klappt es.", "no": "Es blubbert, es stinkt, es bleibt im Glas.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Heilerin": {"ok": "{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.", "no": "Die Hände zittern. {Name} versucht es später noch einmal.", "w": "wenn jemand verletzt ist"}, "Hexe": {"ok": "{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.", "no": "Der Dampf riecht gut. Mehr passiert nicht.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Kräuterkundige": {"ok": "{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.", "no": "Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht.", "w": "bei Pflanzen und draußen im Grünen"}, "Sanitäterin": {"ok": "Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.", "no": "Der Verband hält nicht. {Name} wickelt ihn wieder ab.", "w": "wenn jemand verletzt ist"}, "Handwerker": {"ok": "Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.", "no": "Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg.", "w": "bei Holz, Möbeln, Stegen und Kaputtem"}, "Magd": {"ok": "{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.", "no": "Zu schwer, selbst für {Name}. Für heute.", "w": "bei Schwerem: Fässer, Kisten, Säcke, Steine"}, "Mistgabel-Held": {"ok": "{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!", "no": "{Name} stochert heldenhaft. Leider nur im Heu.", "w": "bei Heu, Laub, Löchern, Gebüsch, Gruben"}, "Ritter": {"ok": "{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.", "no": "{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.", "zu": "Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker.", "w": "bei Türen, Toren, Gittern, Truhen und Kisten"}, "Schmied": {"ok": "{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.", "no": "{Name} dreht es hin und her. Ohne Werkstatt wird das nichts.", "w": "bei Mechanik und bei Kaputtem"}, "Drachenkönigin": {"ok": "{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.", "no": "{Name} ruft. Der Drache hat heute frei.", "w": "draußen, wo eine Probe oder Gefahr wartet"}, "Held": {"ok": "„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.", "no": "„Wir schaffen das …?“ Klang nicht ganz überzeugt.", "w": "wo eine Probe oder Gefahr wartet"}, "König ohne Land": {"ok": "„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.", "no": "„Aufstellung!“ Keiner stellt sich auf.", "w": "wo eine Probe oder Gefahr wartet"}, "Ritterin": {"ok": "{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.", "no": "Der Schild rutscht. Der Mut auch, ein bisschen.", "w": "wo eine Probe oder Gefahr wartet"}, "Schildmaid": {"ok": "{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.", "no": "Der Schild ist heute schwerer als sonst.", "w": "wo eine Probe oder Gefahr wartet"}, "Assassine": {"ok": "Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.", "no": "Der Schatten ist zu klein. {Name} steht einfach in der Ecke.", "w": "im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts"}, "Schattenläufer": {"ok": "{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.", "no": "Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen.", "w": "wo es Verborgenes gibt oder Leute, die man belauschen kann"}, "Sträfling": {"ok": "„Kenn ich.“ Ein Kratzen, ein Klick – offen.", "no": "Das Schloss ist neuer als {Name}s Erfahrung.", "zu": "Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf.", "w": "bei Schlössern, Truhen, Gittern, Zellen"}, "Waldwicht": {"ok": "{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.", "no": "Zu eng – sogar für {Name}.", "w": "bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren"}, "Bardin": {"ok": "{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.", "no": "{Name} stimmt an. Niemand stimmt ein.", "w": "wo Leute sind"}, "Baron": {"ok": "„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.", "no": "„Ihnen? Nein.“ Drei Burgen, kein Eindruck.", "w": "wo Leute sind"}, "Gaukler": {"ok": "{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.", "no": "Ein Ball fällt herunter. Dann noch einer.", "w": "wo Leute sind"}, "Monsterflüsterer": {"ok": "{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.", "no": "Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht.", "w": "bei Tieren und Wesen"}, "Prinzessin a.D.": {"ok": "{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.", "no": "„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof.", "w": "wo Leute sind"}, "Söldner": {"ok": "„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.", "no": "Der Preis ist zu hoch. Sogar für einen guten Witz.", "w": "wo Leute sind"}, "Söldnerin": {"ok": "„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.", "no": "„Sold? Wofür?“ Man lacht {Name} aus.", "w": "wo Leute sind"}, "Wolfsbarde": {"ok": "{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.", "no": "Ein Heuler in Moll. Nur die Hunde im Ort antworten.", "w": "draußen bei Nacht oder wo Leute sind"}, "Bauer": {"ok": "{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.", "no": "Nur Steine und ein beleidigter Wurm.", "w": "bei Erde, Feldern, Gärten, Sand – und draußen im Grünen"}, "Bogenschütze": {"ok": "{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.", "no": "Der Pfeil fliegt sehr weit. In die falsche Richtung.", "w": "draußen oder bei etwas, das man treffen kann"}, "Botin": {"ok": "{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.", "no": "Die Abkürzung ist länger als der Weg.", "w": "draußen, wo mindestens zwei Wege weiterführen"}, "Fuchsjägerin": {"ok": "{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!", "no": "Die Fährte endet einfach. Auch die falsche.", "w": "draußen und überall, wo Spuren sein können"}, "Wachmann": {"ok": "{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.", "no": "Zwanzig Jahre Erfahrung – und heute kommt wieder niemand.", "w": "an Toren, Treppen, Plätzen und wo Leute sind"}, "Waldläuferin": {"ok": "{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.", "no": "Zu viele Spuren, alle durcheinander.", "w": "draußen und überall, wo Spuren sein können"}, "Dämonenschwert": {"ok": "{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.", "no": "Die Klinge schweigt beleidigt.", "w": "bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken"}, "Gelehrter": {"ok": "{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!", "no": "{Name} findet nur Fußnoten zu Fußnoten.", "w": "bei Büchern, Schriften, Tafeln, Briefen, Inschriften"}, "Großer Weiser": {"ok": "{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.", "no": "„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte.", "w": "bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken"}, "Rentner": {"ok": "„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.", "no": "{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe.", "w": "wo Leute sind oder bei Altem"}, "Sternenkundlerin": {"ok": "{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.", "no": "Wolken. Oder {Name} hat sich verzählt.", "w": "draußen bei Nacht oder bei Sternkarten, Fernrohren"}, "Tüftlerin": {"ok": "{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.", "no": "Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus.", "w": "bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser"}, "Zauberin": {"ok": "{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.", "no": "Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht.", "w": "bei Magischem und im Dunkeln, nachts"}, "Zeithexe": {"ok": "{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.", "no": "Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts.", "w": "nach einer misslungenen Probe hier, oder bei Uhren und Glocken"}};
-const TYPN64={"Kämpfer": "Zupacken", "Flinke": "Genau hinsehen", "Gelehrte": "Nachdenken", "Stützen": "Sich kümmern"};
+const SATZ64={};
+const KNAME64={};
+const ANAME64={};
+const KATXT64={};
+const TYPN64={};
 
 
 // ================= Prototyp 64 (h): Pauls eigene Sätze für die Heldenauswahl =================
@@ -26539,8 +26539,8 @@ window.P70=P70;window.satzAI70=satzAI70;window.satzEnde70=satzEnde70;window.chro
 
 
 // Prototyp 71: beim Bau aus den Orts-Dateien gelesen (Ruf der Gruppe hier, ## Ruf-Folgen) und aus den NPC-Dateien (Gehört zu)
-const RUFORT71={"aida": {"fehlt": 9, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 9, "start": "neutral", "z": []}, "ffl": {"fehlt": 9, "start": "freundlich", "z": []}, "grossensee": {"fehlt": 9, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 9, "start": "misstrauisch", "z": []}, "kiefernhang": {"fehlt": 9, "start": "neutral", "z": []}, "kloster": {"fehlt": 9, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 9, "start": "neutral", "z": []}, "oase": {"fehlt": 9, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 9, "start": "neutral", "z": []}, "stahndor": {"fehlt": 9, "start": "neutral", "z": []}, "viellos": {"fehlt": 9, "start": "neutral", "z": []}, "weite": {"fehlt": 9, "start": "neutral", "z": []}};
-const GRPNPC71={"Alt-Rat Wendelin": "Fürstenhof", "Ambros": "Mönche", "Anselm": "Mönche", "Ansgar Krall": "Fürstenhof", "Ausrufer Lambert": "Fürstenhof", "Benno": "Mönche", "Bruno": "Das Haus in Friede Freude Land", "Die Elster": "Kontor und Gassen von AIDA", "Fischer Jos": "Seeleute und Fischer", "Folio": "Mönche", "Fortunato": "Das Haus in Friede Freude Land", "Fürst Trahmes": "Fürstenhof", "General Krull": "Schneewacht", "Goldine": "Das Haus in Friede Freude Land", "Hauptmann Olaf": "Schneewacht", "Hedda": "Seeleute und Fischer", "Herold Gisbert": "Fürstenhof", "Hulda": "Mönche", "Isidor": "Schneewacht", "Jannes": "Seeleute und Fischer", "Jorinde": "Schneewacht", "Knut": "Seeleute und Fischer", "Krumm": "Gemeinderat Großensee", "Lirum": "Gemeinderat Großensee", "Lux": "Das Haus in Friede Freude Land", "Mette": "Gemeinderat Großensee", "Ole": "Seeleute und Fischer", "Ottmar": "Seeleute und Fischer", "Ruprecht": "Schneewacht", "Seilerin Ida": "Seeleute und Fischer", "Swantje": "Seeleute und Fischer", "Wache Ivo": "Schneewacht", "Wachhabende Irmel": "Schneewacht", "Wiebke": "Kontor und Gassen von AIDA", "Zöllnerin Agathe": "Schneewacht"};
+const RUFORT71={"aida": {"fehlt": 0, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 0, "start": "neutral", "z": []}, "ffl": {"fehlt": 0, "start": "neutral", "z": []}, "grossensee": {"fehlt": 0, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 0, "start": "neutral", "z": []}, "kiefernhang": {"fehlt": 0, "start": "neutral", "z": []}, "kloster": {"fehlt": 0, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 0, "start": "neutral", "z": []}, "oase": {"fehlt": 0, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 0, "start": "neutral", "z": []}, "stahndor": {"fehlt": 0, "start": "neutral", "z": []}, "viellos": {"fehlt": 0, "start": "neutral", "z": []}, "weite": {"fehlt": 0, "start": "neutral", "z": []}};
+const GRPNPC71={};
 
 
 // ================= Prototyp 71 (r): Ruf je Ort – Ansehen und Furcht, Taten, reisende Gerüchte =================
@@ -26572,40 +26572,31 @@ const FADE71=5;   // Tage, bis ein Gerücht ohne Neues verblasst
 // Gruppen über Orte hinweg (Vorschlag, Paul entscheidet die endgültige Liste): Mitglieder aus „Gehört zu:“ in den NPC-Dateien, sonst nach Name/Rolle
 const GRP71={schneewacht:{n:'Schneewacht',re:/schneewacht|olaf|jorinde|wache|wächter|soldat|irmel|\bivo\b|krull|zöllner/i},
   moenche:{n:'Mönche von Glockenstill',re:/mönch|bruder|abt\b|novize|glockenstill/i},
-  haendler:{n:'Händler',re:null},
-  // seit 02.11. nachmittags (Paul: „Die vorgeschlagenen Gruppen sind gut.“): Mitglieder über „Gehört zu:“ in den NPC-Dateien
-  fuerstenhof:{n:'Fürstenhof',re:/trahmes|ansgar krall|wendelin|herold/i},
-  gemeinderat:{n:'Gemeinderat Großensee',re:/^(mette|krumm|lirum)\b/i},
-  kontor:{n:'Kontor und Gassen von AIDA',re:/^(wiebke|die elster)\b/i},
-  seeleute:{n:'Seeleute und Fischer',re:/fischer|kapitän|hafenmeister|fährjunge|windleser/i},
-  haus:{n:'Das Haus in Friede Freude Land',re:/croupier|türsteher des casinos|wechselstube|dj der glitzerkugel/i}};
-// Welche Orte Furcht „mögen“ (Paul, 02.11.: AIDA ja, Kloster nein): Furcht dort wirkt zusätzlich auf das Ansehen (Anteil des Furcht-Anstiegs)
-const FMAG71={aida:.4,kloster:-.5};
-const FDECAY71=5;   // Furcht sinkt um 5 je Woche, in der am Ort nichts Neues Furcht macht (Paul, 02.11.: „Furcht baut ab.“)
+  haendler:{n:'Händler',re:null}};
 // ---------- Taten (Konzept Ansatz B) ----------
 // a = Ansehen, f = Furcht am Ort der Tat; reach = wie weit es sich herumspricht; fern = andere Werte für die übrigen Orte (sonst a/f, schwächer mit der Entfernung);
 // rum = Gerücht für die Spieler (Platzhalter-Texte, der Story-Chat darf sie ersetzen); grp = Gruppen; cap = höchstens einmal am Tag je Ort; gegen = widerlegt diese Gerüchte
 const TAT71={
-  helfen:{gro:{stahndor:{seeleute:{a:4}},weite:{seeleute:{a:4}}},n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
+  helfen:{n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
   helfen_gross:{n:'Großes geholfen',a:18,reach:'nah',rum:'Die Fremden haben in {ORT} aufgeräumt.',gegen:['stehlen','schulden','schlecht']},
-  aushang:{gro:{grossensee:{gemeinderat:{a:8}},aida:{kontor:{a:8}}},n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
-  spenden:{gro:{grossensee:{gemeinderat:{a:6}},kloster:{moenche:{a:10}}},n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
+  aushang:{n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
+  spenden:{n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
   show:{n:'Blad(e)iatoren-Show gewonnen',a:55,f:5,reach:'nah',rum:'Blad(e)iatoren-Bezwinger',grp:{schneewacht:{a:5,f:5}}},
   frosch:{n:'Froschkonzert bis zum Ende',a:15,reach:'weit',rum:'Frog Concert Enjoyer'},
   entfernos:{n:'Mit Entfernos gesungen',a:15,reach:'weit',rum:'Die Fremden haben mit Entfernos gesungen.'},
-  befreit:{gro:{ffl:{haus:{a:-15,f:10}},grossensee:{gemeinderat:{a:15}}},n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
-  casino:{gro:{ffl:{haus:{a:-10,f:5}}},n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
-  arena:{gro:{duppelbach:{fuerstenhof:{a:5,f:3}}},n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
-  boss:{gro:{ffl:{haus:{a:-10,f:15}}},n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
-  olaf_sieg:{gro:{nordstollen:{fuerstenhof:{f:5}}},n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
+  befreit:{n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
+  casino:{n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
+  arena:{n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
+  boss:{n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
+  olaf_sieg:{n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
   olaf_vorbei:{n:'An Olaf vorbeigekommen',a:4,reach:'ort',grp:{schneewacht:{a:3}}},
   gegner:{n:'Gegner besiegt',a:1,f:1,reach:'ort',cap:1},
-  ausbruch:{gro:{duppelbach:{fuerstenhof:{a:-6}}},n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
+  ausbruch:{n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
   flucht:{n:'Vor der Wache weggerannt',a:-10,reach:'nah',rum:'In Duppelbach sucht die Wache nach Fremden.',grp:{schneewacht:{a:-5}}},
-  stehlen:{gro:{duppelbach:{fuerstenhof:{a:-5}},aida:{kontor:{a:-6}}},n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
+  stehlen:{n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
   zahlen:{n:'Rechnung bezahlt',a:6,reach:'ort',gegen:['schulden']},
   schulden:{n:'Rechnung nicht bezahlt',a:-8,reach:'ort',rum:'Die Fremden haben ihre Rechnung nicht bezahlt.'},
-  bank_ausfall:{gro:{duppelbach:{fuerstenhof:{a:-8}}},n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
+  bank_ausfall:{n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
   drohen:{n:'Gedroht',a:-3,f:8,reach:'ort',rum:'Die Fremden haben {N} bedroht.'},
   drohen_fehl:{n:'Drohung ging daneben',a:-4,reach:'ort'},
   furcht_weg:{n:'Auf den Ruf verwiesen',a:-2,f:2,reach:'ort'},
@@ -26649,15 +26640,14 @@ function dists71(){try{const sig=WROUTES.length+':'+Object.keys(WNODES).length;i
 function dist71(a,b){if(a===b)return 0;const D=dists71();return D[a]&&D[a][b]!=null?D[a][b]:null}
 function minPerPt71(){try{return ZEIT47.reiseJePunkt||3}catch(e){return 3}}
 // ---------- Werte ändern ----------
-function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;df=Math.round(df||0);if(df>0&&FMAG71[o])da=(da||0)+df*FMAG71[o];da=Math.round(da||0);if(!da&&!df)return;
-  if(df>0){R.fl=R.fl||{};R.fl[o]=today71()}
+function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   const a0=O.a,f0=O.f,s0=aSt71(a0),t0=fSt71(f0);O.a=Math.max(-100,Math.min(100,a0+da));O.f=Math.max(0,Math.min(100,f0+df));
   if(e)e.ap.push({o,a:O.a-a0,f:O.f-f0});
   if(o===cur71()&&(aSt71(O.a)!==s0||fSt71(O.f)!==t0)){try{say('Die Stimmung der Leute hier ändert sich.','sys')}catch(x){}setTimeout(()=>{try{nickCheck71(o)}catch(x){}},400)}}
 function grpApply71(e,g,da,df){const R=R71();da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   if(g==='haendler'){try{const E=E43(),h0=E.hr;E.hr=Math.max(-5,Math.min(5,E.hr+da/20));if(e)e.ap.push({g,hr:E.hr-h0})}catch(x){}return}
-  if(df>0){R.fl=R.fl||{};R.fl['g:'+g]=today71()}const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
-function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const v=GRPNPC71[n.name].toLowerCase().trim();const k=Object.keys(GRP71).find(k=>k===v||GRP71[k].n.toLowerCase()===v||GRP71[k].n.toLowerCase().startsWith(v.slice(0,6)));if(k)return k}}catch(e){}
+  const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
+function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const k=Object.keys(GRP71).find(k=>GRP71[k].n.toLowerCase().startsWith(GRPNPC71[n.name].toLowerCase().slice(0,6)));if(k)return k}}catch(e){}
   try{if(typeof HAND43!=='undefined'&&HAND43[n.name])return'haendler'}catch(e){}const s=(n.name||'')+' '+(n.role||'');return Object.keys(GRP71).find(k=>GRP71[k].re&&GRP71[k].re.test(s))||null}
 function grpA71(g){if(g==='haendler'){try{return Math.round(E43().hr*20)}catch(e){return 0}}const G=R71().g[g];return G?G.a:0}
 function grpF71(g){if(g==='haendler')return 0;const G=R71().g[g];return G?G.f:0}
@@ -26667,7 +26657,7 @@ function tat71(key,o){o=o||{};const T=TAT71[key];if(!T)return null;const R=R71()
   const mul=o.mul==null?1:o.mul,t=now71(),nm=o.npc&&o.npc.name;
   const e={id:++R.n,k:key,ort,t,d:today71(),ap:[],n:T.n,txt:o.txt||null,npc:nm||null};
   apply71(e,ort,(T.a||0)*mul,(T.f||0)*mul);
-  const gs=Object.assign({},T.grp||{},(T.gro&&T.gro[ort])||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
+  const gs=Object.assign({},T.grp||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
   Object.keys(gs).forEach(g=>grpApply71(e,g,(gs[g].a||0)*mul,(gs[g].f||0)*mul));
   // Weitergabe an andere Orte: kommt an, wenn die Gruppe selbst dort wäre
   const rr=REACH71[T.reach||'ort']||0;if(rr>0)ORTE71.forEach(x=>{if(x===ort)return;const d=dist71(ort,x);if(d==null||d>rr)return;
@@ -26712,10 +26702,7 @@ function widerlegt71(e,o,T){negHier71(o).forEach(r=>{if((T.gegen||[]).includes(r
 function gegen71(r,o,anteil,why){const R=R71();r.dem[o]=1;let neg=0;R.log.forEach(e=>{if(r.e.includes(e.id)&&!e.undone)(e.ap||[]).forEach(x=>{if(x.o===o&&x.a<0)neg+=x.a})});
   const back=Math.round(-neg*anteil);const e={id:++R.n,k:'gegen',ort:o,t:now71(),d:today71(),ap:[],n:'Gerücht entkräftet ('+why+'): „'+r.txt+'“'};if(back)apply71(e,o,back,0);R.log.unshift(e);
   try{addChron('Ruf: '+e.n+' · '+fx71(e),['u71_'+e.id],true)}catch(x){}setWorld71();return e}
-function decay71(){const R=R71(),d=today71();if(R.fd==null){R.fd=d;return}if(d<=R.fd)return;R.fl=R.fl||{};
-  for(let x=R.fd+1;x<=Math.min(d,R.fd+60);x++){ORTE71.forEach(o=>{const O=R.o[o],l=R.fl[o]||0;if(O&&O.f>0&&x>l&&(x-l)%7===0)O.f=Math.max(0,O.f-FDECAY71)});
-    Object.keys(R.g).forEach(g=>{const G=R.g[g],l=R.fl['g:'+g]||0;if(G&&G.f>0&&x>l&&(x-l)%7===0)G.f=Math.max(0,G.f-FDECAY71)})}R.fd=d}
-function tick71(){const R=R71(),t=now71();try{decay71()}catch(e){}if(!R.pend.length&&!R.rum.length)return;
+function tick71(){const R=R71(),t=now71();if(!R.pend.length&&!R.rum.length)return;
   const due=R.pend.filter(p=>p.at<=t);if(due.length){R.pend=R.pend.filter(p=>p.at>t);due.forEach(p=>{const e=R.log.find(x=>x.id===p.e);if(e&&e.undone)return;apply71(e||null,p.o,p.a,p.f)});setWorld71()}
   R.rum.forEach(r=>{if(!r.weg&&str71(r)<=0)r.weg=1})}
 // ---------- S.world.ruf = Ansehen-Stufe des aktuellen Orts ----------
@@ -26733,8 +26720,6 @@ function parseF71(line){const P=String(line).split('|').map(s=>s.trim()).filter(
     else if(q=p.match(/^Spitzname\s*:\s*(.+)$/i))f.eff.push({t:'spitz',v:q[1].replace(/^[„"]|[“"]$/g,'')});
     else if(q=p.match(/^Preise\s*([+\-−–])\s*(\d+)\s*%/i))f.eff.push({t:'preis',v:(q[1]==='+'?1:-1)*(+q[2])});
     else if(q=p.match(/^Spielleiter\s*:\s*(.+)$/i))f.eff.push({t:'sl',v:q[1]});
-    else if(q=p.match(/^Ende\s*:\s*(.+)$/i))f.eff.push({t:'ende',v:q[1]});
-    else if(q=p.match(/^Lagerfeuer\s*:\s*(.+)$/i))f.eff.push({t:'feuer',v:q[1]});
     else f.eff.push({t:'sl',v:p})});return f}
 let FOLGEN71=null;
 function folgenAll71(o){if(!FOLGEN71){FOLGEN71={};try{Object.keys(RUFORT71).forEach(k=>{FOLGEN71[k]=(RUFORT71[k].z||[]).map(parseF71).filter(Boolean)})}catch(e){}}return FOLGEN71[o]||[]}
@@ -26840,32 +26825,6 @@ if(typeof gruppe67==='function'){const _g71=gruppe67;gruppe67=function(p){const 
 {const _rw71=renderWorld;renderWorld=function(){const r=_rw71.apply(this,arguments);try{const seg=$('segRuf');if(seg){const h=seg.previousElementSibling;const o=cur71();if(h&&h.tagName==='H2')h.textContent=o?'Ruf der Gruppe in '+ortName71(o):'Ruf der Gruppe';
     let w=$('ruf71w');if(!w){w=document.createElement('div');w.id='ruf71w';seg.after(w)}w.innerHTML='';rufPanel71(w)}}catch(e){console.warn('p71r',e)}return r}}
 (function(){const st=document.createElement('style');st.textContent='.ruf71 .pm71 .dbtn,.ruf71 .sl67line .dbtn{padding:1px 5px;min-width:0;font-size:11px}.ruf71 details{margin:4px 0}.ruf71 select{max-width:60%}.ruf71s{margin-top:10px;border-top:1px dashed #6b5a44;padding-top:6px}.ruf71s p{margin:4px 0}';document.head.appendChild(st)})();
-// ================= Ruf in den Enden und im Finale (Paul, 02.11. nachmittags: 71.F1 und 71.F2 „sehr gute Ideen“) =================
-// Was die Orte über die Gruppe erzählen: zuerst Pauls Zeilen „Ende: …“ / „Lagerfeuer: …“ aus den Ruf-Folgen der Orts-Datei,
-// sonst ein schlichter Ersatzsatz je Stufe (ENDE71, Platzhalter für den Story-Chat). Neutrale Orte schweigen; höchstens drei Orte, die deutlichsten zuerst.
-const ENDE71={nick:'In {O} heißt ihr noch lange „{N}“.',4:'In {O} erzählt man noch lange von euch. Meistens stimmt sogar die Hälfte.',3:'In {O} hebt man den Becher, wenn euer Name fällt.',
-  1:'In {O} wird man vorsichtig, wenn euer Name fällt.',0:'In {O} spuckt man aus, wenn euer Name fällt. Aber man spricht ihn.',angst:'In {O} senkt man die Stimme, wenn euer Name fällt.'};
-function rufEnde71(art){const R=S.ruf71;if(!R)return[];const L=[];ORTE71.forEach(o=>{if(!visited71(o))return;const O=R.o[o];const sa=aSt71(O.a),sf=fSt71(O.f);
-    let own=[];try{own=eff71(o,art==='feuer'?'feuer':'ende')}catch(e){}
-    let txt=own.length?own[own.length-1].v:null,w=Math.abs(O.a)+(sf>=2?O.f:0);
-    if(!txt){if(sf>=2)txt=ENDE71.angst;else if(R.nick[o]&&sa!==2)txt=ENDE71.nick;else if(sa!==2)txt=ENDE71[sa];}
-    if(txt)L.push({o,w,t:txt.replace(/\{O\}/g,ortName71(o)).replace(/\{N\}/g,R.nick[o]||'')})});
-  return L.sort((a,b)=>b.w-a.w).slice(0,3)}
-// „Was aus ihnen wurde“: vor „Und ihr?“ eine Karte „Was man über euch erzählt“
-if(typeof cardList38==='function'){const _cl71=cardList38;cardList38=function(){const L=_cl71.apply(this,arguments);try{const E=rufEnde71('ende');if(E.length){const i=L.findIndex(x=>x[0]==='Und ihr?');
-    const card=['Was man über euch erzählt',E.map(x=>x.t).join(' ')];if(i>=0)L.splice(i,0,card);else L.push(card)}}catch(e){console.warn('p71r',e)}return L}}
-// Lagerfeuer: nach „Hoffentlich laut.“ erzählen die Orte, wie laut
-function rufLines71(lines){if(!Array.isArray(lines))return lines;{
-    const k=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Alle lachen. Oben in den Ästen lacht Linde mit.');
-    if(k>=0){const E=rufEnde71('feuer');if(E.length){lines=lines.slice();lines.splice(k+1,0,['Und es wird laut geredet. '+E.map(x=>x.t).join(' ')])}}
-    // Finale: der Gast greift auf, wie über die Gruppe geredet wird (ein Satz, nur wenn man sie kennt)
-    const j=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Starker Körper. Starker Geist. Danke fürs Großziehen.');
-    if(j>=0&&S.ruf71){const R=S.ruf71;const known=ORTE71.filter(o=>visited71(o)&&R.o[o]);const angst=known.some(o=>fSt71(R.o[o].f)>=2),gut=known.some(o=>aSt71(R.o[o].a)>=3);
-      const satz=angst?GAST71.angst:gut?GAST71.gut:null;if(satz){lines=lines.slice();lines.splice(j+1,0,[satz,'npc','????'])}}
-  }return lines}
-{const _sq71=seq38;seq38=function(lines,step,done){try{lines=rufLines71(lines)}catch(e){console.warn('p71r',e)}return _sq71.call(this,lines,step,done)}}
-// Sätze des Gasts (Vorschlag aus dem Konzept, Story-Chat darf ersetzen)
-const GAST71={gut:'Sie werden euch vergessen. Bei mir nicht.',angst:'Sie haben Angst vor euch. Bei mir müsst ihr keine haben.'};
 
 
 // ================= Nachbesserung zu Prototyp 71 (w): Statisten laufen sauber (Paul 02.11., 13:28/13:30) =================
@@ -27635,6 +27594,453 @@ const GESTALT72={baer:'baer72',fuchs:'fuchs72'};
 try{Object.values(FEINH72).concat(Object.values(GESTALT72)).forEach(k=>{if(!HD70.includes(k))HD70.push(k)})}catch(e){}
 {const _w=wsSet68;wsSet68=function(u){try{if(u&&!u.frog){const gk=u.gestalt&&GESTALT72[u.gestalt];if(gk&&FOE68[gk])return{t:'f',s:FOE68[gk]};
   if(u.hero){const k=FEINH72[u.hero.heroId];if(k&&FOE68[k])return{t:'f',s:FOE68[k]}}}}catch(e){}return _w.apply(this,arguments)}}
+
+
+// ================= Prototyp 73 (w): Würfel – RANDSUM-Schreibweise, Würfelfeld, Einzelwürfel im Log, Todesrettung =================
+// Phase 3, Lieferung 1 (Paul, 04.11., Block 4 der Besprechung `_Spielleiter/besprechung-phase3.md`):
+//  - eigener Nachbau der RANDSUM-Schreibweise (keine fremde Bibliothek, das Spiel bleibt eine Datei ohne Server),
+//  - ein Würfelfeld für Spielleiter und Spieler (Knopf „🎲 Würfel“ unten rechts, Taste W),
+//  - jeder Schaden im Log mit Einzelwürfeln, z. B. „Schaden 1d8+2: [5] → 7“,
+//  - 5e-Regeln: kritisch verdoppelt die Würfel, nicht den Bonus (so rechnete das Spiel schon),
+//  - Todesrettung ohne Tod: auf 0 LP würfelt der Held zu Beginn jedes seiner Züge 1d20 (ab 10 Erfolg; 3 Erfolge = stabil,
+//    3 Fehlschläge = außer Gefecht bis zur nächsten Gaststätte oder langen Rast; 20 = sofort mit 1 LP auf; 1 = zwei Fehlschläge).
+// Schreibweise wie bei RANDSUM (geprüft am 04.11. mit dem RANDSUM-Prüfer): L lässt den NIEDRIGSTEN Würfel weg, H den HÖCHSTEN.
+//  Vorteil = 2d20L („zwei W20, der niedrigere fällt weg“), Nachteil = 2d20H. Die Besprechung hatte es andersherum notiert;
+//  gebaut ist es wie bei RANDSUM, damit die Schreibweise überall gleich gelesen wird.
+// Die Proben-Zeilen („W20 14 +2 = 16 gegen SG 12“) bleiben, wie sie sind: Das Selbst-Würfeln (P56) liest genau diese Zeilen.
+// ---------- Schreibweise lesen und würfeln ----------
+const DIE73=n=>1+Math.floor(Math.random()*n);
+function parse73(s){s=String(s||'').replace(/\s+/g,'').replace(/[Ww](?=\d|%)/g,'d').replace(/−/g,'-');if(!s)return null;
+  const terms=[];const re=/([+-]?)(\d*d(?:\d+|%)(?:[LlHh]\d*|[Rr]\{[<>]?\d+(?:,\d+)*\}|!)*|\d+)/gy;let m,pos=0;
+  while(pos<s.length){re.lastIndex=pos;m=re.exec(s);if(!m||m.index!==pos)return null;pos=re.lastIndex;const sg=m[1]==='-'?-1:1,tx=m[2];
+    const dm=/^(\d*)d(\d+|%)(.*)$/.exec(tx);
+    if(!dm){terms.push({k:'n',v:sg*(+tx)});continue}
+    const n=Math.min(100,Math.max(1,+(dm[1]||1))),sides=dm[2]==='%'?100:Math.max(2,Math.min(1000,+dm[2]));const T={k:'d',sg,n,sides,low:0,high:0,rr:null,ex:false};
+    const mods=dm[3];const mr=/([LlHh])(\d*)|[Rr]\{([<>]?)(\d+(?:,\d+)*)\}|(!)/g;let q;
+    while((q=mr.exec(mods))){if(q[1]){const c=+(q[2]||1);if(/l/i.test(q[1]))T.low=c;else T.high=c}else if(q[4]){T.rr={op:q[3]||'=',v:q[4].split(',').map(Number)}}else if(q[5])T.ex=true}
+    terms.push(T)}
+  return terms.length?terms:null}
+function rrHit73(rr,v){if(!rr)return false;if(rr.op==='<')return v<rr.v[0];if(rr.op==='>')return v>rr.v[0];return rr.v.includes(v)}
+function roll73(s,rnd){const P=parse73(s);if(!P)return null;rnd=rnd||DIE73;let total=0;const out=[];
+  P.forEach(T=>{if(T.k==='n'){total+=T.v;out.push({k:'n',v:T.v});return}
+    let vals=[];for(let i=0;i<T.n;i++){let v=rnd(T.sides);let g=0;while(rrHit73(T.rr,v)&&g++<20)v=rnd(T.sides);vals.push(v);
+      if(T.ex){let e=v,c=0;while(e===T.sides&&c++<20){e=rnd(T.sides);vals.push(e)}}}
+    const idx=vals.map((v,i)=>[v,i]).sort((a,b)=>a[0]-b[0]);const drop=new Set();idx.slice(0,Math.min(T.low,vals.length)).forEach(x=>drop.add(x[1]));idx.slice(Math.max(0,vals.length-T.high)).forEach(x=>drop.add(x[1]));
+    const kept=vals.filter((v,i)=>!drop.has(i));const sum=kept.reduce((a,b)=>a+b,0);total+=T.sg*sum;out.push({k:'d',T,vals,drop:[...drop],sum})});
+  return{s:norm73(s),terms:out,total}}
+function norm73(s){return String(s||'').replace(/\s+/g,'').replace(/[Ww](?=\d|%)/g,'d').replace(/−/g,'-')}
+// „2d20L+4: [2, 16] → 20“ – weggelassene Würfel stehen in Klammern: [(2), 16]
+function fmt73(r){if(!r)return'';const dice=[];r.terms.forEach(x=>{if(x.k==='d')x.vals.forEach((v,i)=>dice.push(x.drop.includes(i)?'('+v+')':String(v)))});
+  return r.s.replace(/-/g,'−')+': ['+dice.join(', ')+'] → '+r.total}
+// ---------- Einzelwürfel beim Schaden: jeder Wurf über d() wird kurz gemerkt ----------
+const REC73=[];let MARK73=0;
+function DREC73(n,v){REC73.push({n,v,t:performance.now()});if(REC73.length>80){REC73.splice(0,40);MARK73=Math.max(0,MARK73-40)}}
+function dmgNote73(dmg,text){const now=performance.now();const L=REC73.slice(MARK73).filter(x=>x.n!==20&&now-x.t<40);if(!L.length||!(dmg>0))return'';
+  const by={};L.forEach(x=>{(by[x.n]=by[x.n]||[]).push(x.v)});const sum=L.reduce((a,x)=>a+x.v,0),flat=dmg-sum;if(flat<0&&!/blockt|weniger|abgeschwächt|Rüstung/.test(text||''))return'';
+  const not=Object.keys(by).sort((a,b)=>b-a).map(k=>by[k].length+'d'+k).join('+')+(flat>0?'+'+flat:flat<0?'−'+(-flat):'');
+  return'Schaden '+not+': ['+L.map(x=>x.v).join(', ')+'] → '+dmg}
+const DMGRX73=/(\d+) Schaden(?!.*\d+ Schaden)/;
+{const _say73w=say;say=function(text,cls,who){const p=_say73w.apply(this,arguments);
+  try{if(cls==='roll'&&typeof text==='string'&&p&&p.appendChild&&!/Würfelfeld/.test(text)){const m=DMGRX73.exec(text);const dmg=m?+m[1]:0;
+      const note=dmg?dmgNote73(dmg,text):'';if(note){const s=document.createElement('span');s.className='dn73';s.textContent=' · '+note;p.appendChild(s)}}}catch(e){}
+  MARK73=REC73.length;return p}}
+{const st=document.createElement('style');st.textContent='#log p .dn73{color:#b9a8d8;font-size:.9em;white-space:nowrap}';document.head.appendChild(st)}
+// ---------- Würfelfeld ----------
+let DF73=null;
+function dfOpen73(){if(DF73){DF73.hidden=!DF73.hidden;if(!DF73.hidden)DF73.querySelector('input').focus();return}
+  DF73=document.createElement('div');DF73.id='dice73';DF73.setAttribute('role','dialog');DF73.setAttribute('aria-label','Würfelfeld');
+  DF73.innerHTML='<div class="h73"><b>🎲 Würfelfeld</b><button type="button" class="x73" aria-label="Schließen">✕</button></div>'+
+    '<div class="r73"><input type="text" spellcheck="false" autocomplete="off" placeholder="z. B. 2d20L+3 oder 1d8+2" aria-label="Würfel-Schreibweise"><button type="button" class="go73">Würfeln</button></div>'+
+    '<div class="q73"></div><div class="v73" aria-live="polite"></div>'+
+    '<label class="sl73"><input type="checkbox" class="dm73"> als Spielleiter würfeln</label>'+
+    '<p class="hl73">Schreibweise wie RANDSUM: <code>3d6</code> drei W6 · <code>+2</code> Bonus · <code>2d20L</code> Vorteil (der niedrigere fällt weg) · <code>2d20H</code> Nachteil (der höhere fällt weg) · <code>4d6L</code> den niedrigsten weglassen · <code>1d6R{1}</code> Einsen neu würfeln · <code>1d6!</code> eine Sechs explodiert. W statt d geht auch.</p>';
+  document.body.appendChild(DF73);const inp=DF73.querySelector('input'),q=DF73.querySelector('.q73');
+  [['W4','1d4'],['W6','1d6'],['W8','1d8'],['W10','1d10'],['W12','1d12'],['W20','1d20'],['W100','1d100'],['Vorteil','2d20L'],['Nachteil','2d20H']].forEach(([l,v])=>{const b=document.createElement('button');b.type='button';b.textContent=l;
+    b.setAttribute('data-tip64',l+'|Würfelt '+v+(/L$/.test(v)?' – zwei W20, der niedrigere fällt weg.':/H$/.test(v)?' – zwei W20, der höhere fällt weg.':'.'));
+    b.onclick=()=>{const m=/([+-]\d+)$/.exec(inp.value.trim());inp.value=v+(m?m[1]:'');dfRoll73()};q.appendChild(b)});
+  DF73.querySelector('.go73').onclick=()=>dfRoll73();inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();dfRoll73()}if(e.key==='Escape')DF73.hidden=true});
+  DF73.querySelector('.x73').onclick=()=>{DF73.hidden=true}}
+function dfRoll73(){const inp=DF73.querySelector('input'),out=DF73.querySelector('.v73');const s=inp.value.trim()||'1d20';const r=roll73(s);
+  if(!r){out.innerHTML='<span class="err73">Das verstehe ich nicht. Beispiele: 1d20+3 · 2d20L · 3d6 · 1d8+1d4+2</span>';return}
+  inp.value=s;const dice=[];r.terms.forEach(x=>{if(x.k==='d')x.vals.forEach((v,i)=>dice.push({v,s:x.T.sides,drop:x.drop.includes(i)}))});
+  out.innerHTML='';const row=document.createElement('div');row.className='dz73';dice.slice(0,24).forEach(D=>{const el=document.createElement('span');el.className='w73'+(D.drop?' drop':'');el.textContent='?';row.appendChild(el);D.el=el});out.appendChild(row);
+  const res=document.createElement('div');res.className='rs73';out.appendChild(res);let k=0;
+  const spin=setInterval(()=>{k++;dice.forEach(D=>{if(D.el)D.el.textContent=DIE73(D.s)});if(k>=8){clearInterval(spin);dice.forEach(D=>{if(D.el)D.el.textContent=D.v});res.textContent=fmt73(r);
+      const dm=DF73.querySelector('.dm73').checked;try{say('Würfelfeld: '+fmt73(r),'roll',dm?'Spielleiter':(hero&&hero.name))}catch(e){}try{if(typeof sfx64==='function')sfx64('wuerfel')}catch(e){}}},55)}
+{const st=document.createElement('style');st.textContent=
+  '#dice73{position:fixed;right:10px;bottom:40px;z-index:61;width:min(360px,calc(100vw - 32px));background:#1b1626f2;color:#f3ead6;border:2px solid #6a5a8a;border-radius:8px;padding:8px 10px;font:13px system-ui,sans-serif;box-shadow:0 6px 24px #0008}'+
+  '#dice73[hidden]{display:none}#dice73 .h73{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}#dice73 .x73{background:none;border:0;color:#f3ead6;cursor:pointer;font-size:14px}'+
+  '#dice73 .r73{display:flex;gap:6px}#dice73 input[type=text]{flex:1;min-width:0;background:#0f0c16;color:#fff;border:1px solid #6a5a8a;border-radius:5px;padding:4px 6px;font:14px "Pixelify Sans",monospace}'+
+  '#dice73 button{background:#2b2440;color:#f3ead6;border:1px solid #6a5a8a;border-radius:5px;padding:3px 7px;cursor:pointer}#dice73 .go73{background:#f6c84a;color:#1b1626;border-color:#f6c84a;font-weight:700}'+
+  '#dice73 .q73{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}#dice73 .dz73{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0}'+
+  '#dice73 .w73{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 3px;background:#f3ead6;color:#1b1626;border:2px solid #1b1626;box-shadow:2px 2px 0 #6a5a8a;font:700 14px "Pixelify Sans",monospace}'+
+  '#dice73 .w73.drop{opacity:.45;text-decoration:line-through}#dice73 .rs73{font:700 15px "Pixelify Sans",monospace;color:#f6c84a;margin:2px 0 4px}#dice73 .err73{color:#ff9a8a}'+
+  '#dice73 .hl73{margin:6px 0 0;font-size:11.5px;line-height:1.35;color:#c8bfdc}#dice73 code{background:#0f0c16;padding:0 3px;border-radius:3px;color:#fff}#dice73 .sl73{font-size:12px;color:#c8bfdc}'+
+  '#tempo66 .dice73b{opacity:.9}';document.head.appendChild(st)}
+// Knopf neben „Lesetempo“ (unten rechts) und Taste W
+{const _ub73=updBtn66;updBtn66=function(){const r=_ub73.apply(this,arguments);try{if(BTN66&&!BTN66.querySelector('.dice73b')){const b=document.createElement('button');b.type='button';b.className='dice73b';b.textContent='🎲 Würfel';
+      b.setAttribute('data-tip64','Würfelfeld|Für Spielleiter und Spieler: jede Würfel-Schreibweise (2d20L+3, 3d6 …), Ergebnis mit Einzelwürfeln im Verlauf. Taste W.');b.onclick=dfOpen73;BTN66.insertBefore(b,BTN66.firstChild)}}catch(e){}return r}}
+setTimeout(()=>{try{updBtn66()}catch(e){}},0);
+document.addEventListener('keydown',e=>{try{if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;if(TAC)return;if(e.key==='w'||e.key==='W'){const s=$('startScr'),p=$('pickScr');if((s&&!s.hidden)||(p&&!p.hidden))return;dfOpen73();e.preventDefault()}}catch(x){}});
+// ---------- Todesrettung (5e, ohne Tod) ----------
+function dsDots73(n){return'●'.repeat(Math.min(3,n))+'○'.repeat(Math.max(0,3-n))}
+function dsActive73(h){return!!(h&&h.hp<=0&&!h.out73&&!(h.ds73&&h.ds73.stable))}
+// Ein Wurf zu Beginn des eigenen Zugs. u = Taktik-Einheit (optional), sonst normaler Kampf.
+function dsRoll73(h,u){if(!dsActive73(h))return false;const D=h.ds73=h.ds73||{ok:0,no:0};const r=d(20);let txt=h.name+' – Todesrettung: 1d20: ['+r+'] → '+r+' (ab 10 Erfolg)';
+  const lg=m=>{try{if(u&&typeof tLog==='function')tLog(m)}catch(e){}say(m,'roll')};
+  if(r===20){h.hp=1;h.ds73=null;if(u){u.hp=1;u.fall=0}try{float(h.x,FLOOR-52,'+1','#8fcf8a')}catch(e){}lg(txt+' → 20! '+h.name+' reißt die Augen auf und steht mit 1 LP wieder.');try{addChron(h.name+' kam mit einer 20 wieder auf die Beine.',[])}catch(e){}renderAll();return true}
+  if(r===1)D.no+=2;else if(r>=10)D.ok++;else D.no++;
+  txt+=' → '+(r===1?'eine 1: zwei Fehlschläge':r>=10?'Erfolg':'Fehlschlag')+'. Erfolge '+dsDots73(D.ok)+' · Fehlschläge '+dsDots73(D.no);
+  if(D.ok>=3){D.stable=true;lg(txt+'. '+h.name+' ist stabil: bewusstlos, aber außer Gefahr.')}
+  else if(D.no>=3){h.out73=true;h.ds73=null;lg(txt+'. '+h.name+' ist außer Gefecht – bis zur nächsten Gaststätte oder langen Rast.');try{addChron(h.name+' ist außer Gefecht (Todesrettung misslungen) – bis zur nächsten Gaststätte oder langen Rast.',[])}catch(e){}}
+  else lg(txt+'.');renderAll();return false}
+// normaler Kampf: Wer bewusstlos ist, würfelt, wenn die Initiative an ihm vorbeizieht (das ist sein Zugbeginn)
+{const _ia73=iniAdvance;iniAdvance=function(){try{if(INI.on&&inFight()&&!TAC&&INI.order.length){let j=INI.i,n=0;const L=[];
+      while(n<12){j=(j+1)%INI.order.length;n++;const x=INI.order[j];if(!x||x.e||x.m||!x.h)break;if(x.h.hp>0)break;L.push(x.h)}
+      L.forEach(h=>dsRoll73(h))}}catch(e){console.warn('p73 Todesrettung',e)}return _ia73.apply(this,arguments)}}
+// Taktik-Kampf: dasselbe, wenn die Reihe an einem gefallenen Helden vorbeigeht
+{const _tn73=tNext;tNext=function(){try{if(TAC&&TAC.order&&TAC.order.length){let j=TAC.ti,n=0;const L=[];
+      while(n<40){j=(j+1)%TAC.order.length;n++;const u=TAC.order[j];if(!u||u.gone)continue;if(u.hp>0)break;if(u.hero&&u.side==='held')L.push(u)}
+      L.forEach(u=>{const h=u.hero;if(h.hp>0&&u.hp<=0)h.hp=0;dsRoll73(h,u)})}}catch(e){console.warn('p73 Todesrettung (Taktik)',e)}return _tn73.apply(this,arguments)}}
+// Stabilisieren: ein anderer Held hilft (Weisheit SG 10, Heilkunst-Weg +2), kostet die Aktion
+function stab73(h2){const h=hero;if(!h||h.hp<=0||!dsActive73(h2))return;if(!act27())return;tickAct27(h);say('Stabilisieren: '+h2.name,'player',h.name);
+  const heil=typeof weg73==='function'&&weg73(h)==='heilkunst';const old=h.mods.wis;if(heil)h.mods.wis=(old||0)+2;let ok=false;try{ok=check('wis',10,'Stabilisieren'+(heil?' (Heilkunst +2)':''))}finally{h.mods.wis=old}
+  if(ok){h2.ds73=h2.ds73||{ok:0,no:0};h2.ds73.stable=true;say(h.name+' drückt auf die Wunde und bringt '+h2.name+' in die stabile Seitenlage. '+h2.name+' ist bewusstlos, aber außer Gefahr.','dm')}
+  else say(h.name+' versucht es, aber die Hände zittern. '+h2.name+' ist noch nicht stabil.','dm');setTimeout(enemyAttack,600)}
+{const _rfc73w=renderFightChips;renderFightChips=function(cr,gr,lab,chip){_rfc73w.apply(this,arguments);try{if(hero.hp<=0||TAC)return;PARTY.filter(p=>p!==hero&&dsActive73(p)).forEach(p=>chip(gr||cr,'Stabilisieren: '+p.name,()=>stab73(p),'cls'))}catch(e){}}}
+// Nach dem Kampf: Wer nur bewusstlos war, kommt mit 1 LP zu sich. Wer außer Gefecht ist, bleibt es.
+let FW73=false;setInterval(()=>{try{const f=inFight()||!!TAC;if(FW73&&!f&&!S.ko&&PARTY.some(p=>p.hp>0)){PARTY.forEach(p=>{if(p.hp<=0&&!p.out73){p.hp=1;p.ds73=null;say(p.name+' kommt nach dem Kampf wieder zu sich (1 LP).','dm')}});renderAll()}FW73=f}catch(e){}},500);
+// Ganze Gruppe am Boden: es gilt die bisherige Niederlage, „außer Gefecht“ fällt dann weg
+{const _hd73=heroDown;heroDown=function(){try{if(PARTY.every(p=>p.hp<=0))PARTY.forEach(p=>{p.out73=false;p.ds73=null})}catch(e){}return _hd73.apply(this,arguments)}}
+// Außer Gefecht hält bis zur Gaststätte oder langen Rast
+{const _ra73w=renderAll;renderAll=function(){try{(PARTY||[]).forEach(p=>{if(p.out73&&p.hp>0)p.hp=0;if(p.hp>0&&p.ds73)p.ds73=null})}catch(e){}return _ra73w.apply(this,arguments)}}
+function wake73(why){let n=0;PARTY.forEach(p=>{if(p.out73){p.out73=false;p.ds73=null;p.hp=Math.max(1,p.hp,Math.ceil(p.max/2));n++;say(p.name+' ist wieder auf den Beinen ('+why+').','dm')}});if(n)renderAll()}
+{const _r47=rest47;rest47=function(){const was=typeof REST47!=='undefined'&&REST47;if(!was)try{wake73('lange Rast')}catch(e){}return _r47.apply(this,arguments)}}
+{const _sw73w=switchScene;switchScene=function(){const r=_sw73w.apply(this,arguments);try{if(typeof inGast64==='function'&&inGast64()&&PARTY.some(p=>p.out73))setTimeout(()=>wake73('in der Gaststätte'),600)}catch(e){}return r}}
+{const _sa73=setActive;setActive=function(i,quiet){const n=PARTY[i];if(n&&n.out73&&!quiet){say(n.name+' ist außer Gefecht – erst eine Gaststätte oder eine lange Rast bringt '+n.name+' zurück.','sys');return}return _sa73.apply(this,arguments)}}
+// Kennzeichen in der Heldenleiste
+{const _rh73=renderHero;renderHero=function(){const r=_rh73.apply(this,arguments);try{const B=[...document.querySelectorAll('#heroCard .pm')];PARTY.forEach((h,i)=>{const b=B[i];if(!b)return;
+    if(h.out73){b.classList.add('out73');b.title=h.name+': außer Gefecht (bis Gaststätte oder lange Rast)'}else if(h.hp<=0&&h.ds73){b.title=h.name+': bewusstlos – Todesrettung '+(h.ds73.stable?'stabil':'Erfolge '+h.ds73.ok+', Fehlschläge '+h.ds73.no)}})}catch(e){}return r}}
+{const st=document.createElement('style');st.textContent='#heroCard .pm.out73{filter:grayscale(1);opacity:.5}';document.head.appendChild(st)}
+// Schutz: Ein verspäteter Gegner-Zug nach einem Kampfende/-neustart findet keinen aktiven Helden (TAC.cur leer) – dann nichts tun
+{const _taa73=tAfterAct;tAfterAct=function(){if(TAC&&!TAC.cur)return;return _taa73.apply(this,arguments)}}
+
+
+// ================= Prototyp 73 (k): Normaler Kampf – alle gleichzeitig, Zustandswörter, Aufstellung mit Abstand, Ziel selbst wählen =================
+// Phase 3, Lieferung 1 (Paul, 04.11., Block 4.4 der Besprechung):
+//  - Alle Gegner erscheinen gleichzeitig (keine Nachrücker mehr). Auch die Rostmilben im Keller stehen jetzt zusammen auf dem Feld.
+//  - Keine LP-Anzeige der Gegner für die Spieler: Zustandswörter (unverletzt / angeschlagen < 75 % / wankt < 50 % / taumelt < 25 % /
+//    am Ende < 10 %), der Erzähler sagt es mit wechselnden Sätzen. Der Spielleiter sieht die Zahlen im Spielleiter-Fenster (Kampf).
+//  - Aufstellung mit Abstand (Paul, 19:19): Helden auf ihrer Seite, Gegner auf der anderen, freie Mitte. Wer handelt, tritt vor und
+//    wieder zurück. In der Poke-Ansicht zwei versetzte Reihen; ab vier Gegnern enger, ab sechs eine zweite Reihe. Nach dem Kampf freies Laufen.
+//  - Ziel selbst wählen (Paul, 19:21): Knöpfe „Ziel“, Klick auf das Namensschild oder auf die Figur im Bild. Das Ziel bleibt vorgemerkt.
+//    Flächen-Techniken treffen das Ziel und seine Nachbarn (bisher: den vordersten und die Wartenden).
+// Technisch: Der gewählte Gegner ist immer `enemy` (so funktionieren alle Techniken weiter), die übrigen stehen in der Rotte (ROT29).
+// Ausnahmen mit eigener Bühne: PaulMon-Gruppen, Arena, Froschkonzert, Feuerkreis.
+let FM73=null;window.ZW73on=true;
+function special73(e){e=e||enemy;const D=e&&e.def;return!!(D&&(D.pm||D.arena||D.fcFight||D.frog))}
+function fmOn73(){try{return!!(FM73&&FM73.scene===S.scene&&inFight()&&!TAC&&!S.ko&&enemy&&!enemy.fade&&!special73())}catch(e){return false}}
+function foes73(){const L=[];if(enemy&&!enemy.dead&&!enemy.fade)L.push(enemy);const R=typeof rot29==='function'?rot29():null;if(R)R.list.forEach(o=>{if(o&&!o.dead)L.push(o)});return L}
+function fmStart73(){const L=foes73();if(!L.length)return;const side=enemy.x>=hero.x?1:-1;const W0=wW();
+  const c=clamp(Math.round((hero.x+enemy.x)/2),96,W0-96);FM73={scene:S.scene,side,c,y0:TD?clamp(Math.round(FLOOR-14),70,120):FLOOR,m:Math.max(1,L.length),t0:t};
+  L.forEach((o,i)=>{o.sl73=i});PARTY.forEach(p=>{p.back73=0})}
+function nextSlot73(){let m=-1;foes73().forEach(o=>{if(o.sl73!=null)m=Math.max(m,o.sl73)});return m+1}
+// Plätze: Helden links oder rechts der Mitte, Gegner auf der anderen Seite
+const MID73=28;
+function hSlot73(p){const F=FM73,i=Math.max(0,PARTY.indexOf(p)),n=PARTY.length,gap=n>=5?19:23;const x=clamp(F.c-F.side*(MID73+i*gap),10,wW()-10);
+  const y=TD?clamp(F.y0+(i%2?7:-7),44,132):null;return[x,y]}
+function fSlot73(o){const F=FM73,j=o.sl73!=null?o.sl73:0,m=Math.max(F.m,j+1),gap=m>=5?20:24;let x,dy=0;
+  if(m>=6){const col=Math.floor(j/2),row=j%2;x=F.c+F.side*(MID73+col*gap+row*Math.round(gap/2));dy=TD?(row?-9:7):(row?-5:0)}
+  else{x=F.c+F.side*(MID73+j*gap);dy=TD?(j%2?-7:7):0}
+  return[clamp(x,10,wW()-10),dy]}
+function dy73(o){try{return fmOn73()&&o&&o.sl73!=null?fSlot73(o)[1]:0}catch(e){return 0}}
+function actor73(){try{const c=INI.on?INI.order[INI.i]:null;return c&&!c.e&&!c.m?c.h:null}catch(e){return null}}
+// ---------- Kampfbeginn erkennen ----------
+let FMN73=0;
+function fkey73(){const R=typeof rot29==='function'?rot29():null;if(R){if(!R.fk73)R.fk73=(enemy&&enemy.fk73)||++FMN73;if(enemy)enemy.fk73=R.fk73;return R.fk73}if(!enemy.fk73)enemy.fk73=++FMN73;return enemy.fk73}
+setInterval(()=>{try{if(inFight()&&!TAC&&!special73()&&enemy&&!enemy.fade){const k=fkey73();if(!FM73||FM73.scene!==S.scene||FM73.k!==k){fmStart73();if(FM73)FM73.k=k}}else if(!inFight())FM73=null}catch(e){}},150);
+// ---------- Gegner: Plätze, Schritt nach vorn beim Angriff ----------
+{const _fs73=foeStrike31;foeStrike31=function(e){try{if(e)e.act73=t+40}catch(x){}return _fs73.apply(this,arguments)}}
+function foeTx73(o){const[x]=fSlot73(o);return o.act73&&t<o.act73?x-FM73.side*14:x}
+drawRot29=(function(_orig){return function(R){if(!fmOn73())return _orig.apply(this,arguments);const main=enemy;if(!main||main.dead)return;const fa=main.fade?Math.max(0,main.fade/40):1,dm=dy73(main);
+  R.list.forEach(o=>{if(o.sl73==null)o.sl73=nextSlot73();if(R.flee)o.tx=FM73.side>0?360:-40;else o.tx=foeTx73(o);const dx=o.tx-o.x;if(Math.abs(dx)>1){o.x+=Math.sign(dx)*Math.min(R.flee?2.4:1.3,Math.abs(dx));o.step++}
+    if(o.lunge>0)o.lunge--;if(o.hurt>0)o.hurt--;const dd=dy73(o)-dm;enemy=o;try{g.save();if(dd)g.translate(0,dd);g.globalAlpha=fa;drawFoe()}catch(e){}finally{g.restore();enemy=main;g.globalAlpha=1}})}})(drawRot29);
+{const _de73=drawEnemy;drawEnemy=function(){if(!fmOn73())return _de73.apply(this,arguments);
+  try{if(enemy.sl73==null)enemy.sl73=nextSlot73();if(!enemy.flee&&!enemy.dead)enemy.tx=foeTx73(enemy)}catch(e){}
+  const dy=dy73(enemy);if(!dy)return _de73.apply(this,arguments);g.save();g.translate(0,dy);try{return _de73.apply(this,arguments)}finally{g.restore()}}}
+// ---------- Helden: Plätze, wer am Zug ist, tritt vor ----------
+{const _mf73=moveFig;moveFig=function(o,speed){try{if(o&&o.follower&&o!==hero&&fmOn73()&&PARTY.includes(o)&&!(drag&&drag.o===o)){const[x,y]=hSlot73(o);const st=o===actor73()?FM73.side*10:0;o.tx=x+st;if(TD&&y!=null)o.ty=y;
+      const r=_mf73.apply(this,arguments);if(Math.abs(o.x-o.tx)<1)o.face=FM73.side;return r}}catch(e){}return _mf73.apply(this,arguments)}}
+{const _dp73=drawParty;drawParty=function(){try{if(fmOn73()&&hero&&!(drag&&drag.o===hero)&&!(hero.queue&&hero.queue.length)&&t>(hero.back73||0)){const[x,y]=hSlot73(hero);const st=hero===actor73()||!INI.on?FM73.side*10:0;hero.tx=x+st;if(TD&&y!=null)hero.ty=y;if(Math.abs(hero.x-hero.tx)<1&&!hero.lunge)hero.face=FM73.side}}catch(e){}return _dp73.apply(this,arguments)}}
+// Nahkampf: statt quer über das Feld zu laufen, tritt der Held einen Schritt vor (die Gegner stehen auf Abstand)
+{const _wk73=walk;walk=function(x,fn,y){try{if(fmOn73()&&typeof x==='number'&&foes73().some(o=>Math.abs(o.x-x)<36)){const[hx,hy]=hSlot73(hero);hero.back73=t+70;return _wk73.call(this,hx+FM73.side*16,fn,TD?hy:y)}}catch(e){}return _wk73.apply(this,arguments)}}
+// ---------- Ziel wählen ----------
+function tgt73(o,quiet){if(!o||o.dead||o===enemy||!inFight()||TAC)return false;const R=rot29();if(!R)return false;const i=R.list.indexOf(o);if(i<0)return false;const old=enemy;
+  R.list[i]=old;enemy=o;
+  try{if(INI.on){const iM=INI.order.findIndex(x=>x.e&&!x.m),iX=INI.order.findIndex(x=>x.m===o);if(iM>=0&&iX>=0){INI.order[iM].m=old;delete INI.order[iX].m}iniBar()}}catch(e){console.warn('p73 Ziel/Initiative',e)}
+  S.tgt73=1;if(!quiet)say('Ziel: '+enemyName(o)+'.','sys');renderAll();return true}
+// Fällt das Ziel, rückt sein nächster Nachbar als Ziel nach (nicht einfach der erste in der Liste)
+promote29=(function(_p){return function(R){try{const s0=enemy&&enemy.sl73;if(s0!=null)R.list.sort((a,b)=>Math.abs((a.sl73!=null?a.sl73:99)-s0)-Math.abs((b.sl73!=null?b.sl73:99)-s0))}catch(e){}return _p.apply(this,arguments)}})(promote29);
+// Flächen: Nachbarn des Ziels statt „die Wartenden“
+rotTargets31=function(n){const R=typeof rot29==='function'?rot29():null;if(!R)return[];const s0=enemy&&enemy.sl73!=null?enemy.sl73:0;
+  return R.list.filter(o=>o&&!o.dead).slice().sort((a,b)=>Math.abs((a.sl73!=null?a.sl73:99)-s0)-Math.abs((b.sl73!=null?b.sl73:99)-s0)).slice(0,n)};
+// Gegner in der Rotte: Brennen, Gift und Aussetzen wirken jetzt auch dort (vorher nur beim vordersten)
+{const _ra73=rotAtk29;rotAtk29=function(o){try{if(o&&!o.dead&&inFight()){const nm=enemyName(o);
+      if(o.burn>0){o.burn--;dmgFoe31(o,1);say(nm+' kokelt noch. 1 Schaden.','roll');if(o.dead||o.hp<=0)return}
+      if(o.dot49&&o.dot49.n>0){o.dot49.n--;const v=o.dot49.v;dmgFoe31(o,v);say(nm+': '+(o.dot49.why||'Gift')+', '+v+' Schaden.','roll');if(o.dead||o.hp<=0)return}
+      if(o.skip){o.skip=0;say(nm+' zögert und greift diese Runde nicht an.','roll');return}}}catch(e){}return _ra73.apply(this,arguments)}}
+// Knöpfe „Ziel“ (vor den Kampf-Knöpfen)
+{const _rfc73=renderFightChips;renderFightChips=function(cr,gr,lab,chip){_rfc73.apply(this,arguments);try{const L=foes73();if(L.length<2||hero.hp<=0)return;
+    const tmp=document.createElement('div');lab(tmp,'Ziel');L.slice().sort((a,b)=>(a.sl73||0)-(b.sl73||0)).forEach(o=>chip(tmp,(o===enemy?'▸ ':'')+enemyName(o)+' · '+ZW73[zst73(o)],()=>tgt73(o),'tgt73'+(o===enemy?' on':'')));
+    [...tmp.childNodes].forEach(n=>{n.classList&&n.classList.add('tg73row')});const br=document.createElement('span');br.className='tgbr73';tmp.appendChild(br);cr.insertBefore(tmp.firstChild,cr.firstChild);let ref=cr.firstChild;while(tmp.firstChild){const n=tmp.firstChild;cr.insertBefore(n,ref.nextSibling);ref=n}}catch(e){console.warn('p73 Ziel-Knöpfe',e)}}}
+// Klick auf die Figur im Bild
+function foeAt73(p){let best=null,bd=99;foes73().forEach(o=>{const top=(typeof foeTop29==='function'&&o.type==='x'?foeTop29(o):null)||FLOOR-34;const dy=dy73(o);const dx=Math.abs(o.x-p.x);
+    if(dx<14&&p.y>top+dy-4&&p.y<FLOOR+dy+(TD?-6:6)&&dx<bd){best=o;bd=dx}});return best}
+cv.addEventListener('pointerdown',e=>{try{if(!fmOn73()||foes73().length<2)return;const p=canvasPos(e);const o=foeAt73(p);if(!o)return;e.stopImmediatePropagation();e.preventDefault();if(o!==enemy)tgt73(o)}catch(x){}},true);
+// ---------- Zustandswörter ----------
+const ZW73=['unverletzt','angeschlagen','wankt','taumelt','am Ende'];
+function zst73(o){const p=Math.max(0,o.hp)/(o.max||o.hp||1);return p>=.75?0:p>=.5?1:p>=.25?2:p>=.1?3:4}
+const ZS73={1:['{G} hat etwas abbekommen.','{G} zuckt zusammen – angeschlagen.','Der Treffer sitzt. {G} ist angeschlagen.'],
+  2:['{G} wankt.','{G} kommt ins Wanken.','{G} steht nicht mehr so sicher wie eben noch.'],
+  3:['{G} taumelt.','{G} stolpert rückwärts und fängt sich gerade noch.','{G} taumelt und sucht nach Halt.'],
+  4:['{G} ist am Ende.','{G} hält sich nur noch mit letzter Kraft.','Noch ein Treffer, und {G} fällt.']};
+setInterval(()=>{try{if(!inFight()||TAC)return;foes73().forEach(o=>{if(o.hp<=0)return;const z=zst73(o);if(o.zs73==null){o.zs73=z;return}if(z>o.zs73){o.zs73=z;const P=ZS73[z];if(P)say(P[Math.floor(Math.random()*P.length)].replace('{G}',enemyName(o)),'dm')}})}catch(e){}},300);
+// Keine Lebenspunkte-Punkte über den Köpfen im normalen Kampf
+{const _pn73=pipN29;pipN29=function(e){try{if(!TAC&&inFight())return 0}catch(x){}return _pn73.apply(this,arguments)}}
+// Namensschilder: Name und Zustand über jedem Gegner, das Ziel hervorgehoben; Klick wählt das Ziel
+const LB73=document.createElement('div');LB73.id='lbl73';try{cv.parentElement.appendChild(LB73)}catch(e){}
+{const st=document.createElement('style');st.textContent='#foe69{display:none!important}#lbl73{position:absolute;inset:0;pointer-events:none;z-index:5}'+
+  '#lbl73 .l73{position:absolute;transform:translate(-50%,-100%);background:rgba(10,8,14,.82);color:#fff;border:1px solid #6a5a6a;padding:0 5px;font:700 11px/1.35 "Pixelify Sans",monospace;white-space:nowrap;text-shadow:1px 1px 0 #000;pointer-events:auto;cursor:pointer}'+
+  '#lbl73 .l73 i{font-style:normal;font-weight:400;color:#e0c8a8}#lbl73 .l73.on{border-color:#f6c84a;color:#f6c84a;font-size:12px}#lbl73 .l73.one{cursor:default;border-color:#d9625a}'+
+  '#clsRow .tgt73{border-color:#8a7a9a}#clsRow .tgt73.on{background:#f6c84a;color:#1b1626;border-color:#f6c84a}#clsRow .tgbr73{flex-basis:100%;height:0}';document.head.appendChild(st)}
+function lbl73(){try{const on=inFight()&&!TAC&&enemy&&!enemy.dead&&!(enemy.def&&enemy.def.fcFight);if(!on){if(LB73.childNodes.length)LB73.innerHTML='';return}
+    const L0=foes73(),L=L0.length>1?L0.filter(o=>o===enemy||o===HOV73):L0,r=cv.getBoundingClientRect(),pr=cv.parentElement.getBoundingClientRect(),co=camOff();const many=L0.length>1;
+    while(LB73.childNodes.length>L.length)LB73.lastChild.remove();while(LB73.childNodes.length<L.length){const el=document.createElement('div');el.className='l73';LB73.appendChild(el)}
+    L.forEach((o,i)=>{const el=LB73.childNodes[i];const nm=enemyName(o)+(o.count>1?' ('+o.count+'×)':'');const w=ZW73[zst73(o)];const sig=nm+'|'+w+'|'+(o===enemy)+'|'+many;
+      if(el.__s!==sig){el.__s=sig;el.innerHTML='';el.appendChild(document.createTextNode((many&&o===enemy?'▸ ':'')+nm+' '));const z=document.createElement('i');z.textContent='· '+w;el.appendChild(z);el.className='l73'+(many&&o===enemy?' on':'')+(many?'':' one');
+        el.title=many?(o===enemy?'Ziel':'Als Ziel wählen'):'';el.onclick=many?(ev=>{ev.stopPropagation();tgt73(o)}):null}
+      const top=(o.type==='x'&&typeof foeTop29==='function'?foeTop29(o):null);const ey=(top!=null?top-4:(o.type==='ghost'||(o.def&&o.def.float)?FLOOR-58:FLOOR-26))+dy73(o);
+      el.style.left=(r.left-pr.left+(o.x-co)/W*r.width)+'px';el.style.top=(r.top-pr.top+Math.max(12,ey)/H*r.height)+'px'})}catch(e){}}
+setInterval(lbl73,100);
+// Mit der Maus über einem Gegner: sein Schild erscheint (die anderen stehen in den Knöpfen „Ziel“ und in der Gegnerkarte)
+let HOV73=null;cv.addEventListener('pointermove',e=>{try{HOV73=fmOn73()?foeAt73(canvasPos(e)):null;cv.style.cursor=HOV73&&HOV73!==enemy?'crosshair':''}catch(x){HOV73=null}});cv.addEventListener('pointerleave',()=>{HOV73=null;cv.style.cursor=''});
+// Reihenfolge-Zahlen über den Gegnern folgen der Reihe in der Poke-Ansicht
+{const _ip73=iniPos;iniPos=function(x){const r=_ip73.apply(this,arguments);try{const o=x&&(x.m||(x.e?enemy:null));const dy=o?dy73(o):0;if(dy&&r)return[r[0],r[1]+dy,r[2]+dy]}catch(e){}return r}}
+// Gegnerkarte: Zustand statt LP-Balken; die Zahlen stehen beim Spielleiter (Fenster „Kampf“)
+{const _fc73=foeCard56;foeCard56=function(){const r=_fc73.apply(this,arguments);try{const c=$('foeCard56');if(!c||c.hidden)return r;const L=foeList56();
+    [...c.querySelectorAll('.k56fr')].forEach((row,i)=>{const x=L[i];if(!x)return;const b=row.querySelector('.k56b.lp');if(b){const w=document.createElement('span');w.className='zw73';w.textContent=ZW73[zst73(x.o)];b.replaceWith(w)}
+      const d=row.querySelector('.k56d');if(d)d.textContent=d.textContent.replace(/^vorn/,'Ziel').replace(/^wartet/,'steht bereit').replace(/ · LP -?\d+\/[\d?]+/,'')})}catch(e){}return r}}
+{const st=document.createElement('style');st.textContent='#foeCard56 .zw73{margin-left:6px;font:400 11px/1.2 system-ui,sans-serif;color:#e0c8a8;white-space:nowrap}';document.head.appendChild(st)}
+// ---------- Kampfbeginn mit mehreren Gegnern: neuer Hinweis ----------
+{const _g73=group29;group29=function(keys,opt){try{if(!S.flags.rotHint29)S.flags.rotHint29=1}catch(e){}const r=_g73.apply(this,arguments);
+  try{if(r&&(keys||[]).length>1&&!S.flags.zielHint73){S.flags.zielHint73=1;setTimeout(()=>say('Mehrere Gegner: Alle stehen gleichzeitig auf dem Feld und greifen in ihrer Initiative an. Euer Ziel wählt ihr über die Knöpfe „Ziel“, über das Namensschild oder mit einem Klick auf die Figur. Das Ziel bleibt vorgemerkt; Flächen treffen auch seine Nachbarn.','sys'),900)}}catch(e){}return r}}
+// ---------- Rostmilben im Keller: alle gleichzeitig ----------
+function rostDef73(){foes23();if(!WORLD||!WORLD.foes)return false;if(!WORLD.foes.p23_rostmilbe){const B=WORLD.foes.p23_stollenmilbe;if(!B)return false;
+    WORLD.foes.p23_rostmilbe=Object.assign({},B,{name:'Rostmilbe',hp:6,ac:11,die:4,appear:'Noch eine Rostmilbe quillt aus dem Spalt.',out:Object.assign({},B.out||{})})}return true}
+cellarMilben=function(){if(inFight())return;walk(150,()=>{S.flags.cellarMilben=true;const n=1+d(2);
+  say('Unter der Falltür klickt und schabt es. Dann quellen rostbraune Leiber aus dem Spalt.','dm');
+  if(!rostDef73()){spawn('milbe',true);if(enemy){enemy.count=n;say(n+' Rostmilben!','sys')}}
+  else{group29(Array.from({length:n},()=>'rostmilbe'),{quiet:true,done:()=>{try{trust('ilse',10,'Milben im Keller erledigt');addChron('Die Rostmilben aus dem Keller sind erledigt.',['retter'])}catch(e){}}});say(n+' Rostmilben – alle zugleich!','sys')}
+  if(!anyChosen())setTimeout(rankeJoins,1400);renderAll()})};
+// ---------- Texte: „der vorderste und die Wartenden“ heißt jetzt „das Ziel und seine Nachbarn“ ----------
+function nbTxt73(s){if(typeof s!=='string')return s;return s.replace(/(den|der) vorderste[n]? und (einen|ein|\d) Wartende[nr]?/g,(m,a,b)=>'das Ziel und '+(b==='einen'?'einen Nachbarn':b==='ein'?'ein Nachbar':b+' Nachbarn'))
+  .replace(/bis zu (\d) Wartende/g,'bis zu $1 Nachbarn').replace(/vorderster \+ Wartende/g,'Ziel + Nachbarn')}
+function nbFix73(){try{Object.keys(TECH27).forEach(k=>{TECH27[k].desc=nbTxt73(TECH27[k].desc)});Object.keys(TX31).forEach(k=>{const X=TX31[k];if(X&&typeof X.lvd==='function'&&!X.lvd.nb73){const f=X.lvd;X.lvd=function(){return nbTxt73(f.apply(this,arguments))};X.lvd.nb73=1}});
+  if(typeof WK49!=='undefined')Object.keys(WK49).forEach(k=>{WK49[k].desc=nbTxt73(WK49[k].desc)})}catch(e){console.warn('p73 Texte',e)}}
+nbFix73();setTimeout(nbFix73,0);
+
+
+// ================= Prototyp 73 (g): 16 Wege mit Start-Techniken und Technik-Linien, Faust als 9. Waffenart, feste Formen, Übungsschwert als Ware =================
+// Phase 3, Lieferung 1 (Paul, 04.11., Blöcke 1–3 der Besprechung `_Spielleiter/besprechung-phase3.md`):
+//  - Zwischen Typ und Klasse liegt jetzt ein Weg (16 Wege). Der Weg bringt eine eigene Start-Technik (Antwort auf D.5:
+//    nicht mehr alle Flinken Doppelschlag) und eine Technik-Linie aus drei Techniken.
+//  - Die alten Start-Techniken (Wuchtschlag, Doppelschlag, Funkenregen, Zuspruch) bleiben im Spiel; wer sie hat, behält sie.
+//    Neue Helden beginnen mit Typ-Technik UND Weg-Technik. Ist beides dieselbe (Wucht, Kunststück, Funken), beginnt sie auf Stufe 3.
+//    (Vorschlag beim Bau, siehe vorschlaege-p73.md 1.)
+//  - Technik-Linie: zwei Techniken, die es schon gibt (bei ihren Lehrmeistern), und ein Lehrstück, das mit Lieferung 3 kommt.
+//    Passt eine Technik zur Linie des eigenen Wegs, wirkt sie eine Stufe stärker (Weg-Resonanz).
+//  - Faust ist die 9. Waffenart (waffenlos: Raufbold, Tierwandler in Gestalt, Mönche ohne Stab): Künste „Klammergriff“ und „Hebel“.
+//  - Feste Formen je Waffenart, auch im normalen Kampf: Klinge Linie, Axt & Hammer Kegel, Stab Kreis, Speer & Lanze Reichweite 2,
+//    Bogen & Wurf Fernkampf, Dolch Einzelziel (stark aus der Flanke), Keule & Werkzeug Einzelziel (kritisch: betäubt),
+//    Kette & Peitsche Reichweite 2, Faust Einzelziel mit Kombo und Kontrolle.
+//  - Übungsschwert nur als Ware (kaufen, verkaufen, keine Wirkung, nicht ausrüstbar).
+// ---------- Wege ----------
+const WEG73={
+  bollwerk:{n:'Bollwerk',typ:'Kämpfer',start:'schildstoss',linie:['formation','eisern'],lehr:'Fauststand (Weite, Strand)',txt:'Steht vorn und hält die Linie.'},
+  wucht:{n:'Wucht',typ:'Kämpfer',start:'wucht',linie:['spalt','bergmann'],lehr:'Steinbrecher (Gebirge, Leiterwand)',txt:'Schwere Schläge, die durch Deckung gehen.'},
+  klinge:{n:'Klinge',typ:'Kämpfer',start:'stossparade',linie:['nadel','gegenstrom'],lehr:'Terz und Quart (Viellos, Fechthof)',txt:'Stoß, Parade, Riposte.'},
+  schatten:{n:'Schatten',typ:'Flinke',start:'hinterruecks',linie:['wolken','nadel'],lehr:'Kettentanz (Turmzelle, nachts)',txt:'Trifft, wo keiner hinsieht.'},
+  jagd:{n:'Jagd',typ:'Flinke',start:'zielschuss',linie:['blattschuss','haken'],lehr:'Kranichstand (Oase, Aussichtsplateau)',txt:'Ein Schuss, der sitzt.'},
+  lauf:{n:'Lauf',typ:'Flinke',start:'anlauf',linie:['froschsprung','kranich'],lehr:'Sieben Wege (Viellos, Alter Brunnen)',txt:'Nie stehen bleiben.'},
+  kunststueck:{n:'Kunststück',typ:'Flinke',start:'doppel',linie:['kartenblick','rueben'],lehr:'Abrechnung (AIDA, Markthalle)',txt:'Blendwerk, Jonglage, Glück.'},
+  funken:{n:'Funken',typ:'Gelehrte',start:'funken',linie:['randnotiz','schlussstrich'],lehr:'Frostgriff (Gebirge, Eisgrotte)',txt:'Feuer, Frost und Funken.'},
+  hexerei:{n:'Hexerei',typ:'Gelehrte',start:'fluch',linie:['spott','kartenblick'],lehr:'Tintenfluch (Oase, Höhlengang)',txt:'Flüche, die an den Gegnern kleben.'},
+  wissen:{n:'Wissen',typ:'Gelehrte',start:'analyse',linie:['schwach','randnotiz'],lehr:'Lesezeichen (Kloster, Bibliothek)',txt:'Wer den Gegner versteht, trifft ihn.'},
+  werkstatt:{n:'Werkstatt',typ:'Gelehrte',start:'wurfphiole',linie:['haken','schwach'],lehr:'Federwerk (Kiefernhang, Kapselhaus)',txt:'Phiolen, Haken, Apparate.'},
+  heilkunst:{n:'Heilkunst',typ:'Stützen',start:'verbinden',linie:['aufguss','zuspruch'],lehr:'Verband im Lauf (Duppelbach, Übungsplatz)',txt:'Hält die Gruppe am Leben.'},
+  glaube:{n:'Glaube',typ:'Stützen',start:'segen',linie:['glocke','letzteratem'],lehr:'Stiller Atem (Kloster, Glockenstube)',txt:'Stille, Segen, Standhaftigkeit.'},
+  lied:{n:'Lied',typ:'Stützen',start:'kampflied',linie:['spott','zuspruch'],lehr:'Zugabe (Großensee, Schenke)',txt:'Alle im selben Takt.'},
+  fuehrung:{n:'Führung',typ:'Stützen',start:'befehl',linie:['formation','zuspruch'],lehr:'Windlesen II (AIDA, Hafen)',txt:'Ein Wort, und die anderen handeln.'},
+  wildnis:{n:'Wildnis',typ:'Stützen',start:'tierruf',linie:['kapselruf','froschsprung'],lehr:'Wurzelgriff (Weite, Zwillingsbaum)',txt:'Tiere und PaulMons kämpfen mit.'}};
+// Klasse → Weg (die zehn neuen Klassen aus Phase 3b stehen schon mit drin)
+const KLW73={
+  bollwerk:['Ritter','Ritterin','Schildmaid','Wachmann','Eidritter','Eidritterin'],
+  wucht:['Schmied','Bauer','Mistgabel-Held','Handwerker','Raufbold','Berserkerin','Berserker'],
+  klinge:['Held','Söldner','Söldnerin','Sträfling','Dämonenschwert','Drachenkönigin','Fechter','Fechterin'],
+  schatten:['Schattenläufer','Assassine','Waldwicht'],
+  jagd:['Waldläuferin','Fuchsjägerin','Bogenschütze','Fallensteller','Fallenstellerin'],
+  lauf:['Seefahrerin','Botin','Froschwanderer','Magd'],
+  kunststueck:['Gaukler','Glücksspieler','Glücksspielerin'],
+  funken:['Magier','Zauberin'],
+  hexerei:['Hexe','Zeithexe','Illusionist','Illusionistin'],
+  wissen:['Gelehrter','Großer Weiser','Sternenkundlerin','Spiegler','Spieglerin'],
+  werkstatt:['Tüftlerin','Alchemistin','Geschützmeister','Geschützmeisterin'],
+  heilkunst:['Heilerin','Kräuterkundige','Sanitäterin'],
+  glaube:['Mönch','Hohepriesterin'],
+  lied:['Bardin','Wolfsbarde','Tänzer','Tänzerin'],
+  fuehrung:['König ohne Land','Baron','Prinzessin a.D.','Rentner'],
+  wildnis:['Monsterflüsterer','Monsterflüsterin','Tierwandler','Tierwandlerin']};
+const WEGDEF73={'Kämpfer':'klinge','Flinke':'lauf','Gelehrte':'wissen','Stützen':'heilkunst'};
+function weg73(h){if(!h||!h.cls)return null;for(const w in KLW73)if(KLW73[w].includes(h.cls))return w;const t=h.typ||typOf27(h.cls);return WEGDEF73[t]||'klinge'}
+function wegN73(h){const w=weg73(h);return w?WEG73[w].n:''}
+// ---------- Die neuen Start-Techniken ----------
+Object.assign(TECH27,{
+  schildstoss:{n:'Schildstoß',kost:1,cd:2,ziel:'feind',von:'Weg Bollwerk',desc:'Ein Stoß mit Schild oder Schulter: Angriff, bei einem Treffer trifft das Ziel 2 Züge lang schlechter.'},
+  stossparade:{n:'Stoß und Parade',kost:1,cd:2,ziel:'feind',von:'Weg Klinge',desc:'Ein Angriff, danach sofort in die Parade: mehr Rüstung bis zum nächsten Zug.'},
+  hinterruecks:{n:'Hinterrücks',kost:1,cd:2,ziel:'feind',von:'Weg Schatten',desc:'Ein Stich aus der Flanke: +W4 Schaden, mit Vorteil, wenn ein Verbündeter das Ziel ablenkt.'},
+  zielschuss:{n:'Zielschuss',kost:1,cd:2,ziel:'feind',von:'Weg Jagd',desc:'Ruhig zielen: besser treffen, früher kritisch.'},
+  anlauf:{n:'Anlauf',kost:1,cd:2,ziel:'feind',rng:5,von:'Weg Lauf',desc:'Ein paar schnelle Schritte, dann ein Angriff mit Schwung. Taktik: bis Bewegung +2 Felder zum Ziel, dann Angriff.'},
+  fluch:{n:'Fluch',kost:1,cd:3,ziel:'feind',rng:4,von:'Weg Hexerei',desc:'Kein Wurf: Das Ziel trifft schlechter und verliert jeden Zug 1 LP.'},
+  analyse:{n:'Analyse',kost:1,cd:3,ziel:'feind',rng:5,von:'Weg Wissen',desc:'Kein Wurf: Du markierst das Ziel. Alle treffen es leichter.'},
+  wurfphiole:{n:'Wurfphiole',kost:1,cd:3,ziel:'feld',rng:3,von:'Weg Werkstatt',desc:'Kein Wurf: Eine Phiole platzt auf und neben einem Feld (normaler Kampf: Ziel und ein Nachbar): W4 Schaden und −1 RK.'},
+  verbinden:{n:'Verbinden',kost:1,cd:2,ziel:'freund',rng:1,von:'Weg Heilkunst',desc:'Ein Verbündeter direkt neben dir (oder du selbst) heilt W4 und ist das Gift los. Hilft auch Bewusstlosen auf.'},
+  segen:{n:'Segen',kost:1,cd:2,ziel:'freund',rng:3,von:'Weg Glaube',desc:'Ein Verbündeter: +1 Geist und +1 RK bis zu deinem nächsten Zug.'},
+  kampflied:{n:'Kampflied',kost:1,cd:3,ziel:'selbst',von:'Weg Lied',desc:'Alle Verbündeten (Taktik: bis 3 Felder) treffen beim nächsten Angriff besser.'},
+  befehl:{n:'Befehl',kost:1,cd:3,ziel:'feind',rng:6,von:'Weg Führung',desc:'Ein Wort genügt: Ein anderer Held greift das Ziel sofort an (Taktik: wer es erreicht).'},
+  tierruf:{n:'Tierruf',kost:1,cd:2,ziel:'feind',rng:4,von:'Weg Wildnis',desc:'Ein Ruf: Dein PaulMon greift an. Ohne geöffnete Kapsel antwortet ein Tier aus der Gegend (schwächer).'}});
+const lp73=L=>L>=6?2:1;
+Object.assign(TX31,{
+  schildstoss:{nat:'stein',tags:['p_str','blockOK'],lvd:L=>'Angriff; Treffer: Ziel −'+lp73(L)+' Treffen für 2 Züge'+(L>=5?', +'+dstepT31(L,true)+' Schaden':'')},
+  stossparade:{nat:'strom',tags:['p_dex','blockOK'],lvd:L=>'Angriff, danach +'+lp73(L)+' RK bis zum nächsten Zug'+(L>=4?'; Treffer +'+Math.floor(L/4)+' Schaden':'')},
+  hinterruecks:{nat:'strom',tags:['p_dex','sneak'],lvd:L=>'Angriff +W4'+(L>=3?'+'+Math.floor(L/3):'')+' Schaden; Vorteil, wenn ein Verbündeter das Ziel ablenkt'},
+  zielschuss:{nat:'stein',tags:['p_dex','ranged'],lvd:L=>'Treffen +'+(1+Math.floor(L/4))+', kritisch ab '+(L>=6?18:19)},
+  anlauf:{nat:'strom',tags:['p_dex','climb'],lvd:L=>'Angriff +1 Treffen, '+dstepT31(L,true)+' extra; Taktik: bis Bewegung +2 Felder'},
+  fluch:{nat:'strom',tags:['magic','p_int'],lvd:L=>'Ziel −'+lp73(L)+' Treffen und '+(L>=5?2:1)+' Schaden pro Zug, '+(L>=8?3:2)+' Züge'},
+  analyse:{nat:'stein',tags:['read','p_int'],lvd:L=>'Markierung: alle +'+(L>=5?2:1)+' gegen das Ziel, '+(L>=7?3:2)+' Runden'},
+  wurfphiole:{nat:'glut',tags:['p_int','explore'],lvd:L=>'W4+'+Math.floor(L/3)+' auf und neben dem Feld, −1 RK für 2 Züge'},
+  verbinden:{nat:'stein',tags:['herb','heal','help'],lvd:L=>'heilt '+healT31(L)+', hebt Gift; hilft Bewusstlosen auf'},
+  segen:{nat:'stein',tags:['p_wis','meditate','help'],lvd:L=>'+1 Geist und +'+lp73(L)+' RK bis zu deinem nächsten Zug'},
+  kampflied:{nat:'strom',tags:['music','p_cha'],lvd:L=>'alle Verbündeten +'+lp73(L)+' auf den nächsten Angriff'},
+  befehl:{nat:'stein',tags:['talk','p_cha'],lvd:L=>'ein anderer Held greift sofort an'+(L>=4?', +'+Math.floor(L/4)+' Treffen':'')},
+  tierruf:{nat:'stein',tags:['talk','explore'],lvd:L=>'PaulMon wie Kapsel-Ruf; ohne Kapsel ein Tier: W4'+(L>=3?'+'+Math.floor(L/3):'')}});
+// ---------- Hilfen ----------
+function others73(h){return PARTY.filter(p=>p!==h&&p.hp>0&&!p.out73)}
+function weakest73(h){return PARTY.filter(p=>!p.out73).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0]||h}
+function allyHit73(q,how,bonus){if(!enemy||enemy.dead)return false;const W=wpn27(q,false),mod=q.mods[W.stat||'str']||0,b=(W.atk||0)+(bonus||0),r=d(20),ac=enemy.ac-((enemy.ac27&&enemy.ac27.n>0)?enemy.ac27.v:0)-((enemy.mark31&&enemy.mark31.n>0)?enemy.mark31.v:0),tot=r+mod+b,hit=r===20||(r!==1&&tot>=ac);
+  q.lunge=12;q.face=enemy.x>q.x?1:-1;const txt=how+': '+q.name+' – W20 '+r+' '+sgn(mod+b)+' = '+tot+' gegen RK '+ac;
+  if(hit){const n=Math.max(1,d(W.die)+Math.max(0,mod)+(r===20?d(W.die):0));enemy.hp-=n;enemy.hurt=10;try{float(enemy.x,enemyY()-12,'-'+n,'#fbf236')}catch(e){}say(txt+' → '+(r===20?'Kritisch':'Treffer')+', '+n+' Schaden.','roll',q.name);try{ev31(q,'dmgOut',n)}catch(e){}}
+  else say(txt+' → daneben.','roll',q.name);return hit}
+// ---------- Normaler Kampf ----------
+Object.assign(TN31,{
+  schildstoss:(h,T,L,c)=>doAtk27({W:c.W,how:'Schildstoß',extra:()=>L>=5?dstep31(L,true):0,done:x=>{if(x&&enemy&&enemy.hp>0){enemy.spott27={v:lp73(L),n:2};say(enemyName()+' gerät aus dem Gleichgewicht: −'+lp73(L)+' Treffen für 2 Züge.','roll')}c.use(x);c.next()}}),
+  stossparade:(h,T,L,c)=>doAtk27({W:c.W,how:'Stoß und Parade',extra:()=>Math.floor(L/4),done:x=>{untilNext49(h,'rk',lp73(L),h.id);say(h.name+' zieht die Klinge zurück in die Parade: +'+lp73(L)+' RK bis zum nächsten Zug.','roll');c.use(x);c.next()}}),
+  hinterruecks:(h,T,L,c)=>{const adv=others73(h).length>0&&foes73n()<=others73(h).length+1;doAtk27({W:c.W,adv,how:'Hinterrücks',extra:()=>d(4)+Math.floor(L/3),done:x=>{c.use(x);c.next()}})},
+  zielschuss:(h,T,L,c)=>doAtk27({W:c.W,bonus:1+Math.floor(L/4),bonusTxt:'Zielschuss',how:'Zielschuss',crit:L>=6?18:19,done:x=>{c.use(x);c.next()}}),
+  anlauf:(h,T,L,c)=>doAtk27({W:c.W,bonus:1,bonusTxt:'Anlauf',how:'Anlauf',extra:()=>dstep31(L,true),done:x=>{c.use(x);c.next()}}),
+  fluch:(h,T,L,c)=>{const v=lp73(L),n=L>=8?3:2,dm=L>=5?2:1;enemy.spott27={v,n};enemy.dot49={v:dm,n,by:h.id,why:'Fluch'};enemy.hurt=6;say(h.name+' spricht einen Fluch über '+enemyName()+': −'+v+' Treffen und '+dm+' Schaden pro Zug, '+n+' Züge.','roll');c.use(true);c.end()},
+  analyse:(h,T,L,c)=>{enemy.mark31={v:L>=5?2:1,n:L>=7?3:2};say(h.name+' sieht genau hin: '+enemyName()+' lässt die linke Seite offen. Alle +'+enemy.mark31.v+' gegen das Ziel ('+enemy.mark31.n+' Runden).','roll');c.use(true);c.end()},
+  wurfphiole:(h,T,L,c)=>{const hit=o=>{const n=d(4)+Math.floor(L/3);o.ac27={v:1,n:2};return n};const n=hit(enemy);enemy.hp-=n;enemy.hurt=10;try{float(enemy.x,enemyY()-12,'-'+n,'#c8e86a')}catch(e){}
+    let txt='Die Phiole platzt bei '+enemyName()+': '+n+' Schaden, −1 RK.';rotTargets31(1).forEach(o=>{const m=hit(o);dmgFoe31(o,m);txt+=' '+enemyName(o)+' bekommt Spritzer ab: '+m+'.'});say(txt,'roll');c.use(true);c.next()},
+  verbinden:(h,T,L,c)=>{const p=weakest73(h);const n=Math.min(heal31(L),p.max-Math.max(0,p.hp));const was=p.hp<=0;if(p.hp<0)p.hp=0;if(n>0){p.hp+=n;try{float(p.x,FLOOR-52,'+'+n,'#8fcf8a')}catch(e){}ev31(h,'heal',n)}p.dot49=null;p.ds73=null;
+    say(h.name+' verbindet '+(p===h?'sich selbst':p.name)+': +'+Math.max(0,n)+' LP'+(was&&p.hp>0?' – '+p.name+' kommt wieder zu sich':'')+'.','roll');c.use(true);c.end()},
+  segen:(h,T,L,c)=>{const p=PARTY.filter(q=>q.hp>0).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0]||h;if(p.gmax!=null)p.geist=Math.min(p.gmax+1,(p.geist||0)+1);untilNext49(p,'rk',lp73(L),h.id);say(h.name+' segnet '+(p===h?'sich selbst':p.name)+': +1 Geist, +'+lp73(L)+' RK bis zum nächsten Zug.','roll');c.use(true);c.end()},
+  kampflied:(h,T,L,c)=>{const v=lp73(L);PARTY.filter(p=>p.hp>0).forEach(p=>{p.zus27=Math.max(+p.zus27||0,v)});say(h.name+' stimmt ein Kampflied an. Alle +'+v+' auf den nächsten Angriff.','roll');c.use(true);c.end()},
+  befehl:(h,T,L,c)=>{const q=others73(h).sort((a,b)=>(b.mods.str||0)+(b.mods.dex||0)-(a.mods.str||0)-(a.mods.dex||0))[0];if(!q){c.refund('Befehl: Es steht niemand sonst, der angreifen könnte.');return}
+    say(h.name+': „'+q.name+', jetzt!“','dm');setTimeout(()=>{allyHit73(q,'Auf Befehl',Math.floor(L/4));c.use(true);c.next()},350)},
+  tierruf:(h,T,L,c)=>{if(pet&&TN31.kapselruf)return TN31.kapselruf(h,T,L,c);const ac=enemy.ac,r=d(20),hb=2+Math.floor(L/4),hit=r===20||(r!==1&&r+hb>=ac);
+    if(hit){const n=d(4)+Math.floor(L/3);enemy.hp-=n;enemy.hurt=10;try{float(enemy.x,enemyY()-12,'-'+n,'#bbff7a')}catch(e){}say('Tierruf: Aus dem Gebüsch schießt etwas Kleines, Zähes hervor – W20 '+r+' +'+hb+' = '+(r+hb)+' gegen RK '+ac+' → Treffer, '+n+' Schaden.','roll')}
+    else say('Tierruf: Etwas raschelt heran – W20 '+r+' +'+hb+' = '+(r+hb)+' gegen RK '+ac+' → daneben, und schon ist es wieder weg.','roll');c.use(hit);c.next()}});
+function foes73n(){try{return foes73().length}catch(e){return 1}}
+// ---------- Taktik-Kampf ----------
+Object.assign(TT31,{
+  schildstoss:(u,T,L,o,cell,c)=>{tAttack(u,o,{__noCount31:1,how:'Schildstoß',noForm:true,extra:()=>L>=5?dstep31(L,true):0,after:x=>{if(x&&o.hp>0){o.spott27={v:lp73(L),n:2};tFloat(o,'−'+lp73(L)+' Treffen','#f6c84a')}c.use(x)}})},
+  stossparade:(u,T,L,o,cell,c)=>{tAttack(u,o,{__noCount31:1,how:'Stoß und Parade',noForm:true,extra:()=>Math.floor(L/4),after:x=>{untilNext49(u,'def',lp73(L),'u'+u.hero.id);tFloat(u,'Parade','#8ac8ff');c.use(x)}})},
+  hinterruecks:(u,T,L,o,cell,c)=>{const adv=tAllies(u).some(q=>q!==u&&tDist(q,o)===1);tAttack(u,o,{__noCount31:1,adv,how:'Hinterrücks',noForm:true,extra:()=>d(4)+Math.floor(L/3),after:x=>c.use(x)})},
+  zielschuss:(u,T,L,o,cell,c)=>{tAttack(u,o,{__noCount31:1,bonus:1+Math.floor(L/4),bonusTxt:'Zielschuss',how:'Zielschuss',crit:L>=6?18:19,noForm:true,after:x=>c.use(x)})},
+  anlauf:(u,T,L,o,cell,c)=>{const rr=(u.mov||3)+2;let spot=null;if(tDist(u,o)===1)spot=[u.c,u.r];else{const S2=[[1,0],[-1,0],[0,1],[0,-1]].map(([a,b])=>[o.c+a,o.r+b]).filter(([cc,r])=>tFree27(cc,r)&&Math.abs(cc-u.c)+Math.abs(r-u.r)<=rr).sort((p,q)=>(Math.abs(p[0]-u.c)+Math.abs(p[1]-u.r))-(Math.abs(q[0]-u.c)+Math.abs(q[1]-u.r)));spot=S2[0]}
+    if(!spot)return c.refund('Anlauf: höchstens '+rr+' Felder – oder neben '+o.name+' ist kein Platz.');if(spot[0]!==u.c||spot[1]!==u.r){u.c=spot[0];u.r=spot[1];tFloat(u,'Anlauf!','#8ad0ff');c.log(u.name+' nimmt Anlauf und steht neben '+o.name+'.')}
+    setTimeout(()=>{if(TAC&&o.hp>0)tAttack(u,o,{__noCount31:1,bonus:1,bonusTxt:'Anlauf',how:'Anlauf',noForm:true,extra:()=>dstep31(L,true),after:x=>c.use(x)})},300)},
+  fluch:(u,T,L,o,cell,c)=>{const v=lp73(L),n=L>=8?3:2,dm=L>=5?2:1;o.spott27={v,n};o.dot49={v:dm,n,why:'Fluch'};tFloat(o,'verflucht','#c890ff');c.log(u.name+' verflucht '+o.name+': −'+v+' Treffen und '+dm+' Schaden pro Zug, '+n+' Züge.');c.use(true)},
+  analyse:(u,T,L,o,cell,c)=>{o.mark31={v:L>=5?2:1,n:L>=7?3:2};tFloat(o,'erkannt','#c890ff');c.log(u.name+' durchschaut '+o.name+': alle +'+o.mark31.v+' gegen das Ziel ('+o.mark31.n+' Runden).');c.use(true)},
+  wurfphiole:(u,T,L,o,cell,c)=>{const[c0,r0]=cell||[o&&o.c,o&&o.r];const hit=TAC.units.filter(q=>q.side!==u.side&&q.hp>0&&!q.gone&&Math.abs(q.c-c0)+Math.abs(q.r-r0)<=1);if(!hit.length)return c.refund('Wurfphiole: Dort steht kein Gegner. Wählt ein Feld auf oder neben einem Gegner.');
+    c.log('Die Wurfphiole platzt!');hit.forEach(q=>{const n=d(4)+Math.floor(L/3);q.ac27={v:1,n:2};c.log(q.name+': '+n+' Schaden, −1 RK.'+tDmg27(u,q,n,'',{}))});c.use(true)},
+  verbinden:(u,T,L,o,cell,c)=>{const n=Math.min(heal31(L),o.max-Math.max(0,o.hp));if(o.hp<0)o.hp=0;o.hp+=Math.max(0,n);o.fall=0;o.dot49=null;if(o.hero){o.hero.hp=o.hp;o.hero.ds73=null}tFloat(o,'+'+Math.max(0,n),'#7af07a');ev31(u.hero,'heal',Math.max(0,n));c.log(u.name+' verbindet '+(o===u?'sich selbst':o.name)+': +'+Math.max(0,n)+' LP, Gift weg.');c.use(true)},
+  segen:(u,T,L,o,cell,c)=>{if(o.gmax!=null){o.geist=Math.min(o.gmax+1,(o.geist||0)+1);if(o.hero)o.hero.geist=o.geist}untilNext49(o,'def',lp73(L),'u'+u.hero.id);tFloat(o,'Segen','#fffbe6');c.log(u.name+' segnet '+(o===u?'sich selbst':o.name)+': +1 Geist, +'+lp73(L)+' RK bis zum nächsten Zug.');c.use(true)},
+  kampflied:(u,T,L,o,cell,c)=>{const v=lp73(L);tAllies(u).filter(q=>tDist(q,u)<=3).forEach(q=>{q.zus27=Math.max(+q.zus27||0,v);tFloat(q,'♪','#f6c84a')});c.log(u.name+' stimmt ein Kampflied an: alle bis 3 Felder +'+v+' auf den nächsten Angriff.');c.use(true)},
+  befehl:(u,T,L,o,cell,c)=>{const q=tAllies(u).filter(x=>x!==u&&x.hero&&x.hp>0&&tInRange(x,o)).sort((a,b)=>(b.atk||0)-(a.atk||0))[0];if(!q)return c.refund('Befehl: Kein anderer Held erreicht '+o.name+' von seinem Platz aus.');
+    c.log(u.name+': „'+q.name+', jetzt!“');setTimeout(()=>{if(TAC&&o.hp>0)tAttack(q,o,{__noCount31:1,bonus:Math.floor(L/4),bonusTxt:'Befehl',how:'Auf Befehl',noForm:true,after:x=>c.use(x)})},300)},
+  tierruf:(u,T,L,o,cell,c)=>{if(u.hero&&u.hero.own&&u.hero.own.opened&&TT31.kapselruf)return TT31.kapselruf(u,T,L,o,cell,c);const hb=2+Math.floor(L/4),r=d(20),x=r===20||(r!==1&&r+hb>=o.ac);
+    if(x){const n=d(4)+Math.floor(L/3);c.log('Tierruf: Ein Tier aus der Gegend springt '+o.name+' an – W20 '+r+' +'+hb+' gegen RK '+o.ac+' → Treffer, '+n+' Schaden.'+tDmg27(u,o,n,'',{}))}else c.log('Tierruf: W20 '+r+' +'+hb+' gegen RK '+o.ac+' → das Tier verfehlt '+o.name+' und verschwindet.');c.use(x)}});
+// Bilder für die neuen Techniken (wie die verwandten alten)
+{const _fx73=fxTech31;const MAP73={schildstoss:'wucht',stossparade:'eisern',hinterruecks:'nadel',zielschuss:'blattschuss',anlauf:'froschsprung',fluch:'spott',analyse:'randnotiz',wurfphiole:'rueben',verbinden:'aufguss',segen:'zuspruch',kampflied:'spott',befehl:'formation',tierruf:'kapselruf'};
+  fxTech31=function(id){if(MAP73[id]){const a=[...arguments];a[0]=MAP73[id];return _fx73.apply(this,a)}return _fx73.apply(this,arguments)}}
+// ---------- Start: Typ-Technik und Weg-Technik ----------
+{const _en73=ensure27;ensure27=function(h){try{if(h&&h.cls&&!h.k27&&!h.tech){const typ=typOf27(h.cls),w=weg73(h),a=TSTART27[typ],b=WEG73[w]&&WEG73[w].start;
+      h.tech=a===b||!b?[{id:a,m:1,use:0,cd:0,lv:3,xp:0}]:[{id:a,m:1,use:0,cd:0},{id:b,m:1,use:0,cd:0}];h.weg73=1}}catch(e){console.warn('p73 Start',e)}
+  const r=_en73.apply(this,arguments);
+  try{if(h&&h.k27&&h.tech&&!h.weg73){h.weg73=1;const w=weg73(h),b=WEG73[w]&&WEG73[w].start;if(b&&!h.tech.some(x=>x.id===b)&&h.tech.length<TSLOTS27){h.tech.push({id:b,m:1,use:0,cd:0,lv:1,xp:0});
+        setTimeout(()=>{try{say(h.name+' folgt dem Weg „'+WEG73[w].n+'“ und kennt jetzt auch „'+TECH27[b].n+'“.','new')}catch(e){}},400)}}}catch(e){}return r}}
+// ---------- Weg-Resonanz: Techniken der eigenen Linie wirken eine Stufe stärker ----------
+function linie73(h){const w=weg73(h);return w?WEG73[w].linie:[]}
+{const _el73=effL31;effL31=function(h,T){let v=_el73.apply(this,arguments);try{if(h&&T&&linie73(h).includes(T.id))v+=1}catch(e){}return v}}
+// ---------- Heldenbogen: Weg, Start-Technik, Linie ----------
+{const _bh73=bogenHtml31;bogenHtml31=function(h){let s=_bh73.apply(this,arguments);try{const w=weg73(h);if(!w)return s;const W=WEG73[w],e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    s=s.replace('Klassentyp: <b>'+h.typ+'</b>','Klassentyp: <b>'+h.typ+'</b> · Weg: <b>'+e(W.n)+'</b>');
+    const kn=id=>!!(h.tech||[]).find(x=>x.id===id);const li=id=>{const D=TECH27[id];if(!D)return'';return'<li>'+(kn(id)?'✓ ':'○ ')+'<b>'+e(D.n)+'</b>'+(kn(id)?'':' <span class="small">– lernbar bei '+e(D.von||'einem Lehrmeister')+'</span>')+'</li>'};
+    const card='<div class="card2 weg73"><h3>Weg: '+e(W.n)+'</h3><p class="small">'+e(W.txt)+'</p><p>Start-Technik: <b>'+e(TECH27[W.start].n)+'</b>'+(kn(W.start)?' ✓':'')+'</p>'+
+      '<p>Technik-Linie (wirkt eine Stufe stärker, wenn gelernt):</p><ul class="small">'+W.linie.map(li).join('')+'<li>○ <b>'+e(W.lehr.split(' (')[0])+'</b> <span class="small">– Lehrstück ('+e((W.lehr.split(' (')[1]||'').replace(/\)$/,''))+'), kommt mit Lieferung 3</span></li></ul></div>';
+    const mk='<div class="card2"><h3>Techniken';const i=s.indexOf(mk);s=i>=0?s.slice(0,i)+card+s.slice(i):s+card}catch(e){console.warn('p73 Bogen',e)}return s}}
+{const st=document.createElement('style');st.textContent='.weg73 ul{margin:2px 0 0 16px;padding:0}.weg73 li{margin:1px 0}';document.head.appendChild(st)}
+// ---------- Faust: 9. Waffenart ----------
+{const _wo73=wartOf27;wartOf27=function(it){try{if(it){const s=nk((it.name||'')+' '+(it.how||''));if(/faust|fauste|kralle|knochel|bandag|schlagring|faustling/.test(s))return'faust'}}catch(e){}return _wo73.apply(this,arguments)}}
+WART27.faust.fd='Kombo: bei einer 15 oder mehr ein zweiter Schlag · nicht zu entwaffnen';
+FAMOF49.faust='faust';
+Object.assign(ART49,{
+  griff:{n:'Klammergriff',nat:'stein',kost:1,cd:2,ziel:'feind',ic:'chain',desc:'Packen und festhalten: Das Ziel trifft schlechter und kann aussetzen (Taktik: kann sich nicht bewegen).',
+    lvd:L=>'Angriff; Treffer: Ziel −'+(L>=6?2:1)+' Treffen für 2 Züge, '+Math.min(60,20+4*L)+' % setzt aus'},
+  hebel:{n:'Hebel',nat:'glut',kost:1,cd:3,ziel:'feind',ic:'crack',desc:'Arm verdrehen, Gelenk sperren: Das Ziel öffnet die Deckung und verliert Kraft.',
+    lvd:L=>'Angriff; Treffer: Ziel −'+(L>=5?2:1)+' RK und −1 Schaden, 2 Züge'+(L>=8?', +W4 Schaden':'')}});
+FAM49.faust={n:'Faust',ic:'star',a:'griff',b:'hebel',
+  k3:{n:'Eisengriff',ic:'chain',d:'Gepackte Gegner treffen 1 schlechter mehr. Waffenlos: +1 Blockwert.',fx:{block:1}},
+  k6:{n:'Faustmeister',ic:'crown',d:'Kombo schon ab 13 (normaler Kampf). +1 Schaden.',fx:{nDmg:1,dmg:1}},
+  s1:{n:'Bandagen',m:[['stoff',2]]},s2:{n:'Knöchelleder',m:[['fell',2]]},s4:{n:'Eisenknöchel',m:[['erz',2],['fell',1]],alt:[['fell',5]]},
+  ms:{n:'Kampfring',d:'Die Felder um dich werden ein Kampfring (3 Runden): Helden darauf +1 Schaden und +1 Treffen.'}};
+['griff','hebel'].forEach(id=>{const A=ART49[id];WK49[id]=A;TECH27[id]={n:A.n,kost:A.kost,cd:A.cd,ziel:A.ziel,von:'Waffenbaum',desc:A.desc};TX31[id]={nat:A.nat,tags:['atk'],req:OWNREQ49,reqT:'die eigene Waffe',lvd:A.lvd}});
+TN31.griff=(h,T,L,c)=>doAtk27({W:c.W,how:'Klammergriff',done:x=>{if(x&&enemy&&enemy.hp>0){const v=L>=6?2:1;enemy.spott27={v,n:2};let m=enemyName()+' ist gepackt: −'+v+' Treffen.';if(Math.random()<Math.min(.6,.2+.04*L)){enemy.skip=1;m+=' Es kommt nicht los und setzt aus.'}say(m,'roll')}c.use(x);c.next()}});
+TN31.hebel=(h,T,L,c)=>doAtk27({W:c.W,how:'Hebel',extra:()=>L>=8?d(4):0,done:x=>{if(x&&enemy&&enemy.hp>0){const v=L>=5?2:1;enemy.ac27={v,n:2};enemy.spott27={v:1,n:2};say(enemyName()+' steckt im Hebel: −'+v+' RK und schwächere Schläge.','roll')}c.use(x);c.next()}});
+TT31.griff=(u,T,L,o,cell,c)=>{tAttack(u,o,{__noCount31:1,how:'Klammergriff',noForm:true,after:x=>{if(x&&o.hp>0){const v=L>=6?2:1;o.spott27={v,n:2};o.mov49bak=o.mov49bak!=null?o.mov49bak:o.mov;o.mov=0;tFloat(o,'gepackt','#f6c84a');c.log(o.name+' ist gepackt: −'+v+' Treffen, kann sich nicht bewegen.');if(Math.random()<Math.min(.6,.2+.04*L)){o.stun31=1;c.log(o.name+' kommt nicht los und setzt aus.')}}c.use(x)}})};
+TT31.hebel=(u,T,L,o,cell,c)=>{tAttack(u,o,{__noCount31:1,how:'Hebel',noForm:true,extra:()=>L>=8?d(4):0,after:x=>{if(x&&o.hp>0){const v=L>=5?2:1;o.ac27={v,n:2};o.spott27={v:1,n:2};tFloat(o,'−'+v+' RK','#f6c84a');c.log(o.name+' steckt im Hebel: −'+v+' RK, schwächere Schläge.')}c.use(x)}})};
+{const _fx73f=fxTech31;fxTech31=function(id){if(id==='griff'||id==='hebel'){const a=[...arguments];a[0]='kopfnuss';return _fx73f.apply(this,a)}return _fx73f.apply(this,arguments)}}
+// Meisterstück der Faust: wie das Resonanzfeld (Taktik-Brett), mit eigenem Namen
+{const _ms73=ms49;ms49=function(u,c){try{if(u&&u.hero&&fam49(u.hero)==='faust'){const f0=fam49,n0=FAM49.keule.ms.n;fam49=()=>'keule';FAM49.keule.ms.n=FAM49.faust.ms.n;try{return _ms73.apply(this,arguments)}finally{fam49=f0;FAM49.keule.ms.n=n0}}}catch(e){console.warn('p73 Faust-Meisterstück',e)}return _ms73.apply(this,arguments)}}
+// ---------- Feste Formen je Waffenart ----------
+WART27.saebel.form='linie';WART27.saebel.fd='Linie: trifft auch den Gegner direkt dahinter (halber Schaden)';
+WART27.hammer.form='kegel';WART27.hammer.fd='Kegel: streift die Gegner links und rechts vom Ziel (halber Schaden) · −1 Angriff';
+WART27.keule.fd='Einzelziel · kritisch: das Ziel ist benommen und setzt aus';WART27.dolch.fd='Einzelziel · +1 Angriff · aus der Flanke zusätzlich W4';
+WART27.kette.fd='Reichweite 2 · zieht heran';
+try{FAM49.wucht.k6.d='Kegel trifft voll (Taktik). Normaler Kampf: +1 Schaden.'}catch(e){}
+// Im normalen Kampf: Linie, Kegel und Kreis treffen beim gewöhnlichen Angriff auch Nachbarn des Ziels (halber Schaden); Keule betäubt bei kritisch
+const FORMN73={linie:'Linie',kegel:'Kegel',ring:'Kreis'};
+{const _da73=doAtk27;doAtk27=function(o){try{const W=o&&o.W;const basic=W&&!o.how&&!o.noForm&&!o.spellFx&&W.art!=='zauber';
+    if(basic&&(FORMN73[W.form]||W.art==='keule')){const done=o.done;o=Object.assign({},o,{done:(hit,dmg,crit)=>{try{if(hit&&dmg>0){
+          if(FORMN73[W.form]){const n=W.form==='linie'?1:2;const L=rotTargets31(n);if(L.length){let txt=FORMN73[W.form]+':';L.forEach(q=>{const m=Math.max(1,Math.ceil(dmg/2));dmgFoe31(q,m);txt+=' '+enemyName(q)+' wird mitgetroffen, '+m+' Schaden.'});say(txt,'roll')}}
+          if(W.art==='keule'&&crit&&enemy&&enemy.hp>0){enemy.skip=1;say(enemyName()+' ist benommen und setzt aus.','roll')}}}catch(e){console.warn('p73 Form',e)}return done&&done.apply(this,arguments)}})}}catch(e){}return _da73.call(this,o)}}
+// ---------- Übungsschwert: nur noch Ware ----------
+WARE43.uebschwert=['Übungsschwert',15,0];WDESC43.uebschwert='Stumpf, aber solide. Zum Üben gedacht – zum Kämpfen taugt es nicht, aber Fechtschulen und Händler zahlen dafür.';
+try{delete IT43.uebschwert;['Ragna','Tamme'].forEach(k=>{const H=HAND43[k];if(!H)return;H.it=(H.it||[]).filter(x=>x!=='uebschwert');H.w=(H.w||[]);if(!H.w.includes('uebschwert'))H.w.push('uebschwert')})}catch(e){console.warn('p73 Übungsschwert',e)}
+{const _b73=buys43;buys43=function(nm,it){try{if(it&&it.kind==='ware'&&it.w43==='uebschwert'&&/^(Ragna|Tamme)$/.test(nm))return true}catch(e){}return _b73.apply(this,arguments)}}
+// Alte Spielstände: ein Übungsschwert als Waffe wird zur Ware
+{const _ra73g=renderAll;renderAll=function(){try{(PARTY||[]).forEach(h=>{const i=(h.inv||[]).findIndex(x=>x&&x.kind==='weapon'&&x.name==='Übungsschwert');if(i>=0){h.inv.splice(i,1);giveWare43(h,'uebschwert',1,true)}})}catch(e){}return _ra73g.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
