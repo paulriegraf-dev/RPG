@@ -27855,7 +27855,7 @@ nbFix73();setTimeout(nbFix73,0);
 //  - Zwischen Typ und Klasse liegt jetzt ein Weg (16 Wege). Der Weg bringt eine eigene Start-Technik (Antwort auf D.5:
 //    nicht mehr alle Flinken Doppelschlag) und eine Technik-Linie aus drei Techniken.
 //  - Die alten Start-Techniken (Wuchtschlag, Doppelschlag, Funkenregen, Zuspruch) bleiben im Spiel; wer sie hat, behält sie.
-//    Neue Helden beginnen mit Typ-Technik UND Weg-Technik. Ist beides dieselbe (Wucht, Kunststück, Funken), beginnt sie auf Stufe 3.
+//    Neue Helden beginnen mit Typ-Technik UND Weg-Technik. Ist beides dieselbe (Wucht, Kunststück, Funken), kommt die erste Linien-Technik dazu (Paul 04.11., 22:14: „Alle zwei“).
 //    (Vorschlag beim Bau, siehe vorschlaege-p73.md 1.)
 //  - Technik-Linie: zwei Techniken, die es schon gibt (bei ihren Lehrmeistern), und ein Lehrstück, das mit Lieferung 3 kommt.
 //    Passt eine Technik zur Linie des eigenen Wegs, wirkt sie eine Stufe stärker (Weg-Resonanz).
@@ -27986,8 +27986,9 @@ Object.assign(TT31,{
   fxTech31=function(id){if(MAP73[id]){const a=[...arguments];a[0]=MAP73[id];return _fx73.apply(this,a)}return _fx73.apply(this,arguments)}}
 // ---------- Start: Typ-Technik und Weg-Technik ----------
 {const _en73=ensure27;ensure27=function(h){try{if(h&&h.cls&&!h.k27&&!h.tech){const typ=typOf27(h.cls),w=weg73(h),a=TSTART27[typ],b=WEG73[w]&&WEG73[w].start;
-      h.tech=a===b||!b?[{id:a,m:1,use:0,cd:0,lv:3,xp:0}]:[{id:a,m:1,use:0,cd:0},{id:b,m:1,use:0,cd:0}];h.weg73=1}}catch(e){console.warn('p73 Start',e)}
+      const b2=a===b||!b?(WEG73[w].linie[0]):b;h.tech=[{id:a,m:1,use:0,cd:0},{id:b2,m:1,use:0,cd:0}];h.weg73=1;h.weg73b=1}}catch(e){console.warn('p73 Start',e)}
   const r=_en73.apply(this,arguments);
+  try{if(h&&h.k27&&h.tech&&!h.weg73b){h.weg73b=1;const w=weg73(h),W=WEG73[w];if(W&&W.start===TSTART27[h.typ||typOf27(h.cls)]){const l=W.linie[0];if(l&&!h.tech.some(x=>x.id===l)&&h.tech.length<TSLOTS27){h.tech.push({id:l,m:1,use:0,cd:0,lv:1,xp:0});setTimeout(()=>{try{say(h.name+' kennt jetzt auch „'+TECH27[l].n+'“ (Weg „'+W.n+'“).','new')}catch(e){}},500)}}}}catch(e){}
   try{if(h&&h.k27&&h.tech&&!h.weg73){h.weg73=1;const w=weg73(h),b=WEG73[w]&&WEG73[w].start;if(b&&!h.tech.some(x=>x.id===b)&&h.tech.length<TSLOTS27){h.tech.push({id:b,m:1,use:0,cd:0,lv:1,xp:0});
         setTimeout(()=>{try{say(h.name+' folgt dem Weg „'+WEG73[w].n+'“ und kennt jetzt auch „'+TECH27[b].n+'“.','new')}catch(e){}},400)}}}catch(e){}return r}}
 // ---------- Weg-Resonanz: Techniken der eigenen Linie wirken eine Stufe stärker ----------
@@ -28036,11 +28037,11 @@ const FORMN73={linie:'Linie',kegel:'Kegel',ring:'Kreis'};
           if(FORMN73[W.form]){const n=W.form==='linie'?1:2;const L=rotTargets31(n);if(L.length){let txt=FORMN73[W.form]+':';L.forEach(q=>{const m=Math.max(1,Math.ceil(dmg/2));dmgFoe31(q,m);txt+=' '+enemyName(q)+' wird mitgetroffen, '+m+' Schaden.'});say(txt,'roll')}}
           if(W.art==='keule'&&crit&&enemy&&enemy.hp>0){enemy.skip=1;say(enemyName()+' ist benommen und setzt aus.','roll')}}}catch(e){console.warn('p73 Form',e)}return done&&done.apply(this,arguments)}})}}catch(e){}return _da73.call(this,o)}}
 // ---------- Übungsschwert: nur noch Ware ----------
-WARE43.uebschwert=['Übungsschwert',15,0];WDESC43.uebschwert='Stumpf, aber solide. Zum Üben gedacht – zum Kämpfen taugt es nicht, aber Fechtschulen und Händler zahlen dafür.';
-try{delete IT43.uebschwert;['Ragna','Tamme'].forEach(k=>{const H=HAND43[k];if(!H)return;H.it=(H.it||[]).filter(x=>x!=='uebschwert');H.w=(H.w||[]);if(!H.w.includes('uebschwert'))H.w.push('uebschwert')})}catch(e){console.warn('p73 Übungsschwert',e)}
-{const _b73=buys43;buys43=function(nm,it){try{if(it&&it.kind==='ware'&&it.w43==='uebschwert'&&/^(Ragna|Tamme)$/.test(nm))return true}catch(e){}return _b73.apply(this,arguments)}}
+WARE43.uebschwert=['Übungsschwert',15,0];WARE43.uebdegen=['Übungsdegen',18,0];WDESC43.uebdegen='Leicht und biegsam. Zum Üben gedacht – zum Kämpfen taugt er nicht, aber Fechtschulen und Händler zahlen dafür.';WDESC43.uebschwert='Stumpf, aber solide. Zum Üben gedacht – zum Kämpfen taugt es nicht, aber Fechtschulen und Händler zahlen dafür.';
+try{delete IT43.uebschwert;delete IT43.degen;{const H=HAND43.Tamme;if(H){H.it=(H.it||[]).filter(x=>x!=='degen');H.w=H.w||[];if(!H.w.includes('uebdegen'))H.w.push('uebdegen')}}['Ragna','Tamme'].forEach(k=>{const H=HAND43[k];if(!H)return;H.it=(H.it||[]).filter(x=>x!=='uebschwert');H.w=(H.w||[]);if(!H.w.includes('uebschwert'))H.w.push('uebschwert')})}catch(e){console.warn('p73 Übungsschwert',e)}
+{const _b73=buys43;buys43=function(nm,it){try{if(it&&it.kind==='ware'&&/^ueb(schwert|degen)$/.test(it.w43)&&/^(Ragna|Tamme)$/.test(nm))return true}catch(e){}return _b73.apply(this,arguments)}}
 // Alte Spielstände: ein Übungsschwert als Waffe wird zur Ware
-{const _ra73g=renderAll;renderAll=function(){try{(PARTY||[]).forEach(h=>{const i=(h.inv||[]).findIndex(x=>x&&x.kind==='weapon'&&x.name==='Übungsschwert');if(i>=0){h.inv.splice(i,1);giveWare43(h,'uebschwert',1,true)}})}catch(e){}return _ra73g.apply(this,arguments)}}
+{const _ra73g=renderAll;renderAll=function(){try{(PARTY||[]).forEach(h=>{[['Übungsschwert','uebschwert'],['Übungsdegen','uebdegen']].forEach(([n,k])=>{const i=(h.inv||[]).findIndex(x=>x&&x.kind==='weapon'&&x.name===n);if(i>=0){h.inv.splice(i,1);giveWare43(h,k,1,true)}})})}catch(e){}return _ra73g.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
