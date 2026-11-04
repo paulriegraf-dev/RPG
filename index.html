@@ -28054,6 +28054,12 @@ function xpTech73(n){xpHeroes73().forEach(h=>{ensure27(h);(h.tech||[]).forEach(T
 function xpKunst73(n){xpHeroes73().forEach(h=>{ensure27(h);const id=h.lehre;if(!id||typeof KUNST31==='undefined'||!KUNST31[id])return;const K=kl31(h,id);K.lv=Math.max(1,Math.min(10,K.lv+n));K.xp=0;if(K.lv>=5)K.d5=1;if(K.lv>=10)K.d10=1;try{recalc27(h)}catch(e){}});
   say('(Spielleiter) Aktive Innere Kunst '+(n>0?'+':'')+n+' Stufe ('+xpHeroes73().filter(h=>h.lehre).map(h=>h.name+': '+KUNST31[h.lehre].n+' St. '+kl31(h,h.lehre).lv).join(', ')+').','sys')}
 function xpWaffe73(we,wp){xpHeroes73().forEach(h=>{try{if(we)gainWE49(h,we,'Spielleiter',true);if(wp)giveWP49(h,wp,'Spielleiter')}catch(e){}});say('(Spielleiter) '+(we?'+'+we+' Waffenerfahrung ':'')+(wp?'+'+wp+' Waffenpunkt'+(wp>1?'e':''):'')+' für '+(XP73==='alle'?'alle':xpHeroes73().map(h=>h.name).join('')),'sys')}
+// Waffenstufe +1 / ganz (Paul 22:34: „sonst krieg ich max Level nie hin“): schaltet die nächsten Knoten des Waffenbaums frei, ohne Punkte, Material, Werkbank oder Bindung
+const WBORD73=['k1','k2','k3','q1','c1','w1','k4','k5','s1','s2','s3','c2','w2','k6','s4','c3','w3','m','a1','a2','x1','x2','v2','v3','e1','V'];
+function wbFree73(h,id){const B=wb49(h);if(B.n[id])return false;if(typeof wbOk73==='function'?!wbOk73(id):!POS49[id])return false;if((PRE49[id]||[]).some(p=>!B.n[p]))return false;if(id==='a1'&&!(typeof aus73==='function'&&aus73(h)))return false;
+  if(id==='s3'&&!B.ver){B.ver='stahl';B.vers.stahl=1}B.n[id]=1;const N=node49(h,id);if(N&&N.art)artAdd49(h,N.art);return true}
+function xpWstufe73(all){xpHeroes73().forEach(h=>{const l0=lvl49(h);let n=0,guard=0;while(guard++<40){const id=WBORD73.find(k=>{const B=wb49(h);return!B.n[k]&&(typeof wbOk73==='function'?wbOk73(k):!!POS49[k])&&!(PRE49[k]||[]).some(p=>!B.n[p])&&!(k==='a1'&&!(typeof aus73==='function'&&aus73(h)))});if(!id)break;wbFree73(h,id);n++;if(!all&&lvl49(h)>l0)break}
+  try{recalc27(h);badge49()}catch(e){}say('(Spielleiter) '+h.name+'s '+wname49(h)+': '+n+' Knoten freigeschaltet, Waffenstufe '+lvl49(h)+'/10.','sys')})}
 if(typeof gruppe67==='function'){const _g73=gruppe67;gruppe67=function(p){const r=_g73.apply(this,arguments);try{
   const box=el67('div',null,'xp73');box.appendChild(el67('h3','Erfahrung (Spielleiter, zum Testen)'));
   const sel=document.createElement('select');sel.setAttribute('aria-label','Für wen');[['alle','Alle Helden']].concat((PARTY||[]).map(h=>[String(h.heroId||h.name),h.name])).forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===XP73)o.selected=true;sel.appendChild(o)});
@@ -28061,7 +28067,8 @@ if(typeof gruppe67==='function'){const _g73=gruppe67;gruppe67=function(p){const 
   const r1=el67('div',null,'sl67row');r1.append(bt67('Techniken +1 Stufe',()=>xpTech73(1)),bt67('Techniken +3',()=>xpTech73(3)),bt67('Techniken −1',()=>xpTech73(-1)));box.appendChild(r1);
   const r2=el67('div',null,'sl67row');r2.append(bt67('Innere Kunst +1 Stufe',()=>xpKunst73(1)),bt67('Innere Kunst −1',()=>xpKunst73(-1)));box.appendChild(r2);
   const r3=el67('div',null,'sl67row');r3.append(bt67('+5 Waffenerfahrung',()=>xpWaffe73(5,0)),bt67('+1 Waffenpunkt',()=>xpWaffe73(0,1)),bt67('+5 Waffenpunkte',()=>xpWaffe73(0,5)));box.appendChild(r3);
-  box.appendChild(el67('p','Techniken und Innere Kunst springen direkt eine Stufe weiter (die Stufen 1–10 gelten auch ohne Lehrmeister). Waffenpunkte gibt man im Waffenbaum aus (Taste U).','small'));
+  const r4=el67('div',null,'sl67row');r4.append(bt67('Waffenstufe +1',()=>xpWstufe73(false)),bt67('Waffenbaum ganz',()=>xpWstufe73(true)));box.appendChild(r4);
+  box.appendChild(el67('p','Techniken und Innere Kunst springen direkt eine Stufe weiter (die Stufen 1–10 gelten auch ohne Lehrmeister). Waffenpunkte gibt man im Waffenbaum aus (Taste U). „Waffenstufe +1“ schaltet die nächsten Knoten gleich frei (ohne Punkte, Material, Werkbank), „Waffenbaum ganz“ alle Knoten der aktuellen Baumgröße.','small'));
   const g=[...p.querySelectorAll('h3')].find(x=>x.textContent==='Geld');if(g)p.insertBefore(box,g);else p.appendChild(box)}catch(e){console.warn('p73 Erfahrung',e)}return r}}
 {const st=document.createElement('style');st.textContent='.xp73 select{margin:2px 0 4px;font:inherit;background:#1b1626;color:#f3ead6;border:1px solid #6a5a8a;border-radius:4px;padding:2px 4px}';document.head.appendChild(st)}
 
