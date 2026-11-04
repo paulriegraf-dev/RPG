@@ -27381,7 +27381,9 @@ function chunks72(t){const s=String(t||'').replace(/\s+/g,' ').trim();if(s.lengt
   P.forEach(p=>{if((cur+p).length>120&&cur){out.push(cur.trim());cur=p}else cur+=p});if(cur.trim())out.push(cur.trim());return out}
 function speech72(t){const q=String(t||'').match(/„[^“]*“/g);return q?q.map(s=>s.slice(1,-1)).join(' … '):String(t||'').replace(/^„|“$/g,'')}
 function art72(t){const s=String(t||'');if(/^\(|flüster|leise\)/i.test(s))return'fl';if(/[!?]!|!\?|[A-ZÄÖÜ]{4,}/.test(s))return'ruf';return''}
-function readMs72(t){return Math.round(Math.min(9000,Math.max(2200,1500+String(t).length*48))*SZ72.fast*(window.__sz72fast||1))}
+// Nachbesserung (Paul 04.11., 72.V2): das Lesetempo aus P66 gilt auch für Blasen und Zwischensequenzen (ruhig = 1,4-fach, sofort = 0,75-fach)
+function tempo72(){try{return typeof TEMPO66==='undefined'?1:TEMPO66==='ruhig'?1.4:TEMPO66==='aus'?0.75:1}catch(e){return 1}}
+function readMs72(t){return Math.round(Math.min(9000,Math.max(2200,1500+String(t).length*48))*tempo72()*SZ72.fast*(window.__sz72fast||1))}
 function bubShow72(o,isHero,name,text,art,ms,fix){const r=root72(),B=r.querySelector('.bubs');
   SZ72.bubs.filter(b=>b.o===o).forEach(b=>b.el.remove());SZ72.bubs=SZ72.bubs.filter(b=>b.o!==o);
   const el=document.createElement('div');el.className='b72'+(art?' '+art:'');el.innerHTML='<b></b><span></span>';el.querySelector('b').textContent=name||'';el.querySelector('span').textContent=text;
@@ -27566,6 +27568,17 @@ function label72(n,tp){if(tp.ask)return tp.ask;if(/^wer bist du\??$/i.test(Strin
 {const _rsc72g=renderSceneCtl;renderSceneCtl=function(){const r=_rsc72g.apply(this,arguments);try{const el=$('sceneCtl');if(el&&!el.querySelector('.ctx72b')){const b=document.createElement('button');b.type='button';b.className='dbtn ctx72b';
     const lab=()=>'Gesprächsthemen erst mit Kontext: '+(S.flags.ctx72off?'aus':'an');b.textContent=lab();b.title='P72: Stichwort-Themen erscheinen erst, wenn das Stichwort gefallen ist. Aus = alle Themen sofort sichtbar (wie bis P71).';
     b.onclick=()=>{S.flags.ctx72off=!S.flags.ctx72off;b.textContent=lab();try{renderAll()}catch(e){}};el.appendChild(b)}}catch(e){}return r}}
+
+
+// ================= Nachbesserung zu Prototyp 72 (h): neue Hintergrund-Vorlage (Paul 04.11., 72.V14) =================
+// Paul: „Vorlagen gerne anpassen, damit das Dokument halbwegs gestreamlined ist und nicht nur ein langer, wirrer Text von jeder Person.“
+// Neue Vorlage Helden/hintergrund-vorlage.md (Abschnitte, je Feld 1–3 Sätze, Personen-Zeilen mit „darf vorkommen?“), Beispiel in
+// Helden/hintergrund-beispiel.md. Damit die Hilfstexte der Vorlage die Themen-Erkennung nicht verfälschen (z. B. „Erinnerung“ → Thema
+// „Vergessen“), zählen Zeilen mit „>“, Überschriften („#“), Feldnamen in **…** am Zeilenanfang und Hinweise in *(…)* nicht mit.
+// Die Personen-Zeilen („ja / nur als Erinnerung / bitte nicht“) wertet das Spiel erst in der Hintergrund-Phase aus (nach Phase 3, 72.V7).
+function bgClean72(t){return String(t||'').split(/\r?\n/).filter(l=>!/^\s*>/.test(l)&&!/^\s*#/.test(l))
+  .map(l=>l.replace(/\*\([^)]*\)\*/g,' ').replace(/^\s*\*\*[^*]*\*\*/,' ').replace(/\s+[–-]\s+(ja|nur als erinnerung|bitte nicht)\s*$/i,' ')).join('\n')}
+if(typeof an29==='function'){const _an72=an29;an29=function(text){return _an72.call(this,bgClean72(text))}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
