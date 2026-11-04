@@ -22882,11 +22882,11 @@ gfWin34=function(){const F=ffl34();F.gf.done='kampf';slotHide34();say('Der Gesch
 
 
 // Prototyp 64: Pauls Einträge aus Helden/heldensaetze.xlsx (Sätze, Namen, Klassen-Aktionen, Typ-Knöpfe)
-const SATZ64={"aldric": "Alter Magier mit noch älterem Eichenstab. Muss ein „verzaubertes“ Magiebuch haben, da er jedes Mal den Staub vom Buch pusten muss.", "oda": "Riecht nach Kamille. Weiß auch, wo die Kamille wächst.", "rieke": "Mischt alles mit allem. Was ist eine Anleitung?", "bodo": "Redet wenig, hämmert viel. Die Nachbarn lieben ihn.", "liska": "Folgt jeder Spur. Meist ihren eigenen.", "nyx": "Böse Hexe. Sie klopft heimlich ihren Besenstaub auf das Magiebuch von Aldric.", "wenzel": "Schweigt gern. Ups …", "yara": "Weiß, wohin der Wind weht.", "gerda": "Trägt einen Schild. Mag ihren Schild, sehr …", "pim": "Macht viralen Street-Magic-Content mit gekauften Schauspielern auf Paultube.", "hedda": "Kennt jeden Weg und jeden Klatsch.", "ulrich": "Stand zwanzig Jahre am Tor. Unbezahlt!", "jost": "Immer in der ersten Reihe, wenn sich eine wütende Meute bildet.", "konrad": "Sein Königreich erstreckt sich, so weit seine Sicht den Horizont erblickt. −8 und −10,5 – und „braucht“ keine Brille.", "kage": "Mag es, zuzuschauen.", "gerold": "So böse, wie der Regen feucht ist.", "linail": "Betet laut. Die Götter hören ihr zu. Machen aber nichts – meistens.", "prime": "Weiß alles, außer den Dingen des alltäglichen Lebens.", "oratio": "Gold und Silber sind seine Sprache der Wahl.", "glenys": "Ihr Schwert trashtalkt sie die ganze Zeit. Wird es einfach nicht los.", "wyvera": "Hat einen Drachen. Und jeder wird davon wissen.", "bolle": "Reparatur notwendig? Hammer! Uhr kaputt? Hammer! Es klappt am Ende irgendwie.", "eckhart": "Hat drei Burgen, einen Affen und ein Pferd. Hat Phantom-Schmerzen, wenn man ihm an seinen nicht vorhandenen Zöpfen zieht.", "morla": "Stets bemüht. Lässt Nyx in Aldrics Haus."};
-const KNAME64={"oda": "Pflanzen-Heilerin", "liska": "Spurenjägerin", "wenzel": "Schweigsamer Mönch", "pim": "Street-Magician", "oratio": "Währungs-Krieger", "glenys": "Gefäß des Dämonenschwerts", "hinnerk": "Keyboard-Warrior", "morla": "Zauber-Lehrling"};
-const ANAME64={"juno": "Troubadix Cosplay", "fenn": "Schatten-Spähung", "oda": "Blütenheilung", "kasimir": "Helden-Ansprache", "rieke": "Alchemie-Wahn", "bodo": "Amboss zücken", "yara": "Seefahrer-Gespür", "lorenz": "Quelle überprüfen", "runa": "Söldnerisches Handeln", "gerold": "Kraft sammeln", "oratio": "Preis einfordern", "hinnerk": "Seinem Namen gerecht werden", "gunther": "Back in my days…"};
-const KATXT64={"Froschwanderer": {"ok": "„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.", "no": "{Name} springt. Platsch.", "w": "bei Gräben, Wasser, Mauern, Kanten und im Gebirge"}, "Seefahrerin": {"ok": "Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.", "no": "Der Knoten ist schön. Er hält nur nicht.", "w": "bei Seilen, Booten, Leitern, Brunnen und im Gebirge"}, "Hohepriesterin": {"ok": "{Name} betet laut. Die Götter hören zu – heute schon.", "no": "{Name} betet laut. Die Götter sind gerade beschäftigt.", "w": "wenn jemandem Geist fehlt oder jemand verletzt ist"}, "Mönch": {"ok": "{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.", "no": "{Name} schweigt. Und muss niesen.", "w": "wenn jemandem Geist fehlt"}, "Alchemistin": {"ok": "{Name} mischt alles mit allem. Diesmal klappt es.", "no": "Es blubbert, es stinkt, es bleibt im Glas.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Heilerin": {"ok": "{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.", "no": "Die Hände zittern. {Name} versucht es später noch einmal.", "w": "wenn jemand verletzt ist"}, "Hexe": {"ok": "{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.", "no": "Der Dampf riecht gut. Mehr passiert nicht.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Kräuterkundige": {"ok": "{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.", "no": "Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht.", "w": "bei Pflanzen und draußen im Grünen"}, "Sanitäterin": {"ok": "Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.", "no": "Der Verband hält nicht. {Name} wickelt ihn wieder ab.", "w": "wenn jemand verletzt ist"}, "Handwerker": {"ok": "Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.", "no": "Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg.", "w": "bei Holz, Möbeln, Stegen und Kaputtem"}, "Magd": {"ok": "{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.", "no": "Zu schwer, selbst für {Name}. Für heute.", "w": "bei Schwerem: Fässer, Kisten, Säcke, Steine"}, "Mistgabel-Held": {"ok": "{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!", "no": "{Name} stochert heldenhaft. Leider nur im Heu.", "w": "bei Heu, Laub, Löchern, Gebüsch, Gruben"}, "Ritter": {"ok": "{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.", "no": "{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.", "zu": "Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker.", "w": "bei Türen, Toren, Gittern, Truhen und Kisten"}, "Schmied": {"ok": "{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.", "no": "{Name} dreht es hin und her. Ohne Werkstatt wird das nichts.", "w": "bei Mechanik und bei Kaputtem"}, "Drachenkönigin": {"ok": "{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.", "no": "{Name} ruft. Der Drache hat heute frei.", "w": "draußen, wo eine Probe oder Gefahr wartet"}, "Held": {"ok": "„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.", "no": "„Wir schaffen das …?“ Klang nicht ganz überzeugt.", "w": "wo eine Probe oder Gefahr wartet"}, "König ohne Land": {"ok": "„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.", "no": "„Aufstellung!“ Keiner stellt sich auf.", "w": "wo eine Probe oder Gefahr wartet"}, "Ritterin": {"ok": "{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.", "no": "Der Schild rutscht. Der Mut auch, ein bisschen.", "w": "wo eine Probe oder Gefahr wartet"}, "Schildmaid": {"ok": "{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.", "no": "Der Schild ist heute schwerer als sonst.", "w": "wo eine Probe oder Gefahr wartet"}, "Assassine": {"ok": "Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.", "no": "Der Schatten ist zu klein. {Name} steht einfach in der Ecke.", "w": "im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts"}, "Schattenläufer": {"ok": "{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.", "no": "Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen.", "w": "wo es Verborgenes gibt oder Leute, die man belauschen kann"}, "Sträfling": {"ok": "„Kenn ich.“ Ein Kratzen, ein Klick – offen.", "no": "Das Schloss ist neuer als {Name}s Erfahrung.", "zu": "Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf.", "w": "bei Schlössern, Truhen, Gittern, Zellen"}, "Waldwicht": {"ok": "{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.", "no": "Zu eng – sogar für {Name}.", "w": "bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren"}, "Bardin": {"ok": "{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.", "no": "{Name} stimmt an. Niemand stimmt ein.", "w": "wo Leute sind"}, "Baron": {"ok": "„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.", "no": "„Ihnen? Nein.“ Drei Burgen, kein Eindruck.", "w": "wo Leute sind"}, "Gaukler": {"ok": "{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.", "no": "Ein Ball fällt herunter. Dann noch einer.", "w": "wo Leute sind"}, "Monsterflüsterer": {"ok": "{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.", "no": "Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht.", "w": "bei Tieren und Wesen"}, "Prinzessin a.D.": {"ok": "{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.", "no": "„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof.", "w": "wo Leute sind"}, "Söldner": {"ok": "„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.", "no": "Der Preis ist zu hoch. Sogar für einen guten Witz.", "w": "wo Leute sind"}, "Söldnerin": {"ok": "„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.", "no": "„Sold? Wofür?“ Man lacht {Name} aus.", "w": "wo Leute sind"}, "Wolfsbarde": {"ok": "{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.", "no": "Ein Heuler in Moll. Nur die Hunde im Ort antworten.", "w": "draußen bei Nacht oder wo Leute sind"}, "Bauer": {"ok": "{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.", "no": "Nur Steine und ein beleidigter Wurm.", "w": "bei Erde, Feldern, Gärten, Sand – und draußen im Grünen"}, "Bogenschütze": {"ok": "{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.", "no": "Der Pfeil fliegt sehr weit. In die falsche Richtung.", "w": "draußen oder bei etwas, das man treffen kann"}, "Botin": {"ok": "{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.", "no": "Die Abkürzung ist länger als der Weg.", "w": "draußen, wo mindestens zwei Wege weiterführen"}, "Fuchsjägerin": {"ok": "{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!", "no": "Die Fährte endet einfach. Auch die falsche.", "w": "draußen und überall, wo Spuren sein können"}, "Wachmann": {"ok": "{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.", "no": "Zwanzig Jahre Erfahrung – und heute kommt wieder niemand.", "w": "an Toren, Treppen, Plätzen und wo Leute sind"}, "Waldläuferin": {"ok": "{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.", "no": "Zu viele Spuren, alle durcheinander.", "w": "draußen und überall, wo Spuren sein können"}, "Dämonenschwert": {"ok": "{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.", "no": "Die Klinge schweigt beleidigt.", "w": "bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken"}, "Gelehrter": {"ok": "{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!", "no": "{Name} findet nur Fußnoten zu Fußnoten.", "w": "bei Büchern, Schriften, Tafeln, Briefen, Inschriften"}, "Großer Weiser": {"ok": "{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.", "no": "„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte.", "w": "bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken"}, "Rentner": {"ok": "„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.", "no": "{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe.", "w": "wo Leute sind oder bei Altem"}, "Sternenkundlerin": {"ok": "{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.", "no": "Wolken. Oder {Name} hat sich verzählt.", "w": "draußen bei Nacht oder bei Sternkarten, Fernrohren"}, "Tüftlerin": {"ok": "{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.", "no": "Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus.", "w": "bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser"}, "Zauberin": {"ok": "{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.", "no": "Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht.", "w": "bei Magischem und im Dunkeln, nachts"}, "Zeithexe": {"ok": "{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.", "no": "Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts.", "w": "nach einer misslungenen Probe hier, oder bei Uhren und Glocken"}};
-const TYPN64={"Kämpfer": "Zupacken", "Flinke": "Genau hinsehen", "Gelehrte": "Nachdenken", "Stützen": "Sich kümmern"};
+const SATZ64={};
+const KNAME64={};
+const ANAME64={};
+const KATXT64={};
+const TYPN64={};
 
 
 // ================= Prototyp 64 (h): Pauls eigene Sätze für die Heldenauswahl =================
@@ -26539,8 +26539,8 @@ window.P70=P70;window.satzAI70=satzAI70;window.satzEnde70=satzEnde70;window.chro
 
 
 // Prototyp 71: beim Bau aus den Orts-Dateien gelesen (Ruf der Gruppe hier, ## Ruf-Folgen) und aus den NPC-Dateien (Gehört zu)
-const RUFORT71={"aida": {"fehlt": 9, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 9, "start": "neutral", "z": []}, "ffl": {"fehlt": 9, "start": "freundlich", "z": []}, "grossensee": {"fehlt": 9, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 9, "start": "misstrauisch", "z": []}, "kiefernhang": {"fehlt": 9, "start": "neutral", "z": []}, "kloster": {"fehlt": 9, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 9, "start": "neutral", "z": []}, "oase": {"fehlt": 9, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 9, "start": "neutral", "z": []}, "stahndor": {"fehlt": 9, "start": "neutral", "z": []}, "viellos": {"fehlt": 9, "start": "neutral", "z": []}, "weite": {"fehlt": 9, "start": "neutral", "z": []}};
-const GRPNPC71={"Alt-Rat Wendelin": "Fürstenhof", "Ambros": "Mönche", "Anselm": "Mönche", "Ansgar Krall": "Fürstenhof", "Ausrufer Lambert": "Fürstenhof", "Benno": "Mönche", "Bruno": "Das Haus in Friede Freude Land", "Die Elster": "Kontor und Gassen von AIDA", "Fischer Jos": "Seeleute und Fischer", "Folio": "Mönche", "Fortunato": "Das Haus in Friede Freude Land", "Fürst Trahmes": "Fürstenhof", "General Krull": "Schneewacht", "Goldine": "Das Haus in Friede Freude Land", "Hauptmann Olaf": "Schneewacht", "Hedda": "Seeleute und Fischer", "Herold Gisbert": "Fürstenhof", "Hulda": "Mönche", "Isidor": "Schneewacht", "Jannes": "Seeleute und Fischer", "Jorinde": "Schneewacht", "Knut": "Seeleute und Fischer", "Krumm": "Gemeinderat Großensee", "Lirum": "Gemeinderat Großensee", "Lux": "Das Haus in Friede Freude Land", "Mette": "Gemeinderat Großensee", "Ole": "Seeleute und Fischer", "Ottmar": "Seeleute und Fischer", "Ruprecht": "Schneewacht", "Seilerin Ida": "Seeleute und Fischer", "Swantje": "Seeleute und Fischer", "Wache Ivo": "Schneewacht", "Wachhabende Irmel": "Schneewacht", "Wiebke": "Kontor und Gassen von AIDA", "Zöllnerin Agathe": "Schneewacht"};
+const RUFORT71={"aida": {"fehlt": 0, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 0, "start": "neutral", "z": []}, "ffl": {"fehlt": 0, "start": "neutral", "z": []}, "grossensee": {"fehlt": 0, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 0, "start": "neutral", "z": []}, "kiefernhang": {"fehlt": 0, "start": "neutral", "z": []}, "kloster": {"fehlt": 0, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 0, "start": "neutral", "z": []}, "oase": {"fehlt": 0, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 0, "start": "neutral", "z": []}, "stahndor": {"fehlt": 0, "start": "neutral", "z": []}, "viellos": {"fehlt": 0, "start": "neutral", "z": []}, "weite": {"fehlt": 0, "start": "neutral", "z": []}};
+const GRPNPC71={};
 
 
 // ================= Prototyp 71 (r): Ruf je Ort – Ansehen und Furcht, Taten, reisende Gerüchte =================
@@ -26572,40 +26572,31 @@ const FADE71=5;   // Tage, bis ein Gerücht ohne Neues verblasst
 // Gruppen über Orte hinweg (Vorschlag, Paul entscheidet die endgültige Liste): Mitglieder aus „Gehört zu:“ in den NPC-Dateien, sonst nach Name/Rolle
 const GRP71={schneewacht:{n:'Schneewacht',re:/schneewacht|olaf|jorinde|wache|wächter|soldat|irmel|\bivo\b|krull|zöllner/i},
   moenche:{n:'Mönche von Glockenstill',re:/mönch|bruder|abt\b|novize|glockenstill/i},
-  haendler:{n:'Händler',re:null},
-  // seit 02.11. nachmittags (Paul: „Die vorgeschlagenen Gruppen sind gut.“): Mitglieder über „Gehört zu:“ in den NPC-Dateien
-  fuerstenhof:{n:'Fürstenhof',re:/trahmes|ansgar krall|wendelin|herold/i},
-  gemeinderat:{n:'Gemeinderat Großensee',re:/^(mette|krumm|lirum)\b/i},
-  kontor:{n:'Kontor und Gassen von AIDA',re:/^(wiebke|die elster)\b/i},
-  seeleute:{n:'Seeleute und Fischer',re:/fischer|kapitän|hafenmeister|fährjunge|windleser/i},
-  haus:{n:'Das Haus in Friede Freude Land',re:/croupier|türsteher des casinos|wechselstube|dj der glitzerkugel/i}};
-// Welche Orte Furcht „mögen“ (Paul, 02.11.: AIDA ja, Kloster nein): Furcht dort wirkt zusätzlich auf das Ansehen (Anteil des Furcht-Anstiegs)
-const FMAG71={aida:.4,kloster:-.5};
-const FDECAY71=5;   // Furcht sinkt um 5 je Woche, in der am Ort nichts Neues Furcht macht (Paul, 02.11.: „Furcht baut ab.“)
+  haendler:{n:'Händler',re:null}};
 // ---------- Taten (Konzept Ansatz B) ----------
 // a = Ansehen, f = Furcht am Ort der Tat; reach = wie weit es sich herumspricht; fern = andere Werte für die übrigen Orte (sonst a/f, schwächer mit der Entfernung);
 // rum = Gerücht für die Spieler (Platzhalter-Texte, der Story-Chat darf sie ersetzen); grp = Gruppen; cap = höchstens einmal am Tag je Ort; gegen = widerlegt diese Gerüchte
 const TAT71={
-  helfen:{gro:{stahndor:{seeleute:{a:4}},weite:{seeleute:{a:4}}},n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
+  helfen:{n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
   helfen_gross:{n:'Großes geholfen',a:18,reach:'nah',rum:'Die Fremden haben in {ORT} aufgeräumt.',gegen:['stehlen','schulden','schlecht']},
-  aushang:{gro:{grossensee:{gemeinderat:{a:8}},aida:{kontor:{a:8}}},n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
-  spenden:{gro:{grossensee:{gemeinderat:{a:6}},kloster:{moenche:{a:10}}},n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
+  aushang:{n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
+  spenden:{n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
   show:{n:'Blad(e)iatoren-Show gewonnen',a:55,f:5,reach:'nah',rum:'Blad(e)iatoren-Bezwinger',grp:{schneewacht:{a:5,f:5}}},
   frosch:{n:'Froschkonzert bis zum Ende',a:15,reach:'weit',rum:'Frog Concert Enjoyer'},
   entfernos:{n:'Mit Entfernos gesungen',a:15,reach:'weit',rum:'Die Fremden haben mit Entfernos gesungen.'},
-  befreit:{gro:{ffl:{haus:{a:-15,f:10}},grossensee:{gemeinderat:{a:15}}},n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
-  casino:{gro:{ffl:{haus:{a:-10,f:5}}},n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
-  arena:{gro:{duppelbach:{fuerstenhof:{a:5,f:3}}},n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
-  boss:{gro:{ffl:{haus:{a:-10,f:15}}},n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
-  olaf_sieg:{gro:{nordstollen:{fuerstenhof:{f:5}}},n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
+  befreit:{n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
+  casino:{n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
+  arena:{n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
+  boss:{n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
+  olaf_sieg:{n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
   olaf_vorbei:{n:'An Olaf vorbeigekommen',a:4,reach:'ort',grp:{schneewacht:{a:3}}},
   gegner:{n:'Gegner besiegt',a:1,f:1,reach:'ort',cap:1},
-  ausbruch:{gro:{duppelbach:{fuerstenhof:{a:-6}}},n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
+  ausbruch:{n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
   flucht:{n:'Vor der Wache weggerannt',a:-10,reach:'nah',rum:'In Duppelbach sucht die Wache nach Fremden.',grp:{schneewacht:{a:-5}}},
-  stehlen:{gro:{duppelbach:{fuerstenhof:{a:-5}},aida:{kontor:{a:-6}}},n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
+  stehlen:{n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
   zahlen:{n:'Rechnung bezahlt',a:6,reach:'ort',gegen:['schulden']},
   schulden:{n:'Rechnung nicht bezahlt',a:-8,reach:'ort',rum:'Die Fremden haben ihre Rechnung nicht bezahlt.'},
-  bank_ausfall:{gro:{duppelbach:{fuerstenhof:{a:-8}}},n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
+  bank_ausfall:{n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
   drohen:{n:'Gedroht',a:-3,f:8,reach:'ort',rum:'Die Fremden haben {N} bedroht.'},
   drohen_fehl:{n:'Drohung ging daneben',a:-4,reach:'ort'},
   furcht_weg:{n:'Auf den Ruf verwiesen',a:-2,f:2,reach:'ort'},
@@ -26649,15 +26640,14 @@ function dists71(){try{const sig=WROUTES.length+':'+Object.keys(WNODES).length;i
 function dist71(a,b){if(a===b)return 0;const D=dists71();return D[a]&&D[a][b]!=null?D[a][b]:null}
 function minPerPt71(){try{return ZEIT47.reiseJePunkt||3}catch(e){return 3}}
 // ---------- Werte ändern ----------
-function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;df=Math.round(df||0);if(df>0&&FMAG71[o])da=(da||0)+df*FMAG71[o];da=Math.round(da||0);if(!da&&!df)return;
-  if(df>0){R.fl=R.fl||{};R.fl[o]=today71()}
+function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   const a0=O.a,f0=O.f,s0=aSt71(a0),t0=fSt71(f0);O.a=Math.max(-100,Math.min(100,a0+da));O.f=Math.max(0,Math.min(100,f0+df));
   if(e)e.ap.push({o,a:O.a-a0,f:O.f-f0});
   if(o===cur71()&&(aSt71(O.a)!==s0||fSt71(O.f)!==t0)){try{say('Die Stimmung der Leute hier ändert sich.','sys')}catch(x){}setTimeout(()=>{try{nickCheck71(o)}catch(x){}},400)}}
 function grpApply71(e,g,da,df){const R=R71();da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   if(g==='haendler'){try{const E=E43(),h0=E.hr;E.hr=Math.max(-5,Math.min(5,E.hr+da/20));if(e)e.ap.push({g,hr:E.hr-h0})}catch(x){}return}
-  if(df>0){R.fl=R.fl||{};R.fl['g:'+g]=today71()}const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
-function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const v=GRPNPC71[n.name].toLowerCase().trim();const k=Object.keys(GRP71).find(k=>k===v||GRP71[k].n.toLowerCase()===v||GRP71[k].n.toLowerCase().startsWith(v.slice(0,6)));if(k)return k}}catch(e){}
+  const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
+function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const k=Object.keys(GRP71).find(k=>GRP71[k].n.toLowerCase().startsWith(GRPNPC71[n.name].toLowerCase().slice(0,6)));if(k)return k}}catch(e){}
   try{if(typeof HAND43!=='undefined'&&HAND43[n.name])return'haendler'}catch(e){}const s=(n.name||'')+' '+(n.role||'');return Object.keys(GRP71).find(k=>GRP71[k].re&&GRP71[k].re.test(s))||null}
 function grpA71(g){if(g==='haendler'){try{return Math.round(E43().hr*20)}catch(e){return 0}}const G=R71().g[g];return G?G.a:0}
 function grpF71(g){if(g==='haendler')return 0;const G=R71().g[g];return G?G.f:0}
@@ -26667,7 +26657,7 @@ function tat71(key,o){o=o||{};const T=TAT71[key];if(!T)return null;const R=R71()
   const mul=o.mul==null?1:o.mul,t=now71(),nm=o.npc&&o.npc.name;
   const e={id:++R.n,k:key,ort,t,d:today71(),ap:[],n:T.n,txt:o.txt||null,npc:nm||null};
   apply71(e,ort,(T.a||0)*mul,(T.f||0)*mul);
-  const gs=Object.assign({},T.grp||{},(T.gro&&T.gro[ort])||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
+  const gs=Object.assign({},T.grp||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
   Object.keys(gs).forEach(g=>grpApply71(e,g,(gs[g].a||0)*mul,(gs[g].f||0)*mul));
   // Weitergabe an andere Orte: kommt an, wenn die Gruppe selbst dort wäre
   const rr=REACH71[T.reach||'ort']||0;if(rr>0)ORTE71.forEach(x=>{if(x===ort)return;const d=dist71(ort,x);if(d==null||d>rr)return;
@@ -26712,10 +26702,7 @@ function widerlegt71(e,o,T){negHier71(o).forEach(r=>{if((T.gegen||[]).includes(r
 function gegen71(r,o,anteil,why){const R=R71();r.dem[o]=1;let neg=0;R.log.forEach(e=>{if(r.e.includes(e.id)&&!e.undone)(e.ap||[]).forEach(x=>{if(x.o===o&&x.a<0)neg+=x.a})});
   const back=Math.round(-neg*anteil);const e={id:++R.n,k:'gegen',ort:o,t:now71(),d:today71(),ap:[],n:'Gerücht entkräftet ('+why+'): „'+r.txt+'“'};if(back)apply71(e,o,back,0);R.log.unshift(e);
   try{addChron('Ruf: '+e.n+' · '+fx71(e),['u71_'+e.id],true)}catch(x){}setWorld71();return e}
-function decay71(){const R=R71(),d=today71();if(R.fd==null){R.fd=d;return}if(d<=R.fd)return;R.fl=R.fl||{};
-  for(let x=R.fd+1;x<=Math.min(d,R.fd+60);x++){ORTE71.forEach(o=>{const O=R.o[o],l=R.fl[o]||0;if(O&&O.f>0&&x>l&&(x-l)%7===0)O.f=Math.max(0,O.f-FDECAY71)});
-    Object.keys(R.g).forEach(g=>{const G=R.g[g],l=R.fl['g:'+g]||0;if(G&&G.f>0&&x>l&&(x-l)%7===0)G.f=Math.max(0,G.f-FDECAY71)})}R.fd=d}
-function tick71(){const R=R71(),t=now71();try{decay71()}catch(e){}if(!R.pend.length&&!R.rum.length)return;
+function tick71(){const R=R71(),t=now71();if(!R.pend.length&&!R.rum.length)return;
   const due=R.pend.filter(p=>p.at<=t);if(due.length){R.pend=R.pend.filter(p=>p.at>t);due.forEach(p=>{const e=R.log.find(x=>x.id===p.e);if(e&&e.undone)return;apply71(e||null,p.o,p.a,p.f)});setWorld71()}
   R.rum.forEach(r=>{if(!r.weg&&str71(r)<=0)r.weg=1})}
 // ---------- S.world.ruf = Ansehen-Stufe des aktuellen Orts ----------
@@ -26733,8 +26720,6 @@ function parseF71(line){const P=String(line).split('|').map(s=>s.trim()).filter(
     else if(q=p.match(/^Spitzname\s*:\s*(.+)$/i))f.eff.push({t:'spitz',v:q[1].replace(/^[„"]|[“"]$/g,'')});
     else if(q=p.match(/^Preise\s*([+\-−–])\s*(\d+)\s*%/i))f.eff.push({t:'preis',v:(q[1]==='+'?1:-1)*(+q[2])});
     else if(q=p.match(/^Spielleiter\s*:\s*(.+)$/i))f.eff.push({t:'sl',v:q[1]});
-    else if(q=p.match(/^Ende\s*:\s*(.+)$/i))f.eff.push({t:'ende',v:q[1]});
-    else if(q=p.match(/^Lagerfeuer\s*:\s*(.+)$/i))f.eff.push({t:'feuer',v:q[1]});
     else f.eff.push({t:'sl',v:p})});return f}
 let FOLGEN71=null;
 function folgenAll71(o){if(!FOLGEN71){FOLGEN71={};try{Object.keys(RUFORT71).forEach(k=>{FOLGEN71[k]=(RUFORT71[k].z||[]).map(parseF71).filter(Boolean)})}catch(e){}}return FOLGEN71[o]||[]}
@@ -26840,32 +26825,6 @@ if(typeof gruppe67==='function'){const _g71=gruppe67;gruppe67=function(p){const 
 {const _rw71=renderWorld;renderWorld=function(){const r=_rw71.apply(this,arguments);try{const seg=$('segRuf');if(seg){const h=seg.previousElementSibling;const o=cur71();if(h&&h.tagName==='H2')h.textContent=o?'Ruf der Gruppe in '+ortName71(o):'Ruf der Gruppe';
     let w=$('ruf71w');if(!w){w=document.createElement('div');w.id='ruf71w';seg.after(w)}w.innerHTML='';rufPanel71(w)}}catch(e){console.warn('p71r',e)}return r}}
 (function(){const st=document.createElement('style');st.textContent='.ruf71 .pm71 .dbtn,.ruf71 .sl67line .dbtn{padding:1px 5px;min-width:0;font-size:11px}.ruf71 details{margin:4px 0}.ruf71 select{max-width:60%}.ruf71s{margin-top:10px;border-top:1px dashed #6b5a44;padding-top:6px}.ruf71s p{margin:4px 0}';document.head.appendChild(st)})();
-// ================= Ruf in den Enden und im Finale (Paul, 02.11. nachmittags: 71.F1 und 71.F2 „sehr gute Ideen“) =================
-// Was die Orte über die Gruppe erzählen: zuerst Pauls Zeilen „Ende: …“ / „Lagerfeuer: …“ aus den Ruf-Folgen der Orts-Datei,
-// sonst ein schlichter Ersatzsatz je Stufe (ENDE71, Platzhalter für den Story-Chat). Neutrale Orte schweigen; höchstens drei Orte, die deutlichsten zuerst.
-const ENDE71={nick:'In {O} heißt ihr noch lange „{N}“.',4:'In {O} erzählt man noch lange von euch. Meistens stimmt sogar die Hälfte.',3:'In {O} hebt man den Becher, wenn euer Name fällt.',
-  1:'In {O} wird man vorsichtig, wenn euer Name fällt.',0:'In {O} spuckt man aus, wenn euer Name fällt. Aber man spricht ihn.',angst:'In {O} senkt man die Stimme, wenn euer Name fällt.'};
-function rufEnde71(art){const R=S.ruf71;if(!R)return[];const L=[];ORTE71.forEach(o=>{if(!visited71(o))return;const O=R.o[o];const sa=aSt71(O.a),sf=fSt71(O.f);
-    let own=[];try{own=eff71(o,art==='feuer'?'feuer':'ende')}catch(e){}
-    let txt=own.length?own[own.length-1].v:null,w=Math.abs(O.a)+(sf>=2?O.f:0);
-    if(!txt){if(sf>=2)txt=ENDE71.angst;else if(R.nick[o]&&sa!==2)txt=ENDE71.nick;else if(sa!==2)txt=ENDE71[sa];}
-    if(txt)L.push({o,w,t:txt.replace(/\{O\}/g,ortName71(o)).replace(/\{N\}/g,R.nick[o]||'')})});
-  return L.sort((a,b)=>b.w-a.w).slice(0,3)}
-// „Was aus ihnen wurde“: vor „Und ihr?“ eine Karte „Was man über euch erzählt“
-if(typeof cardList38==='function'){const _cl71=cardList38;cardList38=function(){const L=_cl71.apply(this,arguments);try{const E=rufEnde71('ende');if(E.length){const i=L.findIndex(x=>x[0]==='Und ihr?');
-    const card=['Was man über euch erzählt',E.map(x=>x.t).join(' ')];if(i>=0)L.splice(i,0,card);else L.push(card)}}catch(e){console.warn('p71r',e)}return L}}
-// Lagerfeuer: nach „Hoffentlich laut.“ erzählen die Orte, wie laut
-function rufLines71(lines){if(!Array.isArray(lines))return lines;{
-    const k=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Alle lachen. Oben in den Ästen lacht Linde mit.');
-    if(k>=0){const E=rufEnde71('feuer');if(E.length){lines=lines.slice();lines.splice(k+1,0,['Und es wird laut geredet. '+E.map(x=>x.t).join(' ')])}}
-    // Finale: der Gast greift auf, wie über die Gruppe geredet wird (ein Satz, nur wenn man sie kennt)
-    const j=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Starker Körper. Starker Geist. Danke fürs Großziehen.');
-    if(j>=0&&S.ruf71){const R=S.ruf71;const known=ORTE71.filter(o=>visited71(o)&&R.o[o]);const angst=known.some(o=>fSt71(R.o[o].f)>=2),gut=known.some(o=>aSt71(R.o[o].a)>=3);
-      const satz=angst?GAST71.angst:gut?GAST71.gut:null;if(satz){lines=lines.slice();lines.splice(j+1,0,[satz,'npc','????'])}}
-  }return lines}
-{const _sq71=seq38;seq38=function(lines,step,done){try{lines=rufLines71(lines)}catch(e){console.warn('p71r',e)}return _sq71.call(this,lines,step,done)}}
-// Sätze des Gasts (Vorschlag aus dem Konzept, Story-Chat darf ersetzen)
-const GAST71={gut:'Sie werden euch vergessen. Bei mir nicht.',angst:'Sie haben Angst vor euch. Bei mir müsst ihr keine haben.'};
 
 
 // ================= Nachbesserung zu Prototyp 71 (w): Statisten laufen sauber (Paul 02.11., 13:28/13:30) =================
@@ -27096,6 +27055,257 @@ function arTags72(){const D=(AR&&AR.duel||[]).filter(o=>!o.fallen);if(!D.length)
 function gas72(){try{return on68()&&!!sc68()&&sc68()[0]==='ggasse'}catch(e){return false}}
 {const _w=wW;wW=function(){if(gas72())return W;return _w.apply(this,arguments)}}
 {const _a=arenaWide;arenaWide=function(){if(gas72())return false;return _a.apply(this,arguments)}}
+
+
+// ================= Nachbesserung zu Prototyp 71 – Phase 1: Fehler und Hänger (Paul 02./03.11., Auftrag 04.11.) =================
+// Auftrag: _Spielleiter/auftrag-2026-11-04.md, Phasenplan T, Phase 1.
+
+// ---------- K.1 Kloster: Laterne in Poke, Helden laufen auf der Stelle ----------
+// Die Laterne links der Treppe sperrte fast den ganzen Laufstreifen (WALK69 y 116–138). Sperrfläche nur noch am Sockel.
+try{COL69.ktreppe=[[106,120,121,128],[268,104,312,118]];delete COLC69.ktreppe}catch(e){}
+// Vordere Figur: Steht sie an einer Fläche fest, sucht sie den Weg darüber oder darunter vorbei.
+// Kommt sie gar nicht weiter, gibt sie das Ziel auf (sonst lief die Laufbewegung endlos auf der Stelle).
+function walkLim71f(x){let lo=0,hi=140;try{const s=sc68(),w=s&&WALK69[s[0]];if(w){lo=w[2];hi=w[3]}lo=Math.max(lo,clampY(x,0));hi=Math.min(hi,clampY(x,999))}catch(e){}return[lo,hi]}
+{const _mf71f=moveFig;moveFig=function(o,speed){
+  if(o!==hero||drag||o.tx==null||!TD||typeof col69!=='function')return _mf71f.apply(this,arguments);
+  const L=col69();if(!L||inFight()||TAC||o.y==null)return _mf71f.apply(this,arguments);
+  const px=o.x,py=o.y,tx=o.tx,ty=o.ty==null?py:o.ty;
+  try{const dx=tx-px,dy=ty-py,dist=Math.hypot(dx,dy),sp=speed||1.3;
+    if(dist>.7&&!colHit69(L,px,py)){const st=Math.min(sp,dist),nx=px+dx/dist*st,ny=py+dy/dist*st,dir=Math.sign(dx);
+      if(dir&&colHit69(L,nx,py)&&colHit69(L,nx,ny)){
+        // waagrecht versperrt: Umweg über oder unter der Fläche
+        const blk=L.find(q=>colHit69([q],nx,py))||L.find(q=>colHit69([q],nx,ny));
+        if(o.det71f==null&&blk){const [lo,hi]=walkLim71f(px);const c=[blk[1]-3,blk[3]+3].filter(y=>y>=lo&&y<=hi&&!colHit69(L,px,y)&&!colHit69(L,nx,y));
+          if(c.length)o.det71f=c.sort((a,b)=>Math.abs(a-ty)+Math.abs(a-py)-Math.abs(b-ty)-Math.abs(b-py))[0]}
+        if(o.det71f!=null){const d=o.det71f-py;if(Math.abs(d)>.05){const s2=Math.min(sp,Math.abs(d)),y2=py+Math.sign(d)*s2;if(!colHit69(L,px,y2)){o.y=y2;o.face=dir;o.st71f=0;return}}}
+      }else if(!colHit69(L,nx,py))o.det71f=null}}catch(e){}
+  const r=_mf71f.apply(this,arguments);
+  try{if(o.tx==null){o.st71f=0;o.det71f=null;return r}
+    const moved=Math.hypot(o.x-px,o.y-py);
+    if(moved>.05){o.st71f=0;return r}
+    if(Math.hypot(o.tx-o.x,(o.ty==null?o.y:o.ty)-o.y)<=.7){o.st71f=0;return r}
+    // kommt gar nicht weiter: Ziel aufgeben, keine Laufbewegung auf der Stelle
+    o.st71f=(o.st71f||0)+1;
+    if(o.st71f>6){o.st71f=0;o.det71f=null;const nah=Math.hypot(tx-o.x,ty-o.y)<60;o.tx=o.x;o.ty=o.y;if(nah)arrive(o);else o.queue=[]}
+  }catch(e){}return r}}
+// Q.3 Mitläufer stehen nicht übereinander: Ziel auf einen freien Platz neben Held, anderen Mitläufern und Personen legen.
+function figs71f(o){const R=[];try{if(hero&&hero!==o&&hero.y!=null)R.push([hero.x,hero.y]);PARTY.filter(h=>h!==hero&&h!==o&&h.ft71t===t&&h.ft71).forEach(h=>R.push(h.ft71));
+  const s=sc68(),M=s&&typeof SPOTXY69!=='undefined'&&SPOTXY69[s[0]];presentNpcs().forEach(n=>{if(n.virtual)return;const p=M&&n.name&&M[n.name];R.push(p?[p[0],p[1]]:[n.x,FLOOR-(n.lane!=null?n.lane:14)])})}catch(e){}return R}
+function spread71f(o,L){const R=figs71f(o),bx=o.tx,by=o.ty,[lo,hi]=walkLim71f(bx);const free=(x,y)=>y>=lo&&y<=hi&&x>=8&&x<=wW()-8&&!(L&&colHit69(L,x,y))&&!R.some(q=>Math.abs(q[0]-x)<14&&Math.abs(q[1]-y)<10);
+  const C=[[0,0],[0,10],[0,-10],[8,6],[-8,6],[8,-6],[-8,-6],[0,18],[0,-18],[14,0],[-14,0],[14,12],[-14,12],[14,-12],[-14,-12]];
+  let pick=null;if(o.ft71&&Math.abs(o.ft71[0]-bx)<16&&Math.abs(o.ft71[1]-by)<20&&free(o.ft71[0],o.ft71[1]))pick=o.ft71;
+  if(!pick)for(const c of C){const x=bx+c[0],y=by+c[1];if(free(x,y)){pick=[x,y];break}}
+  if(pick){o.tx=pick[0];o.ty=pick[1]}o.ft71=[o.tx,o.ty];o.ft71t=t}
+// Mitläufer: Ziel in den Laufbereich ziehen (WALK69, verkleinerte Räume, oberer/unterer Rand), sonst liefen sie am Rand auf der Stelle.
+{const _mf71g=moveFig;moveFig=function(o,speed){
+  try{if(o&&o.follower&&o!==hero&&TD&&typeof on68==='function'&&on68()&&o.tx!=null&&!(drag&&drag.o===o)){const s=sc68();
+    const w=s&&WALK69[s[0]];if(w)o.tx=Math.max(w[0],Math.min(w[1],o.tx));
+    const m=typeof small69==='function'&&small69();if(m)o.tx=Math.max(m.ox+10,Math.min(m.ox+m.w-10,o.tx));
+    o.tx=Math.max(8,Math.min(wW()-8,o.tx));if(o.ty!=null)o.ty=clampY(o.tx,o.ty);
+    const L=col69();if(L&&o.ty!=null&&colHit69(L,o.tx,o.ty)){const b=L.find(q=>colHit69([q],o.tx,o.ty));const [lo,hi]=walkLim71f(o.tx);const c=[b[1]-3,b[3]+3].filter(y=>y>=lo&&y<=hi&&!colHit69(L,o.tx,y));if(c.length)o.ty=c.sort((a,b2)=>Math.abs(a-o.ty)-Math.abs(b2-o.ty))[0]}
+    if(o.ty!=null&&!(typeof solo28==='function'&&solo28()))spread71f(o,L)}}catch(e){}
+  return _mf71g.apply(this,arguments)}}
+
+// ---------- P. Duppelbach, Turm (Paul 03.11.; Entscheidungen 04.11.: „Probe entscheidet“, „Streifen + Wiedererkennen“) ----------
+// P.1 Turmzelle in Poke: Die Wache (Bertram) steht hinter der Gittertür (nicht mit in der Zelle); die Gitterstäbe liegen vor ihr.
+const GIT71F={r:[36,2,50,70],c:null};
+function gitter71f(){try{if(GIT71F.c)return GIT71F.c;const B=G68.bg&&G68.bg.dzelle_p;if(!B||!B.width)return null;const sx=B.width/W,R=GIT71F.r;
+  const c=document.createElement('canvas');c.width=Math.round(R[2]*sx);c.height=Math.round(R[3]*sx);const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(B,R[0]*sx,R[1]*sx,R[2]*sx,R[3]*sx,0,0,c.width,c.height);
+  const d=x.getImageData(0,0,c.width,c.height),a=d.data;for(let i=0;i<a.length;i+=4){const l=a[i]*.3+a[i+1]*.59+a[i+2]*.11;if(l<44)a[i+3]=0}x.putImageData(d,0,0);GIT71F.c=c;return c}catch(e){return null}}
+// Die Wache (aus P26 gezeichnet bei x 44 am unteren Rand) steht mit neuer Grafik hinter der Gittertür.
+{const _df71f=drawFigure;drawFigure=function(img,o,isHero){
+  try{if(!isHero&&o&&!o.name&&TD&&on68()&&(sc68()||[])[0]==='dzelle'&&typeof FOEIMG!=='undefined'&&img===FOEIMG['duppelbacher soldat']&&o.x===44&&!inFight()){
+    const ox=o.x,ol=o.lane;o.x=60;o.tx=60;o.lane=FLOOR-66;try{_df71f.apply(this,arguments)}finally{o.x=ox;o.tx=ox;o.lane=ol}
+    const c=gitter71f(),R=GIT71F.r;if(c)g.drawImage(c,R[0],R[1],R[2],R[3]);return}}catch(e){}
+  return _df71f.apply(this,arguments)}}
+
+// P.2 „Hinausschleichen“ führt nicht mehr aus dem Turm zum Sattel, sondern auf eine andere Ebene im Turm:
+// Probe „Den Weg nach oben finden“ → Ebene −2 (richtig) oder Ebene −4 (falsche Treppe). Die Ausrüstung liegt oben bei Irmel (Erdgeschoss).
+esc2_26=function(){const P2=S.prison26;if(!P2)return;P2.busy=true;P2.stage='flucht72';
+  say('Ihr huscht aus der Zelle auf den Gang. Irgendwo oben klappert ein Schlüsselbund.','dm');renderAll();
+  setTimeout(()=>{try{const ok=check('wis',11,'Den Weg nach oben finden');const lv=ok?-2:-4;
+    if(ok)say('Ihr findet die richtige Treppe und schleicht hinauf: Ebene −2. Eure Ausrüstung liegt oben in der Wachstube bei Irmel. Das Tor ist im Erdgeschoss.','dm');
+    else{say('Ihr nehmt die falsche Treppe. Nach unten: Ebene −4. Aus einer Zelle klopft es: drei Mal, Pause, drei Mal. Die Kälte hier unten beißt (−1 LP für alle).','dm');PARTY.forEach(h=>{if(h.hp>1)h.hp--})}
+    addChron('Aus der Turmzelle geschlichen – jetzt auf Ebene '+(ok?'−2':'−4')+'.',[]);
+    setTimeout(()=>{try{const id=sceneIdByName(LVN45[String(lv)]);ARR45=ok?'unten':'oben';window.__noTravel=true;try{if(id)switchScene(id)}finally{window.__noTravel=false}}catch(e){console.warn('p71f',e)}P2.busy=false;renderAll()},1800)}catch(e){console.warn('p71f',e);P2.busy=false}renderAll()},1400)};
+
+// P.3 Auf der Flucht im Turm: auf jeder Ebene eine Streife. Verstecken (Geschick), sonst Kampf gegen eine Wache.
+// Verloren → zurück in die Zelle. Nach der Flucht erkennt Irmel die Gruppe wieder (Strafe zahlen, sich wehren oder sich ergeben).
+patrol45=function(){if(!inTurm45()||!isPris45()||TAC||inFight())return;const P2=S.prison26;if(!P2||P2.stage==='zelle'||P2.busy)return;if(P2.pat72&&Date.now()-P2.pat72<5000)return;P2.pat72=Date.now();
+  const best=PARTY.filter(h=>h.hp>0).sort((a,b)=>(b.mods.dex||0)-(a.mods.dex||0))[0]||hero;
+  say('Schritte auf der Treppe. Eine Streife kommt.','dm');if(best!==hero){const i=PARTY.indexOf(best);if(i>=0)setActive(i,true)}
+  const ok=check('dex',12-(ROGUE26.test(best.cls||'')?2:0)-(S.flags.night?2:0),'Verstecken');
+  if(ok){say('Ihr drückt euch in eine Nische. Die Wache geht vorbei und pfeift falsch.','dm');return renderAll()}
+  say('„Halt! Stehen bleiben!“ Die Wache zieht den Knüppel.','npc','Duppelbacher Wache');P2.patrol72=1;
+  setTimeout(()=>{try{if(!inFight())spawn23('duppelbacher soldat')}catch(e){console.warn('p71f',e)}renderAll()},900);renderAll()};
+{const _sw71f=switchScene;switchScene=function(sc){const n0=sceneName(),lv0=typeof lvl45==='function'?lvl45():null,lift71=typeof ARR45!=='undefined'&&ARR45==='lift';let lv1=null;try{const P=S.places[sc];const e=P&&B45[Object.keys(B45).find(t=>B45[t][0]===P.biome)];lv1=e?e[2]:null}catch(e){}
+  try{const T=T45();
+    // Gesucht: erst den Eintrag klären, dann geht es hinunter
+    if(lv0===0&&lv1===-1&&!isPris45()&&S.flags.turmGesucht72){say('Irmel klopft auf das Buch. „Erst klären wir das mit eurem Eintrag.“','npc','Wachhabende Irmel');renderAll();return}
+    // Besucher: Ein Klick auf die Treppe bezahlt die Besuchszeit gleich mit
+    if(lv0===0&&lv1===-1&&!isPris45()&&T.visit!==day43()){const p=visitP45();if(pay43(p)){E43().k.duppelbach+=p;E43().last=wallet43();T.visit=day43();say('Irmel stempelt euch die Hand: „BESUCH“ ('+fmt43(p)+'). „Bis Sonnenuntergang.“','npc','Wachhabende Irmel');hudUpd()}}
+  }catch(e){console.warn('p71f',e)}
+  const r=_sw71f.apply(this,arguments);
+  try{const lv=lvl45();if(lv!=null&&lv>=-3&&lv<=0&&isPris45()&&S.prison26.stage!=='zelle'&&lv0!=null&&lv0!==lv&&!lift71||lv!=null&&n0==='turmzelle'&&isPris45()&&S.prison26.stage==='flucht72'&&lv>=-3)setTimeout(()=>{try{patrol45()}catch(e){}},1300);
+    // Wiedererkennen nach der Flucht
+    if(lv===0&&lv0==null&&n0!=='turmzelle'&&!isPris45()&&S.flags.turmGesucht72){setTimeout(()=>{say('Irmel sieht auf, sieht ins Buch, sieht wieder auf. „Euch kenne ich. Entflohen, steht hier. Mit Ausrufezeichen.“','npc','Wachhabende Irmel');say('Neu: „Strafe zahlen“, „Sich wehren“ oder „Sich ergeben“ – oder schnell wieder durchs Tor.','new');renderAll()},900)}}catch(e){console.warn('p71f',e)}
+  return r}}
+function strafe71f(){return Math.round(45*pi44())}
+{const _eg71f=egChips45;egChips45=function(chip){try{if(!isPris45()&&S.flags.turmGesucht72){
+    chip('Strafe zahlen ('+fmt43(strafe71f())+')',()=>{const p=strafe71f();if(!pay43(p)){say('„'+fmt43(p)+'. Sonst bleibt der Eintrag – und ihr gleich mit.“','npc','Wachhabende Irmel');return renderAll()}E43().k.duppelbach+=p;E43().last=wallet43();S.flags.turmGesucht72=false;
+      say('Irmel streicht die Zeile durch, zweimal, und stempelt daneben: „BEZAHLT“. „Beim nächsten Mal kostet es das Doppelte.“','npc','Wachhabende Irmel');addChron('Die Strafe für die Flucht aus dem Turm bezahlt ('+fmt43(p)+').',[]);hudUpd();renderAll()},'spont');
+    chip('Sich wehren',()=>{const P2=S.prison26=S.prison26||{};P2.erkannt72=1;say('Irmel zieht an einer Schnur. Irgendwo läutet eine Glocke. Zwei Wachen kommen die Treppe herauf.','dm');setTimeout(()=>{try{if(!inFight())spawn23('duppelbacher soldat')}catch(e){}renderAll()},900);renderAll()},'spont');
+    chip('Sich ergeben',()=>{S.flags.turmGesucht72=false;const P2=S.prison26=S.prison26||{};P2.stage='zelle';P2.guard=true;S.facts.turm45_offen=false;say('Ihr hebt die Hände. Irmel nickt zufrieden. „Vernünftig. Zelle fünf ist noch warm.“','npc','Wachhabende Irmel');
+      setTimeout(()=>{const id=sceneIdByName('Turmzelle');window.__noTravel=true;try{if(id){ARR45=null;switchScene(id)}}finally{window.__noTravel=false}renderAll()},1400);renderAll()},'spont');
+    return}}catch(e){console.warn('p71f',e)}return _eg71f.apply(this,arguments)}}
+// Sieg gegen die Streife bzw. die Wachen im Erdgeschoss
+{const _ik71f=impKill;impKill=function(){const P2=S.prison26;let pat=false,erk=false;try{pat=!!(P2&&P2.patrol72&&inTurm45());erk=!!(P2&&P2.erkannt72&&inTurm45())}catch(e){}
+  const r=_ik71f.apply(this,arguments);
+  try{if(pat){P2.patrol72=0;setTimeout(()=>{say('Die Wache liegt still im Gang. Weiter, bevor jemand nachsieht.','dm');renderAll()},900)}
+    if(erk){P2.erkannt72=0;setTimeout(()=>{say('Die Wachen liegen am Boden. Irmel hat sich hinter ihrem Buch verschanzt. Ihr nehmt das Tor, bevor die Glocke noch einmal läutet.','dm');const id=sceneIdByName('Goldener Platz');window.__noTravel=true;try{if(id)switchScene(id)}finally{window.__noTravel=false}addChron('Im Turm von Duppelbach wiedererkannt und an den Wachen vorbei entkommen.',[]);renderAll()},1200)}}catch(e){console.warn('p71f',e)}
+  return r}}
+// Niederlage gegen die Streife oder die Wachen → zurück in die Zelle (statt Talisman-Wahl)
+if(typeof showCards==='function'){const _shc71f=showCards;showCards=function(){try{const P2=S.prison26;if(P2&&(P2.patrol72||P2.erkannt72)&&inTurm45()){P2.patrol72=0;P2.erkannt72=0;S.ko=false;try{removeEnemy&&removeEnemy('flee',true)}catch(e){}
+    PARTY.forEach(h=>{h.hp=Math.max(1,Math.ceil(h.max/3));h.hurt=0});S.flags.turmGesucht72=false;P2.stage='zelle';P2.guard=true;S.facts.turm45_offen=false;
+    say('Ihr wacht im Stroh auf. Zelle fünf. Das Schloss ist neu, und Bertram sitzt wieder auf seinem Stuhl.','dm');addChron('Von den Wachen im Turm überwältigt – zurück in der Zelle.',[]);
+    setTimeout(()=>{const id=sceneIdByName('Turmzelle');window.__noTravel=true;try{if(id){ARR45=null;switchScene(id)}}finally{window.__noTravel=false}renderAll()},600);return}}catch(e){console.warn('p71f',e)}
+  return _shc71f.apply(this,arguments)}}
+// Gesucht oder nicht: rechtmäßig frei (bezahlt, abgesessen, Dienstvertrag) gegenüber geflohen
+{const _tv71f=tvAdd44;tvAdd44=function(L){try{if(L&&L.includes('FRST'))S.flags.legit72=Date.now()}catch(e){}return _tv71f.apply(this,arguments)}}
+{const _ab71f=absitzen47;absitzen47=function(){try{S.flags.legit72=Date.now()}catch(e){}return _ab71f.apply(this,arguments)}}
+{const _dv71f=dvFrei54;dvFrei54=function(){try{S.flags.legit72=Date.now()}catch(e){}return _dv71f.apply(this,arguments)}}
+{const _ra71f=renderAll;renderAll=function(){try{const P2=S.prison26;if(P2){const st=P2.stage;if(S.flags.pst72!==st){if(st==='frei'&&S.flags.pst72&&S.flags.pst72!=='frei'){S.flags.turmGesucht72=!(Date.now()-(S.flags.legit72||0)<20000)}S.flags.pst72=st}}}catch(e){}return _ra71f.apply(this,arguments)}}
+
+// ---------- Q.2 Ausgänge in andere Orte: nur „Weiterreisen“ (Paul 04.11.: überall) ----------
+// Ein Ausgang, der in einen anderen Ort führt (z. B. Viellos → Dorftor, Viellos ↔ Klostertreppe), verschwindet, sobald
+// – die Szene selbst „🗺 Weiterreisen“ anbietet und – das Ziel schon auf der Weltkarte bekannt ist. Vorher bleibt er (sonst fände man den Ort nicht).
+// Bootsfahrten (Weite ↔ AIDA) bleiben, sie sind selbst eine Reise.
+function node71f(id){try{for(const k of Object.keys(WNODES)){let e=null;try{e=nodeEntry(k)}catch(x){continue}if(!e||e.msg||e.stay)continue;let i=e.id||null;
+  if(!i&&e.fn){i=k==='nordstollen'?travelPlaceId('north'):k==='grossensee'?travelPlaceId('village'):null}if(i&&i===id)return k}
+  const o=ortOf(id);if(WNODES[o])return o}catch(e){}return null}
+{const _el71f=exitList;exitList=function(sc){const L=_el71f.apply(this,arguments);
+  try{if(sc!==S.scene||!L||!L.length)return L;const here=ortOf(sc),me=typeof entryNode32==='function'&&entryNode32();if(!me||!mapKnown(me))return L;
+    return L.filter(ex=>{try{if(!ex||/Boot/i.test(ex.label||''))return true;const t=sceneIdByName(ex.target);if(!t||ortOf(t)===here)return true;const k=node71f(t);return !(k&&mapKnown(k))}catch(e){return true}})}catch(e){}return L}}
+
+// ---------- K.1 (Ursache) Laufbewegung ohne Ende: Bleibt eine Figur 0,6–0,7 Pixel vor dem Ziel stehen, bewegte moveFig sie nicht mehr,
+// die Zeichnung zeigte aber weiter „läuft“. Jetzt rastet sie auf dem Ziel ein.
+{const _mf71s=moveFig;moveFig=function(o,speed){const r=_mf71s.apply(this,arguments);try{if(o&&o.tx!=null&&!(drag&&drag.o===o)){const dy=(o.ty!=null&&o.y!=null)?o.ty-o.y:0;if(Math.hypot(o.tx-o.x,dy)<=.7){o.x=o.tx;if(o.ty!=null&&o.y!=null)o.y=o.ty}}}catch(e){}return r}}
+
+// ---------- Q.4 Spielleiter lässt Gegner verschwinden (Eisgrotte u. a.): Das Spiel merkt es sich ----------
+// Bisher blieb die Ebene „besetzt“ („Erst müsst ihr an den Gegnern vorbei.“), obwohl der Kampf aufgelöst war. Jetzt: Wellen enden, die Ebene ist frei, Log und Chronik sagen es.
+document.addEventListener('click',e=>{try{const b=e.target&&e.target.closest&&e.target.closest('button');if(b&&/^Kampf beenden \(Gegner verschwindet\)/.test(b.textContent||''))window.__slVanish71=Date.now()}catch(x){}},true);
+{const _re71f=removeEnemy;removeEnemy=function(how){const sl=how==='vanish'&&window.__slVanish71&&Date.now()-window.__slVanish71<1500;const n=sceneName();
+  const r=_re71f.apply(this,arguments);
+  try{if(sl){window.__slVanish71=0;const L=typeof LV26!=='undefined'&&LV26[n];
+    if(S.wave26&&S.wave26.scene===S.scene)S.wave26=null;
+    if(L&&!S.facts[L.fact])setTimeout(()=>{try{free26(L.fact,'Die übrigen Gegner ziehen sich zurück. Der Weg ist frei.')}catch(e){}},500);
+    else addChron('Spielleiter: Der Kampf in '+placeTitle(S.scene)+' hat sich aufgelöst.',[]);
+    try{if(typeof W29!=='undefined'&&W29&&W29.scene===S.scene)W29.list=[]}catch(e){}renderAll()}}catch(e){console.warn('p71f',e)}
+  return r}}
+
+// ---------- N.3 L. in allen Zwischensequenzen mit der neuen Figur (Paul 03.11.: nur die Nahaufnahme seines Gesichts bleibt alt) ----------
+// Bisher (P69, Paul 01.11.) blieb L. in den Szenen die alte Figur. Jetzt: Kessel/Loge, „L. zeigt sich“, L. greift ein, Stahndor, Finale.
+try{LSK69.l='l_offen';LSM69=null}catch(e){}
+function lImg71f(){try{const N=NPC68.l_offen;if(!N||!N.front)return null;if(!N.__o71){const w=N.walk&&N.walk.length?N.walk:[N.east||N.front];N.__o71={idle:N.front,blink:N.front,a:w[0],b:w[1]||w[0]}}return N.__o71}catch(e){return null}}
+{const _df71l=drawFigure;drawFigure=function(img,o,isHero){try{if(!isHero&&on68()&&typeof FOEIMG!=='undefined'&&FOEIMG.l&&img&&(img===FOEIMG.l||img.idle===FOEIMG.l.idle)){const L=lImg71f();if(L)arguments[0]=L}}catch(e){}return _df71l.apply(this,arguments)}}
+function lSwap71f(fn){if(!on68())return fn();const L=lImg71f(),I=typeof FOEIMG!=='undefined'&&FOEIMG.l;if(!L||!I)return fn();const di=g.drawImage;
+  g.drawImage=function(im,...a){try{if(a.length===4&&(im===I.idle||im===I.a||im===I.b)){const[x,y,w,h]=a,s=w/16,ni=im===I.idle?L.idle:L.a,nw=ni.width*s,nh=ni.height*s;return di.call(g,ni,Math.round(x+w/2-nw/2),Math.round(y+h-nh),Math.round(nw),Math.round(nh))}}catch(e){}return di.call(g,im,...a)};
+  try{return fn()}finally{g.drawImage=di}}
+{const _dc26=drawCrew26;drawCrew26=function(){const a=arguments;return lSwap71f(()=>_dc26.apply(this,a))}}
+{const _dk26=drawKill26;drawKill26=function(){const a=arguments;return lSwap71f(()=>_dk26.apply(this,a))}}
+
+// ---------- N.4 (erster Teil) Loge: Solange das Angebot des Typen offen ist, fehlten „Hinunterschauen“ und „Den Mind-Beater wecken“ ----------
+// Wer das Gespräch beendet, ohne anzunehmen oder abzulehnen, saß fest. Jetzt bleiben die Knöpfe da; der Typ wartet bzw. geht, wenn die Szene im Kessel beginnt.
+{const _scc71l=sceneChips;sceneChips=function(chip){const r=_scc71l.apply(this,arguments);try{
+  if(sceneName()==='aussichtsplateau'&&S.deal26&&!talk&&!inFight()&&!TAC&&!RB&&!LS26&&!KILL26){
+    chip(LOOK25?'Wieder aufsehen':'Hinunterschauen',()=>{LOOK25=LOOK25?0:performance.now();if(LOOK25){S.flags.mbSeen=true;say(mbLookText26(),'dm')}renderAll()},LOOK25?undefined:'learned');
+    if(S.flags.mbSeen&&mbPresent26()&&S.flags.mindBeater!=='verschont'&&!S.flags.lScene)chip('Nicht wecken – abwarten',()=>{try{dSay26('Ich lasse euch zusehen. Mein Angebot läuft nicht weg.');setTimeout(()=>{try{if(DUDE26)dudePuff26(DUDE26.x);DUDE26=null;S.deal26=null}catch(e){}lsStart26()},1800)}catch(e){lsStart26()}renderAll()},'learned')}}catch(e){}return r}}
+
+// ---------- D.1 PaulMons im Taktik-Kampf (Paul 04.11.: „Befehl pro Zug“) ----------
+// Jeder Held mit geöffneter Kapsel kann in seinem Zug zusätzlich zur Aktion einmal „PaulMon befehligen“: Ziel bis 3 Felder vom Helden,
+// Move ansagen wie im normalen Kampf (Moves nach PaulMon-Stufe, ★ Lieblingsmove, eigener Kopf bei wenig Vertrauen). „Kapsel-Ruf“ bleibt der stärkere Angriff.
+const PMT71={};
+function pmTurn71(){const T=TAC;if(!T)return null;if(!T.pm71||T.pm71.u!==T.cur)T.pm71={u:T.cur,used:false};return T.pm71}
+function pmCan71(u){try{return !!(TAC&&u&&u.hero&&u.side==='held'&&!u.frog&&u.hp>0&&!TAC.f38&&petOf69(u.hero)&&MOVES[petOf69(u.hero)])}catch(e){return false}}
+{const _ui71p=tUI;tUI=function(){const r=_ui71p.apply(this,arguments);try{const u=TAC&&TAC.cur;if(!pmCan71(u)||TAC.busy)return r;const A=TOV.querySelector('.tacts');if(!A)return r;const P=pmTurn71();
+    let E=A.querySelector('.end68')||A;const b=document.createElement('button');b.type='button';b.className='pm71'+(TAC.mode==='pm71'?' on':'');const k=petOf69(u.hero);
+    b.textContent='PaulMon befehligen'+(P.used?' (schon)':'');b.disabled=P.used;b.title=((CAPS[k]&&CAPS[k].pet)||'PaulMon')+': einmal pro Zug, zusätzlich zur Aktion. Ziel bis 3 Felder vom Helden.';
+    b.onclick=()=>{TAC.mode=TAC.mode==='pm71'?null:'pm71';TAC.pmMenu71=null;if(TAC.mode==='pm71')tLog('Ziel für '+((CAPS[k]&&CAPS[k].pet)||'das PaulMon')+' wählen: ein Gegner bis 3 Felder von '+u.name+'.');tUI()};
+    E.prepend(b);
+    if(TAC.pmMenu71&&TAC.pmMenu71.u===u){const M=TAC.pmMenu71,R=document.createElement('div');R.className='sub68 pm71m';M.L.forEach(m=>{const x=document.createElement('button');x.type='button';x.textContent=(m.fav?'★ ':'')+m.n+' – '+m.d;x.onclick=()=>{TAC.pmMenu71=null;pmDo71(u,M.o,m.i)};R.appendChild(x)});
+      const c=document.createElement('button');c.type='button';c.textContent='Abbrechen';c.onclick=()=>{TAC.pmMenu71=null;TAC.mode=null;tUI()};R.appendChild(c);A.prepend(R)}}catch(e){console.warn('p71f pm',e)}return r}}
+{const _tc71p=tClick;tClick=function(c,r){try{if(TAC&&TAC.mode==='pm71'&&!TAC.busy){const u=TAC.cur,o=tUnitAt(c,r);
+    if(!o||o.side===u.side||o.hp<=0){tLog('Das PaulMon braucht einen Gegner als Ziel.');return}
+    if(tDist(u,o)>3){tLog(o.name+' ist zu weit weg (höchstens 3 Felder vom Helden).');return}
+    const L=(pmMoves58(u.hero)||[]).filter(m=>m.known);if(L.length<=1){TAC.mode=null;return pmDo71(u,o,L.length?L[0].i:0)}
+    TAC.pmMenu71={u,o,L};tUI();return}}catch(e){console.warn('p71f pm',e)}return _tc71p.apply(this,arguments)}}
+function pmDo71(u,o,i){const T=TAC;if(!T||!u||!o)return;const h=u.hero,k=petOf69(h),nm=(CAPS[k]&&CAPS[k].pet)||'Das PaulMon';const P=pmTurn71();P.used=true;T.mode=null;
+  const Lg=m=>{tLog(m);say(m,'roll')};say(nm+', '+MOVES[k][i][0]+'!','player',h.name);
+  try{if(typeof tier==='function'&&typeof NPCS!=='undefined'&&NPCS.pet&&tier(NPCS.pet)<=1&&Math.random()<.25){Lg(nm+' dreht sich weg und hilft nicht.');return tUI()}}catch(e){}
+  let j=i;try{const f=pmFav58(h,k);if(f!=null&&f!==i&&Math.random()<.15){j=f;Lg(nm+' hat seinen eigenen Kopf und nimmt lieber „'+MOVES[k][j][0]+'“.')}const W=petWeights(k);W.uses[j]=(W.uses[j]||0)+1;W.last=j}catch(e){}
+  const desc=(MVD58[k]||[])[j]||'W4 Schaden',lv=pmLvl28(h),hb=2+Math.floor(lv/4),bon=typeof pmBonus28==='function'?pmBonus28(h):0;
+  u.pmFly69={c:o.c,r:o.r,t0:T.t};u.face=o.c>=u.c?1:-1;
+  const foeFx=/Schaden|Gegner/.test(desc);let txt=nm+' ('+MOVES[k][j][0]+')';
+  setTimeout(()=>{if(!TAC)return;try{
+    let hit=true;if(foeFx){const r=d(20),tot=r+hb,ac=o.ac-((o.ac27&&o.ac27.n>0)?o.ac27.v:0);hit=r===20||(r!==1&&tot>=ac);txt+=' → '+o.name+': W20 '+r+' +'+hb+' = '+tot+' gegen RK '+ac+(hit?' → Treffer.':' → daneben.')}
+    if(hit){const m=desc.match(/^W(\d)\s*Schaden/);if(m){const n=d(+m[1])+bon;txt=tDmg27(u,o,n,txt+' '+n+' Schaden.',{});o.hurt=10;tFloat(o,'-'+n,'#bbff7a')}
+      if(o.hp>0){if(/brennt/.test(desc)){o.pmBurn71={n:2,by:u};txt+=' '+o.name+' brennt.'}
+        if(/setzt (eine Runde )?aus/.test(desc)&&(!/manchmal/.test(desc)||Math.random()<.35)){o.stun31=1;tFloat(o,'setzt aus','#f6c84a');txt+=' '+o.name+' setzt eine Runde aus.'}
+        if(/nächster Angriff des Gegners −(\d)|blendet/.test(desc)){const v=+((desc.match(/−(\d)/)||[0,5])[1]);o.spott27={v,n:1};txt+=' '+o.name+': nächster Angriff −'+v+'.'}
+        if(/Rüstung des Gegners −(\d)/.test(desc)){const v=+desc.match(/Rüstung des Gegners −(\d)/)[1];o.ac27={v,n:2};txt+=' '+o.name+': RK −'+v+' für zwei Züge.'}}}
+    const hl=desc.match(/heilt den Helden um W(\d)/);if(hl){const n=d(+hl[1]);u.hp=Math.min(u.max,u.hp+n);tFloat(u,'+'+n,'#8fe08f');txt+=' '+u.name+' +'+n+' LP.'}
+    const sh=desc.match(/nächster Schaden am Helden −(\d)/);if(sh){u.pmShield71=+sh[1];txt+=' '+u.name+': nächster Schaden −'+sh[1]+'.'}
+    if(/gedeckt|Block/.test(desc)){u.pmShield71=Math.max(u.pmShield71||0,3);txt+=' '+u.name+' ist gedeckt.'}
+    Lg(txt);if(o.hp<=0&&typeof tCheckEnd==='function')tCheckEnd()}catch(e){console.warn('p71f pm',e)}tUI()},450);tUI()}
+// Wirkungen: Schutz am Helden, Brennen am Gegner, Rüstung zurück
+{const _td71p=tDmg27;tDmg27=function(a,b,dmg,txt,opt){try{if(b&&b.pmShield71&&dmg>0){const v=Math.min(dmg,b.pmShield71);dmg-=v;b.pmShield71=0;txt=(txt||'')+' (PaulMon fängt '+v+' ab)'}}catch(e){}return _td71p.call(this,a,b,dmg,txt,opt)}}
+{const _tai71p=tAI;tAI=function(u){try{if(TAC&&u&&u.pmBurn71&&u.pmBurn71.n>0&&u.hp>0){const B=u.pmBurn71;B.n--;const n=d(2);const t=tDmg27(B.by||u,u,n,u.name+' brennt: '+n+' Schaden.',{});u.hurt=8;tFloat(u,'-'+n,'#ff9a4a');tLog(t);say(t,'roll');if(B.n<=0)u.pmBurn71=null;
+    if(u.hp<=0){setTimeout(()=>{try{if(TAC&&!tCheckEnd())tEndTurn()}catch(e){}},500);return}}}catch(e){console.warn('p71f pm',e)}return _tai71p.apply(this,arguments)}}
+{const _tn71p=tNext;tNext=function(){try{const p=TAC&&TAC.cur;if(p&&p.ac27&&p.ac27.n>0)p.ac27.n--}catch(e){}const r=_tn71p.apply(this,arguments);try{if(TAC)TAC.pmMenu71=null}catch(e){}return r}}
+
+// ---------- C.3 Lebensanzeige großer Figuren (Geschäftsführer/der normale Typ u. a.) über dem Kopf statt mitten auf der Figur ----------
+// Der Balken sitzt fest 31 Punkte über den Füßen (passend für 32 hohe Bilder). Bei höheren Bildern rutscht er (mit Zugmarke und Zustands-Symbolen) nach oben.
+const HPC71F=new Set(['#3a2a2a','#7ad36a','#d9625a','#4af07a']);
+{const _ud71h=tUnitDraw;tUnitDraw=function(u){let lift=0;try{if(TAC&&u&&typeof ws68==='function'&&ws68()){const S=wsSet68(u),im=S&&wsFrame68(u,S);if(im&&im.height>36)lift=im.height-33}}catch(e){}
+  if(!lift)return _ud71h.apply(this,arguments);
+  const tq0=tq;tq=function(x,y,w,h,col){if(h<=2&&HPC71F.has(col))y-=lift;return tq0.call(this,x,y,w,h,col)};
+  try{return _ud71h.apply(this,arguments)}finally{tq=tq0}}}
+
+// ---------- C.7 Der normale Typ flackert nur an der Oase und nachdem man ihn dort getroffen hat (Paul 04.11.) ----------
+// Vorher (z. B. als Geschäftsführer in Friede Freude Land) steht er ruhig da.
+function dudeFlicker71f(){try{return ortOf(S.scene)==='oase'||!!S.flags.dudeMet26}catch(e){return true}}
+{const _dd71f=drawDude26;drawDude26=function(){try{if(!dudeFlicker71f()&&DUDE26&&DUDE26.scene===S.scene&&DUDE&&!DUDE26.loge){const k=TD?1:2,B=TD?100:FLOOR;const X0=Math.round(DUDE26.x-18*k/2-4*k),Y0=B-34*k;g.drawImage(DUDE,X0,Y0,36*k,36*k);return}}catch(e){}return _dd71f.apply(this,arguments)}}
+
+// ---------- S.7 / N.5 Der Gast bleibt lange ein Rätsel (Paul 04.11.: „Erst vage, später klar“) ----------
+// Früh (vor Stahndor) spricht der normale Typ beim Angebot (Loge, Anwesen) und als Geschäftsführer nur in Andeutungen über seinen „Freund“.
+// Die klaren Sätze (Archiv, Körper, Kapseln als Investition, das Buch) sagt er erst spät: nach Stahndor (Werkstatt-Szene/Ring-Wahl),
+// wenn Ls Name bekannt ist oder auf Weite. Dann auch am Pool (Anwesen) als eigene Fragen, damit das Wissen vor dem Finale sicher erreichbar bleibt.
+function spaet71f(){try{const f=S.facts;return !!(f.stahndor46||f.lname46||f.lname38||f.l_tausch70||f.baum53||(S.w50&&S.w50.st&&S.w50.st!=='aus'))}catch(e){return false}}
+const VAGE71={
+  q_wer:[['Ein ganz normaler Typ. Ich vermittle. Manchmal für mich, manchmal für einen Freund.'],['dm','Bei „Freund“ zögert er einen Atemzug zu lang.',2800]],
+  q_gast:[['Einer, der nicht gern genannt wird. Er ist … zu Besuch. Überall ein bisschen.'],['dm','Für einen Moment wird es kühler. Dann lächelt er wieder.',3000]],
+  q_gastwill:[['Was jeder Gast will: dass man ihn hereinbittet. Mehr erzähle ich, wenn wir uns besser kennen.']],
+  q_l:[['L.? Der Archivar mit dem Buch. Vor zwanzig Jahren hat er für mich jemanden schreiben lassen – einen Tüftler, der heute Fässer stemmt.'],['Heute schreibt er für jemand anderen. Seht euch seine Augen an, wenn ihr sie seht.',3400]],
+  q_llohn:[['Ein Buch, das ihm nicht gehorcht. Türen, die ihn nicht halten. Keine Falten. Und ein Versprechen – von jemandem, der Versprechen sehr ernst nimmt.'],['Wir sind … Mitbewerber. Er liefert schneller als ich.',3800]],
+  q_mb:[['Mein Haustier. Musik, die durch die Ohren in den Kopf geht und dort Dinge zerbricht.'],['Darum liegt es bei mir an der Leine. Manche Dinge soll niemand sonst in die Finger kriegen.',3000]]};
+const HIDE71=['q_lpreis','q_lfrei','q_wessen','q_kapseln28','q28_zweifel','q28_buch'];
+{const _tt71v=talkTopics;talkTopics=function(){const r=_tt71v.apply(this,arguments);try{
+  if(talk==='deal26'&&!spaet71f()&&Array.isArray(r))return r.filter(x=>!HIDE71.includes(x[1])).map(x=>x[1]==='q_gast'?['Was für ein Freund?',x[1]]:x[1]==='q_gastwill'?['Und was will er?',x[1]]:x);
+  if(talk==='dude26'&&spaet71f()&&Array.isArray(r)){const A=S.flags.lateAsk71||{};const L=[['Wer ist dein Freund wirklich?','l71_gast',null],['Was will er?','l71_will','l71_gast'],['Warum hast du uns die Kapseln gegeben?','l71_kaps','l71_will'],['Was willst du mit dem Buch?','l71_buch','l71_kaps']];
+    const add=L.filter(([l,k,pre])=>!A[k]&&(!pre||A[pre])).map(([l,k])=>[l,k]);const i=r.findIndex(x=>/Gespräch beenden/.test(x[0]));if(i>=0)r.splice(i,0,...add);else r.push(...add)}}catch(e){}return r}}
+{const _tp71v=topic;topic=function(k){try{
+  if(talk==='deal26'&&!spaet71f()&&VAGE71[k]&&S.deal26){if(typeof busy27==='function'&&busy27())return renderAll();const D=S.deal26;D.asked[k]=1;D.v71=D.v71||{};D.v71[k]=1;
+    VAGE71[k].forEach(L=>{if(L[0]==='dm')dmLater27(L[1],L[2]||2000);else dSay26(L[0],L[1]||0)});return renderAll()}
+  if(talk==='dude26'&&/^l71_/.test(k)){if(typeof busy27==='function'&&busy27())return renderAll();const A=S.flags.lateAsk71=S.flags.lateAsk71||{};A[k]=1;
+    const map={l71_gast:'q_gast',l71_will:'q_gastwill',l71_kaps:'q_kapseln28',l71_buch:'q28_buch'};const q=map[k];
+    const D0=S.deal26,t0=talk;S.deal26={variant:'dm',asked:Object.assign({q_wer:1,q_gast:1,q_gastwill:1,q_kapseln28:1,q28_zweifel:1,q_llohn:1},A.__q||{}),scene:S.scene,late71:1};talk='deal26';
+    try{if(q==='q_gast'||q==='q_gastwill')dealTopic27(q);else _tp71v.call(this,q)}finally{(A.__q=A.__q||{})[q]=1;S.deal26=D0;talk=t0}return renderAll()}}catch(e){console.warn('p71f gast',e)}
+  return _tp71v.apply(this,arguments)}}
+// Wissens-Erkennung (p57w): Vage Antworten zählen nicht als Quelle; späte Antworten am Pool schon.
+try{const K71={w_typ_dient_gast:['q_wer','q_gast'],w_l_rivale_typ:['q_llohn'],w_gast_sieht_was_l_sieht:['q_l']};
+  TR57.forEach(o=>{const ks=K71[o.id];if(!ks||!o.x)return;o.x=()=>{try{const D=S.deal26,A=(S.flags.lateAsk71&&S.flags.lateAsk71.__q)||{};return ks.some(k=>(D&&D.asked&&D.asked[k]&&!(D.v71&&D.v71[k]))||A[k])}catch(e){return false}}})}catch(e){}
+// Geschäftsführer in Friede Freude Land: „Wohin geht das Gestern?“ – vor Stahndor nur die vage Antwort
+{const _gt71=gfTopic34;gfTopic34=function(k){try{if(k==='g34_wohin'&&!spaet71f()){const F=ffl34();F.gf.ask=F.gf.ask||{};F.gf.ask[k]=1;dSay26('Zu einem Gast. Einem sehr hungrigen. Mehr sage ich nicht – nicht ohne Vertrag.');dSay26('Das Rohr zieht nicht nach unten, wisst ihr. Es zieht weg.',3200);return}}catch(e){}return _gt71.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
