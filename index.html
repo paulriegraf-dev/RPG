@@ -27461,29 +27461,42 @@ function probe72(){const N=presentNpcs().filter(n=>!n.virtual);const a=N[0],b=N[
 //  2) K07b wartet, bis kein Gespräch, kein Kampf und keine Zwischensequenz mehr läuft, und beginnt mit einem Satz des aktiven Helden,
 //     der sagt, von wem die Geschichten kamen. So ist klar, woher die Erkenntnis stammt.
 // Wissen und Knoten bleiben unverändert (K07b, K25e, K25h): dieselben Fakten, dieselben Chronik-Einträge.
-const ERK72={on:false,n:0,tmr:0};
+const ERK72={on:false,n:0,tmr:0,tri:false};
 // Woher kamen die Mythen-Bruchstücke? (für den Einstiegssatz)
 {const _gf72=grantFact;grantFact=function(k,src){const had=!!(S.facts&&S.facts[k]);const r=_gf72.apply(this,arguments);
   try{if(!had&&S.facts[k]&&/^mythos_/.test(k)&&src&&!/fragment|gespräch|spielleiter/i.test(String(src))){S.mysrc72=S.mysrc72||{};S.mysrc72[k]=String(src)}}catch(e){}return r}}
-{const st=document.createElement('style');st.textContent='#sz72.erk .lb{height:8%}#sz72.erk{pointer-events:none}#sz72.erk .plq{font-size:calc(var(--fs72)*.8);top:10%}';document.head.appendChild(st)}
-function erkEnd72(){ERK72.on=false;ERK72.n=0;try{const r=root72();r.classList.remove('erk');if(!SZ72.on)r.querySelector('.plq').classList.remove('on');document.body.classList.remove('sz72on')}catch(e){}}
+{const st=document.createElement('style');st.textContent='#sz72.erk .lb{height:8%}#sz72.erk{pointer-events:none}#sz72.erk .plq{font-size:calc(var(--fs72)*.8);top:10%}'+
+  '#sz72 .b72 .tri72{position:absolute;right:7px;bottom:2px;font-size:.66em;line-height:1;color:#a88f2a;opacity:.8;font-style:normal}';document.head.appendChild(st)}
+function erkEnd72(){ERK72.on=false;ERK72.n=0;ERK72.tri=false;try{const r=root72();r.classList.remove('erk');if(!SZ72.on)r.querySelector('.plq').classList.remove('on');document.body.classList.remove('sz72on')}catch(e){}}
 triSay=function(h,text,ms){window.__nobub72=true;try{say(text,'npc',h&&h.name)}finally{window.__nobub72=false}
   try{if(SZ72.on)return;const r=root72(),P=r.querySelector('.plq');ms=ms||3200;
     if(!ERK72.on){ERK72.on=true;ERK72.n=0;r.classList.add('erk');P.textContent='Die Gruppe steckt die Köpfe zusammen …';P.classList.add('on');try{TRIB.hidden=true}catch(e){}}
     SZ72.bubs.filter(b=>b.isHero).forEach(b=>b.el.remove());SZ72.bubs=SZ72.bubs.filter(b=>!b.isHero);
-    bubShow72(h||hero,true,(h||hero).name,text,ERK72.n++===0?'ged':'',ms);
+    const first=ERK72.n++===0;const b=bubShow72(h||hero,true,(h||hero).name,text,first?'ged':'',ms);
+    // Nachbesserung zu P72 (Paul 04.11., 72.F2 „warum nicht mit dem Gast“): im ersten Gedanken der Oase-Erkenntnisse (K07b, K25e) ein kleines, verstecktes Dreieck – der Gedanke war vielleicht nicht ganz der eigene. Nur ein Zeichen, kein Wissen, nicht bei Miras (K25h: kein Dreieck).
+    if(first&&ERK72.tri&&b&&b.el){const t=document.createElement('i');t.className='tri72';t.textContent='▵';t.setAttribute('aria-hidden','true');b.el.appendChild(t)}
     clearTimeout(ERK72.tmr);ERK72.tmr=setTimeout(erkEnd72,ms+700)}catch(e){console.warn('triSay72',e)}};
 {const _sw72e=switchScene;switchScene=function(){if(ERK72.on){clearTimeout(ERK72.tmr);erkEnd72()}return _sw72e.apply(this,arguments)}}
 // K07b: nicht mitten ins Gespräch, und mit einem Satz, woher die Geschichten kommen
 function erkFrei72(){try{return !talk&&!inFight()&&!TAC&&!SZ72.on&&!ERK72.on&&!S.ko&&!(typeof busy27==='function'&&busy27())&&!(typeof LS26!=='undefined'&&LS26)}catch(e){return true}}
 function erkQuellen72(){const M=S.mysrc72||{};const seen=[];Object.keys(M).forEach(k=>{if(S.facts[k]&&!seen.includes(M[k]))seen.push(M[k])});return seen.slice(-3)}
+// Nachbesserung zu P72 (Paul 04.11., 72.F1 „Geschichte zusammenlegen klingt gut“): K07b passiert nicht mehr von selbst.
+// Sobald genug Geschichten da sind, gibt es einmal einen Hinweis und den Knopf „Geschichten zusammenlegen“; die Spieler wählen den Moment.
+function erkBereit72(){try{return !!S.flags.erkBereit72&&!S.flags.v33point&&!S.facts.see_norden&&mythN33()>=4&&mythV33()<2&&!inV33()}catch(e){return false}}
 if(typeof point33==='function'){const _p72=point33;point33=function(){if(S.flags.v33point||S.facts.see_norden)return;
-  if(!erkFrei72()){clearTimeout(ERK72.wait);ERK72.wait=setTimeout(point33,2200);return}
+  if(!window.__erkGo72){if(!S.flags.erkBereit72){S.flags.erkBereit72=1;const hint=()=>{if(!erkFrei72()){setTimeout(hint,2200);return}
+      say('(Ihr habt inzwischen einige Geschichten über den See gehört. Wenn ihr wollt, legt sie zusammen: Knopf „Geschichten zusammenlegen“.)','sys');try{renderAll()}catch(e){}};setTimeout(hint,600)}
+    return}
+  if(!erkFrei72())return;ERK72.tri=true;
   const q=erkQuellen72();
   if(q.length>=2&&!S.flags.erkIntro72){S.flags.erkIntro72=1;const nm=q.length>2?q.slice(0,-1).join(', ')+' und '+q[q.length-1]:q.join(' und ');
     triSay(hero,'Moment mal. '+nm+' – alle haben uns vom See erzählt. Und jede Geschichte hört an derselben Stelle auf.',3400);
     setTimeout(()=>{S.flags.v33point=0;_p72.apply(this,arguments)},3600);return}
   return _p72.apply(this,arguments)}}
+function erkStart72(){if(!erkBereit72()||!erkFrei72())return;window.__erkGo72=true;try{point33()}finally{window.__erkGo72=false}try{renderAll()}catch(e){}}
+{const _sc72e=sceneChips;sceneChips=function(chip){const r=_sc72e.apply(this,arguments);try{if(!talk&&!inFight()&&!TAC&&!SZ72.on&&!ERK72.on&&erkBereit72())chip('Geschichten zusammenlegen',()=>erkStart72(),'learned')}catch(e){}return r}}
+// K25e am alten Brunnen: derselbe versteckte Hinweis im ersten Gedanken
+if(typeof brunnenRealize33==='function'){const _br72=brunnenRealize33;brunnenRealize33=function(){const was=!!S.flags.seeRealizing;if(!was)ERK72.tri=true;const r=_br72.apply(this,arguments);try{if(!was&&!S.flags.seeRealizing&&!ERK72.on)ERK72.tri=false}catch(e){}return r}}
 // Hinweis „Die Bruchstücke liegen fast beieinander …“ (K25e-Vorlauf) ebenfalls erst nach dem Gespräch
 {const _say72e=say;say=function(text,cls,who){if(cls==='dm'&&typeof text==='string'&&/^Die Bruchstücke liegen fast beieinander/.test(text)&&!erkFrei72()&&!window.__erkNow72){
     const t=text;const wt=()=>{if(erkFrei72()){window.__erkNow72=true;try{say(t,'dm')}finally{window.__erkNow72=false}}else setTimeout(wt,2200)};setTimeout(wt,2200);return}
