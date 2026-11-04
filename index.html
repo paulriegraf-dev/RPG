@@ -28044,6 +28044,28 @@ try{delete IT43.uebschwert;delete IT43.degen;{const H=HAND43.Tamme;if(H){H.it=(H
 {const _ra73g=renderAll;renderAll=function(){try{(PARTY||[]).forEach(h=>{[['Übungsschwert','uebschwert'],['Übungsdegen','uebdegen']].forEach(([n,k])=>{const i=(h.inv||[]).findIndex(x=>x&&x.kind==='weapon'&&x.name===n);if(i>=0){h.inv.splice(i,1);giveWare43(h,k,1,true)}})})}catch(e){}return _ra73g.apply(this,arguments)}}
 
 
+// ================= Prototyp 73 (s): Spielleiter gibt Erfahrung (Paul, 04.11., 22:22: „damit ich besser austesten kann“) =================
+// Im Spielleiter-Fenster, Reiter „Gruppe“, Kasten „Erfahrung (Spielleiter)“: für einen Helden oder alle
+// Technik-Stufen, Innere Kunst, Waffenerfahrung und Waffenpunkte. Stufen setzt er direkt (auch ohne Lehrmeister-Modul).
+let XP73='alle';
+function xpHeroes73(){return XP73==='alle'?(PARTY||[]):(PARTY||[]).filter(h=>String(h.heroId||h.name)===XP73)}
+function xpTech73(n){xpHeroes73().forEach(h=>{ensure27(h);(h.tech||[]).forEach(T=>{try{mig31(T)}catch(e){}if(T.lv==null)T.lv=1;T.lv=Math.max(1,Math.min(10,T.lv+n));T.m=T.lv;T.xp=0});try{recalc27(h)}catch(e){}});
+  say('(Spielleiter) '+(XP73==='alle'?'Alle Helden':xpHeroes73().map(h=>h.name).join(''))+': Techniken '+(n>0?'+':'')+n+' Stufe'+(Math.abs(n)>1?'n':'')+'.','sys')}
+function xpKunst73(n){xpHeroes73().forEach(h=>{ensure27(h);const id=h.lehre;if(!id||typeof KUNST31==='undefined'||!KUNST31[id])return;const K=kl31(h,id);K.lv=Math.max(1,Math.min(10,K.lv+n));K.xp=0;if(K.lv>=5)K.d5=1;if(K.lv>=10)K.d10=1;try{recalc27(h)}catch(e){}});
+  say('(Spielleiter) Aktive Innere Kunst '+(n>0?'+':'')+n+' Stufe ('+xpHeroes73().filter(h=>h.lehre).map(h=>h.name+': '+KUNST31[h.lehre].n+' St. '+kl31(h,h.lehre).lv).join(', ')+').','sys')}
+function xpWaffe73(we,wp){xpHeroes73().forEach(h=>{try{if(we)gainWE49(h,we,'Spielleiter',true);if(wp)giveWP49(h,wp,'Spielleiter')}catch(e){}});say('(Spielleiter) '+(we?'+'+we+' Waffenerfahrung ':'')+(wp?'+'+wp+' Waffenpunkt'+(wp>1?'e':''):'')+' für '+(XP73==='alle'?'alle':xpHeroes73().map(h=>h.name).join('')),'sys')}
+if(typeof gruppe67==='function'){const _g73=gruppe67;gruppe67=function(p){const r=_g73.apply(this,arguments);try{
+  const box=el67('div',null,'xp73');box.appendChild(el67('h3','Erfahrung (Spielleiter, zum Testen)'));
+  const sel=document.createElement('select');sel.setAttribute('aria-label','Für wen');[['alle','Alle Helden']].concat((PARTY||[]).map(h=>[String(h.heroId||h.name),h.name])).forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===XP73)o.selected=true;sel.appendChild(o)});
+  sel.onchange=()=>{XP73=sel.value};box.appendChild(sel);
+  const r1=el67('div',null,'sl67row');r1.append(bt67('Techniken +1 Stufe',()=>xpTech73(1)),bt67('Techniken +3',()=>xpTech73(3)),bt67('Techniken −1',()=>xpTech73(-1)));box.appendChild(r1);
+  const r2=el67('div',null,'sl67row');r2.append(bt67('Innere Kunst +1 Stufe',()=>xpKunst73(1)),bt67('Innere Kunst −1',()=>xpKunst73(-1)));box.appendChild(r2);
+  const r3=el67('div',null,'sl67row');r3.append(bt67('+5 Waffenerfahrung',()=>xpWaffe73(5,0)),bt67('+1 Waffenpunkt',()=>xpWaffe73(0,1)),bt67('+5 Waffenpunkte',()=>xpWaffe73(0,5)));box.appendChild(r3);
+  box.appendChild(el67('p','Techniken und Innere Kunst springen direkt eine Stufe weiter (die Stufen 1–10 gelten auch ohne Lehrmeister). Waffenpunkte gibt man im Waffenbaum aus (Taste U).','small'));
+  const g=[...p.querySelectorAll('h3')].find(x=>x.textContent==='Geld');if(g)p.insertBefore(box,g);else p.appendChild(box)}catch(e){console.warn('p73 Erfahrung',e)}return r}}
+{const st=document.createElement('style');st.textContent='.xp73 select{margin:2px 0 4px;font:inherit;background:#1b1626;color:#f3ead6;border:1px solid #6a5a8a;border-radius:4px;padding:2px 4px}';document.head.appendChild(st)}
+
+
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
 fresh();initRuleForm();setTD(TD);intro();renderAll();renderChron();renderRules();requestAnimationFrame(frame);
 })();
