@@ -29392,6 +29392,8 @@ if(typeof intBox73==='function'){const _ib76=intBox73;intBox73=function(){if(ABS
 if(typeof nIntent73==='function'){const _ni76=nIntent73;nIntent73=function(){if(ABSICHT76)return _ni76.apply(this,arguments);try{if(!inFight()||TAC)return;const R=typeof rot29==='function'?rot29():null;
   const E=[enemy].concat(R?R.list:[]).filter(e=>e&&!e.dead&&!e.fade&&e.hp>0);const A=PARTY.filter(h=>h.hp>0&&!h.out73);if(!E.length||!A.length)return;
   E.forEach(e=>{e.int73=nPick73(Object.assign({},e,{int73:null}),A)})}catch(e){}}}
+// Waffenbaum: e1 (Wesen-Zweig) überlappte w2/w3
+try{if(typeof POSALL73!=='undefined'){POSALL73.e1=[248,204];if(typeof POS49!=='undefined'&&POS49.e1)POS49.e1=POSALL73.e1}}catch(e){}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
