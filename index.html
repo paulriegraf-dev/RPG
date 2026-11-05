@@ -30755,6 +30755,12 @@ try{const i=KN57G.findIndex(x=>x.id==='K25i');if(i>=0){const K=KN57G[i];K.i=()=>
   const j=VR57G.findIndex(x=>x.id==='frage');if(j>=0){VR57G[j].w=()=>f57g('miras_erkannt')&&f57g('miras_zwei')&&f57g('miras_zwei_gesehen')&&!f57g('miras_frage')}
   VR57G.push({id:'konf74',k:'K25k',w:()=>!!(f57g('miras_weg_zeigen')||f57g('miras_weg_rolle')||f57g('miras_weg_name'))&&!f57g('miras_ende'),t:()=>'Im Vielhaus: der zweite Miras stellt sich (Taktik-Kampf).',hier:()=>ort57g()==='viellos',pr:2})}catch(e){console.warn('p74v kn',e)}
 
+// ---------- Material in Viellos (Plan 73.V3, Paul 05.11., 22:02): Salz und Spiegelscherben aus dem alten Brunnen ----------
+try{MATQ49.push({k74:'brunnen',re:/^alter brunnen$/,lab:'Salz vom Brunnenrand kratzen, nach Scherben fischen (Geschick 12)',st:['dex',12],w:[['salz',2],['spiegel',1]],
+    txt:'Wo das Wasser jedes Jahr sinkt, bleibt am Stein eine weiße Kruste. {Name} kratzt sie ab und fischt mit dem Eimerhaken eine Spiegelscherbe aus dem Schacht – jemand hat hier einmal sein Gesicht weggeworfen.',
+    fail:'Die Kruste bröselt ins Wasser, und die Scherbe rutscht vom Haken und versinkt. {Name} lässt es für heute.'});
+  SRC59.salz.push(['Alter Brunnen in Viellos (sammeln)','viellos']);SRC59.spiegel.push(['Alter Brunnen in Viellos (Geschick 12)','viellos'])}catch(e){console.warn('p74v mat',e)}
+
 
 // ================= Prototyp 74 (o): Phase 4 – Oase (Paul 04./05.11.) =================
 // Entwurf und Entscheidungen: _Spielleiter/phase4-entwurf.md (Abschnitte 2 und 3), Auftrag N.2, N.4, N.7, N.8.
@@ -30865,6 +30871,16 @@ function sym74(){const t=SLOTW74.reduce((s,x)=>s+x[1],0);let r=Math.random()*t;f
   else if(s==='sieben'){if(lv>=2){Fo.forEach(u=>{const n=lv===3?d(6)+2:d(4);u.hp=Math.max(1,u.hp-n);tFloat(u,'-'+n,'#e8ba52')});txt=lv===3?'JACKPOT! Münzhagel: Alle Gegner nehmen W6+2 Schaden.':'Zwei Sieben: Ein paar Münzen prasseln auf die Gegner (W4).'}
     else{H.forEach(u=>heal(u,1));txt='Eine Sieben: Eine Münze rollt euch vor die Füße. +1 LP für alle Helden.'}}
   tLog('🎰 '+res.map(x=>SLOTFX34[x]).join(' · ')+' → '+txt);say('Der Bandit: '+res.map(x=>SLOTFX34[x]).join(' · ')+'. '+txt,'roll');return txt}catch(e){console.warn('p74o slot',e);return _sa74.apply(this,arguments)}}}
+
+// ---------- 5. Tintenklecks und Quittungsfalter nicht mehr zufällig (Paul 05.11., 22:02) ----------
+// „Die Falter und Tintenkleckse behalten wir für die Szene als mögliche Gegner, aber nehmen deren random appearance raus.“
+// Sie bleiben im Spielleiter-Bereich („Gegner hier“ an der Oase, GEGDEF67; „Neue Gegner rufen“, FOE29), tauchen aber nicht mehr von selbst auf.
+try{Object.keys(AMB29).forEach(k=>{AMB29[k]=AMB29[k].filter(x=>x!=='tintenklecks'&&x!=='quittungsfalter');if(!AMB29[k].length)delete AMB29[k]})}catch(e){console.warn('p74o amb',e)}
+
+// ---------- 6. Material an der Oase (Plan 73.V3, Paul 05.11., 22:02) ----------
+try{MATQ49.push({k74:'gang',re:/^hoehlengang$/,lab:'Nach Leuchtstein tasten (Weisheit 12)',st:['wis',12],w:[['leucht',1]],txt:'Wo die Tintenflecken an der Wand enden, glimmt ein Stein, kaum größer als ein Daumen. {Name} bricht ihn vorsichtig heraus.',fail:'{Name} tastet die Wand ab. Nur kalter, feuchter Fels.'},
+  {k74:'pool',re:/^anwesen$/,lab:'Spiegelscherben am Pool auflesen (Geschick 11)',st:['dex',11],w:[['spiegel',1]],txt:'Unter einem Liegestuhl liegen die Reste eines Handspiegels. {Name} sammelt die großen Scherben ein, ohne sich zu schneiden.',fail:'Eine Scherbe blitzt – und {Name} zieht die Finger gerade noch rechtzeitig zurück.'});
+  SRC59.leucht.push(['Höhlengang an der Oase (Weisheit 12)','oase']);SRC59.spiegel.push(['Pool im Anwesen (Geschick 11)','oase'])}catch(e){console.warn('p74o mat',e)}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
