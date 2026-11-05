@@ -27677,11 +27677,11 @@ function dfRoll73(){const inp=DF73.querySelector('input'),out=DF73.querySelector
   '#dice73 .w73.drop{opacity:.45;text-decoration:line-through}#dice73 .rs73{font:700 15px "Pixelify Sans",monospace;color:#f6c84a;margin:2px 0 4px}#dice73 .err73{color:#ff9a8a}'+
   '#dice73 .hl73{margin:6px 0 0;font-size:11.5px;line-height:1.35;color:#c8bfdc}#dice73 code{background:#0f0c16;padding:0 3px;border-radius:3px;color:#fff}#dice73 .sl73{font-size:12px;color:#c8bfdc}'+
   '#tempo66 .dice73b{opacity:.9}';document.head.appendChild(st)}
-// Knopf neben „Lesetempo“ (unten rechts) und Taste W
+// Knopf neben „Lesetempo“ (unten rechts)
 {const _ub73=updBtn66;updBtn66=function(){const r=_ub73.apply(this,arguments);try{if(BTN66&&!BTN66.querySelector('.dice73b')){const b=document.createElement('button');b.type='button';b.className='dice73b';b.textContent='🎲 Würfel';
-      b.setAttribute('data-tip64','Würfelfeld|Für Spielleiter und Spieler: jede Würfel-Schreibweise (2d20L+3, 3d6 …), Ergebnis mit Einzelwürfeln im Verlauf. Taste W.');b.onclick=dfOpen73;BTN66.insertBefore(b,BTN66.firstChild)}}catch(e){}return r}}
+      b.setAttribute('data-tip64','Würfelfeld|Für Spielleiter und Spieler: jede Würfel-Schreibweise (2d20L+3, 3d6 …), Ergebnis mit Einzelwürfeln im Verlauf. Knopf unten rechts.');b.onclick=dfOpen73;BTN66.insertBefore(b,BTN66.firstChild)}}catch(e){}return r}}
 setTimeout(()=>{try{updBtn66()}catch(e){}},0);
-document.addEventListener('keydown',e=>{try{if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;if(TAC)return;if(e.key==='w'||e.key==='W'){const s=$('startScr'),p=$('pickScr');if((s&&!s.hidden)||(p&&!p.hidden))return;dfOpen73();e.preventDefault()}}catch(x){}});
+// Nachbesserung (Paul 05.11., 13:43): keine Taste W mehr für das Würfelfeld – W ist Laufen (Poke) und Waffenbaum. Nur noch der Knopf.
 // ---------- Todesrettung (5e, ohne Tod) ----------
 function dsDots73(n){return'●'.repeat(Math.min(3,n))+'○'.repeat(Math.max(0,3-n))}
 function dsActive73(h){return!!(h&&h.hp<=0&&!h.out73&&!(h.ds73&&h.ds73.stable))}
@@ -27997,9 +27997,11 @@ function linie73(h){const w=weg73(h);return w?WEG73[w].linie:[]}
 // ---------- Heldenbogen: Weg, Start-Technik, Linie ----------
 {const _bh73=bogenHtml31;bogenHtml31=function(h){let s=_bh73.apply(this,arguments);try{const w=weg73(h);if(!w)return s;const W=WEG73[w],e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     s=s.replace('Klassentyp: <b>'+h.typ+'</b>','Klassentyp: <b>'+h.typ+'</b> · Weg: <b>'+e(W.n)+'</b>');
-    const kn=id=>!!(h.tech||[]).find(x=>x.id===id);const li=id=>{const D=TECH27[id];if(!D)return'';return'<li>'+(kn(id)?'✓ ':'○ ')+'<b>'+e(D.n)+'</b>'+(kn(id)?'':' <span class="small">– lernbar bei '+e(D.von||'einem Lehrmeister')+'</span>')+'</li>'};
+    const kn=id=>!!(h.tech||[]).find(x=>x.id===id);const li=(id,i)=>{const D=TECH27[id];if(!D)return'';const k=kn(id)||(typeof techAny73==='function'&&techAny73(h,id));if(!k&&typeof hoerOk73==='function'&&!hoerOk73(h,id))return'<li>○ <b>???</b> <span class="small">– Stufe '+(i+2)+' der Linie. Ein Lehrmeister weiß mehr.</span></li>';return'<li>'+(k?'✓ ':'○ ')+'<b>'+e(D.n)+'</b>'+(k?'':' <span class="small">– lernbar bei '+e(D.von||'einem Lehrmeister')+'</span>')+'</li>'};
+    const LS=(typeof LS73!=='undefined'?LS73:[]).find(L=>L.weg===w&&L.art==='tech');const lsK=LS&&((typeof techAny73==='function'&&techAny73(h,LS.id))||(typeof ls73==='function'&&(ls73().fund[LS.id]||ls73().buch[LS.id])));
+    const lsLi=lsK?'<li>'+((typeof techAny73==='function'&&techAny73(h,LS.id))?'✓ ':'○ ')+'<b>'+e(W.lehr.split(' (')[0])+'</b> <span class="small">– Lehrstück ('+e((W.lehr.split(' (')[1]||'').replace(/\)$/,''))+')</span></li>':'<li>○ <b>???</b> <span class="small">– irgendwo steht es geschrieben.</span></li>';
     const card='<div class="card2 weg73"><h3>Weg: '+e(W.n)+'</h3><p class="small">'+e(W.txt)+'</p><p>Start-Technik: <b>'+e(TECH27[W.start].n)+'</b>'+(kn(W.start)?' ✓':'')+'</p>'+
-      '<p>Technik-Linie (wirkt eine Stufe stärker, wenn gelernt):</p><ul class="small">'+W.linie.map(li).join('')+'<li>○ <b>'+e(W.lehr.split(' (')[0])+'</b> <span class="small">– Lehrstück ('+e((W.lehr.split(' (')[1]||'').replace(/\)$/,''))+'), kommt mit Lieferung 3</span></li></ul></div>';
+      '<p>Technik-Linie (wirkt eine Stufe stärker, wenn gelernt):</p><ul class="small">'+W.linie.map(li).join('')+lsLi+'</ul></div>';
     const mk='<div class="card2"><h3>Techniken';const i=s.indexOf(mk);s=i>=0?s.slice(0,i)+card+s.slice(i):s+card}catch(e){console.warn('p73 Bogen',e)}return s}}
 {const st=document.createElement('style');st.textContent='.weg73 ul{margin:2px 0 0 16px;padding:0}.weg73 li{margin:1px 0}';document.head.appendChild(st)}
 // ---------- Faust: 9. Waffenart ----------
@@ -28714,7 +28716,6 @@ const NACHTWESEN73=/fledermaus|milbe|geist|schatten|wicht|eule/i;
 // Die Leiste baut auf den bisherigen Knöpfen auf (sie bleiben versteckt erhalten und werden angeklickt), damit alle Sonderregeln weiter gelten.
 // Unbekannte Knöpfe (Story, Sonderfälle) bleiben sichtbar rechts neben „Bewegen“ und „Zug beenden“.
 const TAB73=[['atk','⚔','Angriff'],['tech','✦','Techniken'],['wk','⚒','Waffenkünste'],['cls','★','Klasse'],['meth','☯','Methode'],['item','🎒','Gegenstände']];
-wsCards68=function(){};
 function art73(u,b){const t=b.textContent.trim();if(b.classList.contains('rules27')||b.classList.contains('undo64')||/^(Zug beenden|Bewegen)/.test(t))return null;
   const h=u.hero;const T=(h.tech||[]).find(x=>TECH27[x.id]&&t.indexOf(TECH27[x.id].n)>=0);
   if(T){if(/^ka/.test(T.id))return'cls';if(T.wk49)return'wk';return'tech'}
@@ -28744,10 +28745,37 @@ function leiste73(){if(!TAC)return;const A=TOV.querySelector('.tacts');if(!A)ret
   if(!cur.length&&TAC.tab73!=='meth'){const p=document.createElement('div');p.className='info73';p.textContent={tech:'Keine Technik ausgerüstet.',wk:'Noch keine Waffenkunst (Waffenbaum, Taste U).',cls:'Keine Klassen-Aktion im Kampf (Waffenbaum, Zweig Klasse).',item:'Nichts Passendes in der Tasche.',atk:'—'}[TAC.tab73]||'—';C.appendChild(p)}
   const F=document.createElement('div');F.className='fix73';fix.forEach(b=>{b.style.display='';F.appendChild(b)});
   L.append(R,C,F);A.prepend(L);A.querySelectorAll(':scope > .cards68, :scope > .sub68').forEach(x=>x.remove())}
-{const _ui73u=tUI;tUI=function(){const r=_ui73u.apply(this,arguments);try{leiste73()}catch(e){console.warn('p73u Leiste',e)}return r}}
-// Tasten 1–6 wechseln den Reiter
+// ---------- Nachbesserung (Paul 05.11., 13:43): keine Reiterleiste. Zurück zu den Karten im Wandering-Sword-Stil aus dem Grafik-Chat
+// (wsCards68, Symbole ICO68). Statt des Textkastens öffnet eine Karte mit mehreren Möglichkeiten eine Reihe kleiner Symbol-Karten;
+// die Erklärung steht im Erklärfenster (data-tip64). Waffenkünste haben eine eigene, siebte Karte. Tasten 1–7 wählen die Karten.
+const WSK73=[['atk','⚔','Angriff'],['tech','✦','Technik'],['wk','⚒','Waffenkunst'],['move','👣','Bewegen'],['def','🛡','Blocken / Ausweichen'],['cls','★','Klasse'],['item','🎒','Gegenstand']];
+function grp73(u,b){const t=b.textContent.trim();if(b.classList.contains('rules27')||b.classList.contains('undo64')||/^Zug beenden/.test(t))return null;
+  if(/^Bewegen/.test(t))return'move';let k=null;try{k=art73(u,b)}catch(e){}
+  if(k==='meth')return'def';if(k==='atk')return/^(Blocken|Ausweichen|Deckung)/.test(t)?'def':'atk';return k}
+function sub73(u,b,k){const t=b.textContent.trim(),h=u.hero;const T=(h.tech||[]).find(x=>TECH27[x.id]&&t.indexOf(TECH27[x.id].n)>=0);
+  const x=document.createElement('button');x.type='button';x.className='s73';x.disabled=b.disabled;if(b.classList.contains('on'))x.classList.add('on');
+  const e=y=>String(y==null?'':y).replace(/[&<>"]/g,z=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[z]));let ic=(WSK73.find(y=>y[0]===k)||['','✦'])[1],n=t,m='';
+  if(T){const D=TECH27[T.id];n=D.n;ic=(t.match(/^[^\sA-Za-zÄÖÜäöü0-9(]+/)||[''])[0]||ic;const lv=(t.match(/St\.\s*\d+\+?/)||[''])[0];
+    m=(lv?lv+' · ':'')+(D.kost!=null?D.kost+' Geist':'');if(/^ka/.test(T.id))m='einmal je Kampf';if((T.cd||0)>0&&b.disabled)m='noch '+T.cd+' Runden'}
+  else{const mm=t.match(/^([^(]+)\((.*)\)\s*$/);if(mm){n=mm[1].trim();m=mm[2]}n=n.replace(/^Gegenstand:\s*/,'');if(b.classList.contains('ult73b'))ic='✸'}
+  x.innerHTML='<span class="i73">'+e(ic)+'</span><b>'+e(n)+'</b>'+(m?'<small>'+e(m)+'</small>':'');
+  const tip=b.getAttribute('data-tip64')||b.title||'';x.setAttribute('data-tip64',tip||(n+'|'+(m||'')));x.setAttribute('aria-label',t);
+  x.onclick=()=>{TAC.sub68=null;b.click()};return x}
+wsCards68=function(){if(!TAC)return;const A=TOV.querySelector('.tacts');if(!A||A.querySelector('.cards68'))return;const u=TAC.cur;if(!u||!u.hero||u.side!=='held'||u.frog||TAC.busy)return;
+  const bs=[...A.querySelectorAll(':scope > button')];if(!bs.length)return;const G={},rest=[];
+  bs.forEach(b=>{const k=grp73(u,b);if(k){(G[k]=G[k]||[]).push(b);b.style.display='none'}else rest.push(b)});
+  const T=TAC;if(T.sub68&&T.sub68.u!==T.cur)T.sub68=null;const C=document.createElement('div');C.className='cards68';
+  WSK73.forEach(([k,ic,lab],i)=>{const L=G[k]||[],live=L.filter(b=>!b.disabled),c=document.createElement('button');c.type='button';c.className='card68';c.dataset.ic=ic;c.dataset.k=k;
+    c.innerHTML=lab+(L.length>1?' ('+L.length+')':'')+'<i class="n73">'+(i+1)+'</i>';c.disabled=!live.length;
+    if(L.some(b=>b.classList.contains('on'))||(T.sub68&&T.sub68.k===k))c.classList.add('on');
+    let tip='';if(!L.length)tip={tech:'Technik|Keine Technik ausgerüstet. Neue zeigen Lehrmeister; ausrüsten im Heldenbogen.',wk:'Waffenkunst|Noch keine Waffenkunst. Sie kommen aus dem Waffenbaum (Taste U).',cls:'Klasse|Die Klassen-Aktion im Kampf ist schon benutzt oder jetzt nicht möglich.',item:'Gegenstand|Nichts Heilendes in der Tasche.',def:'Blocken / Ausweichen|Jetzt nicht möglich.'}[k]||'';
+    else if(!live.length)tip=lab+'|Jetzt nicht möglich (schon gehandelt oder noch in der Pause).';if(tip)c.setAttribute('data-tip64',tip);
+    c.onclick=()=>{if(live.length===1&&L.length===1){T.sub68=null;live[0].click();return}T.sub68=(T.sub68&&T.sub68.k===k)?null:{k,u:T.cur};tUI()};C.appendChild(c)});
+  const E=document.createElement('div');E.className='end68';rest.forEach(b=>{b.style.display='';E.appendChild(b)});C.appendChild(E);A.prepend(C);
+  if(T.sub68){const L=G[T.sub68.k]||[];if(L.length){const R=document.createElement('div');R.className='sub68 sub73';L.forEach(b=>R.appendChild(sub73(u,b,T.sub68.k)));A.prepend(R)}}};
+// Tasten 1–7 wählen die Karten (wie ein Klick)
 document.addEventListener('keydown',e=>{try{if(!TAC||e.ctrlKey||e.altKey||e.metaKey)return;const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;const u=TAC.cur;if(!u||u.side!=='held'||TAC.busy)return;
-  const i=['1','2','3','4','5','6'].indexOf(e.key);if(i<0)return;TAC.tab73=TAB73[i][0];TAC.tab73keep=1;e.preventDefault();tUI()}catch(x){}});
+  const i=['1','2','3','4','5','6','7'].indexOf(e.key);if(i<0)return;const c=TOV.querySelector('.cards68 [data-k="'+WSK73[i][0]+'"]');if(c&&!c.disabled){e.preventDefault();c.click()}}catch(x){}});
 // ---------- Rücknahme: Rechtsklick oder erneuter Klick auf die eigene Figur ----------
 TCV.addEventListener('contextmenu',e=>{if(!TAC)return;e.preventDefault();try{const u=TAC.cur;if(!u||u.side!=='held'||TAC.busy)return;if(typeof tUndoOk64==='function'&&tUndoOk64()){tUndo64();return}if(TAC.mode&&TAC.mode!=='move'&&!TAC.moved){TAC.mode='move';TAC.tech27=null;tUI()}else if(TAC.mode&&TAC.mode!=='move'){TAC.mode=null;TAC.tech27=null;tUI()}}catch(x){}});
 {const _tc73u=tClick;tClick=function(c,r){try{if(TAC&&!TAC.busy){const u=TAC.cur;if(u&&u.side==='held'&&u.c===c&&u.r===r&&TAC.moved&&!TAC.acted&&typeof tUndoOk64==='function'&&tUndoOk64()&&(!TAC.mode||TAC.mode==='move'||TAC.mode==='attack')){tUndo64();return}}}catch(e){}return _tc73u.apply(this,arguments)}}
@@ -28755,7 +28783,7 @@ TCV.addEventListener('contextmenu',e=>{if(!TAC)return;e.preventDefault();try{con
 {const st=TOV.querySelector('.tstage');if(st){const K=document.createElement('div');K.className='cam73';
   K.innerHTML='<button type="button" data-c="l" data-tip64="Kamera|Links herum drehen (Taste Q)." aria-label="Kamera links drehen">⟲</button><button type="button" data-c="r" data-tip64="Kamera|Rechts herum drehen (Taste E)." aria-label="Kamera rechts drehen">⟳</button><button type="button" data-c="z" data-tip64="Kamera|Auf die Figur am Zug zentrieren (Taste C)." aria-label="Zentrieren">◎</button><button type="button" data-c="r0" data-tip64="Kamera|Zurücksetzen (Taste R)." aria-label="Kamera zurücksetzen">↺</button>';
   K.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b||!TAC)return;const k=b.dataset.c;try{if(k==='l')rotate65(-1);else if(k==='r')rotate65(1);else if(k==='z')center65();else if(k==='r0')resetCam65()}catch(x){}e.stopPropagation()});st.appendChild(K)}}
-{const _tr73u=trShow65;trShow65=function(o){try{if(o&&typeof o.tip==='string'&&/^Kamera:/.test(o.tip))o=Object.assign({},o,{tip:'Kamera: Knöpfe rechts am Rand oder Q/E · Ziehen verschiebt · Tasten 1–6 wechseln die Leiste · Rechtsklick nimmt die Bewegung zurück'})}catch(e){}return _tr73u.call(this,o)}}
+{const _tr73u=trShow65;trShow65=function(o){try{if(o&&typeof o.tip==='string'&&/^Kamera:/.test(o.tip))o=Object.assign({},o,{tip:'Kamera: Knöpfe rechts am Rand oder Q/E · Ziehen verschiebt · Tasten 1–7 wählen die Karten · Rechtsklick nimmt die Bewegung zurück'})}catch(e){}return _tr73u.call(this,o)}}
 {const st=document.createElement('style');st.textContent=
   '#tacOv .tacts{max-height:210px}#tacOv .leiste73{display:flex;flex-direction:column;gap:4px;width:100%}'+
   '#tacOv .tabs73{display:flex;flex-wrap:wrap;gap:3px}#tacOv .tabs73 .t73{font-size:12px;padding:2px 8px;border-radius:5px 5px 0 0;background:#241e30;color:#c8c0d0;border:1px solid #4a3f55;border-bottom:none;cursor:pointer}'+
@@ -28769,6 +28797,15 @@ TCV.addEventListener('contextmenu',e=>{if(!TAC)return;e.preventDefault();try{con
   '#tacOv.ws68 .tacts{max-height:none}#tacOv.ws68 .cards73 .c73{width:124px;min-height:58px;border-color:#b7a78a;background:linear-gradient(#3a3346,#241d29);box-shadow:0 2px 0 #141210}'+
   '#tacOv:not(.ws68) .int73{top:auto;bottom:12px}#tacOv .cam73{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;z-index:4}#tacOv .cam73 button{width:30px;height:30px;font-size:16px;border-radius:50%;background:rgba(20,18,26,.82);color:#f3ead6;border:2px solid #6a5c5d;cursor:pointer;padding:0}#tacOv .cam73 button:hover{border-color:#f6c84a}'+
   '@media (max-width:760px){#tacOv .cards73 .c73{width:96px}}';document.head.appendChild(st)}
+
+{const st=document.createElement('style');st.textContent=
+  '#tacOv.ws68 .tacts button.card68{position:relative}#tacOv.ws68 .tacts button.card68 .n73{position:absolute;left:2px;top:0;font-style:normal;font-size:10px;color:#efe2c4;background:#141018;border:1px solid #b7a78a;border-radius:50%;width:15px;height:15px;line-height:13px}'+
+  '#tacOv.ws68 .tacts button.card68[data-k=wk]::before{content:"⚒";font-size:28px;line-height:62px;text-align:center;background:radial-gradient(circle at 50% 38%,#5a4a63 0,#2a2131 60%,#140f18 100%);border-radius:50%}'+
+  '#tacOv.ws68 .sub73{background:radial-gradient(ellipse at 50% 100%,rgba(8,6,12,.85),rgba(8,6,12,.6) 60%,transparent 85%);border:0;padding:6px 14px 2px;gap:10px}'+
+  '#tacOv.ws68 .sub73 .s73{width:74px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;box-shadow:none;padding:0;color:#efe2c4;text-shadow:0 1px 2px #000;cursor:pointer;font-family:inherit}'+
+  '#tacOv.ws68 .sub73 .s73 .i73{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;background:radial-gradient(circle at 50% 38%,#5a4a63 0,#2a2131 60%,#140f18 100%);border:2px solid #b7a78a}'+
+  '#tacOv.ws68 .sub73 .s73 b{font-size:11px;line-height:1.1;text-align:center}#tacOv.ws68 .sub73 .s73 small{font-size:9.5px;color:#c8bcd6}'+
+  '#tacOv.ws68 .sub73 .s73.on .i73{border-color:#f0c43c;box-shadow:0 0 0 2px #f0c43c}#tacOv.ws68 .sub73 .s73:not(:disabled):hover .i73{border-color:#f0c43c}#tacOv.ws68 .sub73 .s73:disabled{opacity:.4;cursor:default}';document.head.appendChild(st)}
 
 
 // ================= Prototyp 73 (l): Lehrstücke und Überfälle als Taktik-Kampf (Phase 3, Lieferung 3; besprechung-phase3.md 3.1 und 4.5) =================
@@ -29181,11 +29218,11 @@ function ultTac73(u){const h=u.hero,U=ult73(h);if(!U||!TAC||TAC.acted||u.ult73||
       if(o.u73rk&&o.u73rk.r!==TAC.round&&--o.u73rk.n<=0){o.ac-=o.u73rk.v;o.u73rk=null}if(o.u73w&&o.u73w.r!==TAC.round&&--o.u73w.n<=0){o.ac+=o.u73w.v;o.u73w=null}if(o.u73k&&o.u73k.r!==TAC.round&&--o.u73k.n<=0)o.u73k=null})}}catch(e){}return r}}
 {const _tm73x=tAtkMod31;tAtkMod31=function(a){const r=_tm73x.apply(this,arguments);try{if(a&&a.u73k){const K=a.u73k;if(K.t){r.bon+=K.t;r.notes.push('+'+K.t+' Ultimate')}if(K.s){const f=r.dmg;r.dmg=c=>(f?f(c):0)+K.s}}}catch(e){}return r}}
 // Knopf in der Leiste (Reiter „Klasse“)
-{const _ui73x2=tUI;tUI=function(){const r=_ui73x2.apply(this,arguments);try{if(!TAC)return r;const u=TAC.cur,A=TOV.querySelector('.tacts');if(!u||!u.hero||u.side!=='held'||TAC.busy||!A)return r;const U=ult73(u.hero);if(!U)return r;
+{const _ui73x2=tUI;tUI=function(){const r=_ui73x2.apply(this,arguments);try{if(!TAC)return r;const u=TAC.cur,A=TOV.querySelector('.tacts');if(!u||!u.hero||u.side!=='held'||TAC.busy||!A)return r;const U=ult73(u.hero);if(!U||ultWarum73(u.hero))return r;
     const b=document.createElement('button');b.type='button';b.className='ult73b';const w=ultWarum73(u.hero);b.textContent='Ultimate: '+U.n+' (ganzer Geist)';b.disabled=!!w||TAC.acted||!!u.ult73||u.geist<3;
     b.setAttribute('data-tip64','Ultimate: '+U.n+'|'+(U.txt||'')+(w?' – '+w+'.':u.ult73?' – in diesem Kampf schon benutzt.':u.geist<3?' – braucht mindestens 3 Geist.':' Kostet den ganzen Geist, einmal je Kampf.'));
     b.onclick=()=>ultTac73(u);const L=A.querySelector('.leiste73');const end=[...A.querySelectorAll('button')].find(x=>/^Zug beenden/.test(x.textContent));A.insertBefore(b,L?L.nextSibling:end||null);
-    if(L){try{leiste73()}catch(e){}}}catch(e){console.warn('p73x Knopf',e)}return r}}
+    if(A.querySelector('.cards68')){try{A.querySelectorAll('.end68 > button').forEach(x=>A.appendChild(x));A.querySelectorAll('.cards68,.sub68').forEach(x=>x.remove());[...A.querySelectorAll(':scope > button')].forEach(x=>{x.style.display=''});wsCards68()}catch(e){}}}catch(e){console.warn('p73x Knopf',e)}return r}}
 {const _art73x=art73;art73=function(u,b){if(b&&b.classList&&b.classList.contains('ult73b'))return'cls';return _art73x.apply(this,arguments)}}
 // ---------- Normaler Kampf (vereinfacht) ----------
 function ultNorm73(){const h=hero,U=ult73(h);if(!U||!ultBereit73(h)||h.ult73n||(h.geist||0)<3)return;if(!act27())return;h.ult73n=1;const V=verm73(h)?1:0,F=U.fx||{};
@@ -29210,14 +29247,83 @@ function ultFxTxt73(F,V){const L=[];F=F||{};const z={alle:'alle Gegner',nah:'Geg
   if(F.bann)L.push(Math.round((F.bann.p||.3)*100)+' %: jeder Gegner setzt aus');if(F.schwach)L.push('Gegner '+(F.schwach.rk?'−'+F.schwach.rk+' RK ':'')+(F.schwach.treffen?'−'+F.schwach.treffen+' Treffen ':'')+'('+((F.schwach.runden||1)+V)+' Runden)');
   if(F.zug)L.push('danach sofort noch einmal dran');if(F.geist)L.push('alle +'+F.geist+' Geist');return L.join(' · ')}
 {const _bh73x=bogenHtml31;bogenHtml31=function(h){let s=_bh73x.apply(this,arguments);try{const U=ult73(h);if(!U)return s;const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const w=ultWarum73(h);
-    const c='<div class="card2 ult73c" style="border-color:'+e(U.farbe||'#f6c84a')+'"><h3>Ultimate: '+e(U.n)+'</h3><p class="small">'+e(U.txt||'')+'</p><p class="small">'+e(ultFxTxt73(U.fx,verm73(h)?1:0))+'</p><p class="small" style="color:'+(w?'#c8a0a0':'#9fe39f')+'">'+(w?e(w[0].toUpperCase()+w.slice(1))+'.':'Bereit: kostet den ganzen Geist (mindestens 3), einmal je Kampf.')+'</p></div>';
+    const c=w?'<div class="card2 ult73c" style="border-color:#6a5c7a"><h3>Ultimate: ?????</h3><p class="small" style="color:#a99bb8">Etwas schläft noch in dieser Klasse. Im Waffenbaum regt es sich.</p></div>':'<div class="card2 ult73c" style="border-color:'+e(U.farbe||'#f6c84a')+'"><h3>Ultimate: '+e(U.n)+'</h3><p class="small">'+e(U.txt||'')+'</p><p class="small">'+e(ultFxTxt73(U.fx,verm73(h)?1:0))+'</p><p class="small" style="color:'+(w?'#c8a0a0':'#9fe39f')+'">'+(w?e(w[0].toUpperCase()+w.slice(1))+'.':'Bereit: kostet den ganzen Geist (mindestens 3), einmal je Kampf.')+'</p></div>';
     const k=s.indexOf('<div class="card2 merk73"');s=k>=0?s.slice(0,k)+c+s.slice(k):s+c}catch(e){console.warn('p73x Bogen',e)}return s}}
 {const _fh73x=fhHtml73;fhHtml73=function(h){let s=_fh73x.apply(this,arguments);try{const U=ult73(h);if(U){const e=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const w=ultWarum73(h);
-      s+='<h4>Ultimate</h4><table><tr><td><b>'+e(U.n)+'</b> <span class="s73">'+(w?e(w):'bereit')+'</span></td><td></td><td class="s73">'+e(ultFxTxt73(U.fx,verm73(h)?1:0))+'</td></tr></table>'}}catch(e){}return s}}
+      if(w){s+='<h4>Ultimate</h4><table><tr><td><b>?????</b></td><td></td><td class="s73">Etwas schläft noch in dieser Klasse.</td></tr></table>';return s}s+='<h4>Ultimate</h4><table><tr><td><b>'+e(U.n)+'</b> <span class="s73">'+(w?e(w):'bereit')+'</span></td><td></td><td class="s73">'+e(ultFxTxt73(U.fx,verm73(h)?1:0))+'</td></tr></table>'}}catch(e){}return s}}
 {const st=document.createElement('style');st.textContent='#tacOv .ult73{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;animation:u73in .25s ease-out}#tacOv .ult73.weg{opacity:0;transition:opacity .35s}'+
   '#tacOv .ult73 .b73{height:13%;background:#000}#tacOv .ult73 .m73{flex:1;display:flex;align-items:center;justify-content:center;gap:18px;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--f73) 55%,transparent) 0,rgba(0,0,0,.55) 70%)}'+
   '#tacOv .ult73 img{max-height:70%;image-rendering:pixelated}#tacOv .ult73 canvas{width:160px;height:160px;image-rendering:pixelated}#tacOv .ult73 .t73x{display:flex;flex-direction:column;color:#fff;text-shadow:0 2px 0 #000}#tacOv .ult73 .t73x small{font-size:16px;opacity:.85}#tacOv .ult73 .t73x b{font-size:34px;color:var(--f73)}'+
   '@keyframes u73in{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}#tacOv .ult73b{border-color:#f6c84a!important}';document.head.appendChild(st)}
+
+// Nachbesserung (Paul 05.11., 13:43): Die Ultimate bleibt ein Rätsel („Ultimate: ?????“), bis Signatur, Ausrichtung und Meisterstück stehen.
+// Im Waffenbaum regt sich etwas: drei Zeichen zeigen, was schon da ist, ohne den Namen zu verraten.
+{const _wr73x=wbRender49;wbRender49=function(){const r=_wr73x.apply(this,arguments);try{const h=PARTY[WBI49]||PARTY[0];if(!h||!ult73(h))return r;let P=WB49.querySelector('.ult73w');
+  if(!P){P=document.createElement('p');P.className='ult73w small';const cv=WB49.querySelector('canvas');if(cv&&cv.parentNode)cv.parentNode.insertBefore(P,cv.nextSibling);else WB49.appendChild(P)}
+  const z=(ok,t)=>'<span style="color:'+(ok?'#f6c84a':'#6a5c7a')+'">'+(ok?'✸':'✧')+' '+t+'</span>';let c3=false,m=false,a=false;try{c3=has49(h,'c3')}catch(e){}try{m=has49(h,'m')}catch(e){}try{a=!!aus73(h)}catch(e){}
+  P.innerHTML=ultBereit73(h)?'<b style="color:#f6c84a">✸ Die Waffe ist erwacht: '+ult73(h).n+'.</b> Steht jetzt im Heldenbogen und im Kampf.':'Etwas schläft in dieser Waffe … '+z(c3,'Signatur')+' · '+z(a,'Ausrichtung')+' · '+z(m,'Meisterstück');
+  P.setAttribute('data-tip64','Ultimate|Wenn alle drei Zeichen leuchten, erwacht die Ultimate dieser Klasse.')}catch(e){}return r}}
+
+
+// ================= Prototyp 73 (v): Nachbesserung nach Pauls Spieltest (05.11., 13:43) =================
+// - Technik-Linie im Heldenbogen bleibt „???“, bis man davon hört: Ein Lehrmeister, mit dem man spricht, verrät die nächste Technik der Linie
+//   (Weg-Lektion) und nennt seine eigenen; Lehrstücke erscheinen, wenn man sie gefunden hat; gelernte Techniken sind immer sichtbar.
+// - Techniken im Heldenbogen: Was die Technik jetzt macht, steht im Erklärfenster (Darüberfahren/Antippen); sichtbar bleibt die nächste Stufe.
+// - Atemnetz als Sternbild (Vorlage: Pauls Bilder, `_Spielleiter/referenzen/atemnetz_ref_*.jpg`, nur als Stilvorlage).
+function hoer73(){S.hoer73=S.hoer73||{t:{},m:{}};return S.hoer73}
+function hoerOk73(h,id){try{const H=hoer73();if(H.t[id])return true;const D=TECH27[id];if(!D||!D.von)return false;
+  for(const k in H.m){const T=TEACH31[k];if(T&&(T.short&&D.von.indexOf(T.short)>=0))return true}}catch(e){}return false}
+// Wer mit einem Lehrmeister spricht, hört von ihm: welche Technik der eigenen Linie als Nächstes kommt, und was er selbst zeigt.
+{const _tt73v=talkTopics;talkTopics=function(){const r=_tt73v.apply(this,arguments);try{const n=typeof NPCS!=='undefined'&&talk?NPCS[talk]:null;const tid=n&&tidOf31(n);
+    if(tid){const H=hoer73();H.m[tid]=1;PARTY.forEach(h=>{try{if(typeof wegOk73==='function'&&wegOk73(tid,h)){const id=wegNext73(h);if(id)H.t[id]=1}}catch(e){}})}}catch(e){}return r}}
+{const _lt73v=lTopics73;lTopics73=function(tid){try{const H=hoer73();H.m[tid]=1;PARTY.forEach(h=>{try{if(wegOk73(tid,h)){const id=wegNext73(h);if(id)H.t[id]=1}}catch(e){}})}catch(e){}return _lt73v.apply(this,arguments)}}
+// Gelernt = gehört
+{const _lg73v=learnTech27;learnTech27=function(h,id){try{hoer73().t[id]=1}catch(e){}return _lg73v.apply(this,arguments)}}
+
+// ---------- Heldenbogen: „Jetzt:“ wandert ins Erklärfenster ----------
+{const _bh73v=bogenHtml31;bogenHtml31=function(h){let s=_bh73v.apply(this,arguments);try{const i0=s.indexOf('<h3>Techniken');if(i0<0)return s;const i1=s.indexOf('</div>',s.indexOf('Neue Techniken zeigen Lehrmeister',i0));if(i1<0)return s;
+    let part=s.slice(i0,i1);const strip=x=>x.replace(/<[^>]*>/g,'').replace(/"/g,'&quot;');
+    part=part.replace(/<p><b>([^<]*)<\/b>([\s\S]*?)<p class="small">Jetzt: ([\s\S]*?)<\/p>/g,(m,n,mid,jetzt)=>{const name=strip(n).replace(/^[^A-Za-zÄÖÜäöü]+\s*/,'');
+      return'<p><b class="t73v" tabindex="0" data-tip64="'+name+'|Jetzt: '+strip(jetzt)+'">'+n+'</b>'+mid});
+    s=s.slice(0,i0)+part+s.slice(i1)}catch(e){console.warn('p73v Bogen',e)}return s}}
+{const st=document.createElement('style');st.textContent='.t73v{cursor:help;border-bottom:1px dotted #8a7a9a}';document.head.appendChild(st)}
+
+// ---------- Atemnetz als Sternbild (Paul 05.11., 13:43/13:53) ----------
+// Die Figur des Helden als dunkler Schattenriss in einem Tuschekreis, die 18 Knoten als Sterne auf dem Körper: Kopf Intelligenz, Brust Weisheit,
+// Arme Stärke und Charisma, Beine Geschick und Mischung; alle Äste gehen von der Mitte (Bauch) aus. Erworbene Sterne leuchten und atmen,
+// der nächste lernbare blinkt. Klick wie bisher (data-atem73). Rahmen/Schmuck kann der Grafik-Chat später liefern.
+const APOS73={str:[[38,52],[30,58],[24,67]],cha:[[62,52],[70,58],[76,67]],int:[[50,34],[44,23],[56,13]],wis:[[50,48],[43,42],[57,40]],dex:[[45,76],[43,86],[41,95]],mix:[[55,76],[57,86],[59,95]]};
+const AFARB73={str:'#e8643c',dex:'#6ad08a',int:'#5ab0ff',wis:'#9fe3e0',cha:'#f0c43c',mix:'#c08af0'};
+function stern73(h){const A=an73(h),free=aFree73(h),e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const C=[50,63];
+  let ln='',pt='',leg='';
+  AORD73.forEach(br=>{const B=ATEM73[br],P=APOS73[br],i=A[br]||0,col=AFARB73[br];let prev=C;
+    P.forEach((p,j)=>{const on=j<i;ln+='<line x1="'+prev[0]+'" y1="'+prev[1]+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="'+(on?'#f0b040':'#8a8098')+'" stroke-width="'+(on?0.9:0.5)+'"'+(on?' class="lo73"':'')+'/>';prev=p});
+    P.forEach((p,j)=>{const K=B.k[j],on=j<i,can=j===i&&free>0;pt+='<button type="button" class="st73'+(on?' on':can?' can':'')+'" style="left:'+p[0]+'%;top:'+p[1]+'%;--c73:'+col+'"'+(can?' data-atem73="'+br+'"':' aria-disabled="true"')+' aria-label="'+e(B.n+': '+K[0])+'" data-tip64="'+e(K[0]+' ('+B.n+')')+'|'+e(K[1])+(on?' – gelernt.':can?' – Klick: lernen (1 Atempunkt).':' – erst die Sterne davor.')+'"></button>'});
+    leg+='<div class="lg73"><i style="background:'+col+'"></i><b>'+B.n+'</b> '+B.k.map((K,j)=>'<span class="'+(j<i?'on':'')+'">'+e(K[0])+'</span>').join(' · ')+'</div>'});
+  return'<div class="sb73"><div class="fig73"><div class="ring73"></div>'+(()=>{let u='';try{const D=HERODATA.find(x=>x.id===h.heroId);u=(D&&D.url)||h.url||'';if(!u){const I=HIMG[h.heroId];if(I&&I.idle&&I.idle.toDataURL)u=I.idle.toDataURL()}}catch(x){}return u?'<img class="sil73" alt="" src="'+e(u)+'">':''})()+'<svg viewBox="0 0 100 100" preserveAspectRatio="none">'+ln+'</svg><span class="mi73" style="left:'+C[0]+'%;top:'+C[1]+'%"></span>'+pt+'</div><div class="leg73">'+leg+'</div></div>'}
+{const _bh73s=bogenHtml31;bogenHtml31=function(h){let s=_bh73s.apply(this,arguments);try{const i=s.indexOf('<div class="an73">');if(i<0)return s;
+    let j=i+'<div class="an73">'.length,d=1;const re=/<div\b|<\/div>/g;re.lastIndex=j;let m;while((m=re.exec(s))){d+=m[0]==='</div>'?-1:1;if(!d){j=m.index+6;break}}
+    s=s.slice(0,i)+stern73(h)+s.slice(j)}catch(e){console.warn('p73v Sternbild',e)}return s}}
+{const st=document.createElement('style');st.textContent=
+  '.atem73 .sb73{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.atem73 .fig73{position:relative;width:230px;height:290px;flex:0 0 auto}'+
+  '.atem73 .ring73{position:absolute;left:5%;top:14%;width:90%;height:72%;border-radius:50%;background:radial-gradient(circle at 50% 42%,#a9bcc6 0,#6f8592 40%,#34434d 66%,#12161b 71%,transparent 72%);box-shadow:0 0 0 5px #12161b,0 0 0 7px #3a3442,0 0 26px 6px rgba(150,190,220,.18)}'+
+  '.atem73 .sil73{position:absolute;left:50%;bottom:2%;height:96%;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(0) drop-shadow(0 0 2px rgba(0,0,0,.6));opacity:.85}'+
+  '.atem73 .fig73 svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.atem73 .lo73{filter:drop-shadow(0 0 1.5px #f0b040)}'+
+  '.atem73 .mi73{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:radial-gradient(circle,#fff6d8,#f0b040 60%,transparent 70%);box-shadow:0 0 8px 2px #f0b04088}'+
+  '.atem73 .st73{position:absolute;width:15px;height:15px;margin:-7.5px 0 0 -7.5px;padding:0;border-radius:50%;border:1.5px solid #9a90a8;background:#2a2333;cursor:default}'+
+  '.atem73 .st73.on{border-color:#fff3;background:radial-gradient(circle at 40% 35%,#fff 0,var(--c73) 45%,#000 100%);box-shadow:0 0 8px 3px var(--c73);animation:atm73 4s ease-in-out infinite}'+
+  '.atem73 .st73.can{border:2px solid #fff;background:radial-gradient(circle,#ffffff55,#1b1622 70%);cursor:pointer;animation:blk73 1.2s ease-in-out infinite}.atem73 .st73.can:hover{box-shadow:0 0 10px 3px var(--c73)}'+
+  '@keyframes atm73{0%,100%{box-shadow:0 0 5px 2px var(--c73)}50%{box-shadow:0 0 12px 5px var(--c73)}}@keyframes blk73{0%,100%{opacity:1}50%{opacity:.45}}'+
+  '.atem73 .leg73{flex:1;min-width:220px;display:flex;flex-direction:column;gap:3px;font-size:12px}.atem73 .lg73 i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}'+
+  '.atem73 .lg73 span{color:#7a7088}.atem73 .lg73 span.on{color:#f3ead6;font-weight:bold}'+
+  '@media (prefers-reduced-motion:reduce){.atem73 .st73.on,.atem73 .st73.can{animation:none}}';document.head.appendChild(st)}
+
+// ---------- Herzsteine für große Gruppen (Paul 05.11., 14:11: „bitte anpassen“) ----------
+// Jedes Meisterstück braucht einen Herzstein; die sechs großen Bosse geben je einen (einmal im Spiel). Ab 4 Helden gibt jeder davon einen zweiten,
+// damit auch Gruppen mit 5–6 Helden ihre Meisterstücke schmieden können, ohne alles teuer in AIDA zu kaufen.
+{const _bd73v=bossDrop49;bossDrop49=function(name){let neu=false,k='';try{k=nk(name||'');neu=!!k&&!(S.wbDrop49&&S.wbDrop49[k])}catch(e){}const r=_bd73v.apply(this,arguments);
+  try{if(neu&&PARTY.length>=4&&/hauptmann olaf|normale typ|kapselgeist|ragna|mind beater|königin|koenigin/.test(k)){giveWare43(hero||PARTY[0],'herz',1);say('Beute: noch ein Herzstein – genug Wärme für eine große Gruppe.','sys')}}catch(e){}return r}}
+try{if(typeof SRC59!=='undefined'&&SRC59.herz)SRC59.herz.unshift(['große Bosse: Olaf, der normale Typ, Kapselgeist, Ragna, Mind-Beater, Königin (ab 4 Helden je zwei)',null])}catch(e){}
 
 
 // ================= Grafik zu Prototyp 73 (n): feine Kampf-Figuren für die bisherigen Helden, Faust-Animationen (Paul 04.11., 22:44) =================
