@@ -29735,6 +29735,9 @@ if(typeof nIntent73==='function'){const _ni76=nIntent73;nIntent73=function(){if(
   const E=[enemy].concat(R?R.list:[]).filter(e=>e&&!e.dead&&!e.fade&&e.hp>0);const A=PARTY.filter(h=>h.hp>0&&!h.out73);if(!E.length||!A.length)return;
   E.forEach(e=>{e.int73=nPick73(Object.assign({},e,{int73:null}),A)})}catch(e){}}}
 
+// Waffenbaum: e1 (Wesen-Zweig) überlappte w2/w3 in der Mittelspalte (Paul 05.11., 15:21) – seitlich neben w1/w2 setzen
+try{if(typeof POSALL73!=='undefined'){POSALL73.e1=[248,204];if(typeof POS49!=='undefined'&&POS49.e1)POS49.e1=POSALL73.e1}}catch(e){}
+
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
 fresh();initRuleForm();setTD(TD);intro();renderAll();renderChron();renderRules();requestAnimationFrame(frame);
