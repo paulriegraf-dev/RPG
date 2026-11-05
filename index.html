@@ -6088,7 +6088,7 @@ function doAtk27(o){const h=hero;ensure27(h);const W=o.W,stat=W.stat||'str',mod=
     let r=d(20),rr='';if(o.adv){const r2=d(20);rr='['+r+','+r2+'] ';r=Math.max(r,r2);notes.push('Vorteil')}
     const crit=r>=(o.crit||20)&&r!==1,tot=r+mod+bon,hit=r===20||crit||(r!==1&&tot>=ac);const how=o.how||W.how;
     setTimeout(()=>{if(!enemy||enemy.dead||enemy.fade)return o.done&&o.done(false);
-      if(o.spellFx)for(let i=0;i<20;i++)parts.push({x:h.x+h.face*14,y:FLOOR-34,vx:(enemy.x-h.x)/40+Math.random()*.4-.2,vy:Math.random()*.4-.2,life:40,c:i%2?'#fbf236':'#e8702a'});
+      if(o.spellFx)for(let i=0;i<20;i++)parts.push({x:h.x+h.face*14,y:FLOOR-34,vx:(enemy.x-h.x)/40+Math.random()*.4-.2,vy:Math.random()*.4-.2,life:40,c:i%2?(o.fxc||'#fbf236'):(o.fxc2||'#e8702a')});
       const head=`${how}: W20 ${rr}${r} ${sgn(mod)}${notes.length?' ('+notes.join(', ')+')':''} = ${tot+0} gegen RK ${ac}`;let dmg=0;
       if(hit){const die=o.die||W.die;dmg=Math.max(1,d(die)+Math.max(0,mod)+(crit?d(die):0)+(o.extra?o.extra(crit):0)+(H31&&H31.dmg?H31.dmg(crit):0));enemy.hurt=10;enemy.hp-=dmg;burst(enemy.x,enemyY()+4,'#e8d7b0',10);float(enemy.x,enemyY()-12,'-'+dmg,crit?'#ff8a3a':'#fbf236');say(head+` → ${crit?'Kritisch':'Treffer'}, ${dmg} Schaden.`,'roll',h.name)}
       else{float(enemy.x,enemyY()-12,'daneben','#8c8496');say(head+' → daneben.','roll',h.name)}
@@ -28384,9 +28384,9 @@ function fhHtml73(h){const e=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':
   const w=weg73(h),W=WEG73[w],A=typeof aus73==='function'?aus73(h):null;let s='<p class="fw73">'+e(h.name)+' · '+e(h.cls)+' · Typ <b>'+e(h.typ)+'</b> · Weg <b>'+e(W?W.n:'?')+(A?' · '+A.n:'')+'</b> · Heldenentwicklung „'+e(EN57[el57()]||'')+'“</p>';
   const row=(n,lv,t,extra)=>'<tr><td><b>'+e(n)+'</b>'+(extra?' <span class="s73">'+e(extra)+'</span>':'')+'</td><td>'+(lv!=null?'St. '+lv:'')+'</td><td class="s73">'+e(t)+'</td></tr>';
   const tl=(h.tech||[]).filter(t=>TECH27[t.id]&&!t.wk49&&!/^ka_|^ka69/.test(t.id)&&t.id!=='meister49');
-  s+='<h4>Techniken ('+tl.length+'/'+TSLOTS27+')</h4><table>'+tl.map(t=>{try{mig31(t)}catch(x){}const D=TECH27[t.id],X=TX31[t.id];const L=effL31(h,t);return row(D.n,t.lv||1,X&&X.lvd?X.lvd(L):D.desc,(W&&W.linie.includes(t.id)?'Linie ':'')+(W&&W.start===t.id?'Weg ':'')+(A&&A.sid===t.id?'Ausrichtung ':'')+D.kost+' Geist')}).join('')+'</table>';
-  const ar=(h.tech||[]).filter(t=>t.wk49&&TECH27[t.id]&&t.id!=='meister49'&&!/^ka/.test(t.id));if(ar.length)s+='<h4>Waffenkünste <span class="s73">(Techniken aus dem Waffenbaum, belegen keinen Platz)</span></h4><table>'+ar.map(t=>{const D=TECH27[t.id],X=TX31[t.id];return row(D.n,t.lv||1,X&&X.lvd?X.lvd(effL31(h,t)):D.desc,D.kost+' Geist')}).join('')+'</table>';
-  const ka=(h.tech||[]).filter(t=>/^ka/.test(t.id)&&TECH27[t.id]);if(ka.length)s+='<h4>Klassen-Aktion im Kampf</h4><table>'+ka.map(t=>row(TECH27[t.id].n,null,TECH27[t.id].desc,'einmal je Kampf')).join('')+'</table>';
+  s+='<h4>Techniken ('+tl.length+'/'+TSLOTS27+')</h4><table>'+tl.map(t=>{try{mig31(t)}catch(x){}const D=TECH27[t.id],X=TX31[t.id];const L=effL31(h,t);return row(D.n,t.lv||1,X&&X.lvd?X.lvd(L):D.desc,'')}).join('')+'</table>';
+  const ar=(h.tech||[]).filter(t=>t.wk49&&TECH27[t.id]&&t.id!=='meister49'&&!/^ka/.test(t.id));if(ar.length)s+='<h4>Waffenkünste <span class="s73">(Techniken aus dem Waffenbaum, belegen keinen Platz)</span></h4><table>'+ar.map(t=>{const D=TECH27[t.id],X=TX31[t.id];return row(D.n,t.lv||1,X&&X.lvd?X.lvd(effL31(h,t)):D.desc,'')}).join('')+'</table>';
+  const ka=(h.tech||[]).filter(t=>/^ka/.test(t.id)&&TECH27[t.id]);if(ka.length)s+='<h4>Klassen-Aktion im Kampf</h4><table>'+ka.map(t=>row(TECH27[t.id].n,null,TECH27[t.id].desc.replace(/\s*Einmal pro Kampf, kein Geist\.?$/,''),'')).join('')+'</table>';
   if(el57()>=2){const kn=kKnown31(h);s+='<h4>Methoden (Innere Künste)</h4>'+(kn.length?'<table>'+kn.map(id=>{const K=KUNST31[id],Q=kl31(h,id);return row(K.n,Q.lv,K.desc,(h.lehre===id?'aktiv':'ruht')+(typeof stockt73==='function'&&h.lehre===id&&stockt73(h)?' · stockt':''))}).join('')+'</table>':'<p class="s73">Noch keine.</p>')+
     (typeof aFree73==='function'?'<p class="s73">Atemnetz: '+aUsed73(h)+' Knoten, '+aFree73(h)+' Atempunkte frei (Heldenbogen).</p>':'')}
   // Lernbar: auf Pauls Wunsch (05.11.) aus dem Fenster genommen, weil es verwirrt; mit FHLERN73=true wieder sichtbar
@@ -28889,7 +28889,7 @@ function lzTxt73(h){const n=lz73(h),t=lzNext73(h);return n+' Lernzeichen'+(t?' (
     BOG27.querySelectorAll('[data-rep73x]').forEach(b=>b.onclick=()=>{h.swap73=[];renderAll();try{renderBogen27()}catch(e){}});
     BOG27.querySelectorAll('[data-atem73n]').forEach(b=>b.onclick=()=>{atemNeu73(h);try{renderBogen27()}catch(e){}})}catch(e){}return r}}
 {const _fh73r=fhHtml73;fhHtml73=function(h){let s=_fh73r.apply(this,arguments);try{const e=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    if(el57()>=2)s=s.replace('</p>',' · Lehrmeister: '+e(schNames73(h).join(', ')||'noch keiner')+' ('+schOf73(h).length+'/'+SCHMAX73+') · '+e(lzTxt73(h))+'</p>');
+    if(el57()>=2)s=s.replace('</p>',' · <span class="t73v" tabindex="0" data-tip64="Lehrmeister|'+e(schNames73(h).join(', ')||'Noch bei keinem Lehrmeister in der Lehre.')+' Ein Held lernt bei höchstens '+SCHMAX73+' Lehrmeistern.">Lehrmeister ('+schOf73(h).length+'/'+SCHMAX73+')</span> · <span class="t73v" tabindex="0" data-tip64="Lernzeichen|Jede Lektion bei einem Lehrmeister kostet ein Lernzeichen. Alle '+LZTAGE73+' Tage kommt eins nach (höchstens '+LZMAX73+' auf Vorrat); ein gewonnener Boss- oder Taktik-Kampf gibt eins dazu (bis '+LZALL73+').">'+e(lzTxt73(h))+'</span></p>');
     const R=rep73(h).filter(t=>TECH27[t.id]);if(R.length){const t='<h4>Repertoire <span class="s73">(ruht; Tausch bei der langen Rast im Heldenbogen)</span></h4><table>'+R.map(T=>'<tr><td><b>'+e(TECH27[T.id].n)+'</b></td><td>St. '+(T.lv||1)+'</td><td class="s73">'+e(TECH27[T.id].desc)+'</td></tr>').join('')+'</table>';
       const k=s.indexOf('</table>');s=k>=0?s.slice(0,k+8)+t+s.slice(k+8):s+t}}catch(e){console.warn('p73r F',e)}return s}}
 if(typeof gruppe67==='function'){const _g73r=gruppe67;gruppe67=function(p){const r=_g73r.apply(this,arguments);try{const box=p.querySelector('.xp73');if(box){const row=el67('div',null,'sl67row');
@@ -29323,7 +29323,7 @@ function fxTxt73(F){const s=v=>(v>0?'+':'')+v,P=p=>p?(s(p.v)+' auf '+(p.stat?({s
     const c='<div class="card2 merk73"><h3>Merkmale</h3>'+M.map((m,i)=>'<p><b>'+(i?'⚖ ':'★ ')+e(m[0])+'</b> <span class="small">'+e(m[1])+'</span><br><span class="small" style="color:#c8bcd6">'+e(fxTxt73(m[2]||{}))+'</span></p>').join('')+'</div>';
     const k=s.indexOf('<div class="card2"><h3>Spielstil');s=k>=0?s.slice(0,k)+c+s.slice(k):s+c}catch(e){console.warn('p73e Bogen',e)}return s}}
 {const _fh73e=fhHtml73;fhHtml73=function(h){let s=_fh73e.apply(this,arguments);try{const M=merk73(h);if(M.length){const e=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-      const t='<h4>Merkmale</h4><table>'+M.map((m,i)=>'<tr><td><b>'+e(m[0])+'</b> <span class="s73">'+(i?'mit Haken':'gut')+'</span></td><td></td><td class="s73">'+e(fxTxt73(m[2]||{}))+'</td></tr>').join('')+'</table>';const k=s.indexOf('<h4>');s=k>=0?s.slice(0,k)+t+s.slice(k):s+t}}catch(e){}return s}}
+      const t='<h4>Merkmale</h4><table>'+M.map((m,i)=>'<tr><td><b>'+e(m[0])+'</b></td><td></td><td class="s73">'+e(fxTxt73(m[2]||{}))+'</td></tr>').join('')+'</table>';const k=s.indexOf('<h4>');s=k>=0?s.slice(0,k)+t+s.slice(k):s+t}}catch(e){}return s}}
 {const _tf73e=tafel57;tafel57=function(){let h=_tf73e.apply(this,arguments);try{const L=trOn73();if(L.length){const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
       h='<div class="tr73"><b>Was man über uns erzählt</b>'+L.map(k=>'<div>„'+e(TR73[k].n)+'“ – '+e(TR73[k].d)+'</div>').join('')+'</div>'+h}}catch(e){}return h}}
 if(typeof gruppe67==='function'){const _g73e=gruppe67;gruppe67=function(p){const r=_g73e.apply(this,arguments);try{const box=el67('div',null,'tr73sl');box.appendChild(el67('h3','Eigenschaften der Truppe (höchstens 3)'));
@@ -29664,6 +29664,172 @@ Object.assign(MERK73,{
 });
 // Heldenauswahl: Filter „Neueste“ für die 24 neuen Helden (Paul: alle sofort wählbar, später ordnen)
 {const _rp73h=renderPick;renderPick=function(){const r=_rp73h.apply(this,arguments);try{const F=$('pickFil');if(F&&!F.querySelector('[data-g73]')){const n=HERODATA.filter(h=>h.grp==='neu73').length;const b=document.createElement('button');b.type='button';b.dataset.g73='1';b.textContent='Neueste '+n;if(pickFilter==='neu73')b.className='on';b.onclick=()=>{pickFilter='neu73';renderPick()};F.appendChild(b)}}catch(e){}return r}}
+
+// ================= Vorschlag 73.V4 (Paul 05.11., 15:40): drei Start-Techniken je Typ, fest je Held nach seiner Rolle =================
+// Jeder Typ hat drei Start-Techniken (eine davon die alte). Jeder Held bekommt die, die zu seiner Rolle passt (Schaden, Schutz, Kontrolle …).
+// Hätten zwei Helden derselben Gruppe dieselbe, nimmt der spätere automatisch eine der anderen beiden („Doppel weicht aus“). Ebenso, wenn sie
+// gleich der Weg-Technik wäre. Spielstände bleiben, wie sie sind: getauscht wird nur beim Erstellen der Gruppe.
+const TYPT73={
+  standhaft:{n:'Standhaft',k:'buff',d:'Fest hinstellen: du bekommst +2 Rüstung, wer in deiner Nähe steht +1, bis zu deinem nächsten Zug.',r:[['rk',1],['rkall',1]]},
+  sturmhieb:{n:'Sturmhieb',k:'atk',d:'Ein Schlag mit dem ganzen Körper: Wer getroffen wird, fliegt ein Feld zurück.',r:[['push',1]]},
+  ausweichschritt:{n:'Ausweichschritt',k:'buff',d:'Leichtfüßig zur Seite: Ausweichwert +2 bis zum nächsten Zug.',r:[['dodge',2]]},
+  kniff:{n:'Schmutziger Kniff',k:'atk',b:1,d:'Sand in die Augen, Tritt gegen das Knie: Wer getroffen wird, trifft 1 Runde schlechter.',r:[['spott',2,1]]},
+  schutzzeichen:{n:'Schutzzeichen',k:'buff',d:'Ein Zeichen in der Luft: alle in der Nähe +1 Rüstung, und alle atmen auf.',r:[['rkall',1],['geist']]},
+  bannblick:{n:'Bannblick',k:'cast',d:'Ein Blick, der festhält: Das Ziel kann aussetzen und trifft schlechter.',r:[['skip',.3],['spott',1,2]]},
+  heilhand:{n:'Heilende Hand',k:'buff',d:'Eine ruhige Hand auf der Wunde: Der am schwersten Verletzte in der Nähe heilt.',r:[['heal',6]]},
+  stoerton:{n:'Störton',k:'cast',d:'Ein schiefer Ton genau ins Ohr: Das Ziel trifft 2 Runden schlechter.',r:[['spott',2,2]]}};
+Object.keys(TYPT73).forEach(id=>{try{mkTech73(id,TYPT73[id],false);TECH27[id].kost=1;TECH27[id].cd=TYPT73[id].k==='atk'?2:3;TECH27[id].von='Start-Technik ('+({standhaft:'Kämpfer',sturmhieb:'Kämpfer',ausweichschritt:'Flinke',kniff:'Flinke',schutzzeichen:'Gelehrte',bannblick:'Gelehrte',heilhand:'Stützen',stoerton:'Stützen'})[id]+')'}catch(e){console.warn('73.V4',id,e)}});
+const OPT73={'Kämpfer':['wucht','standhaft','sturmhieb'],'Flinke':['doppel','ausweichschritt','kniff'],'Gelehrte':['funken','schutzzeichen','bannblick'],'Stützen':['zuspruch','heilhand','stoerton']};
+// Rolle je Klasse: 0 = Schaden (alte Typ-Technik), 1 = Schutz/Ausweichen/Heilen, 2 = Kontrolle/Störung
+const ROLLE73K={'Ritter':1,'Ritterin':1,'Schildmaid':1,'Wachmann':1,'Eidritter':1,'Eidritterin':1,'Schmied':2,'Handwerker':2,'Bauer':2,'Mistgabel-Held':2,'Drachenkönigin':2,
+  'Botin':1,'Seefahrerin':1,'Froschwanderer':1,'Waldwicht':1,'Magd':1,'Gaukler':2,'Glücksspieler':2,'Glücksspielerin':2,'Fallenstellerin':2,
+  'Gelehrter':1,'Großer Weiser':1,'Sternenkundlerin':1,'Tüftlerin':1,'Alchemistin':1,'Geschützmeisterin':1,'Zeithexe':2,'Spiegler':2,'Spieglerin':2,'Illusionist':2,'Illusionistin':2,'Hexe':2,
+  'Heilerin':1,'Sanitäterin':1,'Kräuterkundige':1,'Hohepriesterin':1,'Mönch':1,'Monsterflüsterer':2,'Monsterflüsterin':2,'Tierwandler':2,'Tierwandlerin':1,'Rentner':2};
+const ROLLE73H={};   // Ausnahmen je Held (Id → 0/1/2), falls Paul einzelne Helden anders will
+function startWahl73(h,belegt){const typ=h.typ||typOf27(h.cls),O=OPT73[typ];if(!O)return null;const w=weg73(h),ws=WEG73[w]&&WEG73[w].start;
+  const r=ROLLE73H[h.heroId]!=null?ROLLE73H[h.heroId]:(ROLLE73K[h.cls]||0);const pref=[[0,2,1],[1,0,2],[2,0,1]][r].map(i=>O[i]);
+  return pref.find(x=>x!==ws&&!(belegt&&belegt.has(x)))||pref.find(x=>x!==ws)||pref[0]}
+function startSetzen73(h,id){try{const typ=h.typ||typOf27(h.cls),w=weg73(h),W=WEG73[w],ws=W&&W.start,alt=TSTART27[typ];if(!id||!h.tech)return;
+    const zwei=ws&&ws!==id?ws:(W&&W.linie&&W.linie.find(x=>x!==id))||ws;const weg=new Set([alt,ws,W&&W.linie&&W.linie[0]].concat(OPT73[typ]||[]));
+    const rest=h.tech.filter(t=>t&&!weg.has(t.id));h.tech=[{id,m:1,use:0,cd:0,lv:1,xp:0}].concat(zwei&&zwei!==id?[{id:zwei,m:1,use:0,cd:0,lv:1,xp:0}]:[]).concat(rest);h.st73=id;try{hoer73().t[id]=1;if(zwei)hoer73().t[zwei]=1}catch(e){}}catch(e){console.warn('73.V4 Start',e)}}
+{const _mh73v4=makeHero;makeHero=function(){const h=_mh73v4.apply(this,arguments);try{ensure27(h);if(!h.st73)startSetzen73(h,startWahl73(h,null))}catch(e){}return h}}
+{const _bp73v4=buildParty;buildParty=function(){const r=_bp73v4.apply(this,arguments);try{const belegt=new Set();(PARTY||[]).forEach(h=>{ensure27(h);const c=startWahl73(h,belegt);startSetzen73(h,c);(h.tech||[]).slice(0,2).forEach(t=>belegt.add(t.id))})}catch(e){console.warn('73.V4 Gruppe',e)}return r}}
+
+// ================= Kampfregeln neu (Paul 05.11., 15:45 „ausdünnen und nur das Notwendigste“; 15:50 „ganz allgemein“) =================
+// Ersetzt die gewachsene Fassung (P27, P31 …) durch sieben kurze, allgemeine Karten, wie die Regeln seit P73 gelten.
+// Nur wer online mitspielt und einen Helden lenkt, sieht oben zusätzlich eine Karte zu seinem Helden (REG73G = Name, gesetzt in mitBogen66).
+let REG73G=null;
+function regelHeld73(h){let rk='?',W=null;try{rk=rk31(h)}catch(x){}try{W=wpn27(h,false)}catch(x){}const e=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  return'<div class="card2 rh73"><h3>Dein Held: '+e(h.name)+'</h3><p>LP '+h.hp+'/'+h.max+' · RK '+rk+' · Geist '+h.geist+'/'+h.gmax+'</p>'+(W?'<p class="small">'+e(W.n)+': W'+W.die+' + '+e(STATS[W.stat||'str']||'')+'</p>':'')+'</div>'}
+rulesHtml27=function(h){const card=(t,a,b)=>'<div class="card2"><h3>'+t+'</h3><p>'+a+'</p>'+(b?'<p class="small">'+b+'</p>':'')+'</div>';
+  let s='<div class="grid">';try{const g=REG73G&&PARTY.find(x=>x.name===REG73G);if(g){ensure27(g);s+=regelHeld73(g)}}catch(x){}
+  s+=card('Wer ist dran?','Die Reihenfolge wird gewürfelt. Pro Zug: eine Aktion.','Taktik-Kampf: erst laufen, dann handeln. Rechtsklick nimmt das Laufen zurück, solange noch nichts getan ist.');
+  s+=card('Treffen','W20 + Wert der Waffe gegen die Rüstung (RK). Gleich oder höher trifft.','20 = kritisch (Schaden doppelt), 1 = daneben. Vorteil: zwei W20, der höhere zählt.');
+  s+=card('Schaden','Würfel der Waffe + derselbe Wert.','Im Taktik-Kampf hat jede Waffe eine Form (Nahkampf, Fern, Ring …).');
+  s+=card('Zaubern','Gelehrte zaubern: W6 + Intelligenz, Reichweite 3, kostet keinen Geist. Jede Klasse hat ihren eigenen Grundzauber mit einer kleinen Eigenheit (steht im Heldenbogen).','Mit der Waffe schlagen Gelehrte schwächer zu: Würfel eine Stufe kleiner.');
+  s+=card('Abwehr','Blocken nimmt Schaden weg (Stärke, Kämpfer +3, Stützen +1). Ausweichen lässt Angriffe ins Leere gehen (Geschick, Flinke +3, Stützen und Gelehrte +1).','Taktik: Höhe +1, Flanke +2 (ein Verbündeter steht auch am Ziel), von hinten mit Vorteil.');
+  s+=card('Geist und Techniken','Techniken kosten Geist und brauchen danach ein paar Züge Pause.','„Durchatmen“: +1 Geist, +1 LP. Die Klassen-Aktion geht einmal je Kampf ohne Geist.');
+  s+=card('Bei 0 LP','Kein Tod: Der Held würfelt Todesrettung (W20, ab 10 Erfolg). 3 Erfolge: stabil. 3 Fehlschläge: außer Gefecht bis zur Gaststätte oder langen Rast.','Eine 20 steht sofort mit 1 LP wieder auf. Nach dem Kampf kommt die Hälfte der verlorenen LP zurück.');
+  s+=card('Stärker werden','Techniken wachsen durch Einsatz (Stufe 1–10). Neues zeigen Lehrmeister (höchstens 3 je Held, eine Lektion kostet ein Lernzeichen).','Dazu Waffenbaum, Methoden mit Atemnetz und am Ende die Ultimate. Boni aus der Entwicklung: höchstens +3 Treffen und +3 Schaden je Angriff.');
+  return s+'</div>'};
+// p64b schreibt Namen und Klassen-Aktion in die erste Karte des Bogens – in den Regeln nicht: Gitter zum Schluss neu setzen.
+{const _rb73r=renderBogen27;renderBogen27=function(){const r=_rb73r.apply(this,arguments);try{if(BOGR27){const g=BOG27.querySelector('.grid');if(g)g.outerHTML=rulesHtml27(PARTY[BOGI27]||hero)}}catch(e){console.warn('p73 Regeln',e)}return r}}
+if(typeof mitBogen66==='function'){const _mb73=mitBogen66;mitBogen66=function(G,fn){const a=REG73G;REG73G=G&&G.hero||null;try{return _mb73.apply(this,arguments)}finally{REG73G=a}}}
+
+
+// ================= Prototyp 73 (z): Grundzauber je Klasse (Paul 05.11., 15:50–16:05) =================
+// Paul: „Eigene Zauberarten find ich deeeutlich besser“, „alle die zaubern können sollen … angehalten werden, weiter zu zaubern (auch mit den
+// normalen Angriffen)“, „den Damage … mit einem direkten Angriff mit dem Zauberstab verringern“. Vorschlag mit Tabelle abgesegnet („So umsetzen“).
+// - Alle 16 Gelehrten zaubern in beiden Kampfarten (bisher im normalen Kampf nur die 8 Zauberklassen, und alle hießen „Feuerfunke“).
+// - Jede Klasse hat ihren Grundzauber (W6 + Intelligenz, Reichweite 3) mit eigenem Namen, Bild, Klang und einer kleinen Eigenheit.
+// - Gelehrte schlagen mit der Waffe schwächer zu: der Waffenwürfel ist eine Stufe kleiner (W6 → W4, W4 → W3).
+// Neu sind Spiegelstrahl (Spiegler), Trugfunke (Illusionist) und Zündfunke (Geschützmeister); bisher castete diese Klassen den Platzhalter „Arkaner Blitz“.
+// Feinere Animationen kann der Grafik-Chat liefern (grafik-auftraege.md).
+const ZAUB73=[
+  [/zeithexe/i,'zeit','Zeitwirbel','zeit','Daneben? Der Wirbel kommt zurück: der nächste Zeitwirbel +2 Treffen.','#c890ff','#7a4ad8'],
+  [/magier/i,'feuer','Feuerball','brand','Brennt nach: 1 Schaden in der nächsten Runde.','#fbf236','#e8702a'],
+  [/zauberin/i,'eis','Eissplitter','eis','Klamme Finger: Der nächste Treffer des Ziels macht 1 Schaden weniger.','#e8f8ff','#7ac8ff'],
+  [/hexe/i,'kraut','Kräuterzauber','kraut','Der schwächste Verbündete bekommt 1 LP.','#b8e8a0','#4ab04a'],
+  [/sternenkundler/i,'stern','Sternschnuppe','stern','Kritisch schon ab 19.','#fff2a0','#f0c43c'],
+  [/alchemist/i,'trank','Wurftrank','trank','Überraschung: Schaden W4, W6 oder W8.','#a8f0a0','#6ad86a'],
+  [/weise/i,'arkan','Arkaner Blitz','arkan','Reine Kraft: +1 Treffen.','#e8f4ff','#9ad8ff'],
+  [/t(ü|ue)ftler/i,'technik','Zahnradwurf','zahn','Klemmt in der Rüstung: Ziel −1 RK bis zu seinem nächsten Zug.','#ffd060','#b8a060'],
+  [/gelehrte/i,'fussnote','Fußnotenhagel','fuss','Randnotiz: Der nächste Angriff eines Verbündeten aufs Ziel +1 Treffen.','#f4ecd8','#ffffff'],
+  [/spiegler/i,'spiegel','Spiegelstrahl','spiegel','Wer den Spiegler bis zu seinem nächsten Zug angreift, bekommt 1 Schaden zurück.','#ffffff','#b8c8e0'],
+  [/illusionist/i,'trug','Trugfunke','trug','Das Ziel greift beim nächsten Mal mit Nachteil an (zwei W20, der kleinere zählt).','#e0a0ff','#8a6ad8'],
+  [/gesch(ü|ue)tzmeister/i,'zuend','Zündfunke','zuend','Mit etwas Glück (1 zu 6) knallt es: +W4 Schaden.','#ffb040','#ff6a2a']];
+function grund73(h){if(!h)return null;try{if(!caster49(h))return null}catch(e){return null}const c=h.cls||'';
+  for(const Z of ZAUB73)if(Z[0].test(c))return{k:Z[1],n:Z[2],e:Z[3],d:Z[4],c1:Z[5],c2:Z[6]};
+  return{k:'arkan',n:'Arkaner Blitz',e:'arkan',d:'Reine Kraft: +1 Treffen.',c1:'#e8f4ff',c2:'#9ad8ff'}}
+// Bilder im Taktik-Kampf: die Klassen ordnen sich ihrer Zauberart zu; drei neue Arten
+try{SPELLK41.unshift([/spiegler/i,'spiegel'],[/illusionist/i,'trug'],[/gesch(ü|ue)tzmeister/i,'zuend'],[/fl(ü|ue)sterin/i,'ranke']);
+  Object.assign(SPELLN41,{spiegel:'Spiegelstrahl',trug:'Trugfunke',zuend:'Zündfunke'})}catch(e){}
+try{Object.assign(S42,{
+  spiegel:()=>{bell35(2600,0,.06,.35);bell35(3400,.08,.05,.3);noise35(.1,.08,.16,6000,2)},
+  trug:()=>{osc35('sine',500,900,0,.25,.06);osc35('sine',760,380,.12,.3,.05)},
+  zuend:()=>{noise35(0,.05,.2,3000,2);noise35(.18,.25,.5,500,.8);osc35('sine',110,40,.18,.3,.4)}})}catch(e){}
+{const _sf73z=spellFX41;spellFX41=function(a,b,k){if(!/^(spiegel|trug|zuend)$/.test(k))return _sf73z.apply(this,arguments);
+  try{const A=fxPosU31(a),B=fxPosU31(b),f=a.face<0?-1:1,hx=A.x+f*5,hy=A.y-6;a._noOrb41=TAC.t;fxL41({k:'label41',x:A.x,y:A.y-24,txt:SPELLN41[k],col:'#e8dcff',dur:1000});
+    if(k==='spiegel'){fxL41({k:'beam41',x:A.x,y:A.y+4,w:6,h:30,col:'#ffffff',dur:260},0);fxL41({k:'bolt41',x0:hx,y0:hy,x1:B.x,y1:B.y,col:'#e8f0ff',dur:260},120);fxL41({k:'shards41',x:B.x,y:B.y,r:10,cols:['#e8f0ff','#b8c8e0','#ffffff'],dur:380},220)}
+    else if(k==='trug'){for(let i=0;i<3;i++)fxL41({k:'proj41',x0:hx,y0:hy,x1:B.x+(i-1)*6,y1:B.y+(i-1)*3,shape:'spark',col:['#e0a0ff','#8a6ad8','#ffffff'][i],trail:4,arc:10-i*4,dur:170},60+i*30);fxL41({k:'puff41',x:B.x,y:B.y,col:'#c8a0f0',r:9,dur:520},250)}
+    else{fxL41({k:'proj41',x0:hx,y0:hy,x1:B.x,y1:B.y,shape:'spark',col:'#ffb040',trail:5,arc:4,dur:150},60);fxL41({k:'boom41',x:B.x,y:B.y,r:9,dur:380},220)}
+    snd42(k)}catch(e){console.warn('p73z fx',e)}}}
+
+// ---------- Würfeln mit Nachteil (Trugfunke): der nächste W20 wird zweimal geworfen, der kleinere zählt ----------
+let NACH73=0,NACHW73=null;
+if(typeof D20_56==='function'){const _d73z=D20_56;D20_56=function(){const v=_d73z.apply(this,arguments);if(v)return v;
+  if(NACH73>0){NACH73=0;const a=1+Math.floor(Math.random()*20),b=1+Math.floor(Math.random()*20);NACHW73=[a,b];return Math.min(a,b)}return 0}}
+
+// ---------- Waffe der Gelehrten: eine Stufe kleiner ----------
+function klein73(x){return x>4?stepDie49(x,-1):Math.max(2,x-1)}
+{const _w73z=wpn27;wpn27=function(h,spell){const r=_w73z.apply(this,arguments);try{if(!spell&&r&&r.art!=='zauber'&&caster49(h))return Object.assign({},r,{die:klein73(r.die),klein73:1})}catch(e){}return r}}
+
+// ---------- Normaler Kampf ----------
+// Knopf: eigener Name statt „Feuerfunke“, und alle Gelehrten bekommen ihn
+{const _ai73z=attackItems;attackItems=function(){const l=_ai73z.apply(this,arguments);try{const Z=grund73(hero);const i=l.findIndex(x=>/Feuerfunke \(Zauber\)/.test(x[0]));if(i>=0)l.splice(i,1);
+    if(Z)l.splice(1,0,[Z.n+' (Zauber)',()=>{say(Z.n,'player',hero.name);attack(true)}])}catch(e){console.warn('p73z',e)}return l}}
+function weakest73(L){return L.filter(q=>q.hp>0&&q.hp<q.max).sort((a,b)=>a.hp/a.max-b.hp/b.max)[0]||null}
+{const _da73z=doAtk27;doAtk27=function(o){try{const h=hero,W=o&&o.W;const Z=W&&W.art==='zauber'&&o.spellFx&&!o.how?grund73(h):null;
+    if(Z){const e0=enemy;o=Object.assign({},o,{how:Z.n,fxc:Z.c1,fxc2:Z.c2});let knall=0;
+      if(Z.e==='arkan'){o.bonus=(o.bonus||0)+1;o.bonusTxt='Arkaner Blitz'}
+      if(Z.e==='zeit'&&h.zeit73){o.bonus=(o.bonus||0)+2;o.bonusTxt='Wirbel kehrt zurück';h.zeit73=0}
+      if(Z.e==='stern')o.crit=Math.min(o.crit||20,19);
+      if(Z.e==='trank')o.die=[4,6,8][Math.floor(Math.random()*3)];
+      if(Z.e==='zuend'){const x0=o.extra;o.extra=c=>{let v=x0?x0(c):0;if(Math.random()<1/6){knall=d(4);v+=knall}return v}}
+      const done=o.done;o.done=function(hit,dmg,crit){try{const t=[];const e=e0;
+          if(hit&&e&&e.hp>0){if(Z.e==='brand'&&!(e.dot49&&e.dot49.n>0)){e.dot49={v:1,n:1,by:h.id,why:'Feuerball'};t.push(enemyName(e)+' brennt nach')}
+            if(Z.e==='eis'){e.eis73=1;t.push(enemyName(e)+' hat klamme Finger')}
+            if(Z.e==='zahn'&&!(e.ac27&&e.ac27.n>0&&e.ac27.v>=1)){e.ac27={v:1,n:1};t.push('das Zahnrad klemmt in der Rüstung (−1 RK)')}
+            if(Z.e==='fuss'&&!(e.mark31&&e.mark31.n>0)){e.mark31={v:1,n:1};t.push('Randnotiz: der nächste Angriff darauf +1')}
+            if(Z.e==='trug'){e.trug73=1;t.push(enemyName(e)+' sieht doppelt (Nachteil beim nächsten Angriff)')}}
+          if(hit&&Z.e==='kraut'){const q=weakest73(PARTY);if(q){q.hp=Math.min(q.max,q.hp+1);try{float(q.x,FLOOR-52,'+1','#7af07a')}catch(x){}t.push(q.name+' bekommt 1 LP')}}
+          if(Z.e==='zuend'&&knall)t.push('KNALL! +'+knall+' Schaden');
+          if(Z.e==='zeit'&&!hit){h.zeit73=1;t.push('der Wirbel kommt zurück (+2 beim nächsten Zeitwirbel)')}
+          if(Z.e==='spiegel'){h.spiegel73=1;t.push(h.name+' steht hinter dem Spiegel: wer angreift, bekommt 1 Schaden zurück')}
+          if(t.length)say(Z.n+': '+t.join(', ')+'.','roll')}catch(x){console.warn('p73z',x)}return done&&done.apply(this,arguments)}}}catch(e){console.warn('p73z',e)}
+  return _da73z.call(this,o)}}
+// Der Spiegel hält bis zur nächsten eigenen Aktion
+if(typeof act27==='function'){const _ac73z=act27;act27=function(){const r=_ac73z.apply(this,arguments);try{if(r&&hero)hero.spiegel73=0}catch(e){}return r}}
+// Gegner greift an: Trugfunke (Nachteil), Eissplitter (−1 Schaden beim nächsten Treffer), Spiegelstrahl (1 Schaden zurück)
+{const _fs73z=foeStrike31;foeStrike31=function(e,H,o){if(!e||e.dead||!inFight()||S.ko)return _fs73z.apply(this,arguments);
+  try{if(e.trug73||e.eis73||PARTY.some(p=>p.spiegel73)){H=H||tgt31(e)}}catch(x){}
+  let sh=0;try{if(e.eis73&&H){H.shield=(H.shield||0)+1;sh=1}if(e.trug73){NACH73=1;NACHW73=null}}catch(x){}
+  let r;try{r=_fs73z.call(this,e,H,o)}finally{const w=NACHW73;if(e.trug73&&w){e.trug73=0;try{say('Trugfunke: '+enemyName(e)+' sieht doppelt und greift mit Nachteil an ['+w[0]+', '+w[1]+'] → '+Math.min(w[0],w[1])+'.','roll')}catch(x){}}NACH73=0;NACHW73=null}
+  try{if(sh)setTimeout(()=>{try{if((H.shield||0)===0){e.eis73=0;say('Eissplitter: klamme Finger – '+H.name+' bekommt 1 Schaden weniger.','roll')}else H.shield=Math.max(0,H.shield-1)}catch(x){}},320);
+    if(H&&H.spiegel73)setTimeout(()=>{try{if(inFight()&&!e.dead&&e.hp>0){dmgFoe31(e,1);say('Spiegelstrahl: Der Angriff spiegelt sich – '+enemyName(e)+' bekommt 1 Schaden zurück.','roll')}}catch(x){}},380)}catch(x){}
+  return r}}
+
+// ---------- Taktik-Kampf ----------
+{const _ta73z=tAttack;tAttack=function(a,b,opt){try{opt=opt||{};
+  if(TAC&&a&&b&&a.side==='held'&&opt.spell&&a.sp&&!opt.how){const h=a.hero,Z=grund73(h);
+    if(Z){a.sp.how=Z.n;opt=Object.assign({},opt);let knall=0;
+      if(Z.e==='arkan'){opt.bonus=(opt.bonus||0)+1;opt.bonusTxt='Arkaner Blitz'}
+      if(Z.e==='zeit'&&a.zeit73){opt.bonus=(opt.bonus||0)+2;opt.bonusTxt='Wirbel kehrt zurück';a.zeit73=0}
+      if(Z.e==='stern')opt.crit=Math.min(opt.crit||20,19);
+      if(Z.e==='trank')opt.die=stepDie49(a.sp.die||6,[-1,0,1][Math.floor(Math.random()*3)]);
+      if(Z.e==='zuend'){const x0=opt.extra;opt.extra=c=>{let v=x0?x0(c):0;if(Math.random()<1/6){knall=d(4);v+=knall}return v}}
+      if(Z.e==='spiegel')a.spiegel73=1;
+      const af=opt.after;opt.after=function(hit,dmg,crit){try{const t=[];
+          if(hit&&b.hp>0){if(Z.e==='brand'&&!(b.dot49&&b.dot49.n>0)){b.dot49={v:1,n:1,why:'Feuerball'};t.push(b.name+' brennt nach')}
+            if(Z.e==='eis'){b.eis73=1;t.push(b.name+' hat klamme Finger')}
+            if(Z.e==='zahn'&&!(b.ac27&&b.ac27.n>0&&b.ac27.v>=1)){b.ac27={v:1,n:1};t.push('−1 RK bis zu seinem Zug')}
+            if(Z.e==='fuss'&&!(b.mark31&&b.mark31.n>0)){b.mark31={v:1,n:1};t.push('Randnotiz: der nächste Angriff darauf +1')}
+            if(Z.e==='trug'){b.trug73=1;t.push(b.name+' sieht doppelt')}}
+          if(hit&&Z.e==='kraut'){const q=weakest73(tAllies(a));if(q){q.hp=Math.min(q.max,q.hp+1);if(q.hero)q.hero.hp=q.hp;tFloat(q,'+1','#7af07a');t.push(q.name+' bekommt 1 LP')}}
+          if(Z.e==='zuend'&&knall)t.push('KNALL! +'+knall+' Schaden');
+          if(Z.e==='zeit'&&!hit){a.zeit73=1;t.push('der Wirbel kommt zurück')}
+          if(Z.e==='spiegel')t.push(a.name+' steht hinter dem Spiegel');
+          if(t.length)tLog(Z.n+': '+t.join(', ')+'.')}catch(x){console.warn('p73z',x)}return af&&af.apply(this,arguments)}}}
+  if(TAC&&a&&b&&a.side!=='held'&&b.side==='held'){if(a.trug73){NACH73=1;NACHW73=null}
+    if(b.spiegel73)setTimeout(()=>{try{if(TAC&&a.hp>0&&!a.gone)tLog(tDmg27(b,a,1,'Spiegelstrahl: '+a.name+' bekommt 1 Schaden zurück.',{}))}catch(x){}},420)}}catch(e){console.warn('p73z',e)}
+  let r;try{r=_ta73z.call(this,a,b,opt)}finally{try{const w=NACHW73;if(a&&a.trug73&&w){a.trug73=0;tLog('Trugfunke: '+a.name+' greift mit Nachteil an ['+w[0]+', '+w[1]+'] → '+Math.min(w[0],w[1])+'.')}}catch(x){}NACH73=0;NACHW73=null}
+  return r}}
+{const _td73z=tDmg27;tDmg27=function(a,b,n,txt,opt){try{if(TAC&&a&&a.eis73&&b&&b.side==='held'&&a.side!=='held'&&n>0){a.eis73=0;n=n-1;txt=String(txt||'')+' (Eissplitter: 1 weniger)'}}catch(e){}return _td73z.call(this,a,b,n,txt,opt)}}
+{const _tn73z=tNext;tNext=function(){const r=_tn73z.apply(this,arguments);try{const u=TAC&&TAC.cur;if(u&&u.spiegel73)u.spiegel73=0}catch(e){}return r}}
+
+// ---------- Heldenbogen: der Grundzauber steht über den Techniken ----------
+{const _bh73z=bogenHtml31;bogenHtml31=function(h){let s=_bh73z.apply(this,arguments);try{const Z=grund73(h);const i=s.indexOf('<h3>Techniken');if(Z&&i>=0){const q=x=>String(x).replace(/"/g,'&quot;');
+    s=s.slice(0,i)+'<p class="gz73"><b class="t73v" tabindex="0" data-tip64="'+q(Z.n+' (Grundzauber)|W6 + Intelligenz, Reichweite 3. '+Z.d+' Kostet keinen Geist.')+'">✦ '+Z.n+'</b> <span class="small">Grundzauber · '+Z.d+'</span></p>'+s.slice(i)}}catch(e){console.warn('p73z Bogen',e)}return s}}
 
 
 // ================= Grafik zu Prototyp 73 (n): feine Kampf-Figuren für die bisherigen Helden, Faust-Animationen (Paul 04.11., 22:44) =================
