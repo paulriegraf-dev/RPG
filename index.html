@@ -30675,7 +30675,7 @@ function konf74(){const k=weg74(),st=V33();if(!k||S.facts.miras_ende||TAC)return
 // ---------- Taktik-Kampf im Ratssaal ----------
 TFLOOR.saal74=['#c8b48a','#bca87e','#d4c096','#b09c72'];
 TAC_MAPS.ratssaal74={floor:'saal74',title:'Das Vielhaus – der Ratssaal',grid:['.CCCMCCC.','.........','.........','..B...B..','.........','..B...B..','S.......S'],chalk:false,crowd:false};
-const KI74V='## Gegner\n- Der zweite Miras | Rolle: nahkampf | Ziel: schwächster | Leben: 34 | Rüstung: 13 | Angriff: 4 | Schaden: 6 | Bewegung: 4 | Reichweite: 1\n- Getreuer | Rolle: nahkampf | Ziel: nächster | Leben: 9 | Rüstung: 11 | Angriff: 3 | Schaden: 4 | Bewegung: 3 | Reichweite: 1\n';
+const KI74V='## Gegner\n- Der zweite Miras | Rolle: nahkampf | Ziel: schwächster | Leben: 34 | Rüstung: 13 | Angriff: 4 | Schaden: 6 | Bewegung: 4 | Reichweite: 1\n- Getreuer | Rolle: nahkampf | Ziel: nächster | Leben: 14 | Rüstung: 11 | Angriff: 3 | Schaden: 4 | Bewegung: 3 | Reichweite: 1\n';
 {const o=tacKiParse(KI74V);Object.keys(o).forEach(k=>{TAC_KI[k]=o[k]})}
 {const _tkl74=tacKiLoad;tacKiLoad=async function(){await _tkl74.apply(this,arguments);const o=tacKiParse(KI74V);Object.keys(o).forEach(k=>{if(!TAC_KI[k])TAC_KI[k]=o[k]})}}
 {const _ts74=tacStart;tacStart=function(o){const r=_ts74.apply(this,arguments);try{if(TAC&&TAC.M===TAC_MAPS.ratssaal74)TAC.tiles.forEach(row=>row.forEach(T=>{if('CMS'.includes(T.obj))T.block=true}))}catch(e){}return r}}
