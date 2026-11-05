@@ -29710,7 +29710,7 @@ rulesHtml27=function(h){const card=(t,a,b)=>'<div class="card2"><h3>'+t+'</h3><p
   s+=card('Abwehr','Blocken nimmt Schaden weg (Stärke, Kämpfer +3, Stützen +1). Ausweichen lässt Angriffe ins Leere gehen (Geschick, Flinke +3, Stützen und Gelehrte +1).','Taktik: Höhe +1, Flanke +2 (ein Verbündeter steht auch am Ziel), von hinten mit Vorteil.');
   s+=card('Geist und Techniken','Techniken kosten Geist und brauchen danach ein paar Züge Pause.','„Durchatmen“: +1 Geist, +1 LP. Die Klassen-Aktion geht einmal je Kampf ohne Geist.');
   s+=card('Bei 0 LP','Kein Tod: Der Held würfelt Todesrettung (W20, ab 10 Erfolg). 3 Erfolge: stabil. 3 Fehlschläge: außer Gefecht bis zur Gaststätte oder langen Rast.','Eine 20 steht sofort mit 1 LP wieder auf. Nach dem Kampf kommt die Hälfte der verlorenen LP zurück.');
-  s+=card('Stärker werden','Techniken wachsen durch Einsatz (Stufe 1–10). Neues zeigen Lehrmeister (höchstens 3 je Held, eine Lektion kostet ein Lernzeichen).','Dazu Waffenbaum, Methoden mit Atemnetz und am Ende die Ultimate. Boni aus der Entwicklung: höchstens +3 Treffen und +3 Schaden je Angriff.');
+  s+=card('Stärker werden','Techniken wachsen durch Einsatz (Stufe 1–10). Neues zeigen Lehrmeister (höchstens 3 je Held, eine Lektion kostet ein Lernzeichen).','Dazu Waffenbaum, Methoden mit Gaben beim Durchbruch und am Ende die Ultimate. Boni aus der Entwicklung: höchstens +3 Treffen und +3 Schaden je Angriff.');
   return s+'</div>'};
 // p64b schreibt Namen und Klassen-Aktion in die erste Karte des Bogens – in den Regeln nicht: Gitter zum Schluss neu setzen.
 {const _rb73r=renderBogen27;renderBogen27=function(){const r=_rb73r.apply(this,arguments);try{if(BOGR27){const g=BOG27.querySelector('.grid');if(g)g.outerHTML=rulesHtml27(PARTY[BOGI27]||hero)}}catch(e){console.warn('p73 Regeln',e)}return r}}
@@ -29924,6 +29924,114 @@ const ULTK77=(typeof G68DATA!=='undefined'&&G68DATA.ult77)||null;
     im.onerror=()=>ende();im.src=src;setTimeout(ende,gesamt+2500)   // Sicherheitsnetz
   }catch(e){try{fn()}catch(e2){}}}}
 {const st=document.createElement('style');st.textContent='#tacOv .ult77 .m73{gap:22px}#tacOv .ult77 canvas{width:min(62vw,600px)!important;height:auto!important;aspect-ratio:96/54;image-rendering:pixelated;border:3px solid #000;box-shadow:0 0 0 2px var(--f73)}';document.head.appendChild(st)}
+
+
+// ===================== Prototyp 73, Nachbesserung: Durchbruch-Gaben statt Atemnetz =====================
+// Pauls Entscheidung vom 05.11. (16:13–16:25), Plan: _Spielleiter/vorschlaege-p73.md Abschnitt 10b.
+//  - Das Atemnetz fällt weg (Karte, Atempunkte, Neu verteilen, alle Knoten-Wirkungen). Nichts gelöscht: die alten
+//    Teile in p73m.js/p73r.js/p73v.js bleiben, werden hier still gelegt (aHas73 neu, Karte per CSS aus).
+//  - Bei jedem Durchbruch (Stufe 5 und 10) wählt der Held eine von zwei Gaben. Die Paare hängen an der Natur der
+//    Methode (GABEN77). Die Wahl ist fest (Paul). Eine Gabe wirkt nur, solange ihre Methode aktiv ist.
+//  - Keine Gabe gibt +Treffen oder +Schaden (Obergrenze D4 bleibt unberührt). Umfang „klein“: keine Methoden, keine Gaben.
+//  - Heldenbogen: kleine Karte „Methode & Gaben“ mit der Meditations-Silhouette (G68DATA.atem76), 10 kleine Sterne
+//    für die Stufen, 2 große für die Gaben. Fenster F: eine Zeile „Gaben: …“.
+//  - Für alte Tests: window.__atemAlt77=1 vor dem Laden lässt das Atemnetz wie vorher.
+const GABEN77={
+  stein:{5:['standfest','wachsam'],10:['erster','band']},
+  strom:{5:['leicht','schritt'],10:['sparsam','blick']},
+  glut:{5:['wuchten','anfeuern'],10:['wort','unbeugsam']}};
+const GABE77={
+  standfest:['Standfest','Einmal je Kampf macht ein schwerer Treffer nur halben Schaden.'],
+  wachsam:['Wachsam','Wird nie überrascht: handelt in der ersten Runde vor den Gegnern, Wache halten gelingt immer.'],
+  erster:['Erster Blick','Zu Kampfbeginn ist ein Gegner markiert (alle +1 gegen ihn, 2 Runden).'],
+  band:['Band zum PaulMon','Das PaulMon greift einmal je Kampf von selbst mit an. Ohne PaulMon: Proben mit Tieren, Spuren und Pflanzen mit Vorteil.'],
+  leicht:['Leichter Fuß','Einmal je Kampf einem schweren Treffer ganz ausweichen.'],
+  schritt:['Weiter Schritt','Taktik: Bewegung +1. Normaler Kampf: Initiative +1.'],
+  sparsam:['Sparsamer Geist','Jede dritte Technik in einem Kampf kostet keinen Geist.'],
+  blick:['Weiter Blick','Taktik: Reichweite von Zaubern und Fernwaffen +1. Normaler Kampf: der erste Fern- oder Zauberangriff mit Vorteil.'],
+  wuchten:['Wuchten','Taktik: Zurückstoßen geht ein Feld weiter. Normaler Kampf: Nahkampf-Treffer lassen das Ziel mit 20 % taumeln.'],
+  anfeuern:['Anfeuern','Einmal je Kampf bekommt der erste Angriff eines Verbündeten Vorteil; einmal am Tag darf ein Verbündeter eine misslungene Probe wiederholen.'],
+  wort:['Ein Wort genügt','Die erste Technik jedes Kampfes kostet keinen Geist.'],
+  unbeugsam:['Unbeugsam','Einmal je Kampf bei 0 LP mit 1 LP stehen bleiben.']};
+const NATN77={stein:'Stein',strom:'Strom',glut:'Glut'},NATC77={stein:'#c8b08a',strom:'#7ac8ff',glut:'#ff8a4a'};
+function aus77(){return typeof window==='undefined'||!window.__atemAlt77}
+function on77(){try{return aus77()&&el57()>=2}catch(e){return false}}
+function nat77(id){const K=KUNST31[id];return K&&GABEN77[K.nat]?K.nat:'stein'}
+function gab77(h){h.gabe77=h.gabe77||{};return h.gabe77}
+function gHas77(h,g){if(!h||!on77())return false;const id=kAct31(h);if(!id)return false;const G=h.gabe77&&h.gabe77[id];return!!(G&&(G[5]===g||G[10]===g))}
+function gOpen77(h,id){const K=h.kl31&&h.kl31[id];if(!K)return[];const G=(h.gabe77&&h.gabe77[id])||{},o=[];if((K.d5||K.lv>=5)&&!G[5])o.push(5);if((K.d10||K.lv>=10)&&!G[10])o.push(10);return o}
+function gWahl77(h,id,lv,g){if(!GABEN77[nat77(id)][lv].includes(g))return;const G=gab77(h);G[id]=G[id]||{};if(G[id][lv])return;G[id][lv]=g;
+  say(h.name+' – Gabe aus „'+KUNST31[id].n+'“: '+GABE77[g][0]+'. '+GABE77[g][1],'new');try{addChron(h.name+': Gabe „'+GABE77[g][0]+'“ ('+KUNST31[id].n+')',[],false,'learn')}catch(e){}try{recalc27(h)}catch(e){}}
+function gFrag77(h,id,lv){const P=GABEN77[nat77(id)][lv];choose27(h.name+' – Durchbruch in „'+KUNST31[id].n+'“ (Stufe '+lv+'). Wähle eine Gabe, sie bleibt fest:',P.map(g=>[GABE77[g][0]+' – '+GABE77[g][1],()=>gWahl77(h,id,lv,g)]))}
+const ASK77={};
+// ---------- 1. Atemnetz still legen: alte Knoten-Abfragen auf die Gaben umlenken ----------
+// (Die Aufrufstellen in p73m/p73r fragen nach Ast und Knoten in der ursprünglichen Reihenfolge.)
+{const _ah77=aHas73;aHas73=function(h,br,i){if(!aus77())return _ah77.apply(this,arguments);if(!on77())return false;
+  const k=br+i;if(k==='str2')return gHas77(h,'wuchten');if(k==='dex1')return gHas77(h,'schritt');if(k==='int1')return gHas77(h,'sparsam');
+  if(k==='int2')return!!TAC&&gHas77(h,'blick');if(k==='wis2')return gHas77(h,'erster');if(k==='cha2')return gHas77(h,'wort');return false}}
+// ---------- 2. Kampfbeginn: Merker je Kampf, Wachsam, Band zum PaulMon ----------
+let F77={anf:0};
+function hasPet77(h){try{const p=h===hero?pet:(h.own&&h.own.pet);return!!(p&&!p.leaving)}catch(e){return false}}
+function pmHit77(h){return d(4)+Math.max(0,(typeof pmBonus28==='function'?pmBonus28(h):0)||0)}
+function wachBump77(fn){const L=on77()?PARTY.filter(h=>h.hp>0&&gHas77(h,'wachsam')):[];L.forEach(h=>{h.mods.dex=(h.mods.dex||0)+20});try{return fn()}finally{L.forEach(h=>{h.mods.dex-=20})}}
+{const _is77=iniStart;iniStart=function(){const a=arguments,t=this;F77={anf:0};PARTY.forEach(h=>{h.g77f={}});const r=wachBump77(()=>_is77.apply(t,a));
+  try{if(on77())PARTY.filter(h=>h.hp>0&&gHas77(h,'band')&&hasPet77(h)).forEach((h,i)=>setTimeout(()=>{try{if(!enemy||enemy.dead||TAC)return;const n=pmHit77(h);enemy.hp-=n;enemy.hurt=10;float(enemy.x,enemyY()-12,'-'+n,'#fbf236');say('Band zum PaulMon: '+genit(h.name)+' PaulMon springt von selbst vor und trifft den Gegner. '+n+' Schaden.','roll')}catch(e){}},900+i*500))}catch(e){}return r}}
+{const _ts77=tacStart;tacStart=function(){const a=arguments,t=this;F77={anf:0};PARTY.forEach(h=>{h.g77f={}});const r=wachBump77(()=>_ts77.apply(t,a));
+  try{if(TAC&&on77())PARTY.filter(h=>h.hp>0&&gHas77(h,'band')&&hasPet77(h)).forEach((h,i)=>setTimeout(()=>{try{if(!TAC)return;const b=TAC.units.find(u=>u.side!=='held'&&u.hp>0);if(!b)return;const n=pmHit77(h);b.hp=Math.max(1,b.hp-n);b.hurt=12;tFloat(b,'-'+n,'#ffd84a');tLog('Band zum PaulMon: '+genit(h.name)+' PaulMon springt vor und trifft '+b.name+'. '+n+' Schaden.')}catch(e){}},1200+i*500))}catch(e){}return r}}
+// ---------- 3. Schwere Treffer: Leichter Fuß, Standfest, Unbeugsam ----------
+function schwer77(max,hp0,dmg){return dmg>=Math.max(3,Math.ceil(max/4))||hp0-dmg<=0}
+function abfang77(h,hp0,dmg){// gibt den Schaden zurück, der wirklich ankommt, und einen Satz
+  const f=h.g77f=h.g77f||{};let txt='';
+  if(dmg>0&&!f.leicht&&gHas77(h,'leicht')&&schwer77(h.max,hp0,dmg)){f.leicht=1;return[0,'Leichter Fuß: '+h.name+' ist im letzten Moment weg – der Treffer geht ins Leere.']}
+  if(dmg>0&&!f.stand&&gHas77(h,'standfest')&&schwer77(h.max,hp0,dmg)){f.stand=1;const n=Math.ceil(dmg/2);txt='Standfest: '+h.name+' fängt den Schlag ab, nur '+n+' statt '+dmg+' Schaden.';dmg=n}
+  if(hp0-dmg<=0&&!f.unb&&gHas77(h,'unbeugsam')){f.unb=1;dmg=hp0-1;txt+=(txt?' ':'')+'Unbeugsam: '+h.name+' bleibt mit 1 LP stehen.'}
+  return[dmg,txt]}
+EV31.push(function(H,k,n){if(k!=='dmgIn'||!on77()||TAC||!H)return;const hp0=H.hp+n;const[d2,txt]=abfang77(H,hp0,n);if(d2===n)return;H.hp=hp0-d2;if(txt){try{float(H.x,FLOOR-64,d2?'abgefangen':'ausgewichen','#7af0c8')}catch(e){}setTimeout(()=>say(txt,'roll'),0)}});
+{const _td77=tDmg27;tDmg27=function(a,b,dmg,txt,opt){try{if(on77()&&b&&b.side==='held'&&b.hero&&b.hp>0&&dmg>0){const[d2,t2]=abfang77(b.hero,b.hp,dmg);if(t2){if(d2<=0){tFloat(b,'ausgewichen','#7af0c8');return(txt||'')+' '+t2}const r=_td77.call(this,a,b,d2,txt,opt);return r+' '+t2}}}catch(e){}return _td77.apply(this,arguments)}}
+// ---------- 4. Vorteil: Weiter Blick (normaler Kampf), Anfeuern ----------
+function anfHalter77(h){return PARTY.find(p=>p!==h&&p.hp>0&&gHas77(p,'anfeuern'))}
+{const _da77=doAtk27;doAtk27=function(o){try{const h=hero;if(on77()&&h&&!TAC&&o&&!o.adv){const W=o.W,fern=(W&&(W.ranged||W.art==='zauber'||W.form==='fern'))||o.spellFx;h.g77f=h.g77f||{};
+    if(fern&&!h.g77f.blick&&gHas77(h,'blick')){h.g77f.blick=1;o=Object.assign({},o,{adv:true})}
+    else if(!F77.anf){const A=anfHalter77(h);if(A){F77.anf=1;o=Object.assign({},o,{adv:true});say('Anfeuern: '+A.name+' ruft '+h.name+' etwas zu – Vorteil.','sys')}}}}catch(e){}return _da77.call(this,o)}}
+{const _ta77=tAttack;tAttack=function(a,b,opt){try{if(on77()&&TAC&&a&&a.side==='held'&&a.hero&&!(opt&&opt.adv)&&!F77.anf){const A=anfHalter77(a.hero);if(A){F77.anf=1;opt=Object.assign({},opt||{},{adv:true});tLog('Anfeuern: '+A.name+' ruft '+a.hero.name+' etwas zu – Vorteil.')}}}catch(e){}return _ta77.call(this,a,b,opt)}}
+// Proben: Wachsam (Wache halten), Band ohne PaulMon (Vorteil), Anfeuern (1× am Tag wiederholen)
+const BANDRE77=/tier|spur|fährte|faehrte|pflanz|kraut|kräut|krauter|natur|wild|jagd/;
+{const _ck77=check;check=function(stat,dc,label){if(!on77())return _ck77.apply(this,arguments);const h=hero,L=nk(label||'');
+  try{if(/wache halten/.test(L)){const w=PARTY.find(p=>p.hp>0&&gHas77(p,'wachsam'));if(w){say('Wachsam: '+w.name+' schläft mit einem offenen Auge. Nichts entgeht ihr oder ihm.','sys');return true}}}catch(e){}
+  let ok=_ck77.apply(this,arguments);
+  try{if(!ok&&h&&gHas77(h,'band')&&!hasPet77(h)&&BANDRE77.test(L)){say('Band zum PaulMon: '+h.name+' liest die Zeichen der Natur noch einmal (Vorteil).','sys');ok=_ck77.apply(this,arguments)}}catch(e){}
+  try{if(!ok&&h&&!inFight()&&!TAC){const A=anfHalter77(h),day=Math.floor(clk()/1440);if(A&&(A.anfTag77!==day)){A.anfTag77=day;say('Anfeuern: '+A.name+' lässt '+h.name+' nicht aufgeben – noch einmal!','sys');ok=_ck77.apply(this,arguments)}}}catch(e){}
+  return ok}}
+// ---------- 5. Wahl nach dem Durchbruch ----------
+{const _ra77=renderAll;renderAll=function(){const r=_ra77.apply(this,arguments);try{if(on77()&&!inFight()&&!TAC&&!document.querySelector('.choose27'))for(const h of PARTY){const id=kAct31(h);if(!id)continue;const o=gOpen77(h,id);if(!o.length)continue;const k=h.name+'|'+id+'|'+o[0];if(ASK77[k])continue;ASK77[k]=1;setTimeout(()=>{if(!document.querySelector('.choose27')&&!inFight()&&!TAC&&gOpen77(h,id).includes(o[0]))gFrag77(h,id,o[0])},1200);break}}catch(e){console.warn('p73gab Wahl',e)}return r}}
+// ---------- 6. Heldenbogen: Atemnetz aus, Karte „Methode & Gaben“ ----------
+function karte77(h){const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const id=kAct31(h);
+  let A=null;try{A=typeof G68DATA!=='undefined'&&G68DATA.atem76}catch(x){}
+  let c='<div class="card2 gab77" style="grid-column:1/-1"><h3>Methode & Gaben</h3><div class="gw77">';
+  c+='<div class="gf77">'+(A&&A.bild?'<img alt="" src="'+A.bild+'">':'')+'</div><div class="gt77">';
+  if(!id){c+='<p class="small">Keine Methode aktiv. Gaben gibt es beim Durchbruch einer Methode (Stufe 5 und 10).</p></div></div></div>';return c}
+  const K=kl31(h,id),nat=nat77(id),col=NATC77[nat],G=(h.gabe77&&h.gabe77[id])||{};
+  c+='<p><b>'+e(KUNST31[id].n)+'</b> <span class="small">('+NATN77[nat]+') · Stufe '+K.lv+'</span></p><p class="sz77" style="--c77:'+col+'">';
+  for(let i=1;i<=10;i++)c+='<i class="'+(i<=K.lv?'on':'')+'" title="Stufe '+i+'"></i>';c+='</p>';
+  [5,10].forEach(lv=>{const g=G[lv],P=GABEN77[nat][lv];c+='<p class="gz77" style="--c77:'+col+'"><b class="'+(g?'on':'')+'">✦</b> ';
+    if(g)c+='<span title="'+e(GABE77[g][1])+'"><b>'+e(GABE77[g][0])+'</b> – '+e(GABE77[g][1])+'</span>';
+    else if(gOpen77(h,id).includes(lv))c+='<span>Gabe offen: </span>'+P.map(x=>'<button type="button" data-gabe77="'+id+'|'+lv+'|'+x+'" title="'+e(GABE77[x][1])+'">'+e(GABE77[x][0])+'</button>').join(' ');
+    else c+='<span class="small">Durchbruch auf Stufe '+lv+': '+P.map(x=>e(GABE77[x][0])).join(' oder ')+'</span>';c+='</p>'});
+  c+='</div></div></div>';return c}
+{const _bh77=bogenHtml31;bogenHtml31=function(h){let s=_bh77.apply(this,arguments);try{if(!on77())return s;const c=karte77(h);const i=s.indexOf('<div class="card2 atem73"');s=i>=0?s.slice(0,i)+c+s.slice(i):s+c}catch(e){console.warn('p73gab Bogen',e)}return s}}
+{const _rb77=renderBogen27;renderBogen27=function(){const r=_rb77.apply(this,arguments);try{const h=PARTY[BOGI27]||hero;BOG27.querySelectorAll('[data-gabe77]').forEach(b=>b.onclick=()=>{const[id,lv,g]=b.dataset.gabe77.split('|');gWahl77(h,id,+lv,g);try{renderBogen27()}catch(e){}renderAll()})}catch(e){}return r}}
+// Fenster F: Zeile „Gaben“ statt „Atemnetz“
+{const _fh77=fhHtml73;fhHtml73=function(h){let s=_fh77.apply(this,arguments);try{if(!on77())return s;const id=kAct31(h),G=(id&&h.gabe77&&h.gabe77[id])||{};const L=[G[5],G[10]].filter(Boolean).map(g=>GABE77[g][0]);
+  s=s.replace(/<p class="s73">Atemnetz:[^<]*<\/p>/,'<p class="s73">Gaben: '+(L.length?L.join(', '):'noch keine (Durchbruch auf Stufe 5 und 10)')+'</p>')}catch(e){}return s}}
+{const st=document.createElement('style');st.textContent=
+  'body:not(.atemalt77) .atem73,body:not(.atemalt77) p:has(> [data-atem73n]){display:none!important}'+
+  '.gab77 .gw77{display:flex;gap:10px;align-items:center}.gab77 .gf77{flex:0 0 auto;width:52px;height:60px;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 42%,#a9bcc6 0,#6f8592 70%,#3a4550 100%)}'+
+  '.gab77 .gf77 img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}.gab77 .gt77{flex:1;min-width:0}.gab77 p{margin:2px 0}'+
+  '.gab77 .sz77 i{display:inline-block;width:7px;height:7px;margin-right:3px;border-radius:50%;border:1px solid #6a6078;background:#211b2b}'+
+  '.gab77 .sz77 i.on{border-color:transparent;background:var(--c77);box-shadow:0 0 4px var(--c77)}'+
+  '.gab77 .gz77>b{display:inline-block;width:16px;color:#4a4258}.gab77 .gz77>b.on{color:var(--c77);text-shadow:0 0 6px var(--c77)}'+
+  '.gab77 button{font-size:11.5px;padding:1px 6px;border-radius:4px;background:#2b2440;color:#f6c84a;border:1px solid #f6c84a88;cursor:pointer}';
+  document.head.appendChild(st);try{if(!aus77())document.body.classList.add('atemalt77')}catch(e){}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
