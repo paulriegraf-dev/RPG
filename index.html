@@ -29382,6 +29382,16 @@ if(typeof stern73==='function'){const _st76=stern73;stern73=function(h){let s=_s
 {const st=document.createElement('style');st.textContent=
   '.atem73 .fig76{width:240px;height:280px}.atem73 .fig76 .bg76{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}'+
   '.atem73 .fig76 .ring73,.atem73 .fig76 .sil73{display:none}';document.head.appendChild(st)}
+// ================= P76b: Absichten der Gegner nur noch intern (Paul 05.11., 15:18: „nur intern (im Code) darstellen. Der Spieler braucht die krasse Visualisierung nicht“) =================
+// Die Kampf-KI aus p73i.js plant weiter (TAC.int73 im Taktik-Kampf, e.int73 im normalen Kampf) und hält sich daran. Für Spieler unsichtbar:
+// keine roten Dreiecke über den Helden, kein Kasten „Absichten“, keine Zeile „Absichten: …“ im normalen Kampf.
+// Der Spielleiter sieht die Absichten weiter im Reiter „Kampf“. Wieder einschalten: ABSICHT76=true.
+let ABSICHT76=false;
+if(typeof intBox73==='function'){const _ib76=intBox73;intBox73=function(){if(ABSICHT76)return _ib76.apply(this,arguments);try{if(!TAC)return;const B=TOV.querySelector('.int73');if(B)B.hidden=true;
+  const u=TAC.cur,mine=u&&u.side==='held'&&!TAC.busy;if(mine){const key=TAC.round+'|'+TAC.ti;if(TAC.int73k!==key){TAC.int73k=key;TAC.int73P76=intAll73()}}TAC.int73L=null}catch(e){}}}
+if(typeof nIntent73==='function'){const _ni76=nIntent73;nIntent73=function(){if(ABSICHT76)return _ni76.apply(this,arguments);try{if(!inFight()||TAC)return;const R=typeof rot29==='function'?rot29():null;
+  const E=[enemy].concat(R?R.list:[]).filter(e=>e&&!e.dead&&!e.fade&&e.hp>0);const A=PARTY.filter(h=>h.hp>0&&!h.out73);if(!E.length||!A.length)return;
+  E.forEach(e=>{e.int73=nPick73(Object.assign({},e,{int73:null}),A)})}catch(e){}}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
