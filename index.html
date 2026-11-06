@@ -9380,8 +9380,8 @@ function selTopics31(tid){const s=L31(),sel=s.sel,T=TEACH31[tid],r=[];
   if(sel.step==='arm')return armTopics31();
   const h=hBy31(sel.h);if(!h){sel.step='wer';return selTopics31(tid)}
   lessonsOf31(tid,h).forEach(Ls=>{const st=lStat31(tid,Ls,h);const kn=Ls.kind==='meister'?'Meistertechnik: ':Ls.kind==='kunst'?'Innere Kunst: ':Ls.kind==='uebung'||Ls.kind==='xp'?'':'Technik: ';
-    if(st==='ok')r.push([kn+(Ls.label||Ls.key)+(Ls.kind==='uebung'?'':' ('+(METH31[Ls.m]||Ls.m)+')'),'l31_l:'+Ls.key]);
-    else if(st==='has'&&(Ls.cfg||Ls.obs)&&Ls.kind!=='xp'){const uk=tid+'|'+Ls.key+'|'+hid31(h);if(s.ueb[uk]==null||s.ueb[uk]<(S.visit31||0))r.push(['„'+(Ls.label||Ls.key)+'“ üben','l31_u:'+Ls.key])}});
+    if(st==='ok')r.push([typeof lab80==='function'?lab80(tid,Ls,kn,h):kn+(Ls.label||Ls.key)+(Ls.kind==='uebung'?'':' ('+(METH31[Ls.m]||Ls.m)+')'),'l31_l:'+Ls.key]);
+    else if(st==='has'&&(Ls.cfg||Ls.obs||(typeof UBL80!=='undefined'&&typeof on80u==='function'&&on80u()&&UBL80[Ls.id]))&&Ls.kind!=='xp'){const uk=tid+'|'+Ls.key+'|'+hid31(h);if(s.ueb[uk]==null||s.ueb[uk]<(S.visit31||0))r.push(['„'+(Ls.label||Ls.key)+'“ üben','l31_u:'+Ls.key])}});
   r.push(['Jemand anderen vorstellen','l31_back'],['Danke, später','l31_no']);return r}
 function teachAsk31(tid){const s=L31(),T=TEACH31[tid],al=alive31(),k=al.filter(h=>T.fit(h)>=2).length;s.sel={tid,step:'wer'};s.met[tid]=1;s.v++;
   say31(tid,[al.length===1?'Nur du? Dann zeig mal her.':T.ask(k,al.length)])}
@@ -32442,6 +32442,424 @@ if(typeof szene79==='function'){const _sz80=szene79;szene79=function(p0){const r
         const bx=el67('span',null,'sl79pm');bx.append(bt67('⚔ Kampf',()=>encFight24('auto')),bt67('zieht ab',()=>encEnd24((ENC24[E.kind]||{}).leave||'')));l.append(bar,lb,bx);
         const nx=wh.nextElementSibling;if(nx&&nx.tagName==='P'&&/Niemand/.test(nx.textContent))nx.replaceWith(l);else wh.after(l)}}}catch(e){console.warn('p80m SL',e)}return r}}
 {const _sg80=sig67;sig67=function(k){let s=_sg80.apply(this,arguments);try{if(k==='szene67'&&S.enc)s+='|enc:'+S.enc.kind+':'+S.enc.anger}catch(e){}return s}}
+
+
+// ================= Nachbesserung 3 zu Prototyp 80 (06.11., nachts) – Lehrmeister: Übungsspiele, Ilse als Einstieg =================
+// Paul (06.11., 23:12–23:20): Bei Ilse kann man sofort lernen, und die Knöpfe verraten schon die Technik. Entscheidungen:
+//   – Auf den Lern-Knöpfen steht nur noch Held + Art („Gerold: eine Lektion (Bollwerk)“, „Technik lernen – Übung „Wind am Hang““);
+//     was man lernt, erscheint erst nach dem Erfolg.
+//   – Ilse lehrt erst, wenn die Gruppe einen Kampf bestanden hat (die Rostmilben unter der Falltür), und nur EINEN Helden.
+//     Die anderen schickt sie zu einem passenden Lehrmeister (Vorschlag, siehe vorschlaege-p80.md).
+//   – Jede Lektion ist ein kleines Übungsspiel, je Lehrmeister ein eigenes, das sich anders spielt (alles auf einmal).
+//     Misslingt es, geht es erst am nächsten Spieltag weiter.
+// Alte Tests: alles hier ist aus, wenn window.__t56 gesetzt ist und __t56.lm80u fehlt (wie bei den anderen Test-Schaltern).
+function on80u(){return!(window.__t56&&!window.__t56.lm80u)}
+// Neue Gruppe (buildParty): Ilse wartet auf den ersten Kampf. Alte Spielstände ohne S.lm80 gelten als „schon gekämpft“.
+function lm80(){if(!S.lm80)S.lm80={kampf:1,ilseH:null,intro:1,fd:{},verw:{}};S.lm80.fd=S.lm80.fd||{};S.lm80.verw=S.lm80.verw||{};return S.lm80}
+// ---------- Welche Lektion welches Spiel hat ----------
+const UBN80={wind:'Wind am Hang',klopf:'Klopf-Echo',huetchen:'Wo ist die Karte?',fass:'Fässer stapeln',tee:'Tee aufgießen',teeweg:'Tee ziehen lassen',
+  ruebe:'Rüben ziehen',stein:'Trittsteine',aufstellung:'Aufstellung',suche:'Randnotizen suchen',runen:'Runen merken',faeden:'Fäden halten'};
+const UBL80={kiefernruhe:{g:'wind',st:'wis'},kapselruf:{g:'klopf',st:'cha'},kartenblick:{g:'huetchen',st:'wis'},faesser:{g:'fass',st:'str'},
+  aufguss:{g:'tee',st:'con'},teeweg:{g:'teeweg',st:'wis'},erdwurzel:{g:'ruebe',st:'str'},kranich:{g:'stein',st:'dex'},formation:{g:'aufstellung',st:'int'},randnotiz:{g:'suche',st:'int'}};
+const STN80={str:'Stärke',dex:'Geschick',con:'Konstitution',int:'Intelligenz',wis:'Weisheit',cha:'Charisma'};
+function ease80(h,st){const m=(h&&h.mods&&h.mods[st])||0;return Math.max(-1,Math.min(5,m))}
+// ---------- Rahmen: Fenster, Schleife, Tasten (Aussehen wie die Übungen aus P31) ----------
+let UB80=null;
+{const st=document.createElement('style');st.textContent=
+`#ub80{position:fixed;inset:0;z-index:92;background:#05040add;display:flex;align-items:center;justify-content:center;padding:10px;box-sizing:border-box;font-family:"Pixelify Sans",monospace;color:#f3ead6}
+#ub80 .box{background:#16121c;border:2px solid #3a3346;box-shadow:0 0 0 2px #0b0a0d,0 10px 40px #000a;padding:12px 14px;width:min(960px,96vw);box-sizing:border-box;text-align:center;max-height:96vh;overflow:auto}
+#ub80 h2{margin:0 0 2px;font-size:22px;color:#f6c84a;font-weight:normal}
+#ub80 .hint{margin:0 0 8px;font-size:15px;color:#cfc6b4;line-height:1.3}
+#ub80 canvas{width:100%;image-rendering:pixelated;image-rendering:crisp-edges;background:#0b0a0d;border:2px solid #2a2531;display:block;touch-action:none;cursor:pointer}
+#ub80 .hud{display:flex;justify-content:space-between;gap:10px;margin:6px 2px 0;font-size:16px}#ub80 .hud .g{color:#9fe8a8}
+#ub80 .btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+#ub80 .btns button{font:inherit;font-size:18px;padding:10px 18px;background:#2a2531;color:#f3ead6;border:2px solid #4a4058;cursor:pointer;min-width:150px;touch-action:none;user-select:none}
+#ub80 .btns button:hover,#ub80 .btns button:focus-visible{border-color:#f6c84a;outline:none}#ub80 .btns button.dn{background:#4a3a1a;border-color:#f6c84a}
+#ub80 .res{font-size:17px;margin:8px 0 0;min-height:22px;line-height:1.35}
+#ub80 .row2{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px;color:#8a8496;gap:8px}
+#ub80 .row2 button{font:inherit;font-size:14px;background:none;border:1px solid #3a3346;color:#a89fb4;padding:4px 10px;cursor:pointer}`;document.head.appendChild(st)}
+function tn80(f,ms,ty,v){try{tone31(f,ms,ty,v)}catch(e){}}
+function ub80(cfg,cb){if(UB80||(typeof MINI31!=='undefined'&&MINI31))return false;const G=UBG80[cfg.ub80];if(!G)return false;
+  const h=cfg.h||null,e=ease80(h,cfg.st||'wis');
+  const ov=document.createElement('div');ov.id='ub80';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');
+  ov.innerHTML='<div class="box"><h2></h2><p class="hint"></p><canvas width="320" height="144"></canvas><div class="hud"><span class="g"></span><span class="b"></span></div><div class="btns"></div><p class="res" aria-live="polite"></p><div class="row2"><span class="keys"></span><button type="button" class="quit">Aufhören (Esc)</button></div></div>';
+  ov.querySelector('h2').textContent=cfg.title||UBN80[cfg.ub80];
+  ov.querySelector('.hint').textContent=G.hint+(h?' Dein '+STN80[cfg.st||'wis']+'-Wert ('+(e>=0?'+':'')+e+') macht es '+(e>=2?'deutlich ':'')+(e>=0?'leichter.':'schwerer.'):'');
+  document.body.appendChild(ov);const cv=ov.querySelector('canvas'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
+  const U=UB80={cfg,cb,ov,cv,cx,G,h,e,ph:'ready',t:0,res:{},dn:{},raf:0,last:performance.now(),fl:[]};
+  ov.querySelector('.keys').textContent=G.keys||'Leertaste: los';ov.querySelector('.quit').onclick=()=>ubEnd80(true);
+  try{G.init(U)}catch(err){console.warn('ub80 init',err)}ubBtns80([{k:'los',l:'Los geht’s'}]);ubHud80();
+  U.kd=ev=>{if(UB80!==U)return;const k=(ev.key||'').toLowerCase();if(ev.repeat&&U.dn[k])return ev.preventDefault();
+    if(k==='escape'){ev.preventDefault();ev.stopImmediatePropagation();return ubEnd80(true)}
+    if(ev.target&&ev.target.tagName==='BUTTON'&&(k===' '||k==='enter')){ev.stopImmediatePropagation();return}
+    ev.preventDefault();ev.stopImmediatePropagation();U.dn[k]=1;
+    if(U.ph==='ready'&&(k===' '||k==='enter'))return ubStart80();if(U.ph==='end'&&(k===' '||k==='enter'))return ubEnd80(false);
+    if(U.ph==='play'&&G.key)G.key(U,k,true)};
+  U.ku=ev=>{if(UB80!==U)return;const k=(ev.key||'').toLowerCase();U.dn[k]=0;if(U.ph==='play'&&G.key)G.key(U,k,false)};
+  window.addEventListener('keydown',U.kd,true);window.addEventListener('keyup',U.ku,true);
+  const pos=ev=>{const r=cv.getBoundingClientRect();return[(ev.clientX-r.left)*320/r.width,(ev.clientY-r.top)*144/r.height]};
+  cv.addEventListener('pointerdown',ev=>{ev.preventDefault();if(U.ph==='ready')return ubStart80();if(U.ph==='play'&&G.click){const p=pos(ev);G.click(U,p[0],p[1],true)}});
+  cv.addEventListener('pointerup',ev=>{if(U.ph==='play'&&G.click){const p=pos(ev);G.click(U,p[0],p[1],false)}});
+  const loop=now=>{if(UB80!==U)return;const dt=Math.min(.05,(now-U.last)/1000);U.last=now;
+    if(U.ph==='play'){U.t+=dt;try{G.step(U,dt)}catch(err){console.warn('ub80 step',err)}}
+    try{cx.clearRect(0,0,320,144);G.draw(U,cx,now);ubFl80(U,cx,now)}catch(err){console.warn('ub80 draw',err)}
+    U.raf=requestAnimationFrame(loop)};U.raf=requestAnimationFrame(loop);
+  setTimeout(()=>{const f=ov.querySelector('.btns button');if(f)f.focus()},50);return true}
+function ubBtns80(list){const U=UB80;if(!U)return;U.btns=list;const box=U.ov.querySelector('.btns');box.innerHTML='';
+  list.forEach(b=>{const el=document.createElement('button');el.type='button';el.textContent=b.l;el.dataset.k=b.k;
+    if(b.hold){const up=()=>{el.classList.remove('dn');if(UB80===U&&U.ph==='play')U.G.btn(U,b.k,false)};
+      el.onpointerdown=ev=>{ev.preventDefault();el.classList.add('dn');if(UB80===U&&U.ph==='play')U.G.btn(U,b.k,true)};el.onpointerup=up;el.onpointerleave=up;el.onpointercancel=up}
+    else el.onclick=()=>{if(b.k==='los')return ubStart80();if(b.k==='weiter')return ubEnd80(false);if(UB80===U&&U.ph==='play')U.G.btn(U,b.k,true)};
+    box.appendChild(el)})}
+function ubHud80(l,r){const U=UB80;if(!U)return;U.ov.querySelector('.g').textContent=l||'';U.ov.querySelector('.b').textContent=r||''}
+function ubStart80(){const U=UB80;if(!U||U.ph!=='ready')return;U.ph='play';U.t=0;U.ov.querySelector('.res').textContent='';
+  try{U.G.init(U);if(U.G.start)U.G.start(U)}catch(err){console.warn('ub80 start',err)}ubBtns80(U.G.btns?U.G.btns(U):[]);tn80(520,90,'triangle',.03)}
+function ubFl80(U,cx,now){U.fl=U.fl.filter(f=>now-f.t<900);U.fl.forEach(f=>{const a=1-(now-f.t)/900;cx.globalAlpha=Math.max(0,a);txt80(cx,f.s,f.x,f.y-(1-a)*10,f.c);cx.globalAlpha=1})}
+function fl80(U,s,x,y,c){U.fl.push({s,x,y,c:c||'#fffbe6',t:performance.now()})}
+// Ende: ok = geschafft; txt = Zeile unter dem Spiel
+function ubWin80(U,ok,txt,perf){if(!U||U.ph!=='play')return;U.ph='end';U.res.ok=!!ok;U.res.allPerfect=!!perf;
+  U.ov.querySelector('.res').innerHTML=(ok?'<b style="color:#9fe8a8">Geschafft!</b> ':'<b style="color:#ff9a8a">Noch nicht.</b> ')+(txt||'');
+  ubBtns80([{k:'weiter',l:'Weiter'}]);setTimeout(()=>{const f=U.ov.querySelector('.btns button');if(f)f.focus()},30);tn80(ok?660:200,260,ok?'triangle':'sine',.04)}
+function ubEnd80(abort){const U=UB80;if(!U)return;cancelAnimationFrame(U.raf);window.removeEventListener('keydown',U.kd,true);window.removeEventListener('keyup',U.ku,true);U.ov.remove();UB80=null;
+  const r=Object.assign({},U.res);if(abort||U.ph!=='end'){r.aborted=true;r.ok=false}try{U.cb&&U.cb(r)}catch(err){console.warn(err)}try{renderAll()}catch(err){}}
+// ---------- Zeichenhilfen (eigene Pixel, Hauspalette) ----------
+function rc80(cx,x,y,w,h,c){cx.fillStyle=c;cx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+function txt80(cx,s,x,y,c,sz){cx.fillStyle=c||'#f3ead6';cx.font=(sz||8)+'px "Pixelify Sans",monospace';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(s,Math.round(x),Math.round(y))}
+function bg80(cx,top,bot){const g=cx.createLinearGradient(0,0,0,144);g.addColorStop(0,top);g.addColorStop(1,bot);cx.fillStyle=g;cx.fillRect(0,0,320,144)}
+function rnd80(a,b){return a+Math.random()*(b-a)}
+function shuf80(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+// ---------- Die Spiele ----------
+const UBG80={};
+// 1. Wind am Hang (Ilse, Kiefernruhe): eine junge Kiefer gegen Böen gerade halten
+UBG80.wind={hint:'Eine junge Kiefer am Hang, der Wind dreht. Halte sie mit ← und → (oder den Knöpfen) gerade, bis der Wind nachlässt. Nicht hektisch werden: wer zu fest drückt, kippt sie selbst um.',keys:'Tasten: ← → gedrückt halten',
+  init(U){U.s={a:0,v:0,w:0,wt:0,nx:1.2,T:Math.max(10,16-U.e),L:0,R:0,max:.78}},
+  btns(){return[{k:'L',l:'← stützen',hold:1},{k:'R',l:'stützen →',hold:1}]},
+  key(U,k,d){if(k==='arrowleft'||k==='a')U.s.L=d?1:0;if(k==='arrowright'||k==='d')U.s.R=d?1:0},btn(U,k,d){U.s[k]=d?1:0},
+  step(U,dt){const s=U.s;s.nx-=dt;if(s.nx<=0){s.nx=rnd80(1,2.4)-U.e*.05;const str=.55+U.t*.035-U.e*.05;s.wt=(Math.random()<.5?-1:1)*rnd80(.4,1)*str}
+    s.w+=(s.wt-s.w)*Math.min(1,dt*2.5);const push=(s.R-s.L)*1.5;s.v+=(s.w*1.15+push+s.a*.9-s.v*1.6)*dt;s.a+=s.v*dt;
+    ubHud80('Halten: '+Math.floor(U.t)+' / '+s.T+' s','Neigung '+Math.round(Math.abs(s.a)/s.max*100)+' %');
+    if(Math.abs(s.a)>s.max){tn80(140,300,'sawtooth',.03);return ubWin80(U,false,'Die Kiefer ist umgekippt. „Gegen den Hang, nicht gegen den Wind“, sagt Ilse.')}
+    if(U.t>=s.T)ubWin80(U,true,'Der Wind legt sich. Die Kiefer steht – ein bisschen schief, aber sie steht.',Math.abs(s.a)<.2)},
+  draw(U,cx,now){const s=U.s;bg80(cx,'#1b2340','#3a3a5a');rc80(cx,0,0,320,144,'rgba(0,0,0,0)');
+    cx.fillStyle='#2c4a2a';cx.beginPath();cx.moveTo(0,144);cx.lineTo(0,98);cx.lineTo(320,128);cx.lineTo(320,144);cx.fill();cx.fillStyle='#3d6235';cx.fillRect(0,124,320,20);
+    for(let i=0;i<14;i++){const x=(i*29+now*.06*Math.sign(s.w||1)*Math.abs(s.w)*3)%340-10;const y=20+(i*37)%70;rc80(cx,x,y,8+Math.abs(s.w)*14,1,'rgba(220,230,255,'+(.15+Math.abs(s.w)*.4)+')')}
+    const px=160,py=116;cx.save();cx.translate(px,py);cx.rotate(s.a);rc80(cx,-2,-44,4,44,'#5a3a22');
+    [[-16,-26,32,8],[-13,-34,26,8],[-10,-42,20,7],[-6,-49,12,7],[-3,-54,6,5]].forEach(([x,y,w,h],i)=>rc80(cx,x,y,w,h,i%2?'#2f6b3a':'#3e8a48'));cx.restore();
+    rc80(cx,px-10,py-2,20,4,'#4a3020');const wx=160+s.w*60;rc80(cx,Math.min(160,wx),8,Math.abs(wx-160),4,'#cfe0ff');txt80(cx,s.w<-.05?'◀ Wind':s.w>.05?'Wind ▶':'still',160,18,'#cfe0ff');
+    rc80(cx,10,132,300*Math.min(1,U.t/s.T),4,'#9fe8a8');if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,70,'#f6c84a',10)}};
+// 2. Klopf-Echo (Ilse, Kapsel-Ruf): ein Klopfmuster nachklopfen
+UBG80.klopf={hint:'Ilse klopft ein Muster auf die Kapsel. Hör genau hin und klopf es nach (Leertaste, Klick oder Knopf). Es kommt auf die Abstände an, nicht auf die Geschwindigkeit.',keys:'Taste: Leertaste',
+  init(U){U.s={r:0,lens:[3,4,5],need:3,ok:0,lives:1+(U.e>=2?1:0),ph:'zeig',pat:[],tap:[],t0:0,k:[],flash:0}},
+  start(U){this.neu(U)},neu(U){const s=U.s,n=s.lens[Math.min(s.r,s.lens.length-1)];s.pat=[0];for(let i=1;i<n;i++)s.pat.push(s.pat[i-1]+(Math.random()<.5?320:620));s.ph='zeig';s.t0=U.t+.6;s.tap=[];s.k=[]},
+  btns(){return[{k:'klopf',l:'Klopfen'}]},key(U,k,d){if(d&&(k===' '||k==='enter'))this.btn(U,'klopf',true)},click(U,x,y,d){if(d)this.btn(U,'klopf',true)},
+  btn(U,k,d){const s=U.s;if(!d||s.ph!=='dein')return;s.tap.push(U.t*1000);s.flash=U.t;tn80(300,70,'square',.035);if(s.tap.length>=s.pat.length)this.pruef(U)},
+  pruef(U){const s=U.s,tol=.3+U.e*.035;let bad=0;for(let i=1;i<s.pat.length;i++){const pi=s.pat[i]-s.pat[i-1],pp=s.tap[i]-s.tap[i-1];if(Math.abs(pp-pi)/pi>tol)bad++}
+    if(!bad){s.ok++;s.r++;fl80(U,'Es klopft zurück!',160,30,'#9fe8a8');tn80(660,120,'triangle',.04)}else{s.lives--;fl80(U,'Daneben',160,30,'#ff9a8a')}
+    if(s.ok>=s.need)return ubWin80(U,true,'Aus dem Regal klickt es leise zurück.',s.lives>=1+(U.e>=2?1:0));
+    if(s.lives<0)return ubWin80(U,false,'„Nicht wie einen Hund rufen“, sagt Ilse. „Wie einen Freund.“');s.ph='pause';s.t0=U.t+1.2},
+  step(U){const s=U.s;ubHud80('Muster: '+s.ok+' / '+s.need,'Fehlversuche frei: '+Math.max(0,s.lives));
+    if(s.ph==='pause'&&U.t>=s.t0)this.neu(U);
+    if(s.ph==='zeig'){const ms=(U.t-s.t0)*1000;s.pat.forEach((p,i)=>{if(ms>=p&&!s.k[i]){s.k[i]=1;s.flash=U.t;tn80(250,80,'square',.04)}});if(ms>s.pat[s.pat.length-1]+500){s.ph='dein';s.tap=[]}}
+    if(s.ph==='dein'&&s.tap.length&&U.t*1000-s.tap[s.tap.length-1]>2600){s.tap=s.pat.map(()=>0);this.pruef(U)}},
+  draw(U,cx){const s=U.s;bg80(cx,'#2a1d18','#140e0c');rc80(cx,0,104,320,40,'#5a3a22');rc80(cx,0,104,320,3,'#7a5232');
+    const f=Math.max(0,1-(U.t-s.flash)*4);const cxp=160,cyp=78;
+    // eigene Kapsel: eine liegende Messing-Pille mit Naht und Nieten (kein fremdes Vorbild)
+    const pill=(x,y,w,h,c)=>{cx.fillStyle=c;cx.beginPath();cx.moveTo(x+h/2,y);cx.lineTo(x+w-h/2,y);cx.arc(x+w-h/2,y+h/2,h/2,-Math.PI/2,Math.PI/2);cx.lineTo(x+h/2,y+h);cx.arc(x+h/2,y+h/2,h/2,Math.PI/2,Math.PI*1.5);cx.fill()};
+    pill(cxp-34,cyp-14,68,28,'#3a2a1a');pill(cxp-32,cyp-12,64,24,'#c8a060');cx.save();cx.beginPath();cx.rect(cxp,cyp-14,40,28);cx.clip();pill(cxp-32,cyp-12,64,24,'#3a6a5a');cx.restore();
+    rc80(cx,cxp-1,cyp-12,2,24,'#2a1d18');rc80(cx,cxp-26,cyp-8,10,2,'#e8d090');[-20,-8,8,20].forEach(dx=>rc80(cx,cxp+dx,cyp+6,2,2,'#2a1d18'));
+    if(f>0){cx.strokeStyle='rgba(246,200,74,'+f+')';cx.lineWidth=2;cx.beginPath();cx.arc(cxp,cyp,26+(1-f)*16,0,7);cx.stroke()}
+    txt80(cx,s.ph==='zeig'?'Ilse klopft …':s.ph==='dein'?'Jetzt du!':'',160,22,s.ph==='dein'?'#f6c84a':'#cfc6b4',10);
+    s.pat.forEach((p,i)=>rc80(cx,160-s.pat.length*7+i*14,118,8,8,s.ph==='dein'?(i<s.tap.length?'#f6c84a':'#4a4058'):(s.k[i]?'#cfc6b4':'#4a4058')));
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,46,'#f6c84a',10)}};
+// 3. Wo ist die Karte? (Mette, Kartenblick): einer Karte beim Mischen folgen
+UBG80.huetchen={hint:'Mette zeigt dir eine Karte und mischt sie unter zwei andere. Folge ihr mit den Augen und tipp sie an (oder Taste 1–3). Drei Runden, zwei musst du treffen.',keys:'Tasten: 1 · 2 · 3',
+  init(U){U.s={r:0,ok:0,need:2,R:3,pos:[0,1,2],ziel:0,ph:'zeig',t0:0,sw:[],cur:null,pick:-1}},
+  start(U){this.neu(U)},neu(U){const s=U.s;s.pos=[0,1,2];s.ziel=Math.floor(Math.random()*3);s.ph='zeig';s.t0=U.t;s.pick=-1;
+    const n=5+s.r*2,d=Math.max(.24,(.55-s.r*.07-U.e*.03));s.sw=[];for(let i=0;i<n;i++){const a=Math.floor(Math.random()*3);let b=Math.floor(Math.random()*2);if(b>=a)b++;s.sw.push([a,b])}s.d=d;s.i=0},
+  key(U,k,d){if(d&&/^[123]$/.test(k))this.wahl(U,+k-1)},click(U,x,y,d){if(!d)return;const s=U.s;for(let c=0;c<3;c++){const p=this.xy(s,c);if(Math.abs(x-p[0])<22&&Math.abs(y-p[1])<30)return this.wahl(U,c)}},
+  xy(s,c){const slot=s.pos[c];let x=80+slot*80,y=74;if(s.cur&&(s.cur.a===c||s.cur.b===c)){const k=s.cur.k,from=s.cur.f[c],to=s.cur.to[c];x=80+(from+(to-from)*k)*80;y=74+(s.cur.a===c?-1:1)*Math.sin(k*Math.PI)*16}return[x,y]},
+  wahl(U,c){const s=U.s;if(s.ph!=='wahl')return;s.pick=c;s.ph='auf';s.t0=U.t;if(c===s.ziel){s.ok++;fl80(U,'Hehe. Gut, Kind.',160,18,'#9fe8a8');tn80(700,120,'triangle',.04)}else{fl80(U,'Hehe. Nein.',160,18,'#ff9a8a');tn80(180,140,'sine',.03)}},
+  step(U){const s=U.s;ubHud80('Getroffen: '+s.ok+' / '+s.need,'Runde '+Math.min(s.R,s.r+1)+' / '+s.R);
+    if(s.ph==='zeig'&&U.t-s.t0>1.6){s.ph='misch';s.t0=U.t}
+    if(s.ph==='misch'){if(!s.cur){if(s.i>=s.sw.length){s.ph='wahl';return}const[a,b]=s.sw[s.i];s.cur={a,b,k:0,f:{[a]:s.pos[a],[b]:s.pos[b]},to:{[a]:s.pos[b],[b]:s.pos[a]},t0:U.t};tn80(420,30,'square',.015)}
+      s.cur.k=Math.min(1,(U.t-s.cur.t0)/s.d);if(s.cur.k>=1){const t=s.pos[s.cur.a];s.pos[s.cur.a]=s.pos[s.cur.b];s.pos[s.cur.b]=t;s.cur=null;s.i++}}
+    if(s.ph==='auf'&&U.t-s.t0>1.3){s.r++;if(s.ok>=s.need)return ubWin80(U,true,'„Die Karte zeigt, was als Nächstes kommt, wenn keiner was ändert.“',s.ok>=s.R);
+      if(s.ok+(s.R-s.r)<s.need)return ubWin80(U,false,'Mette sammelt die Karten ein. „Komm wieder, Kind.“');this.neu(U)}},
+  draw(U,cx){const s=U.s;bg80(cx,'#1d3a2a','#0f2218');rc80(cx,20,30,280,100,'#1a5a36');rc80(cx,20,30,280,2,'#2c7a4a');
+    for(let c=0;c<3;c++){const[x,y]=this.xy(s,c);const up=(s.ph==='zeig'||s.ph==='auf'||U.ph!=='play');rc80(cx,x-16,y-22,32,44,'#0b0a0d');
+      if(up&&c===s.ziel){rc80(cx,x-15,y-21,30,42,'#f3ead6');rc80(cx,x-5,y-8,10,16,'#c8382c');rc80(cx,x-8,y-5,16,10,'#c8382c')}
+      else if(up){rc80(cx,x-15,y-21,30,42,'#f3ead6');rc80(cx,x-4,y-4,8,8,'#3a3346')}
+      else{rc80(cx,x-15,y-21,30,42,'#5a2a6a');for(let i=0;i<5;i++)rc80(cx,x-12+i*5,y-18,2,36,'#7a4a8a')}
+      if(s.ph==='wahl')txt80(cx,String(c+1),x,y+30,'#f6c84a');if(s.pick===c&&s.ph==='auf')rc80(cx,x-16,y+24,32,2,c===s.ziel?'#9fe8a8':'#ff9a8a')}
+    if(s.ph==='wahl')txt80(cx,'Wo ist sie?',160,16,'#f6c84a',10);if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,16,'#f6c84a',10)}};
+// 4. Fässer stapeln (Sanlep, Fässer stemmen): pendelndes Fass im richtigen Moment fallen lassen
+UBG80.fass={hint:'Das Fass pendelt über dem Stapel. Lass es fallen (Leertaste, Klick oder Knopf), wenn es genau über dem oberen Fass hängt. Sechs Fässer, und der Stapel darf nicht kippen.',keys:'Taste: Leertaste',
+  init(U){U.s={st:[{x:160}],x:60,dir:1,v:70-U.e*6,fall:null,lean:0,goal:6,W:38,H:13}},
+  btns(){return[{k:'drop',l:'Fallen lassen'}]},key(U,k,d){if(d&&(k===' '||k==='enter'))this.btn(U,'drop',true)},click(U,x,y,d){if(d)this.btn(U,'drop',true)},
+  btn(U,k,d){const s=U.s;if(!d||s.fall)return;s.fall={x:s.x,y:16}},
+  step(U,dt){const s=U.s;const n=s.st.length-1;ubHud80('Fässer: '+n+' / '+s.goal,'Schieflage '+Math.round(Math.abs(s.lean))+' / 24');
+    if(!s.fall){s.x+=s.dir*(s.v+n*9)*dt;if(s.x>280){s.x=280;s.dir=-1}if(s.x<40){s.x=40;s.dir=1}return}
+    const topY=128-s.st.length*s.H;s.fall.y+=dt*260;if(s.fall.y<topY-s.H)return;
+    const top=s.st[s.st.length-1],d=s.fall.x-top.x;s.fall=null;
+    if(Math.abs(d)>s.W*.6){tn80(120,300,'sawtooth',.03);return ubWin80(U,false,'Das Fass rollt vom Stapel. Sanlep seufzt und holt das nächste.')}
+    s.lean+=d*.55;s.st.push({x:top.x+d});tn80(180+n*30,90,'square',.03);fl80(U,Math.abs(d)<4?'Sitzt!':'wackelt …',top.x+d,topY-20,Math.abs(d)<4?'#9fe8a8':'#ffcf5a');
+    if(Math.abs(s.lean)>24){tn80(110,400,'sawtooth',.03);return ubWin80(U,false,'Der Stapel neigt sich … und kippt. Krachend.')}
+    if(s.st.length-1>=s.goal)ubWin80(U,true,'Sechs Fässer, und keins wackelt. Sanlep nickt anerkennend.',Math.abs(s.lean)<6)},
+  draw(U,cx){const s=U.s;bg80(cx,'#2a1d18','#1a120e');rc80(cx,0,128,320,16,'#4a3020');
+    const fass=(x,y,a)=>{cx.save();cx.translate(x,y);cx.rotate(a||0);rc80(cx,-s.W/2,-s.H,s.W,s.H,'#8a5a32');rc80(cx,-s.W/2,-s.H+2,s.W,2,'#3a2a1a');rc80(cx,-s.W/2,-3,s.W,2,'#3a2a1a');rc80(cx,-s.W/2+2,-s.H+1,2,s.H-2,'#a87442');cx.restore()};
+    const tilt=s.lean/400;s.st.forEach((b,i)=>{if(i===0){rc80(cx,b.x-30,118,60,10,'#5a3a22');return}fass(b.x,128-(i-1)*s.H-10+0,tilt*i)});
+    if(U.ph==='play'&&!s.fall){rc80(cx,s.x,0,1,8,'#cfc6b4');fass(s.x,22)}if(s.fall)fass(s.fall.x,s.fall.y);
+    if(U.ph==='ready'){fass(s.x,22);txt80(cx,'Leertaste oder Klick: los',160,60,'#f6c84a',10)}}};
+// 5. Tee aufgießen (Odo, Aufguss): gedrückt halten, im grünen Bereich loslassen
+UBG80.tee={hint:'Halte gedrückt, um heißes Wasser aufzugießen, und lass im grünen Bereich los. Zu früh ist er dünn, zu spät bitter. Drei Tassen, zwei müssen schmecken.',keys:'Taste: Leertaste gedrückt halten',
+  init(U){U.s={i:0,ok:0,R:3,need:2,v:0,on:0,z:0,zw:12+U.e*2,ph:'warte',t0:0}},start(U){this.neu(U)},neu(U){const s=U.s;s.v=0;s.on=0;s.z=rnd80(45,82-s.zw);s.ph='warte'},
+  btns(){return[{k:'gies',l:'Aufgießen (halten)',hold:1}]},key(U,k,d){if(k===' '||k==='enter')this.btn(U,'gies',d)},click(U,x,y,d){this.btn(U,'gies',d)},
+  btn(U,k,d){const s=U.s;if(s.ph==='warte'&&d){s.on=1;s.ph='gies';return}if(s.ph==='gies'&&!d){s.on=0;this.urteil(U)}},
+  urteil(U){const s=U.s;const ok=s.v>=s.z&&s.v<=s.z+s.zw;s.i++;if(ok){s.ok++;fl80(U,'Genau richtig.',160,20,'#9fe8a8');tn80(620,120,'triangle',.04)}else fl80(U,s.v<s.z?'Zu dünn.':'Bitter!',160,20,'#ff9a8a');s.ph='pause';s.t0=U.t},
+  step(U,dt){const s=U.s;ubHud80('Tassen gut: '+s.ok+' / '+s.need,'Tasse '+Math.min(s.R,s.i+1)+' / '+s.R);
+    if(s.ph==='gies'){s.v+=(14+s.v*.9)*dt*(1-U.e*.04);if(s.v>=100){s.v=100;s.on=0;this.urteil(U)}}
+    if(s.ph==='pause'&&U.t-s.t0>1.1){if(s.ok>=s.need)return ubWin80(U,true,'„So schmeckt er“, sagt Odo leise. „Merk dir die Hand, nicht die Zahl.“',s.ok>=s.R);
+      if(s.ok+(s.R-s.i)<s.need)return ubWin80(U,false,'Odo gießt den Tee weg. „Noch mal. Morgen.“');this.neu(U)}},
+  draw(U,cx){const s=U.s;bg80(cx,'#22302a','#121a16');rc80(cx,0,112,320,32,'#4a3a2a');rc80(cx,130,72,60,40,'#e8e0cc');rc80(cx,134,76,52,32,'#2a1d18');
+    const lv=Math.min(1,s.v/100),col=s.v<s.z?'#c8a060':s.v<=s.z+s.zw?'#9a6a2a':'#5a2a14';rc80(cx,134,108-32*lv,52,32*lv,col);rc80(cx,190,82,10,4,'#e8e0cc');rc80(cx,196,82,4,16,'#e8e0cc');
+    if(s.on){rc80(cx,158,10,4,62,'rgba(200,220,255,.6)');rc80(cx,140,0,40,10,'#6a6a7a')}
+    rc80(cx,250,20,14,100,'#0b0a0d');rc80(cx,251,21+98*(1-(s.z+s.zw)/100),12,98*s.zw/100,'#2c7a4a');rc80(cx,248,120-100*lv,18,2,'#f6c84a');txt80(cx,'bitter',257,14,'#cfc6b4');txt80(cx,'dünn',257,128,'#cfc6b4');
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,40,'#f6c84a',10)}};
+// 6. Tee ziehen lassen (Odo, Teeweg): die Farbe beobachten und im richtigen Moment den Beutel ziehen
+UBG80.teeweg={hint:'Der Tee zieht von allein. Achte auf die Farbe und zieh den Beutel (Leertaste, Klick), wenn er die Farbe der Probe oben links hat. Drei Kannen, zwei müssen stimmen.',keys:'Taste: Leertaste',
+  init(U){U.s={i:0,ok:0,R:3,need:2,v:0,z:0,ph:'zieh',t0:0,sp:0}},start(U){this.neu(U)},neu(U){const s=U.s;s.v=0;s.z=rnd80(35,85);s.sp=rnd80(9,15);s.ph='zieh'},
+  btns(){return[{k:'zieh',l:'Beutel ziehen'}]},key(U,k,d){if(d&&(k===' '||k==='enter'))this.btn(U,'zieh',true)},click(U,x,y,d){if(d)this.btn(U,'zieh',true)},
+  col(v){const k=Math.min(1,v/100);const r=Math.round(220-150*k),g=Math.round(190-150*k),b=Math.round(120-100*k);return'rgb('+r+','+g+','+b+')'},
+  btn(U,k,d){const s=U.s;if(!d||s.ph!=='zieh')return;const tol=7+U.e*1.2,ok=Math.abs(s.v-s.z)<=tol;s.i++;if(ok){s.ok++;fl80(U,'Genau so.',160,20,'#9fe8a8');tn80(620,120,'triangle',.04)}else fl80(U,s.v<s.z?'Zu hell.':'Zu dunkel.',160,20,'#ff9a8a');s.ph='pause';s.t0=U.t},
+  step(U,dt){const s=U.s;ubHud80('Kannen gut: '+s.ok+' / '+s.need,'Kanne '+Math.min(s.R,s.i+1)+' / '+s.R);
+    if(s.ph==='zieh'){s.v+=s.sp*dt;if(s.v>=100){s.v=100;this.btn(U,'zieh',true)}}
+    if(s.ph==='pause'&&U.t-s.t0>1.1){if(s.ok>=s.need)return ubWin80(U,true,'„Der Tee weiß, wann er fertig ist. Du musst nur hinsehen.“',s.ok>=s.R);
+      if(s.ok+(s.R-s.i)<s.need)return ubWin80(U,false,'Odo schüttelt den Kopf. „Du hast auf die Zeit geschaut, nicht auf den Tee.“');this.neu(U)}},
+  draw(U,cx){const s=U.s;bg80(cx,'#22302a','#121a16');rc80(cx,0,112,320,32,'#4a3a2a');rc80(cx,10,10,40,24,'#0b0a0d');rc80(cx,12,12,36,20,this.col(s.z));txt80(cx,'Probe',30,40,'#cfc6b4');
+    rc80(cx,120,50,80,62,'#d8d0bc');rc80(cx,124,54,72,54,this.col(s.v));rc80(cx,200,64,14,6,'#d8d0bc');rc80(cx,158,20,2,40,'#cfc6b4');if(s.ph==='zieh')rc80(cx,152,58,14,12,'#8a6a3a');
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,30,'#f6c84a',10)}};
+// 7. Rüben ziehen (Krumm, Erdwurzel): Rüben ziehen, Rostmilben in Ruhe lassen
+UBG80.ruebe={hint:'Auf Krumms Feld schauen Rüben aus der Erde – zieh sie (Klick oder Taste 1–6). Manchmal ist es eine Rostmilbe: die lässt du in Ruhe. Zehn Rüben in 25 Sekunden.',keys:'Tasten: 1–6',
+  init(U){U.s={h:[0,1,2,3,4,5].map(()=>({k:null,t:0})),n:0,bad:0,goal:10,T:25,nx:.5,stay:1.15+U.e*.09}},
+  key(U,k,d){if(d&&/^[1-6]$/.test(k))this.hit(U,+k-1)},click(U,x,y,d){if(!d)return;for(let i=0;i<6;i++){const p=this.xy(i);if(Math.abs(x-p[0])<24&&Math.abs(y-p[1])<20)return this.hit(U,i)}},
+  xy(i){return[70+(i%3)*90,58+Math.floor(i/3)*46]},
+  hit(U,i){const s=U.s,o=s.h[i];if(!o.k)return;const p=this.xy(i);if(o.k==='r'){s.n++;fl80(U,'+1',p[0],p[1]-20,'#9fe8a8');tn80(500+s.n*20,70,'triangle',.035)}else{s.bad++;fl80(U,'Autsch!',p[0],p[1]-20,'#ff9a8a');tn80(150,160,'sawtooth',.03)}o.k=null},
+  step(U,dt){const s=U.s;ubHud80('Rüben: '+s.n+' / '+s.goal,'Zeit '+Math.max(0,Math.ceil(s.T-U.t))+' s · Milben gestört: '+s.bad+' / 2');
+    if(s.bad>2)return ubWin80(U,false,'Die Milben haben genug von dir. Krumm lacht so, dass ihm die Mütze runterfällt.');
+    if(s.n>=s.goal)return ubWin80(U,true,'Krumm wiegt die Rüben in der Hand. „Du hast mit den Füßen gezogen, nicht mit den Armen. Gut.“',s.bad===0);
+    if(U.t>=s.T)return ubWin80(U,false,'Die Zeit ist um. '+s.n+' Rüben im Korb.');
+    s.h.forEach(o=>{if(o.k&&U.t>o.t)o.k=null});s.nx-=dt;if(s.nx<=0){s.nx=rnd80(.45,.85);const fr=s.h.map((o,i)=>o.k?-1:i).filter(i=>i>=0);if(fr.length){const i=fr[Math.floor(Math.random()*fr.length)];s.h[i]={k:Math.random()<.24?'m':'r',t:U.t+s.stay}}}},
+  draw(U,cx){const s=U.s;bg80(cx,'#2a3a22','#1a2414');rc80(cx,0,30,320,114,'#4a3a22');
+    for(let i=0;i<6;i++){const[x,y]=this.xy(i);rc80(cx,x-18,y+4,36,8,'#2a1d12');const o=s.h[i];
+      if(o.k==='r'){rc80(cx,x-6,y-6,12,10,'#e8862a');rc80(cx,x-6,y-16,3,10,'#3e8a48');rc80(cx,x-1,y-19,3,13,'#4aa858');rc80(cx,x+4,y-15,3,9,'#3e8a48')}
+      if(o.k==='m'){rc80(cx,x-9,y-6,18,10,'#8a4a22');rc80(cx,x-7,y-8,14,3,'#a8602e');[-10,-5,4,9].forEach(dx=>rc80(cx,x+dx,y+3,2,4,'#5a2a12'));rc80(cx,x-4,y-4,2,2,'#f3ead6');rc80(cx,x+2,y-4,2,2,'#f3ead6')}
+      txt80(cx,String(i+1),x,y+20,'#8a8496')}
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,16,'#f6c84a',10)}};
+// 8. Trittsteine (Ottmar, Kranichschritt): einen gezeigten Weg über Steine aus dem Gedächtnis nachspringen
+UBG80.stein={hint:'Ottmar springt einen Weg über die Steine vor. Merk ihn dir und spring ihn nach, Stein für Stein (anklicken). Wer daneben tritt, wird nass. Zwei Wege.',keys:'Maus oder Finger',
+  init(U){U.s={r:0,R:2,lives:U.e>=2?1:0,ph:'zeig',path:[],i:0,t0:0,wet:-9}},start(U){this.neu(U)},
+  neu(U){const s=U.s,len=s.r?7:5;let row=Math.floor(Math.random()*4),col=0;s.path=[[col,row]];while(s.path.length<len){const opts=[];if(col<5)opts.push([col+1,row]);if(s.r&&row>0)opts.push([col,row-1]);if(s.r&&row<3)opts.push([col,row+1]);if(col<5&&row>0)opts.push([col+1,row-1]);if(col<5&&row<3)opts.push([col+1,row+1]);
+      const c=opts.filter(p=>!s.path.some(q=>q[0]===p[0]&&q[1]===p[1]));if(!c.length)break;const p=c[Math.floor(Math.random()*c.length)];col=p[0];row=p[1];s.path.push(p)}
+    s.ph='zeig';s.i=0;s.t0=U.t+.5;s.sh=Math.max(.32,.62-s.r*.12-U.e*.03)},
+  xy(c,r){return[40+c*48,34+r*26]},
+  click(U,x,y,d){const s=U.s;if(!d||s.ph!=='dein')return;for(let c=0;c<6;c++)for(let r=0;r<4;r++){const p=this.xy(c,r);if(Math.abs(x-p[0])<16&&Math.abs(y-p[1])<11){const w=s.path[s.i];
+        if(w[0]===c&&w[1]===r){s.i++;tn80(400+s.i*40,60,'triangle',.03);if(s.i>=s.path.length){s.r++;fl80(U,'Trocken drüben!',160,12,'#9fe8a8');if(s.r>=s.R)return ubWin80(U,true,'Ottmar nickt. „Leicht wie ein Kranich. Na ja. Wie ein junger Kranich.“',s.lives===(U.e>=2?1:0));s.ph='p';s.t0=U.t}}
+        else{s.wet=U.t;tn80(120,200,'sine',.04);fl80(U,'Platsch!',p[0],p[1]-12,'#8ac8ff');s.lives--;if(s.lives<0)return ubWin80(U,false,'Nass bis zu den Knien. Ottmar reicht dir ein Tuch.');s.ph='p';s.t0=U.t}return}}},
+  step(U){const s=U.s;ubHud80('Wege: '+s.r+' / '+s.R,s.ph==='dein'?'Stein '+(s.i+1)+' / '+s.path.length:'Ottmar springt vor …');
+    if(s.ph==='zeig'&&U.t-s.t0>s.path.length*s.sh+.3)s.ph='dein';if(s.ph==='p'&&U.t-s.t0>1)this.neu(U)},
+  draw(U,cx){const s=U.s;bg80(cx,'#1a3a5a','#0e2236');for(let i=0;i<20;i++)rc80(cx,(i*47+U.t*20)%330-10,10+(i*23)%130,10,1,'#3a6a9a');
+    rc80(cx,0,0,16,144,'#3d6235');rc80(cx,304,0,16,144,'#3d6235');
+    const k=s.ph==='zeig'?Math.floor((U.t-s.t0)/s.sh):-1;
+    for(let c=0;c<6;c++)for(let r=0;r<4;r++){const[x,y]=this.xy(c,r);let col='#7a7a86';const pi=s.path.findIndex(p=>p[0]===c&&p[1]===r);
+      if(s.ph==='zeig'&&pi>=0&&pi===k)col='#f6c84a';if(s.ph==='dein'&&pi>=0&&pi<s.i)col='#9fe8a8';rc80(cx,x-13,y-8,26,16,'#3a3a46');rc80(cx,x-12,y-9,24,14,col)}
+    if(U.t-s.wet<.6)rc80(cx,0,0,320,144,'rgba(140,200,255,.25)');if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,72,'#f6c84a',10)}};
+// 9. Aufstellung (Olaf, Formation): drei Wachen so stellen, dass alle Lücken gedeckt sind
+UBG80.aufstellung={hint:'Olaf zeigt dir einen Hof mit Lücken in der Mauer (rot). Stell drei Wachen auf (Feld anklicken, noch mal klicken nimmt sie weg). Eine Wache deckt ihre Reihe und Spalte, Felsen versperren die Sicht. Alle Lücken müssen gedeckt sein.',keys:'Maus oder Finger',
+  init(U){const s=U.s={N:5,fels:[],luek:[],w:[],T:75+U.e*8};for(let tries=0;tries<200;tries++){if(this.gen(s))break}},
+  gen(s){const N=s.N,key=(c,r)=>c+','+r,cells=[];for(let c=0;c<N;c++)for(let r=0;r<N;r++)cells.push([c,r]);shuf80(cells);
+    s.fels=cells.slice(0,3);const sol=cells.slice(3,6);s.w=[];const cov=this.deck(s,sol);const cand=[...cov].filter(k=>!sol.some(p=>key(p[0],p[1])===k));if(cand.length<6)return false;
+    s.luek=shuf80(cand).slice(0,6).map(k=>k.split(',').map(Number));
+    // Rätsel nicht zu leicht: mit nur zwei Wachen darf es nicht gehen
+    const free=cells.filter(p=>!this.besetzt(s,p[0],p[1]));for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){if(this.alle(s,[free[i],free[j]]))return false}return true},
+  besetzt(s,c,r){return s.fels.some(p=>p[0]===c&&p[1]===r)||s.luek.some(p=>p[0]===c&&p[1]===r)},
+  deck(s,W){const N=s.N,out=new Set();W.forEach(([c,r])=>{[[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>{let x=c+dx,y=r+dy;while(x>=0&&y>=0&&x<N&&y<N){if(s.fels.some(p=>p[0]===x&&p[1]===y))break;out.add(x+','+y);x+=dx;y+=dy}})});return out},
+  alle(s,W){const d=this.deck(s,W);return s.luek.every(p=>d.has(p[0]+','+p[1]))},
+  xy(c,r){return[100+c*24,16+r*24]},
+  click(U,x,y,d){const s=U.s;if(!d)return;const c=Math.floor((x-88)/24),r=Math.floor((y-4)/24);if(c<0||r<0||c>=s.N||r>=s.N)return;if(this.besetzt(s,c,r)){fl80(U,'Da geht nicht.',x,y-8,'#ff9a8a');return}
+    const i=s.w.findIndex(p=>p[0]===c&&p[1]===r);if(i>=0)s.w.splice(i,1);else if(s.w.length<3){s.w.push([c,r]);tn80(360,50,'square',.03)}else fl80(U,'Nur drei Wachen.',160,136,'#ffcf5a');
+    if(s.w.length===3&&this.alle(s,s.w))ubWin80(U,true,'Olaf geht die Mauer ab, Lücke für Lücke. „Hält“, sagt er nur. Bei ihm ist das ein Lob.',U.t<s.T*.5)},
+  step(U){const s=U.s;const d=this.deck(s,s.w),g=s.luek.filter(p=>d.has(p[0]+','+p[1])).length;ubHud80('Gedeckt: '+g+' / '+s.luek.length,'Wachen '+s.w.length+' / 3 · Zeit '+Math.max(0,Math.ceil(s.T-U.t))+' s');
+    if(U.t>=s.T)ubWin80(U,false,'Olaf schüttelt den Kopf. „Da kommt eine ganze Horde durch.“')},
+  draw(U,cx){const s=U.s;bg80(cx,'#2a2a34','#16161c');const d=this.deck(s,s.w);
+    for(let c=0;c<s.N;c++)for(let r=0;r<s.N;r++){const[x,y]=this.xy(c,r);const k=c+','+r;rc80(cx,x-11,y-11,22,22,d.has(k)?'#4a4a3a':'#3a3a46')}
+    s.fels.forEach(([c,r])=>{const[x,y]=this.xy(c,r);rc80(cx,x-9,y-7,18,14,'#7a7a86');rc80(cx,x-6,y-9,10,4,'#9a9aa6')});
+    s.luek.forEach(([c,r])=>{const[x,y]=this.xy(c,r);const ok=d.has(c+','+r);rc80(cx,x-10,y-10,20,20,ok?'#2c7a4a':'#8a2a2a');rc80(cx,x-6,y-2,12,4,ok?'#9fe8a8':'#ff9a8a')});
+    s.w.forEach(([c,r])=>{const[x,y]=this.xy(c,r);rc80(cx,x-4,y-9,8,6,'#e8c8a0');rc80(cx,x-5,y-3,10,10,'#3a5a8a');rc80(cx,x+5,y-11,1,18,'#cfc6b4')});
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,72,'#f6c84a',10)}};
+// 10. Randnotizen suchen (Folio/Hulda, Randnotiz): kleine rote Haken auf einer vollgeschriebenen Seite finden
+UBG80.suche={hint:'Auf der Seite stecken fünf Randnotizen: kleine Haken in roter Tinte. Finde mindestens vier, bevor die Kerze heruntergebrannt ist. Tintenkleckse zählen nicht – wer sie antippt, verliert Zeit.',keys:'Maus oder Finger',
+  init(U){const s=U.s={n:[],k:[],f:0,need:4,T:40+U.e*4,straf:0,lines:[]};const used=[];const frei=(x,y)=>used.every(p=>Math.abs(p[0]-x)>12||Math.abs(p[1]-y)>10);
+    for(let i=0;i<14;i++){const ln=[];let x=36;while(x<284){const w=rnd80(6,22);ln.push([x,w]);x+=w+rnd80(3,6)}s.lines.push(ln)}
+    while(s.n.length<5){const x=rnd80(30,290),y=rnd80(16,128);if(frei(x,y)){used.push([x,y]);s.n.push({x,y,f:0})}}
+    while(s.k.length<14){const x=rnd80(30,290),y=rnd80(16,128);if(frei(x,y)){used.push([x,y]);s.k.push({x,y,r:rnd80(1.5,3)})}}},
+  click(U,x,y,d){const s=U.s;if(!d)return;const n=s.n.find(o=>!o.f&&Math.abs(o.x-x)<7&&Math.abs(o.y-y)<7);if(n){n.f=1;s.f++;tn80(560+s.f*40,90,'triangle',.035);fl80(U,'Gefunden',n.x,n.y-8,'#9fe8a8');
+      if(s.f>=s.need)return ubWin80(U,true,'Am Rand steht, ganz klein: „Wer das liest, hat hingesehen.“',s.f>=5)}
+    else{s.straf+=2;tn80(160,100,'sine',.03);fl80(U,'−2 s',x,y-8,'#ff9a8a')}},
+  step(U){const s=U.s;const rest=s.T-U.t-s.straf;ubHud80('Randnotizen: '+s.f+' / '+s.need,'Kerze '+Math.max(0,Math.ceil(rest))+' s');if(rest<=0)ubWin80(U,false,'Die Kerze ist aus. '+s.f+' Notizen gefunden.')},
+  draw(U,cx){const s=U.s;bg80(cx,'#2a1d18','#140e0c');rc80(cx,20,6,280,132,'#e8dcc0');rc80(cx,20,6,280,2,'#c8b890');
+    s.lines.forEach((ln,i)=>ln.forEach(([x,w])=>rc80(cx,x,14+i*8.6,w,2,'#8a7a62')));
+    s.k.forEach(o=>{cx.fillStyle='#4a2a22';cx.beginPath();cx.arc(o.x,o.y,o.r,0,7);cx.fill()});
+    s.n.forEach(o=>{const c=o.f?'#2c7a4a':'#a8302a';rc80(cx,o.x-3,o.y-1,2,2,c);rc80(cx,o.x-1,o.y+1,2,2,c);rc80(cx,o.x+1,o.y-1,2,2,c);rc80(cx,o.x+3,o.y-3,2,2,c);if(o.f){cx.strokeStyle='#2c7a4a';cx.strokeRect(o.x-6,o.y-6,12,12)}});
+    const rest=Math.max(0,1-(U.t+s.straf)/s.T);rc80(cx,304,138-60*rest,8,60*rest,'#f3ead6');rc80(cx,307,132-60*rest,2,5,'#f6c84a');
+    if(U.ph==='ready'){rc80(cx,60,58,200,26,'#16121cdd');txt80(cx,'Leertaste oder Klick: los',160,71,'#f6c84a',10)}}};
+// 11. Runen merken (Weg-Lektion der Gelehrten): eine Folge leuchtender Zeichen nachtippen
+const RUN80=[[[1,0,1,6],[1,3,5,1]],[[0,0,6,1],[3,0,1,7],[0,6,6,1]],[[0,0,1,7],[0,0,5,1],[0,3,4,1]],[[3,0,1,7],[0,2,7,1],[1,5,5,1]],[[0,6,7,1],[0,0,1,7],[6,0,1,7]],[[3,0,1,3],[0,3,7,1],[1,4,1,3],[5,4,1,3]]];
+UBG80.runen={hint:'Sechs Zeichen leuchten nacheinander auf. Tipp sie in derselben Reihenfolge an (oder Tasten 1–6). Drei Folgen, jede ein Zeichen länger.',keys:'Tasten: 1–6',
+  init(U){U.s={r:0,lens:[3,4,5],seq:[],i:0,ph:'zeig',t0:0,lives:U.e>=2?1:0,lit:-1,lt:0}},start(U){this.neu(U)},
+  neu(U){const s=U.s,n=s.lens[s.r];s.seq=[];for(let i=0;i<n;i++){let x;do{x=Math.floor(Math.random()*6)}while(i&&x===s.seq[i-1]);s.seq.push(x)}s.i=0;s.ph='zeig';s.t0=U.t+.6;s.sh=Math.max(.38,.7-U.e*.04-s.r*.05)},
+  xy(i){return[88+(i%3)*72,46+Math.floor(i/3)*54]},
+  key(U,k,d){if(d&&/^[1-6]$/.test(k))this.tip(U,+k-1)},click(U,x,y,d){if(!d)return;for(let i=0;i<6;i++){const p=this.xy(i);if(Math.abs(x-p[0])<24&&Math.abs(y-p[1])<22)return this.tip(U,i)}},
+  tip(U,i){const s=U.s;if(s.ph!=='dein')return;s.lit=i;s.lt=U.t;if(s.seq[s.i]===i){s.i++;tn80(300+i*80,90,'triangle',.035);if(s.i>=s.seq.length){s.r++;fl80(U,'Richtig.',160,12,'#9fe8a8');
+        if(s.r>=s.lens.length)return ubWin80(U,true,'Die Zeichen bleiben einen Moment länger hell als nötig. Als hätten sie dich erkannt.',s.lives===(U.e>=2?1:0));s.ph='p';s.t0=U.t}}
+    else{s.lives--;tn80(130,200,'sawtooth',.03);fl80(U,'Falsch.',160,12,'#ff9a8a');if(s.lives<0)return ubWin80(U,false,'Die Zeichen verblassen. Nächstes Mal mit mehr Ruhe.');s.ph='p';s.t0=U.t;s.r=Math.max(0,s.r)}},
+  step(U){const s=U.s;ubHud80('Folgen: '+s.r+' / '+s.lens.length,s.ph==='dein'?'Zeichen '+(s.i+1)+' / '+s.seq.length:'Schau hin …');
+    if(s.ph==='zeig'){const k=Math.floor((U.t-s.t0)/s.sh);if(k>=0&&k<s.seq.length&&s.lit!==k*10+s.seq[k]+100){s.lit=k*10+s.seq[k]+100;tn80(300+s.seq[k]*80,120,'sine',.03)}if(U.t-s.t0>s.seq.length*s.sh+.2){s.ph='dein';s.lit=-1}}
+    if(s.ph==='p'&&U.t-s.t0>1)this.neu(U)},
+  draw(U,cx){const s=U.s;bg80(cx,'#1c1830','#0e0c1a');const k=s.ph==='zeig'?Math.floor((U.t-s.t0)/s.sh):-1;
+    for(let i=0;i<6;i++){const[x,y]=this.xy(i);const on=(s.ph==='zeig'&&k>=0&&k<s.seq.length&&s.seq[k]===i&&(U.t-s.t0)%s.sh<s.sh*.8)||(s.ph==='dein'&&s.lit===i&&U.t-s.lt<.25);
+      rc80(cx,x-22,y-20,44,40,on?'#6a5aa0':'#2a2540');rc80(cx,x-20,y-18,40,36,on?'#8a7ac8':'#36304e');RUN80[i].forEach(([a,b,w,h])=>rc80(cx,x-14+a*4,y-14+b*4,w*4,h*4,on?'#fffbe6':'#8a84a6'));txt80(cx,String(i+1),x+16,y+14,'#6a6486')}
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,72,'#f6c84a',10)}};
+// 12. Fäden halten (Weg-Lektion der Supporter): drei Fäden gleichzeitig gespannt halten
+UBG80.faeden={hint:'Drei Gefährten hängen an deinen Fäden. Jeder Faden lässt nach, mal schneller, mal mit einem Ruck. Tipp einen Faden an (oder Tasten 1–3), um ihn nachzuziehen. Keiner darf reißen – 20 Sekunden lang.',keys:'Tasten: 1 · 2 · 3',
+  init(U){U.s={v:[80,80,80],r:[rnd80(.7,1.3),rnd80(.7,1.3),rnd80(.7,1.3)],T:20,ruck:2.5,min:100}},
+  key(U,k,d){if(d&&/^[123]$/.test(k))this.zieh(U,+k-1)},click(U,x,y,d){if(!d)return;const i=Math.floor((x-40)/80);if(i>=0&&i<3)this.zieh(U,i)},
+  zieh(U,i){const s=U.s;s.v[i]=Math.min(100,s.v[i]+20);tn80(360+i*90,50,'triangle',.03)},
+  step(U,dt){const s=U.s;const base=(10+U.t*.45)*(1-U.e*.06);s.v=s.v.map((v,i)=>v-base*s.r[i]*dt);s.ruck-=dt;if(s.ruck<=0){s.ruck=rnd80(1.6,3.2);const i=Math.floor(Math.random()*3);s.v[i]-=18;fl80(U,'Ruck!',80+i*80,20,'#ffcf5a');s.r[i]=rnd80(.7,1.4)}
+    s.min=Math.min(s.min,...s.v);ubHud80('Halten: '+Math.floor(U.t)+' / '+s.T+' s','schwächster Faden '+Math.max(0,Math.round(Math.min(...s.v)))+' %');
+    if(s.v.some(v=>v<=0)){tn80(110,300,'sawtooth',.03);return ubWin80(U,false,'Ein Faden ist gerissen. Wer alle hält, muss auf alle zugleich schauen.')}
+    if(U.t>=s.T)ubWin80(U,true,'Alle drei Fäden halten. Du hast nie auf dich selbst geschaut – genau richtig.',s.min>30)},
+  draw(U,cx){const s=U.s;bg80(cx,'#20283a','#10141e');rc80(cx,30,8,260,4,'#5a4a3a');
+    for(let i=0;i<3;i++){const x=80+i*80,v=Math.max(0,s.v[i]),len=20+(100-v)*.8;const c=v<25?'#ff9a8a':v<50?'#ffcf5a':'#9fe8a8';rc80(cx,x,12,1,len,c);
+      rc80(cx,x-5,12+len,10,10,'#e8c8a0');rc80(cx,x-6,22+len,12,12,['#3a5a8a','#8a3a3a','#3a7a4a'][i]);rc80(cx,x-20,128,40,6,'#0b0a0d');rc80(cx,x-19,129,38*v/100,4,c);txt80(cx,String(i+1),x,139,'#8a8496')}
+    if(U.ph==='ready')txt80(cx,'Leertaste oder Klick: los',160,72,'#f6c84a',10)}};
+// ---------- Starten: lokal oder beim Gast (P63) ----------
+function play80(cfg,cb){try{const a=window.__t56&&window.__t56.ub80auto;if(a){setTimeout(()=>cb({ok:a==='ok',aborted:a==='ab',allPerfect:false}),30);return true}}catch(e){}
+  if(!cfg.ub80)return mini31(cfg,cb);
+  try{if(typeof mpMiniGuestOf63==='function'&&mpMiniGuestOf63(cfg.h))return mini31(cfg,cb)}catch(e){}// der Gast spielt (siehe Hülle um mpMiniGuest63)
+  return ub80(cfg,cb)}
+// Gast: Kommt ein Übungsspiel aus P80, läuft es hier im eigenen Fenster; das Ergebnis geht wie bei P63 zurück.
+if(typeof mpMiniGuest63==='function'){const _mg80=mpMiniGuest63;mpMiniGuest63=function(m){const C=(m&&m.cfg)||{};if(!C.ub80)return _mg80.apply(this,arguments);
+  if(UB80){try{G62.conn.send({t:'minires',id:m.id,res:{aborted:true}})}catch(e){}return}
+  const old=document.getElementById('ub80');if(old)old.remove();const me={id:m.id};G62.mini63=me;
+  const h=C.h?(PARTY||[]).find(x=>x.name===C.h.name)||{name:C.h.name,mods:{}}:null;C.h=h;
+  const ok=ub80(C,res=>{if(G62.mini63===me)G62.mini63=null;if(me.dead)return;try{G62.conn.send({t:'minires',id:m.id,res})}catch(e){}});
+  if(!ok){G62.mini63=null;try{G62.conn.send({t:'minires',id:m.id,res:{aborted:true}})}catch(e){}}}}
+if(typeof mEnd31==='function'){const _me80=mEnd31;mEnd31=function(abort){if(UB80&&!(typeof MINI31!=='undefined'&&MINI31))return ubEnd80(true);return _me80.apply(this,arguments)}}
+// ---------- Fehlschlag gilt bis morgen ----------
+function fdKey80(tid,h){return tid+'|'+hid31(h)}
+function failDay80(tid,h){lm80().fd[fdKey80(tid,h)]=day43()}
+function failed80(tid,h){return on80u()&&lm80().fd[fdKey80(tid,h)]===day43()}
+{const _co80=cool31;cool31=function(tid,h){return _co80.apply(this,arguments)||failed80(tid,h)}}
+// ---------- Lektionen mit Übungsspiel ----------
+{const _rl80=runLesson31;runLesson31=function(tid,Ls,h,ueben){const g=on80u()&&Ls&&UBL80[Ls.id];if(!g||!h)return _rl80.apply(this,arguments);
+  if(!ueben&&tid==='ilse')lm80().ilseH=hid31(h);
+  const cfg={ub80:g.g,st:g.st,h,title:(ueben?'Üben: ':'')+UBN80[g.g],m:{name:tName31(tid),img:tImg31(tid)}};
+  if(!ueben&&Ls.obs&&Ls.obs.lines){const t=say31(tid,Ls.obs.lines);return setTimeout(()=>play80(cfg,res=>done80(tid,Ls,h,res,ueben)),Math.min(t,2600))}
+  return play80(cfg,res=>done80(tid,Ls,h,res,ueben))}}
+function done80(tid,Ls,h,res,ueben){res=res||{};if(!ueben&&!res.ok&&!res.aborted){failDay80(tid,h);setTimeout(()=>{try{say(h.name+' darf es morgen wieder versuchen.','sys')}catch(e){}},600)}
+  try{afterMini31(tid,Ls,h,res,ueben)}catch(e){console.warn('p80u',e)}}
+// Beschriftung: nur Art, nicht die Technik (Paul). Gleiche Beschriftungen bekommen eine Nummer.
+function art80(Ls){const g=UBL80[Ls.id];return g&&on80u()?'Übung „'+UBN80[g.g]+'“':(METH31[Ls.m]||Ls.m)}
+function lab80(tid,Ls,kn,h){if(!on80u()||Ls.kind==='uebung'||Ls.kind==='xp'||Ls.kind==='hint')return kn+(Ls.label||Ls.key)+(Ls.kind==='uebung'?'':' ('+(METH31[Ls.m]||Ls.m)+')');
+  const w=k=>k==='meister'?'Meistertechnik':k==='kunst'?'Methode':'Technik';const base=L=>w(L.kind)+' lernen – '+art80(L);
+  const all=lessonsOf31(tid,h).filter(L=>lStat31(tid,L,h)==='ok'&&L.kind!=='uebung'&&L.kind!=='xp'&&L.kind!=='hint'),same=all.filter(L=>base(L)===base(Ls));
+  return base(Ls)+(same.length>1?' ('+(same.indexOf(Ls)+1)+')':'')}
+// Weg-Lektion: Knopf ohne Technik-Namen, vorher ein Übungsspiel je Typ
+{const _lt80=lTopics73;lTopics73=function(tid){const r=_lt80.apply(this,arguments);if(!on80u())return r;
+  return r.map(x=>typeof x[1]==='string'&&x[1].startsWith('l73_wl:')?[x[0].replace(/^(.*?): „.*“ \((.*)\)$/,'$1: eine Lektion ($2)'),x[1]]:x)}}
+function wegCfg80(h){const t=h.typ||typOf27(h.cls);
+  if(t==='Kämpfer')return trainCfg31(h,'block',{title:'Weg-Lektion: Schlagabtausch',goal:4,goalKey:'good',goalTxt:'Gute Blocks',beats:8});
+  if(t==='Flinke')return Object.assign(zielCfg31(h),{title:'Weg-Lektion: Zielübung'});
+  if(t==='Gelehrte')return{ub80:'runen',st:'int',h,title:'Weg-Lektion: '+UBN80.runen};
+  return{ub80:'faeden',st:'wis',h,title:'Weg-Lektion: '+UBN80.faeden}}
+let WP80=0;
+{const _tp80=topic;topic=function(k){if(!on80u()||WP80||typeof k!=='string'||!k.startsWith('l73_wl:'))return _tp80.apply(this,arguments);
+  if(typeof busy27==='function'&&busy27())return renderAll();
+  const n=NPCS[talk],tid=tidOf31(n),h=hBy31(k.slice(7)),tk=talk;if(!tid||!h||!wegOk73(tid,h))return _tp80.apply(this,arguments);
+  if(tid==='ilse')lm80().ilseH=hid31(h);
+  const cfg=wegCfg80(h);cfg.h=h;cfg.m=Object.assign({name:tName31(tid),img:tImg31(tid)},cfg.m||{});
+  const t=say31(tid,['Zeig mir, was du kannst. Dann zeige ich dir, wohin dein Weg führt.']);
+  setTimeout(()=>play80(cfg,res=>{res=res||{};
+    if(res.ok){if(talk==null)try{talk=tk}catch(e){}WP80=1;try{l73().sel={tid,step:'weg'};topic(k)}catch(e){console.warn('p80u Weg',e)}finally{WP80=0}}
+    else{if(!res.aborted)failDay80(tid,h);say31(tid,[res.aborted?'Schon gut. Ein andermal.':'Noch nicht. Morgen wieder.']);l73().sel=null}
+    renderAll()}),Math.min(t,1800));l73().sel=null;return renderAll()}}
+{const _wo80=wegOk73;wegOk73=function(tid,h){const r=_wo80.apply(this,arguments);if(!r||!on80u())return r;if(failed80(tid,h))return false;
+  if(tid==='ilse'){const L=lm80();if(!L.kampf)return false;if(L.ilseH&&L.ilseH!==hid31(h))return false}return r}}
+// ---------- „Das wäre dein erster von drei Lehrmeistern.“ ----------
+{const _pr80=teachPresent31;teachPresent31=function(tid,i){const r=_pr80.apply(this,arguments);try{const h=PARTY[i];if(!on80u()||!h||SCHFREI73.includes(tid)||isSch73(h,tid)||!jetzt73(tid,h))return r;
+  const n=schOf73(h).length;if(n<SCHMAX73)setTimeout(()=>{try{say(h.name+': Das wäre dein '+['erster','zweiter','dritter'][n]+' von drei Lehrmeistern. Wer bei ihr oder ihm lernt, bleibt Schüler, bis er die Lehre beendet.','sys');renderAll()}catch(e){}},900)}catch(e){}return r}}
+// ---------- Ilse: erst nach dem ersten bestandenen Kampf, nur ein Held ----------
+{const _bp80=buildParty;buildParty=function(){const r=_bp80.apply(this,arguments);try{S.lm80={kampf:0,ilseH:null,intro:0,fd:{},verw:{}}}catch(e){}return r}}
+if(typeof victory64==='function'){const _vi80=victory64;victory64=function(){try{lm80().kampf=1}catch(e){}return _vi80.apply(this,arguments)}}
+const VERW80={Kämpfer:['ragna','brunhild','sanlep'],Flinke:['ottmar','jorinde','entfernos'],Gelehrte:['mette','anselm','hulda'],Stützen:['lirum','odo','mette']};
+function verw80(h){const t=h.typ||typOf27(h.cls);const L=VERW80[t]||VERW80.Kämpfer;return L.find(id=>{const T=TEACH31[id];if(!T||(T.tier==='verborgen'&&!L31().rev[id]))return false;try{return!T.cond||T.cond()}catch(e){return false}})||null}
+function verwSatz80(h){const v=verw80(h);if(!v)return h.name+', für dich bin ich die Falsche. Hör dich um, da draußen wartet jemand auf dich.';const T=TEACH31[v];
+  return h.name+', für dich bin ich die Falsche. Geh zu '+tName31(v)+' – '+(T.ort||'').replace(' · ',', ')+'.'}
+{const _jz80=jetzt73;jetzt73=function(tid,h){const r=_jz80.apply(this,arguments);if(!r||tid!=='ilse'||!on80u())return r;const L=lm80();if(!L.kampf)return false;return!(L.ilseH&&L.ilseH!==hid31(h))}}
+{const _wa80=warum73;warum73=function(tid,h){if(tid==='ilse'&&on80u()&&h&&h.hp>0){const L=lm80();
+    if(L.ilseH&&L.ilseH!==hid31(h)){const k=hid31(h);if(!L.verw[k]){L.verw[k]=1;const v=verw80(h);try{addChron('Ilse schickt '+h.name+(v?' zu '+tName31(v)+'.':' weiter.'),[],true,'learn')}catch(e){}}return verwSatz80(h)}}
+  return _wa80.apply(this,arguments)}}
+function ilseTopicsOff80(r){return r.filter(x=>!['l31_ask','l73_weg','l73_aus','l73_dbm'].includes(x[1]))}
+{const _tt80=talkTopics;talkTopics=function(){let r=_tt80.apply(this,arguments);try{if(!on80u())return r;const n=NPCS[talk];if(tidOf31(n)!=='ilse')return r;const L=lm80();
+    if(!L.kampf){r=ilseTopicsOff80(r);const at=Math.max(0,r.length-1);r.splice(at,0,['Kannst du uns etwas beibringen?','lm80_ilse0'])}}catch(e){console.warn('p80u Ilse',e)}return r}}
+function intro80(k){const L=lm80(),tk=talk;L.intro=1;const al=(PARTY||[]).filter(h=>h.hp>0).slice(0,3),T=TEACH31.ilse;
+  const st=[{w:'Ilse',t:'Ich hab euch gehört, da unten. Gepolter, Geschimpfe – und dann Ruhe. Gute Ruhe.'}];
+  al.forEach(h=>{let s='';try{const hh=Object.assign({},h,{typ:h.typ||typOf27(h.cls)});s=T.react(hh)}catch(e){}if(s)st.push({w:'Ilse',t:h.name+'. '+s})});
+  st.push({w:'Ilse',t:'Einem von euch kann ich etwas zeigen. Einem. Für die anderen bin ich die Falsche – denen sag ich, wo sie hinmüssen.'});
+  st.push({e:'Lehrmeister sehen, wie ihr kämpft, und zeigen euch, was zu euch passt. Jeder Held lernt bei höchstens drei. Eine Lektion kostet ein Lernzeichen und eine Übung; misslingt sie, geht es erst am nächsten Tag weiter. Was ihr lernt, wisst ihr erst, wenn ihr es könnt.'});
+  const go=()=>{try{if(talk==null)talk=tk}catch(e){}try{topic(k)}catch(e){console.warn(e)}};
+  if(typeof szene72==='function'&&!(window.__no65))return szene72(st,{id:'lm80ilse',onEnd:go});
+  st.forEach(x=>{try{say(x.e||('„'+x.t+'“'),x.e?'dm':'npc',x.e?undefined:'Ilse')}catch(e){}});go()}
+{const _tp80b=topic;topic=function(k){if(!on80u()||typeof k!=='string')return _tp80b.apply(this,arguments);
+  try{const n=NPCS[talk];if(tidOf31(n)==='ilse'){const L=lm80();
+      if(k==='lm80_ilse0'){say31('ilse',['Euch? Erst will ich sehen, wie ihr euch schlagt.','Unter meiner Falltür klickt und schabt es seit Tagen. Kümmert euch darum. Dann reden wir.']);return renderAll()}
+      if(L.kampf&&!L.intro&&(k==='l31_ask'||k==='l73_weg')){intro80(k);return renderAll()}}}catch(e){console.warn('p80u Ilse',e)}
+  return _tp80b.apply(this,arguments)}}
+
+// ================= Paul (06.11., 23:22): Erklärung beim Darüberfahren über eine Technik – was sie tut, ohne genaue Werte =================
+// Grundlage ist die Beschreibung der Technik (desc/d); Zahlen werden in Worte gefasst („+2 Rüstung“ → „mehr Rüstung“). Eigene Texte in KURZ80.
+const KURZ80={ka69_deicen:'Deicen würfelt für jeden Gegner: Bei einer Sechs nimmt der Gegner Schaden, bei einer Eins Deicen selbst. Einmal pro Kampf, kein Geist.'};
+function kurzTxt80(s){s=String(s||'');
+ s=s.replace(/\s*\((?:Taktik|normal|im Taktik)[^)]*\)/g,'').replace(/\s*\([^)]*\d[^)]*\)/g,'');
+ s=s.replace(/[+−-]\s?\d+\s?(?:auf\s)?(RK|Rüstung)/g,(m)=>/[−-]/.test(m)?'weniger Rüstung':'mehr Rüstung');
+ s=s.replace(/[+]\s?\d+\s?(Treffen|auf Treffer|zum Treffen)/g,'besser treffen').replace(/[−-]\s?\d+\s?(Treffen|auf Treffer|zum Treffen)/g,'schlechter treffen');
+ s=s.replace(/[+]\s?\d+\s?Geist/g,'etwas Geist').replace(/[+]\s?\d+\s?(LP|Lebenspunkte)/g,'etwas Leben');
+ s=s.replace(/\b\d*W\d+(\s?[+]\s?\d+)?\s?(Schaden)?/g,(m,a,b)=>b?'Schaden':'etwas');
+ s=s.replace(/[+]\s?\d+\s?Schaden/g,'mehr Schaden').replace(/\b\d+\s?Schaden/g,'Schaden');
+ s=s.replace(/\b(\d+|eine?n?)\s?(Runden?|Züge?|Zug)\s?lang/g,'eine Weile').replace(/\bfür\s\d+\s(Runden?|Züge?)/g,'eine Weile').replace(/\b\d+\s(Runden?|Züge?)\b/g,'eine Weile');
+ s=s.replace(/\bbis zu \d+ Felder(n)? weit/g,'ein paar Felder weit').replace(/\b\d+ Felder(n)?( weit)?/g,'ein paar Felder$2');
+ s=s.replace(/\b\d+\s?%/g,'manchmal');
+ s=s.replace(/\s?in Reichweite \d+/g,' auf Abstand').replace(/\bbis \d+ weit/g,'auf Abstand').replace(/Reichweite \d+/g,'Reichweite');
+ s=s.replace(/Ausweichwert\s?[+]\s?\d+/g,'besser ausweichen').replace(/(RK|Rüstung)\s?[−-]\s?\d+/g,'weniger Rüstung');
+ s=s.replace(/\b\d+\s?LP\b/g,'etwas Leben').replace(/\b(\d+|ein|1) Feld(er)? (weg|näher)/g,'$3').replace(/nächsten \d+ Angriffe/g,'nächsten Angriffe').replace(/\b1 Zug\b/g,'kurz');
+ s=s.replace(/\b(trifft|treffen)((?: eine Weile| nur| kurz)?) [−-]\s?\d+/g,'$1$2 schlechter').replace(/Fernangriffe der Gegner [−-]\d+/g,'Fernangriffe der Gegner werden schwächer');
+ s=s.replace(/[+]\s?\d+\s?auf den nächsten Angriff/g,'besser beim nächsten Angriff').replace(/[+]\s?\d+\s?Bewegung/g,'mehr Bewegung').replace(/[+]\s?\d+\s?(?=\p{L})/gu,'mehr ').replace(/(\s)[−]\s?\d+/g,'$1weniger');
+ s=s.replace(/[+]\s?\d+(?=[,.])/g,'etwas mehr');s=s.replace(/etwas(?=[A-Za-zÄÖÜäöü])/g,'etwas ').replace(/\+Schaden/g,'mehr Schaden');
+ s=s.replace(/\s{2,}/g,' ').replace(/\s+([.,:;])/g,'$1');return s.trim()}
+
+function kurz80(id){const D=TECH27[id];if(!D)return'';return KURZ80[id]||kurzTxt80(D.desc||D.d||'')}
+function tipTech80(id){const D=TECH27[id];return D?D.n+'|'+kurz80(id):''}
+if(typeof sub73==='function'){const _sb80=sub73;sub73=function(u,b,k){const x=_sb80.apply(this,arguments);try{const t=b.textContent.trim(),h=u&&u.hero;const T=h&&(h.tech||[]).find(y=>TECH27[y.id]&&t.indexOf(TECH27[y.id].n)>=0);
+  if(T&&x&&x.setAttribute)x.setAttribute('data-tip64',tipTech80(T.id))}catch(e){}return x}}
+// Normaler Kampf und andere Knöpfe mit einem Technik-Namen: die Erklärung wird beim ersten Darüberfahren angehängt.
+window.addEventListener('mouseover',e=>{try{const b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.dataset.tip80)return;b.dataset.tip80='1';
+  const own=b.getAttribute('data-tip64');if(own&&own.indexOf('|')>0&&!/Geist\s*$|^[^|]*\|\s*$/.test(own))return;const t=b.textContent||'';const h=(typeof hero!=='undefined'&&hero)||null;
+  const L=((h&&h.tech)||[]).concat((PARTY||[]).flatMap(x=>x.tech||[]));const T=L.find(y=>TECH27[y.id]&&TECH27[y.id].n.length>3&&t.indexOf(TECH27[y.id].n)>=0);if(T)b.setAttribute('data-tip64',tipTech80(T.id))}catch(err){}},true);
+// ================= Paul (06.11., 23:25): Start mit zwei Techniken =================
+// Typ-Technik und eigene Klassen-Technik; die erste Technik des Wegs (WEG73[w].start) gibt es erst bei der ersten Weg-Lektion.
+{const _ss80=startSetzen73;startSetzen73=function(h,id){const r=_ss80.apply(this,arguments);try{const alt=window.__t80start===false&&!(window.__t56&&window.__t56.lm80u);if(!alt&&on80u()&&h&&h.tech){const W=WEG73[weg73(h)];if(W){const weg=new Set([W.start].concat(W.linie||[]));
+    const vor=h.tech.length;h.tech=h.tech.filter(t=>t.id===id||!weg.has(t.id));if(h.tech.length<vor)h.ohneWeg80=1}}}catch(e){console.warn('p80u Start',e)}return r}}
+{const _wn80=wegNext73;wegNext73=function(h){try{if(on80u()){const W=WEG73[weg73(h)];if(W&&W.start&&TECH27[W.start]&&!known73(h,W.start))return W.start}}catch(e){}return _wn80.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
