@@ -31771,7 +31771,7 @@ const GRP78=[{re:/^.+?(kapsel|-Kapsel) nehmen$/i,n:'Kapseln',min:3},{re:/^Aufheb
 const OPEN78={};let BUSY78=false;
 function kind78(b){const t=(b.textContent||'').trim();
   if(/^(Rasten|Lager aufschlagen|Draußen schlafen|Übernachten)/.test(t))return'rest';
-  if(/^Zur Ausgangsposition$/.test(t))return'go';
+  if(/^Zur Ausgangsposition$/.test(t))return'weg';
   if(b.classList.contains('go')||/→|^Zurück[: ]|^Weiter erkunden$|verlassen$|^(Hinaus|Hinein|Hinauf|Hinunter)\b|^Nach (draußen|drinnen|oben|unten)\b/.test(t))return'go';
   if(/^Mit .+ sprechen$|^Sprich mit |^Ansprechen: /.test(t)||b.classList.contains('gast23'))return'talk';
   return'hier'}
@@ -31783,22 +31783,21 @@ function szene78(){const gr=document.getElementById('genRow');if(!gr||BUSY78||ga
     const B=[...gr.children].filter(x=>x.tagName==='BUTTON');
     if(!on78()||still78()||!B.length){gr.classList.remove('g78');B.forEach(b=>{b.style.order='';b.classList.remove('h78','sub78','gold78','rest78','calm78');delete b.dataset.k78});return}
     gr.classList.add('g78');const has={hier:0,talk:0,go:0};
-    const lab=(t,o,cls)=>{const d=document.createElement('div');d.className='lb78'+(cls?' '+cls:'');d.textContent=t;d.style.order=o;gr.appendChild(d)};
+    const lab=(t,o,cls)=>{const br=document.createElement('div');br.className='lb78 br78'+(cls?' '+cls:'');br.style.order=o;gr.appendChild(br);const d=document.createElement('div');d.className='lb78 lt78';d.textContent=t;d.style.order=o;gr.appendChild(d)};
     // Gruppen gleichartiger Knöpfe
     const grp={};B.forEach(b=>{const t=b.textContent.trim();if(kind78(b)!=='hier')return;const G=GRP78.find(g=>g.re.test(t));if(G)(grp[G.n]=grp[G.n]||[]).push(b)});
     B.forEach(b=>{const k=kind78(b);b.dataset.k78=k;b.classList.remove('h78','sub78','gold78','rest78','calm78');
       if(k==='rest'){b.style.order='-2';b.classList.add('rest78');const t=b.textContent.trim(),k2=t.replace(/\s*\(.*\)\s*$/,'');if(k2!==t){b.title=t;b.textContent=k2}return}
+      if(k==='weg'){b.classList.add('h78');return}
       if(k==='go'){b.style.order='6';has.go++;return}
       if(k==='talk'){b.style.order='4';has.talk++;return}
       b.style.order='1';has.hier++});
-    // nur ein Story-Knopf golden: erst ein pulsierender, sonst „Untersuchen: …“, sonst ein hervorgehobener
-    {const H=B.filter(b=>b.dataset.k78==='hier');H.forEach(b=>b.classList.remove('calm78'));const g=H.find(b=>b.classList.contains('pulse64'))||H.find(b=>/^Untersuchen: /.test(b.textContent.trim()))||H.find(b=>b.classList.contains('mp68'));
-      if(g)g.classList.add('gold78');H.forEach(b=>{if(b!==g&&b.classList.contains('mp68'))b.classList.add('calm78')})}
+    // keine Hervorhebung mehr (Paul 13:14): alle Knöpfe gleich
+    B.filter(b=>b.dataset.k78==='hier').forEach(b=>{if(b.classList.contains('mp68')||b.classList.contains('pulse64'))b.classList.add('calm78')});
     Object.keys(grp).forEach(n=>{const L=grp[n],G=GRP78.find(g=>g.n===n);if(L.length<G.min)return;const ok78=S.scene+'|'+(hero?hero.name:'')+'|'+n,open=!!OPEN78[ok78];
       L.forEach(b=>{b.style.order='2';b.classList.add(open?'sub78':'h78')});
       const tg=document.createElement('button');tg.type='button';tg.className='chip tg78'+(open?' on':'');tg.textContent=n+' ('+L.length+') '+(open?'▾':'▸');tg.setAttribute('aria-expanded',open?'true':'false');tg.style.order='1';
       tg.onclick=ev=>{ev.stopPropagation();OPEN78[ok78]=!open;szene78();try{if(typeof mpPush62==='function')mpPush62()}catch(e){}};gr.appendChild(tg)});
-    const hd=document.createElement('div');hd.className='hd78';hd.style.order='-3';let pl='';try{pl=placeTitle()}catch(e){}hd.textContent=pl+' · '+hhmm(clk());gr.appendChild(hd);
     if(has.hier)lab('HIER','0');if(has.talk)lab('LEUTE','3');if(has.go)lab('WEGE','5','w78');
   }catch(e){console.warn('p78 Szene',e)}finally{BUSY78=false;try{MOS78.takeRecords()}catch(e){}}}
 const MOS78=new MutationObserver(()=>{if(BUSY78)return;requestAnimationFrame(szene78)});
@@ -31807,12 +31806,12 @@ const MOS78=new MutationObserver(()=>{if(BUSY78)return;requestAnimationFrame(sze
 {const _rc78=renderChips;renderChips=function(){const r=_rc78.apply(this,arguments);try{szene78()}catch(e){}return r}}
 {const _ra78=renderAll;renderAll=function(){const r=_ra78.apply(this,arguments);try{szene78()}catch(e){}try{slStil78()}catch(e){}try{document.body.classList.toggle('nowb78',on78()&&el57()<=1)}catch(e){}return r}}
 {const st=document.createElement('style');st.textContent=
-  '#genRow.g78{row-gap:6px}#genRow.g78 > .lbl{display:none}#genRow.g78 .chip.spont,#genRow.g78 .chip.learned,#genRow.g78 .chip.cls,#genRow.g78 .chip.go{border-color:var(--line);color:var(--fg)}'+
+  '#genRow.g78{row-gap:4px}#genRow.g78 > .lbl{display:none}#genRow.g78 .chip.spont,#genRow.g78 .chip.learned,#genRow.g78 .chip.cls,#genRow.g78 .chip.go{border-color:var(--line);color:var(--fg)}'+
   '#genRow.g78 .chip.gold78{border-color:#b08a3a;color:#f6d27a}'+'#genRow.g78 .chip.calm78{border:2px solid var(--line)!important;background:var(--panel2)!important;color:var(--fg)!important;font-weight:normal!important;box-shadow:none!important}'+
   '#genRow.g78 .h78{display:none!important}#genRow.g78 .chip.sub78{background:#1f1a29;border-color:#8a7ab0}#genRow.g78 .chip.tg78.on{border-color:#8a7ab0;color:#f3ead6}'+
   '#genRow.g78 .chip[data-k78="go"]{background:none;border-color:transparent;color:#c9bfd6;padding:0 6px}#genRow.g78 .chip[data-k78="go"]:hover{color:#fff2c4;text-decoration:underline}'+
-  '#genRow.g78 .chip.rest78{font-size:16px;padding:0 8px;border-color:var(--line);color:#c9bfd6}'+
-  '#genRow .lb78{flex-basis:100%;font-size:12px;letter-spacing:.12em;color:#a89cb8;margin-top:4px}#genRow .lb78.w78{border-top:1px dashed var(--line);padding-top:6px;margin-top:8px}'+
+  '#genRow.g78 .chip.rest78{position:absolute;top:6px;right:8px;font-size:15px;padding:0 8px;border-color:var(--line);color:#c9bfd6}'+'.lower .actions{position:relative}'+'#genRow.g78 .chip.pulse64{animation:none}'+'body.m-player .lower{grid-template-columns:minmax(0,1fr) min(560px,46vw)}'+
+  '#genRow .lb78.br78{flex-basis:100%;height:0;margin:0}#genRow .lb78.br78.w78{border-top:1px dashed var(--line);margin-top:2px}#genRow .lb78.lt78{font-size:11px;letter-spacing:.12em;color:#a89cb8;min-width:46px}'+'body:not(.alt78) .lower .actions{gap:5px}'+
   '#genRow .hd78{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#c9bfd6;font-size:16px;padding:1px 8px;background:#1b1720;border:1px solid #2c2634}'+
   'body.nowb78 .wb49b{display:none!important}'+
   '#stil78{margin-top:10px}#stil78 summary{cursor:pointer}';document.head.appendChild(st)}
@@ -31863,6 +31862,116 @@ function mig78(h){if(!on78())return;const B=h&&h.wb49;if(!B||B.mig78)return;B.mi
 // Fehler gefunden (06.11.): Das Meisterstück trägt in der Chronik den Vorschlag „stern“, den es nicht gibt – danach brach die Chronik ab.
 // Unbekannte Vorschläge werden jetzt übersprungen.
 {const _rc78=renderChron;renderChron=function(){try{(S.chron||[]).forEach(c=>{if(c&&c.sugg)c.sugg=c.sugg.filter(k=>typeof SUGG!=='undefined'&&SUGG[k])})}catch(e){}return _rc78.apply(this,arguments)}}
+
+
+// ================= Prototyp 78 (f): Nachbesserung – Fenster „Fähigkeiten“, Fenstergrößen, „Was wir wissen“, Meisterstück, Mitspieler-Leiste =================
+// Pauls Entscheidungen vom 06.11. (12:45–13:26), Sammlung _Spielleiter/sammlung-p78.md (Punkte 2, 3, 5, 7, 8, 9).
+//  - Heldenbogen = wer der Held ist (Werte, Waffe, Persönlichkeit, Lehrmeister, Achievements); Fenster F = was er kann.
+//    Im Heldenbogen steht zu den Techniken nur noch ein Verweis. F zeigt die Symbole der Kampf-Karten (ICO68/ICO78),
+//    Reihenfolge wie im Kampf, je Technik eine Zeile + kleiner Balken, nächste Stufe im Tooltip, Repertoire eingeklappt,
+//    Weg als Pfad, Kopfzeile ohne „Heldenentwicklung“. F öffnet beim Helden, der gerade dran ist (bei Mitspielern: ihr eigener).
+//  - Heldenbogen etwas größer, F genauso groß.
+//  - „Was wir wissen“: Standardansicht „Jetzt“ (3 wichtigste offene Fragen + Neuestes), Themen-Überschrift erst ab dem zweiten Eintrag.
+//  - Meisterstück: Beschreibung gekürzt, erst sichtbar, wenn Krone, Wesen 3 und Klassensignatur stehen.
+//  - Mitspieler: ohne „Mein Held“, Pfeiltasten, „Frei unterwegs“, 🐞 und den kleinen Chat. Text mit @ am Anfang = Nachricht an alle.
+const E78F=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ico78f(k,sz){try{const I=(typeof ICO78!=='undefined'&&ICO78[k])||(typeof ICO68!=='undefined'&&ICO68[k]);if(I)return'<img class="i78f" src="'+I+'" alt="" width="'+(sz||20)+'" height="'+(sz||20)+'">'}catch(e){}
+  return'<span class="i78f t">'+({glut:'🔥',strom:'🌊',stein:'⛰',ult:'✸',wk:'⚒',meth:'☯',cls:'★',tech:'✦'}[k]||'•')+'</span>'}
+// ---------- Fenster F neu ----------
+function techZeile78(h,t,art){const D=TECH27[t.id];if(!D)return'';const X=TX31[t.id]||{};let L=t.lv||1;try{L=effL31(h,t)}catch(e){}
+  const jetzt=X.lvd?X.lvd(L):D.desc,naechst=X.lvd&&(t.lv||1)<10?X.lvd(L+1):'';let need=0;try{need=need31(t.lv||1)}catch(e){}
+  const pct=need?Math.min(100,Math.round(100*(t.xp||0)/need)):100;
+  const marken=(art==='ka'?['einmal je Kampf']:[(D.kost!=null?D.kost+' Geist':''),(D.cd?'Pause '+D.cd:'')]).filter(Boolean).map(m=>'<span class="mk78">'+E78F(m)+'</span>').join('');
+  const tip=(art==='ka'?D.desc:'Jetzt: '+jetzt+(naechst?' · Stufe '+((t.lv||1)+1)+': '+naechst:'')+(need&&art!=='ka'&&(t.lv||1)<10?' · Erfahrung '+(t.xp||0)+'/'+need+' bis Stufe '+((t.lv||1)+1):''));
+  const ic=art==='ka'?ico78f('cls'):art==='wk'?ico78f('wk'):ico78f(X.nat||'tech');
+  return'<div class="tz78" title="'+E78F(tip)+'"><span class="ic">'+ic+'</span><div class="tx"><div class="kopf"><b>'+E78F(D.n)+'</b>'+(art!=='ka'?'<span class="st">St. '+(t.lv||1)+'</span>':'')+marken+'</div>'+
+    (art!=='ka'?'<div class="bal78"><i style="width:'+pct+'%"></i></div>':'')+'<div class="eine">'+E78F(art==='ka'?D.desc.replace(/\s*Einmal pro Kampf, kein Geist\.?$/,''):jetzt)+'</div></div></div>'}
+function fhHtml78(h){ensure27(h);let s='';const w=weg73(h),W=WEG73[w],A=typeof aus73==='function'?aus73(h):null;
+  s+='<p class="fw73">'+E78F(h.name)+' · '+E78F(h.cls)+' · '+E78F(wort78?wort78(h.typ):h.typ)+(W?' · Weg '+E78F(W.n)+(A?' · '+E78F(A.n):''):'')+'</p>';
+  const tl=(h.tech||[]).filter(t=>TECH27[t.id]&&!t.wk49&&!/^ka/.test(t.id)&&t.id!=='meister49');
+  s+='<h4>'+ico78f('tech',18)+' Techniken <span class="s73">'+tl.length+' von '+TSLOTS27+'</span></h4>'+tl.map(t=>techZeile78(h,t,'tech')).join('');
+  let R=[];try{R=rep73(h).filter(t=>TECH27[t.id])}catch(e){}
+  if(R.length)s+='<details class="rep78"><summary>Ruhende Techniken ('+R.length+') – tauschen im Heldenbogen bei der Rast</summary>'+R.map(t=>techZeile78(h,t,'tech')).join('')+'</details>';
+  const ar=(h.tech||[]).filter(t=>t.wk49&&TECH27[t.id]&&t.id!=='meister49'&&!/^ka/.test(t.id));
+  if(ar.length)s+='<h4>'+ico78f('wk',18)+' Waffenkünste <span class="s73">belegen keinen Platz</span></h4>'+ar.map(t=>techZeile78(h,t,'wk')).join('');
+  const ka=(h.tech||[]).filter(t=>/^ka/.test(t.id)&&TECH27[t.id]);
+  if(ka.length)s+='<h4>'+ico78f('cls',18)+' Klassen-Aktion</h4>'+ka.map(t=>techZeile78(h,t,'ka')).join('');
+  try{const U=ult73(h);if(U){const ok=ultBereit73(h);s+='<h4>'+ico78f('ult',18)+' Ultimate</h4><div class="tz78"><span class="ic">'+ico78f('ult')+'</span><div class="tx"><div class="kopf"><b>'+(ok?E78F(U.n):'?????')+'</b></div><div class="eine">'+(ok?E78F(U.txt||''):'Etwas schläft noch in dieser Klasse.')+'</div></div></div>'}}catch(e){}
+  try{if(el57()>=2){const id=kAct31(h);s+='<h4>'+ico78f('meth',18)+' Methode</h4>';
+    if(!id)s+='<p class="s73">Noch keine aktiv.</p>';else{const K=KUNST31[id],Q=kl31(h,id),N=NAT31[K.nat]||{};const G=(h.gabe77&&h.gabe77[id])||{};
+      let st='';for(let i=1;i<=10;i++)st+='<i class="'+(i<=Q.lv?'an':'')+'"></i>';
+      const gz=lv=>{const g=G[lv];if(g&&typeof GABE77!=='undefined')return'<span class="g78 an" title="'+E78F(GABE77[g][1])+'">✦ '+E78F(GABE77[g][0])+'</span>';
+        let P=[];try{P=GABEN77[nat77(id)][lv].map(x=>GABE77[x][0])}catch(e){}return'<span class="g78">✦ Stufe '+lv+': '+E78F(P.join(' oder '))+'</span>'};
+      s+='<div class="tz78"><span class="ic">'+ico78f(K.nat)+'</span><div class="tx"><div class="kopf"><b>'+E78F(K.n)+'</b><span class="st">St. '+Q.lv+'</span><span class="mk78">'+E78F(N.n||'')+'</span></div><div class="ster78">'+st+'</div><div class="eine">'+E78F(K.desc)+'</div><div class="gaben78">'+gz(5)+gz(10)+'</div></div></div>'}}}catch(e){}
+  if(W){const kennt=id=>(h.tech||[]).some(t=>t.id===id)||(typeof rep73==='function'&&rep73(h).some(t=>t.id===id));
+    const P=[W.start].concat(W.linie||[]).map(id=>kennt(id)&&TECH27[id]?E78F(TECH27[id].n)+' ✓':'???');P.push('???');
+    s+='<h4>Weg: '+E78F(W.n)+(A?' · '+E78F(A.n):'')+'</h4><p class="pfad78">'+P.join(' <span>→</span> ')+'</p>';
+    if(!A&&el57()>=2){const T=wegTech73(h);const o=['a','b'].map(ab=>AUSD73[w+'_'+ab]).filter(Boolean).map(x=>x.n);if(o.length)s+='<p class="s73">Ausrichtung: '+E78F(o.join(' oder '))+' – bei einem Lehrmeister, wenn „'+E78F(TECH27[W.start].n)+'“ Stufe 5 hat (jetzt '+(T?T.lv||1:0)+').</p>'}}
+  return s}
+if(typeof fhHtml73==='function'){const _fh78f=fhHtml73;fhHtml73=function(h){if(!on78())return _fh78f.apply(this,arguments);try{return fhHtml78(h)}catch(e){console.warn('p78f F',e);return _fh78f.apply(this,arguments)}}}
+// ---------- Heldenbogen: Techniken nur als Verweis, Methode kompakt ----------
+function bogen78f(){if(!on78()||typeof BOG27==='undefined'||!BOG27)return;const h=PARTY[BOGI27]||hero;const G=BOG27.querySelector('.grid');if(!G||!h)return;
+  const C=[...G.children].filter(c=>c.classList&&c.classList.contains('card2'));const t=c=>{const x=c.querySelector(':scope > h3');return x?x.textContent.trim():''};
+  const tc=C.find(c=>/^Techniken/.test(t(c)));
+  if(tc){const tl=(h.tech||[]).filter(x=>TECH27[x.id]&&!x.wk49&&!/^ka/.test(x.id)&&x.id!=='meister49');const ar=(h.tech||[]).filter(x=>x.wk49&&TECH27[x.id]&&x.id!=='meister49'&&!/^ka/.test(x.id));
+    const h3=tc.querySelector(':scope > h3');[...tc.children].forEach(x=>{if(x!==h3)x.remove()});if(h3)h3.textContent='Techniken';
+    const p=document.createElement('p');p.innerHTML=tl.length+' von '+TSLOTS27+(ar.length?' · '+ar.length+' Waffenkunst'+(ar.length>1?'e':''):'')+' · <span class="small">'+tl.map(x=>E78F(TECH27[x.id].n)).join(', ')+'</span>';tc.appendChild(p);
+    const b=document.createElement('button');b.type='button';b.textContent='✦ Fähigkeiten öffnen (Taste F)';b.onclick=()=>{try{const i=BOGI27;BOG27.hidden=true;fhOpen73(i)}catch(e){}};tc.appendChild(b)}
+  // „Methode & Gaben“ nur noch, wenn eine Gabe zu wählen ist (die Gaben stehen in F)
+  C.filter(c=>c.classList.contains('gab77')).forEach(c=>{if(!c.querySelector('[data-gabe77]'))c.remove()});
+  const ik=C.find(c=>/^Innere Kunst$/.test(t(c)));if(ik){const x=ik.querySelector(':scope > h3');if(x)x.textContent='Methode';ik.querySelectorAll(':scope > p.small').forEach(p=>{if(/^St\. |^Wächst durch/.test(p.textContent))p.remove()})}}
+{const _rb78f=renderBogen27;renderBogen27=function(){const r=_rb78f.apply(this,arguments);try{bogen78f()}catch(e){console.warn('p78f Bogen',e)}return r}}
+// ---------- Meisterstück: kurz und erst später aufgedeckt ----------
+{const _nd78=node49;node49=function(h,id){const N=_nd78.apply(this,arguments);if(!on78()||id!=='m'||!N)return N;try{const B=wb49(h);const fehlt=!B.n.m&&PRE49.m.some(p=>!B.n[p]);
+    if(fehlt)return Object.assign({},N,{n:'Meisterstück',d:'Was die Waffe als Meisterstück kann, zeigt sich, wenn Krone, Wesen 3 und Klassensignatur stehen.',tip78:''});
+    const S=String(N.d||'').split(/(?<=\.)\s+(?=[A-ZÄÖÜ])/);const tip=[],keep=[];
+    S.forEach(x=>{if(/^Braucht/.test(x)||/^Dazu in jedem Kampf \+1/.test(x))return;if(/^[A-ZÄÖÜ][a-zäöüß]+: [A-ZÄÖÜ]/.test(x)&&!/^Normaler Kampf|^Im normalen Kampf|^Taktik/.test(x)){tip.push(x);return}keep.push(x)});
+    return Object.assign({},N,{d:keep.join(' '),tip78:tip.join(' ')})}catch(e){return N}}}
+{const _wr78f=wbRender49;wbRender49=function(){const r=_wr78f.apply(this,arguments);try{if(on78()&&WBSEL49==='m'){const h=PARTY[WBI49]||PARTY[0];const N=node49(h,'m');const x=WB49.querySelector('.wbi h3');if(x&&N.tip78){x.title=N.tip78;x.textContent=N.n+' ⓘ'}}}catch(e){}return r}}
+// ---------- „Was wir wissen“: Ansicht „Jetzt“, Themen erst ab zwei Einträgen ----------
+function jetzt78(){const W=W57();const ids=Object.keys(W.k).filter(wVis57);let pl='';try{pl=placeTitle()}catch(e){}
+  const q=[],seen=new Set();ids.filter(id=>offen57(id)&&WK57[id].frage).sort((a,b)=>((W.k[b].ort===pl)-(W.k[a].ort===pl))||((W.k[b].n||0)-(W.k[a].n||0))).forEach(id=>{const f=WK57[id].frage;if(seen.has(f)||q.length>=3)return;seen.add(f);q.push('<p class="q">'+(W.k[id].n>W.seen?NB57:'')+esc57(f)+'</p>')});
+  const neu=[],ks=new Set();ids.slice().sort((a,b)=>(W.k[b].n||0)-(W.k[a].n||0)).forEach(id=>{const s=WK57[id].satz;if(ks.has(s)||neu.length>=4)return;ks.add(s);neu.push('<p class="'+(ahnt57(id)?'a':'k')+'" title="'+esc57(wann57(W.k[id])+(wo57(W.k[id])?' · '+wo57(W.k[id]):''))+'">'+(W.k[id].n>W.seen?NB57:'')+esc57(s)+'</p>')});
+  if(!q.length&&!neu.length)return'<p class="small">Noch wisst ihr nichts. Seht euch um, redet mit den Leuten – was ihr herausfindet, steht dann hier.</p>';
+  return(q.length?'<div class="card2"><h3>Was euch gerade beschäftigt</h3>'+q.join('')+'</div>':'')+(neu.length?'<div class="card2"><h3>Zuletzt dazugekommen</h3>'+neu.join('')+'</div>':'')+
+    '<p><button data-t="tafel">Alles, was wir wissen ('+ids.length+')</button></p>'}
+// Fragen-Tafel: ein Thema bekommt erst ab dem zweiten Eintrag eine eigene Überschrift; Einzelnes steht unter „Seltsames“
+if(typeof tafel57==='function'){const _tf78=tafel57;tafel57=function(){if(!on78())return _tf78.apply(this,arguments);try{const W=W57();let h='';const gm=gmVis57();
+  if(gm.length)h+='<div class="card2"><h3>Vermutungen und Notizen</h3>'+gm.map(g=>'<p class="'+(g.art==='vermutung'?'a':'k')+(g.durch?' s':'')+'">'+(g.n>W.seen?NB57:'')+(g.art==='vermutung'?'Vermutung: ':'')+esc57(g.txt)+'</p>').join('')+'</div>';
+  let cards='',any=false;const einz=[];
+  for(const a of ARCORD57){const ids=Object.keys(WK57).filter(id=>WK57[id].arc===a&&wVis57(id));if(!ids.length)continue;any=true;
+    const qs=[],ks=[],as=[];const seenQ=new Set(),seenK=new Set();
+    ids.forEach(id=>{const K=WK57[id],r=W.k[id],nu=r.n>W.seen?NB57:'';if(offen57(id)&&K.frage&&!seenQ.has(K.frage)){seenQ.add(K.frage);qs.push('<p class="q">'+esc57(K.frage)+'</p>')}
+      let s=K.satz;if(seenK.has(s))return;seenK.add(s);(ahnt57(id)?as:ks).push('<p class="'+(ahnt57(id)?'a':'k')+'" title="'+esc57(wann57(r)+(wo57(r)?' · '+wo57(r):''))+'">'+nu+esc57(s)+'</p>')});
+    if(seenK.size<2){einz.push(qs.join('')+ks.join('')+as.join(''));continue}
+    cards+='<div class="card2"><h3>'+esc57(ARC57[a])+'</h3>'+qs.join('')+ks.join('')+(as.length?'<p class="small">Ihr ahnt:</p>'+as.join(''):'')+'</div>'}
+  if(einz.length)cards+='<div class="card2"><h3>Seltsames</h3>'+einz.join('')+'</div>';
+  if(!any&&!gm.length)return'<p class="small">Noch wisst ihr nichts. Seht euch um, redet mit den Leuten – was ihr herausfindet, steht dann hier.</p>';
+  return h+'<p class="small">? = offene Frage · • = das wisst ihr · ~ = das ahnt ihr nur</p><div class="grid">'+cards+'</div>'}catch(e){console.warn('p78f Tafel',e);return _tf78.apply(this,arguments)}}}
+if(typeof renderDlg57==='function'){const _rd78=renderDlg57;renderDlg57=function(){if(!on78())return _rd78.apply(this,arguments);const jetzt=TAB57==='jetzt';if(jetzt)TAB57='tafel';const r=_rd78.apply(this,arguments);if(jetzt)TAB57='jetzt';
+  try{const T=DLG57.querySelector('.bx .tabs');if(T&&!T.querySelector('[data-t="jetzt"]')){const b=document.createElement('button');b.dataset.t='jetzt';b.textContent='Jetzt';T.insertBefore(b,T.firstChild)}
+    if(T)T.querySelectorAll('button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===TAB57));
+    if(jetzt){const bx=DLG57.querySelector('.bx');[...bx.children].forEach(c=>{if(!c.classList.contains('x')&&c.tagName!=='H2'&&!c.classList.contains('tabs'))c.remove()});bx.insertAdjacentHTML('beforeend',jetzt78())}}catch(e){console.warn('p78f Jetzt',e)}return r}}
+if(typeof open57==='function'){const _op78=open57;open57=function(tab){if(on78()&&!tab)tab='jetzt';return _op78.call(this,tab)}}
+// ---------- Mitspieler-Leiste und @-Nachrichten ----------
+{const _hm78=mpHostMsg62;mpHostMsg62=function(G,m){try{if(on78()&&G&&m&&m.t==='cmd'){const tx=String(m.text||'').trim();if(tx[0]==='@'){const v=tx.slice(1).trim().replace(/\s+/g,' ').slice(0,300);if(v)say('💬 '+G.name+': '+v,'sys');return}}}catch(e){}return _hm78.apply(this,arguments)}}
+{const _run78=run;run=function(raw){try{if(on78()&&String(raw||'').trim()[0]==='@'){const v=String(raw).trim().slice(1).trim();if(v)say('💬 '+(typeof MP62!=='undefined'&&MP62&&MP62.role==='host'?'Spielleiter':'Am Tisch')+': '+v,'sys');return}}catch(e){}return _run78.apply(this,arguments)}}
+if(typeof mpBar62==='function'){const _mb78=mpBar62;mpBar62=function(){const r=_mb78.apply(this,arguments);try{if(on78()&&!G62.fight){const d=document.getElementById('mp62dran');if(d)d.textContent=''}}catch(e){}return r}}
+{const _ra78f=renderAll;renderAll=function(){const r=_ra78f.apply(this,arguments);try{document.body.classList.toggle('alt78',!on78())}catch(e){}return r}}
+{const ph=()=>{try{const c=document.getElementById('cmd');if(c&&on78()&&!/@/.test(c.placeholder))c.placeholder=c.placeholder.replace(/\.?\s*$/,'')+' · @ schreibt an alle'}catch(e){}};setTimeout(ph,800);setInterval(ph,4000)}
+{const st=document.createElement('style');st.textContent=
+  'body:not(.alt78) #mp62card,body:not(.alt78) .mp63pad,body:not(.alt78) #mp63bugG,body:not(.alt78) #mp62chat{display:none!important}'+
+  // Größe: Heldenbogen etwas größer, Fenster F genauso groß und im selben Stil
+  'body:not(.alt78) #bogen27 .bx,body:not(.alt78) #faeh73 .fx73{width:min(1000px,96vw);height:min(86vh,820px);max-height:none;box-sizing:border-box}'+
+  'body:not(.alt78) #faeh73 .fx73{background:#141218;border:2px solid #3a3346;border-radius:0;padding:12px 16px;font:15px "VT323","Pixelify Sans",monospace;color:#f3ead6}'+
+  '#faeh73 .fw73{color:#c9bfd6}#faeh73 h4{display:flex;align-items:center;gap:6px;margin:12px 0 4px;font:600 13px "Pixelify Sans",monospace;color:#f6c84a;letter-spacing:.04em}#faeh73 h4 .s73{color:#8c8496;font-weight:400}'+
+  '#faeh73 .tz78{display:flex;gap:8px;align-items:flex-start;padding:5px 6px;border:1px solid #2c2634;background:#1b1820;margin:3px 0}#faeh73 .tz78 .ic{flex:0 0 26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle at 50% 38%,#5a4a63 0,#2a2131 60%,#140f18 100%)}'+
+  '#faeh73 .i78f{image-rendering:pixelated}#faeh73 .i78f.t{font-size:14px}#faeh73 .tz78 .tx{flex:1;min-width:0}#faeh73 .kopf{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}#faeh73 .kopf b{font:600 14px "Pixelify Sans",monospace}#faeh73 .st{color:#f6c84a}'+
+  '#faeh73 .mk78{font-size:12px;color:#c9bfd6;border:1px solid #3a3346;padding:0 4px}#faeh73 .bal78{height:4px;background:#2a2531;margin:3px 0}#faeh73 .bal78 i{display:block;height:100%;background:#c9a24a}#faeh73 .eine{font-size:14px;color:#c9bfd6;line-height:1.15}'+
+  '#faeh73 .ster78 i{display:inline-block;width:7px;height:7px;margin-right:3px;border-radius:50%;border:1px solid #6a6078;background:#211b2b}#faeh73 .ster78 i.an{background:#f6c84a;border-color:transparent}'+
+  '#faeh73 .gaben78{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:3px;font-size:14px}#faeh73 .g78{color:#8c8496}#faeh73 .g78.an{color:#f6d27a}'+
+  '#faeh73 .pfad78{font-size:15px}#faeh73 .pfad78 span{color:#6a6078}#faeh73 details.rep78{margin:4px 0}#faeh73 details.rep78 summary{cursor:pointer;color:#c9bfd6;font-size:14px}';
+  document.head.appendChild(st)}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
