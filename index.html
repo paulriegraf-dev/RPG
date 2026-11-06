@@ -31407,7 +31407,7 @@ const LINES77=[[1,1,1],[0,0,0],[2,2,2],[0,1,2],[2,1,0]];
 const SYMN77={joker:'Joker',sieben:'Sieben',bar:'BAR',kapsel:'Kapsel',lavala:'Lavala',serve:'Serve',traello:'Trällo',jeton:'Jeton',replay:'Replay'};
 const PMK77={lavala:3,serve:5,traello:8};
 const TAKT77={per:700,tol:110,ziel:60};
-const MNAME77={A:'Sonntagsglück',B:'Taktgefühl'};
+const MNAME77={A:'Sonntagsglück',B:'Taktgefühl',alt:'Der Alte'};
 try{Object.assign(SYMART34,G77.sym)}catch(e){}
 // ---------- Bilder ----------
 const IMG77={};
@@ -31435,7 +31435,7 @@ function rnd77(){return[0,1,2].map(k=>Math.floor(Math.random()*STRIP77[k].length
 // ---------- Zustand ----------
 // CAS34.m77 = 'A' | 'B'; CAS34.n77 = Linien; CAS34.cur77 = sichtbare Stellungen; CAS34.free77 = Freispiel offen; CAS34.takt77 = Taktpunkte
 function st77(){if(!CAS34.m77)CAS34.m77='A';if(![1,3,5].includes(CAS34.n77))CAS34.n77=1;if(!CAS34.cur77)CAS34.cur77=[11,11,11];if(CAS34.takt77==null)CAS34.takt77=0;return CAS34}
-function on77(){return CAS34.open==='sl'&&typeof G77!=='undefined'}
+function on77(){return CAS34.open==='sl'&&CAS34.m77!=='alt'&&typeof G77!=='undefined'}
 function unit77(){const s=CAS34.stake;return s.typ==='erinnerung'?1:Math.max(1,s.amt||1)}
 function cost77(){return unit77()*st77().n77}
 function stakeErr77(){const s=CAS34.stake,h=hero,n=st77().n77,u=unit77();if(CAS34.free77)return'';
@@ -31487,6 +31487,8 @@ function pos77(k,now){const G=CAS34.g;if(!G||!G.m77)return st77().cur77[k];const
   const u=(now-R.tp)/R.T;if(u>=1){const b=now-R.tp-R.T;return b<160?R.f+.2*Math.sin(Math.PI*b/160):R.f}return R.f+R.db*(1-u)*(1-u)}
 function speed77(k,now){const a=pos77(k,now),b=pos77(k,now-16);return Math.abs(a-b)/16}
 function tick77(){const G=CAS34.g;if(!G||!G.m77||!G.live||CAS34.open!=='sl'){return}const now=performance.now();
+  try{const fast=G.reels.some((R,k)=>now>R.ts+90&&!R.stopped&&speed77(k,now)>.012);if(fast&&now-(G.roll77||0)>58){G.roll77=now;SFX64.roll77()}
+    if(G.mode==='B'&&G.reels.some(R=>!R.tp)){const b=Math.floor((now-G.t0)/TAKT77.per);if(b!==G.beat77){G.beat77=b;if(b>0)SFX64.takt77()}}}catch(e){}
   G.reels.forEach((R,k)=>{const end=G.mode==='A'?R.te:R.tp!=null?R.tp+R.T:null;if(end!=null&&now>=end&&!R.stopped){R.stopped=1;sfx64('klack77',k)}});
   redraw77();
   if(G.reels.every(R=>R.stopped)&&now>Math.max(...G.reels.map(R=>(G.mode==='A'?R.te:R.tp+R.T)))+180)return finish77(G);
@@ -31579,16 +31581,22 @@ function draw77(cv){const sty=casSty68(),M=G77.meta[sty],im=img77(sty),W=320,H=M
 // ---------- Einhängen ins Casino ----------
 {const _dc77=drawCas34;drawCas34=function(cv){if(on77()){try{return draw77(cv)}catch(e){console.warn('p77',e)}}return _dc77.apply(this,arguments)}}
 {const _ui77=slUi34;slUi34=function(row){if(!on77())return _ui77.apply(this,arguments);const C=st77(),G=CAS34.g&&CAS34.g.m77?CAS34.g:null,live=G&&G.live;
-  [1,3,5].forEach(n=>btn34(row,n+(n>1?' Linien':' Linie'),()=>{C.n77=n},C.n77===n,live));
+  [1,3,5].forEach(n=>btn34(row,n+(n>1?' Linien':' Linie'),()=>{C.n77=n;sfx64('linie77',n)},C.n77===n,live));
   if(C.m77==='A')btn34(row,C.free77?'Freispiel: Hebel ziehen':'Hebel ziehen',()=>spin77(),0,live);
   else if(!live)btn34(row,C.free77?'Freispiel: Start':'Start',()=>spin77(),0,false);
   else [0,1,2].forEach(k=>btn34(row,'Stopp '+(k+1),()=>stop77(k),0,!!G.reels[k].tp));
-  btn34(row,C.m77==='A'?'Zum Knopf-Automaten':'Zum Hebel-Automaten',()=>{C.m77=C.m77==='A'?'B':'A';CAS34.g=null;CAS34.msg=C.m77==='A'?'„Sonntagsglück“: Hebel ziehen, die Walzen halten von selbst.':'„Taktgefühl“: Start drücken, dann jede Walze selbst anhalten. Wer im Takt der Lämpchen drückt, sammelt Taktpunkte.'},0,live)}}
+  ['A','B','alt'].filter(m=>m!==C.m77).forEach(m=>btn34(row,SWT77[m],()=>wechsel77(m),0,live))}}
+const SWT77={A:'↔ Hebel-Automat „Sonntagsglück“',B:'↔ Knopf-Automat „Taktgefühl“',alt:'↔ Alter Automat (eine Reihe)'};
+const SWM77={A:'„Sonntagsglück“: Hebel ziehen, die Walzen halten von selbst.',B:'„Taktgefühl“: Start drücken, dann jede Walze selbst anhalten. Wer im Takt der Lämpchen drückt, sammelt Taktpunkte.',
+  alt:'Der alte Automat: drei Walzen, eine Reihe, wie früher. Hebel ziehen.'};
+function wechsel77(m){st77().m77=m;CAS34.g=null;CAS34.msg=SWM77[m];sfx64('wechsel77');try{if(CASEL34){const c=CASEL34.querySelector('canvas');if(c)c.style.transform=''}}catch(e){}renderCas34();try{slLoop34()}catch(e){}}
+// Der alte Automat: eigene Knöpfe zum Wechseln
+{const _ua77=slUi34;slUi34=function(row){const r=_ua77.apply(this,arguments);try{if(CAS34.open==='sl'&&CAS34.m77==='alt'&&!(CAS34.g&&CAS34.g.live))['A','B'].forEach(m=>btn34(row,SWT77[m],()=>wechsel77(m),0,false))}catch(e){}return r}}
 {const _so77=stakeOk34;stakeOk34=function(){if(on77())return stakeErr77();return _so77.apply(this,arguments)}}
 {const _sx77=stakeTxt34;stakeTxt34=function(){if(on77())return stakeTxt77();return _sx77.apply(this,arguments)}}
-{const _co77=casOpen34;casOpen34=function(g){if(g==='slb'){st77().m77='B';g='sl'}else if(g==='sl'){st77().m77='A'}const r=_co77.call(this,g);
+{const _co77=casOpen34;casOpen34=function(g){if(g==='slb'){st77().m77='B';g='sl'}else if(g==='slc'){st77().m77='alt';g='sl'}else if(g==='sl'){st77().m77='A'}const r=_co77.call(this,g);
   try{if(on77()){CAS34.msg=st77().m77==='A'?'„Sonntagsglück“: neun Felder, fünf Linien. Hebel ziehen, die Walzen halten von selbst.':'„Taktgefühl“: neun Felder, fünf Linien. Start drücken, dann jede Walze mit ihrem Knopf anhalten.';renderCas34()}}catch(e){}return r}}
-{const _rc77=renderCas34;renderCas34=function(){const r=_rc77.apply(this,arguments);try{if(on77()&&CASEL34){const t=CASEL34.querySelector('.t span');if(t)t.textContent='✦ Glücksautomat „'+MNAME77[st77().m77]+'“ · Zum Ewigen Sonntag'}}catch(e){}return r}}
+{const _rc77=renderCas34;renderCas34=function(){const r=_rc77.apply(this,arguments);try{if(CAS34.open==='sl'&&CASEL34){const t=CASEL34.querySelector('.t span');if(t)t.textContent='✦ Glücksautomat „'+MNAME77[st77().m77]+'“ · Zum Ewigen Sonntag'}}catch(e){}return r}}
 // Klick auf Hebel oder Knöpfe im Bild
 document.addEventListener('pointerdown',e=>{try{if(!on77()||!CASEL34||CASEL34.hidden)return;const cv=e.target&&e.target.closest&&e.target.closest('#cas34 canvas');if(!cv)return;
   const r=cv.getBoundingClientRect(),lx=(e.clientX-r.left)/r.width*320,ly=(e.clientY-r.top)/r.height*(cv.height/2),sty=casSty68(),M=G77.meta[sty],C=st77();
@@ -31598,13 +31606,21 @@ document.addEventListener('pointerdown',e=>{try{if(!on77()||!CASEL34||CASEL34.hi
 document.addEventListener('keydown',e=>{try{if(!on77()||!CASEL34||CASEL34.hidden||/INPUT|TEXTAREA/.test((e.target||{}).tagName||''))return;const G=CAS34.g,C=st77();
   if(e.key===' '&&!(G&&G.live)){spin77();e.preventDefault()}else if(C.m77==='B'&&G&&G.m77&&G.live&&/^[123]$/.test(e.key)){stop77(+e.key-1);e.preventDefault()}}catch(err){}});
 // Zweiter Automat im Casino
-try{const i=CASSPOT34.findIndex(s=>s[1]==='sl');if(i>=0){CASSPOT34[i][2]=274;CASSPOT34.splice(i+1,0,['An den Knopf-Automaten setzen','slb',296])}}catch(e){}
+try{const i=CASSPOT34.findIndex(s=>s[1]==='sl');if(i>=0){CASSPOT34[i][2]=262;CASSPOT34.splice(i+1,0,['An den Knopf-Automaten setzen','slb',284],['An den alten Automaten setzen (eine Reihe)','slc',306])}}catch(e){}
 // ---------- Klänge ----------
+// Jeder Druck hat einen eigenen Klang (Paul 06.11.: „wichtig fürs Feedback“): Linien-Wahl, Hebel, Start, Stopp (im Takt mit Glöckchen),
+// Klacken je Walze, leises Rattern der laufenden Walzen und im Knopf-Automaten ein Takt-Ticken. Das Rattern und Ticken hört nur, wer spielt.
 Object.assign(SFX64,{
-  hebel77(){g64(1.3,()=>{for(let i=0;i<7;i++)noise35(i*.035,.02,.35,2200+i*120,5);osc35('square',180,90,.26,.12,.12,.004);for(let i=0;i<14;i++)noise35(.3+i*.045,.018,.18,3600,6)})},
-  start77(){g64(1.2,()=>{osc35('square',440,660,0,.08,.08,.004);for(let i=0;i<12;i++)noise35(.08+i*.045,.018,.18,3600,6)})},
-  stopp77(t){g64(1.3,()=>{osc35('square',t?880:520,t?1320:420,0,.05,.12,.002);noise35(0,.03,.3,1800,4)})},
-  klack77(k){g64(1.3,()=>{noise35(0,.04,.45,900+(k||0)*180,3);osc35('triangle',160,90,0,.07,.18,.002)})}});
+  linie77(n){g64(1.3,()=>{noise35(0,.012,.4,5200,8);const f=[0,520,0,660,0,880][n||1]||600;osc35('square',f,f,0,.035,.09,.001);osc35('square',f*1.5,f*1.5,.04,.03,.05,.001)})},
+  wechsel77(){g64(1.2,()=>{noise35(0,.03,.3,2400,4);osc35('triangle',300,600,0,.12,.12,.003)})},
+  hebel77(){g64(1.4,()=>{for(let i=0;i<8;i++){noise35(i*.03,.014,.45,2600+i*160,7);osc35('square',900-i*40,880-i*40,i*.03,.012,.05,.001)}
+    noise35(.25,.05,.6,700,3);osc35('triangle',140,70,.25,.14,.3,.002);for(let i=0;i<5;i++)osc35('square',1100+i*90,1100+i*90,.42+i*.04,.012,.05,.001)})},
+  start77(){g64(1.4,()=>{noise35(0,.015,.5,4800,8);osc35('square',392,392,0,.06,.1,.002);osc35('square',587,587,.07,.08,.1,.002);noise35(.05,.04,.4,800,3)})},
+  stopp77(t){g64(1.5,()=>{noise35(0,.012,.55,6000,9);noise35(.008,.05,.5,600,3);osc35('triangle',220,110,0,.08,.32,.001);
+    if(t){bell35(1568,.02,.22,.5);bell35(2093,.09,.2,.6)}else osc35('square',330,300,.02,.05,.06,.001)})},
+  klack77(k){g64(1.5,()=>{noise35(0,.05,.55,700+(k||0)*220,3);osc35('triangle',180-(k||0)*20,80,0,.09,.34,.001);noise35(.06,.02,.25,3000,6)})},
+  roll77(){g64(.9,()=>{noise35(0,.008,.16,3200+Math.random()*800,9)})},
+  takt77(){g64(.9,()=>{osc35('sine',1320,1320,0,.03,.07,.001)})}});
 // ---------- C.2 / N.8: der Automat im Geschäftsführer-Kampf im neuen Design ----------
 // Die Kampftabelle (p74o) bleibt; die Symbole werden als die neuen gezeigt: Kirsche→Jeton, Zitrone→Serve, Klee→Trällo, Glocke→Kapsel,
 // Hufeisen→Lavala, BAR→BAR, Diamant→Joker, Sieben→Sieben. Die mittlere Linie zählt; oben und unten laufen die Walzen nur mit.
