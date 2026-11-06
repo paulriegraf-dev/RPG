@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 77 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 78 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -15920,7 +15920,7 @@ function learn49(h,id,ver){const B=wb49(h),w=why49(h,id);if(w)return say(h.name+
   if(id==='s3'&&!ver){const opts=Object.keys(VER49).filter(v=>cnt49(VER49[v].m)>=1);return choose27('Veredelung für '+wname49(h)+' (kostet 1 Material)',opts.map(v=>[VER49[v].n+' – '+matName49(VER49[v].m)+' ('+cnt49(VER49[v].m)+') · '+VER49[v].d,()=>learn49(h,'s3',v)]).concat([['Abbrechen',()=>{}]]))}
   let used='';if(id[0]==='s'&&id!=='s3'){const M=mats49(h,id);if(!M.use)return;M.use.forEach(([w,n])=>take49(w,n));used=matTxt49(M.use).replace(/ \(\d+\)/g,'')}
   if(id==='s3'){take49(VER49[ver].m,1);B.ver=ver;B.vers[ver]=1;used='1 × '+matName49(VER49[ver].m)}
-  if(id==='m'){take49('herz',1);used='1 × Herzstein'}
+  if(id==='m'&&!window.WB78){take49('herz',1);used='1 × Herzstein'}
   B.wp-=COST49[id];B.n[id]=1;const N=node49(h,id);if(N.art)artAdd49(h,N.art);if(id[0]==='s'||id==='m')pf49(h,'handwerklich',2);
   try{lvUpFx31(h)}catch(e){}try{snd42('lvl')}catch(e){}
   say('⚔ '+h.name+'s '+wname49(h)+': „'+N.n+'“'+(used?' (geschmiedet aus '+used+')':'')+'. '+N.d.replace(/ Braucht.*$/,''),'new');addChron(h.name+'s Waffe: '+N.n+'.',[],true);
@@ -16468,7 +16468,7 @@ function wbDraw49(){const cv=WBC49,h=PARTY[WBI49];if(!cv||!h)return;const g=cv.g
   // Sternbild-Hintergrund
   for(let i=0;i<70;i++){const x=(i*97)%400,y=(i*53+i*i)%280,a=.25+.25*Math.sin(t/900+i);g.fillStyle='rgba(200,180,255,'+a.toFixed(2)+')';g.fillRect(x,y,1,1)}
   g.strokeStyle='#211c30';g.lineWidth=1;[46,84,124].forEach(r=>{g.beginPath();g.arc(200,140,r,0,Math.PI*2);g.stroke()});
-  g.font='8px "Pixelify Sans",monospace';g.fillStyle='#6a5a8a';g.textAlign='center';g.fillText('KUNST',200,62);g.fillText('WESEN',200,272);g.textAlign='left';g.fillText('SCHMIEDE',300,118);g.fillText('KLASSE',50,118);
+  g.font='8px "Pixelify Sans",monospace';g.fillStyle='#6a5a8a';g.textAlign='center';if(window.WB78){g.fillText('KUNST',200,12);g.fillText('WESEN',200,276);g.textAlign='left'}else{g.fillText('KUNST',200,62);g.fillText('WESEN',200,272);g.textAlign='left';g.fillText('SCHMIEDE',300,118);g.fillText('KLASSE',50,118)}
   // Verbindungen (gepunktet)
   LINK49.forEach(([a,b])=>{const A=POS49[a],Bp=POS49[b],on=(a==='m'||B.n[a])&&B.n[b];const col=on?'#f6c84a':'#4a4068';const n=Math.max(1,Math.round(Math.hypot(Bp[0]-A[0],Bp[1]-A[1])/3));
     for(let i=0;i<=n;i++){if(i%2)continue;const x=A[0]+(Bp[0]-A[0])*i/n,y=A[1]+(Bp[1]-A[1])*i/n;g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),1,1)}});
@@ -22883,12 +22883,12 @@ gfWin34=function(){const F=ffl34();F.gf.done='kampf';slotHide34();say('Der Gesch
 
 
 // Prototyp 64: Pauls Einträge aus Helden/heldensaetze.xlsx (Sätze, Namen, Klassen-Aktionen, Typ-Knöpfe)
-const SATZ64={"aldric": "Alter Magier mit noch älterem Eichenstab. Muss ein „verzaubertes“ Magiebuch haben, da er jedes Mal den Staub vom Buch pusten muss.", "oda": "Riecht nach Kamille. Weiß auch, wo die Kamille wächst.", "rieke": "Mischt alles mit allem. Was ist eine Anleitung?", "bodo": "Redet wenig, hämmert viel. Die Nachbarn lieben ihn.", "liska": "Folgt jeder Spur. Meist ihren eigenen.", "nyx": "Böse Hexe. Sie klopft heimlich ihren Besenstaub auf das Magiebuch von Aldric.", "wenzel": "Schweigt gern. Ups …", "yara": "Weiß, wohin der Wind weht.", "gerda": "Trägt einen Schild. Mag ihren Schild, sehr …", "pim": "Macht viralen Street-Magic-Content mit gekauften Schauspielern auf Paultube.", "hedda": "Kennt jeden Weg und jeden Klatsch.", "ulrich": "Stand zwanzig Jahre am Tor. Unbezahlt!", "jost": "Immer in der ersten Reihe, wenn sich eine wütende Meute bildet.", "konrad": "Sein Königreich erstreckt sich, so weit seine Sicht den Horizont erblickt. −8 und −10,5 – und „braucht“ keine Brille.", "kage": "Mag es, zuzuschauen.", "gerold": "So böse, wie der Regen feucht ist.", "linail": "Betet laut. Die Götter hören ihr zu. Machen aber nichts – meistens.", "prime": "Weiß alles, außer den Dingen des alltäglichen Lebens.", "oratio": "Gold und Silber sind seine Sprache der Wahl.", "glenys": "Ihr Schwert trashtalkt sie die ganze Zeit. Wird es einfach nicht los.", "wyvera": "Hat einen Drachen. Und jeder wird davon wissen.", "bolle": "Reparatur notwendig? Hammer! Uhr kaputt? Hammer! Es klappt am Ende irgendwie.", "eckhart": "Hat drei Burgen, einen Affen und ein Pferd. Hat Phantom-Schmerzen, wenn man ihm an seinen nicht vorhandenen Zöpfen zieht.", "morla": "Stets bemüht. Lässt Nyx in Aldrics Haus."};
-const KNAME64={"oda": "Pflanzen-Heilerin", "liska": "Spurenjägerin", "wenzel": "Schweigsamer Mönch", "pim": "Street-Magician", "oratio": "Währungs-Krieger", "glenys": "Gefäß des Dämonenschwerts", "hinnerk": "Keyboard-Warrior", "morla": "Zauber-Lehrling", "deicen": "Knifflerin", "lioba": "Nonne", "ilva": "Kopierzwerg"};
-const ANAME64={"juno": "Troubadix Cosplay", "fenn": "Schatten-Spähung", "oda": "Blütenheilung", "kasimir": "Helden-Ansprache", "rieke": "Alchemie-Wahn", "bodo": "Amboss zücken", "yara": "Seefahrer-Gespür", "lorenz": "Quelle überprüfen", "runa": "Söldnerisches Handeln", "gerold": "Kraft sammeln", "oratio": "Preis einfordern", "hinnerk": "Seinem Namen gerecht werden", "gunther": "Back in my days…", "deicen": "Würfel werfen", "ilva": "Nachäffen", "sunna": "Pfadfindlern", "ronja": "Kunsttanz", "tamino": "Fächertanz"};
-const KATXT64={"Froschwanderer": {"ok": "„Quak.“ {Name} springt – weiter, als irgendwer gedacht hätte – und landet genau richtig.", "no": "{Name} springt. Platsch.", "w": "bei Gräben, Wasser, Mauern, Kanten und im Gebirge"}, "Seefahrerin": {"ok": "Zwei Schlingen, ein Zug: {Name}s Knoten hält, egal was kommt.", "no": "Der Knoten ist schön. Er hält nur nicht.", "w": "bei Seilen, Booten, Leitern, Brunnen und im Gebirge"}, "Hohepriesterin": {"ok": "{Name} betet laut. Die Götter hören zu – heute schon.", "no": "{Name} betet laut. Die Götter sind gerade beschäftigt.", "w": "wenn jemandem Geist fehlt oder jemand verletzt ist"}, "Mönch": {"ok": "{Name} schweigt. Dann lacht er leise. Die Ruhe steckt alle an.", "no": "{Name} schweigt. Und muss niesen.", "w": "wenn jemandem Geist fehlt"}, "Alchemistin": {"ok": "{Name} mischt alles mit allem. Diesmal klappt es.", "no": "Es blubbert, es stinkt, es bleibt im Glas.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Heilerin": {"ok": "{Name} riecht nach Kamille und weiß, wo es wehtut. Ein Verband, ein Schluck – besser.", "no": "Die Hände zittern. {Name} versucht es später noch einmal.", "w": "wenn jemand verletzt ist"}, "Hexe": {"ok": "{Name} murmelt über einer Handvoll Kräuter. Grüner Dampf, ein Hauch Wärme – es wird besser.", "no": "Der Dampf riecht gut. Mehr passiert nicht.", "w": "wenn jemand verletzt ist oder bei Kräutern, Kesseln, Flaschen"}, "Kräuterkundige": {"ok": "{Name} kennt jede Wurzel beim Vornamen. Diese hier hilft.", "no": "Diese Wurzel kennt {Name} nicht. Und sie {Name} auch nicht.", "w": "bei Pflanzen und draußen im Grünen"}, "Sanitäterin": {"ok": "Ein Verband. Noch einer. {Name} verbindet alles – auch Leute, die das nicht wollten.", "no": "Der Verband hält nicht. {Name} wickelt ihn wieder ab.", "w": "wenn jemand verletzt ist"}, "Handwerker": {"ok": "Ein Brett, drei Nägel, drei Schläge: {Name} hat es wieder stabil gemacht. Dabei findet sich etwas.", "no": "Das Holz ist zu morsch. {Name} legt den Hammer seufzend weg.", "w": "bei Holz, Möbeln, Stegen und Kaputtem"}, "Magd": {"ok": "{Name} packt an und hebt es einfach hoch. Darunter liegt etwas.", "no": "Zu schwer, selbst für {Name}. Für heute.", "w": "bei Schwerem: Fässer, Kisten, Säcke, Steine"}, "Mistgabel-Held": {"ok": "{Name} stochert mit Hingabe. Es raschelt, es klirrt – da ist was!", "no": "{Name} stochert heldenhaft. Leider nur im Heu.", "w": "bei Heu, Laub, Löchern, Gebüsch, Gruben"}, "Ritter": {"ok": "{Name} stemmt die Schulter dagegen. Es knirscht, das Holz ächzt – und gibt nach.", "no": "{Name} stemmt sich dagegen, bis die Schulter brennt. Nichts rührt sich.", "zu": "Die Tür hält – sie ist zu stark beschlagen. Aber im Rahmen sitzt etwas locker.", "w": "bei Türen, Toren, Gittern, Truhen und Kisten"}, "Schmied": {"ok": "{Name} klopft, biegt und zieht nach. Danach läuft es wieder – und ein brauchbares Teil bleibt übrig.", "no": "{Name} dreht es hin und her. Ohne Werkstatt wird das nichts.", "w": "bei Mechanik und bei Kaputtem"}, "Drachenkönigin": {"ok": "{Name} ruft. Hoch oben zieht ein Schatten vorbei. Der Drache sieht es anders, kommt aber trotzdem kurz.", "no": "{Name} ruft. Der Drache hat heute frei.", "w": "draußen, wo eine Probe oder Gefahr wartet"}, "Held": {"ok": "„Wir schaffen das.“ {Name} sagt es so, dass alle es glauben.", "no": "„Wir schaffen das …?“ Klang nicht ganz überzeugt.", "w": "wo eine Probe oder Gefahr wartet"}, "König ohne Land": {"ok": "„Aufstellung!“ {Name} regiert die Gruppe wie den Pferdestall: streng, aber gerecht.", "no": "„Aufstellung!“ Keiner stellt sich auf.", "w": "wo eine Probe oder Gefahr wartet"}, "Ritterin": {"ok": "{Name} hebt den geerbten Schild. Der Mut ist auch geerbt – und steckt an.", "no": "Der Schild rutscht. Der Mut auch, ein bisschen.", "w": "wo eine Probe oder Gefahr wartet"}, "Schildmaid": {"ok": "{Name} hebt den Schild. Steht. Bleibt stehen. Dahinter fühlen sich alle sicherer.", "no": "Der Schild ist heute schwerer als sonst.", "w": "wo eine Probe oder Gefahr wartet"}, "Assassine": {"ok": "Eben war {Name} noch da. Jetzt nicht mehr. Dann wieder doch – mit etwas in der Hand.", "no": "Der Schatten ist zu klein. {Name} steht einfach in der Ecke.", "w": "im Dunkeln: Nischen, Gänge, Keller, Höhlen, nachts"}, "Schattenläufer": {"ok": "{Name} ist kurz weg und kommt mit einem Lächeln wieder. Ehrlich. Meistens.", "no": "Eine Diele knarrt. {Name} tut so, als wäre nichts gewesen.", "w": "wo es Verborgenes gibt oder Leute, die man belauschen kann"}, "Sträfling": {"ok": "„Kenn ich.“ Ein Kratzen, ein Klick – offen.", "no": "Das Schloss ist neuer als {Name}s Erfahrung.", "zu": "Dieses Schloss bleibt zu, das spürt {Name} sofort. Aber dabei fällt etwas auf.", "w": "bei Schlössern, Truhen, Gittern, Zellen"}, "Waldwicht": {"ok": "{Name} macht sich ganz schmal und ist durch. Auf der anderen Seite: etwas.", "no": "Zu eng – sogar für {Name}.", "w": "bei engen Stellen: Ritzen, Spalten, Gittern, Schächten, Rohren"}, "Bardin": {"ok": "{Name} stimmt ein Lied an. Nach der ersten Strophe singen die Leute mit.", "no": "{Name} stimmt an. Niemand stimmt ein.", "w": "wo Leute sind"}, "Baron": {"ok": "„Das gehört eigentlich mir.“ {Name} sagt es so überzeugt, dass niemand widerspricht.", "no": "„Ihnen? Nein.“ Drei Burgen, kein Eindruck.", "w": "wo Leute sind"}, "Gaukler": {"ok": "{Name} wirft, fängt, schlägt ein Rad. Applaus! Münzen klimpern.", "no": "Ein Ball fällt herunter. Dann noch einer.", "w": "wo Leute sind"}, "Monsterflüsterer": {"ok": "{Name} knurrt freundlich. Das Tier antwortet – und zeigt, was es weiß.", "no": "Das Tier sieht {Name} an, als hätte es nichts verstanden. Hat es auch nicht.", "w": "bei Tieren und Wesen"}, "Prinzessin a.D.": {"ok": "{Name} setzt sich gerade hin, und plötzlich steht man ihr gegenüber wie im Thronsaal. Man hört zu.", "no": "„Und wer sind Sie?“ Ohne Schloss hält man schlecht Hof.", "w": "wo Leute sind"}, "Söldner": {"ok": "„Für euch: ein Sonderpreis.“ {Name} grinst. Man verhandelt – und mag ihn danach mehr.", "no": "Der Preis ist zu hoch. Sogar für einen guten Witz.", "w": "wo Leute sind"}, "Söldnerin": {"ok": "„Arbeit kostet.“ {Name} verschränkt die Arme. Man nimmt sie ernst.", "no": "„Sold? Wofür?“ Man lacht {Name} aus.", "w": "wo Leute sind"}, "Wolfsbarde": {"ok": "{Name} hebt den Kopf und heult – in Dur. Alle hören zu, manche heulen mit.", "no": "Ein Heuler in Moll. Nur die Hunde im Ort antworten.", "w": "draußen bei Nacht oder wo Leute sind"}, "Bauer": {"ok": "{Name} gräbt. Die Erde gibt etwas her, das hier jemand verloren hat.", "no": "Nur Steine und ein beleidigter Wurm.", "w": "bei Erde, Feldern, Gärten, Sand – und draußen im Grünen"}, "Bogenschütze": {"ok": "{Name} spannt, zielt, schießt – Treffer. Etwas fällt herunter.", "no": "Der Pfeil fliegt sehr weit. In die falsche Richtung.", "w": "draußen oder bei etwas, das man treffen kann"}, "Botin": {"ok": "{Name} kennt den Weg – oder einen besseren. Unterwegs liegt etwas am Rand.", "no": "Die Abkürzung ist länger als der Weg.", "w": "draußen, wo mindestens zwei Wege weiterführen"}, "Fuchsjägerin": {"ok": "{Name} hat die Fährte. Ein paar Schritte, ein Haken – da!", "no": "Die Fährte endet einfach. Auch die falsche.", "w": "draußen und überall, wo Spuren sein können"}, "Wachmann": {"ok": "{Name} stellt sich hin und sieht zu. Lange. Dann fällt auf, was sonst keiner bemerkt hat.", "no": "Zwanzig Jahre Erfahrung – und heute kommt wieder niemand.", "w": "an Toren, Treppen, Plätzen und wo Leute sind"}, "Waldläuferin": {"ok": "{Name} kniet sich hin und folgt den Spuren mit den Fingern. Sie führen zu etwas.", "no": "Zu viele Spuren, alle durcheinander.", "w": "draußen und überall, wo Spuren sein können"}, "Dämonenschwert": {"ok": "{Name} hält die Klinge daran. Sie flüstert. {Name} flüstert zurück – und versteht.", "no": "Die Klinge schweigt beleidigt.", "w": "bei Magischem: Altar, Spiegel, Kapseln, Zeichen, Dreiecken"}, "Gelehrter": {"ok": "{Name} blättert, liest, murmelt eine Fußnote. Da steht es ja!", "no": "{Name} findet nur Fußnoten zu Fußnoten.", "w": "bei Büchern, Schriften, Tafeln, Briefen, Inschriften"}, "Großer Weiser": {"ok": "{Name} streicht über das alte Ding. „Das hab ich schon einmal gesehen. Vor sehr langer Zeit.“ Er erinnert sich – an die richtige Hälfte.", "no": "„Das kenne ich … glaube ich.“ {Name} erinnert sich an die falsche Hälfte.", "w": "bei Altem: Ruinen, Altären, Statuen, Brunnen, Glocken"}, "Rentner": {"ok": "„Früher, da …“ {Name} erzählt. Und erzählt. Mittendrin steckt etwas, das wirklich hilft.", "no": "{Name} erzählt eine Geschichte ohne Ende. Und ohne Pointe.", "w": "wo Leute sind oder bei Altem"}, "Sternenkundlerin": {"ok": "{Name} zeigt nach oben und zählt. Diesmal stimmt die Zahl – und die Sterne verraten etwas.", "no": "Wolken. Oder {Name} hat sich verzählt.", "w": "draußen bei Nacht oder bei Sternkarten, Fernrohren"}, "Tüftlerin": {"ok": "{Name} legt ein Ohr an die Mechanik und dreht an einer Schraube. Klick. Jetzt ist klar, wie es funktioniert.", "no": "Zu viele Zahnräder, zu wenig Licht. {Name} wird nicht schlau daraus.", "w": "bei Mechanik: Aufzug, Ventil, Zahnräder, Uhren, Schlösser"}, "Zauberin": {"ok": "{Name} schnippt, und Funken fliegen in jede Ecke. In ihrem Licht zeigt sich, was im Dunkeln lag.", "no": "Ein Funke, ein Zischen, ein bisschen Rauch. Mehr nicht.", "w": "bei Magischem und im Dunkeln, nachts"}, "Zeithexe": {"ok": "{Name} dreht an einer unsichtbaren Uhr. Fünf Minuten zurück – diesmal weiß die Gruppe, worauf sie achten muss.", "no": "Die Zeit hakt. {Name} kommt nur zwei Sekunden weit, und die bringen nichts.", "w": "nach einer misslungenen Probe hier, oder bei Uhren und Glocken"}, "Glücksspieler": {"ok": "{Name} legt drei Karten offen hin. Die Leute beugen sich vor – und erzählen mehr, als sie wollten.", "no": "Die Karten fallen falsch. Niemand will mitspielen.", "w": "wo Leute sind"}, "Glücksspielerin": {"ok": "{Name} lässt die Würfel über den Tisch rollen. Zwei Sechsen. Jetzt hört ihr jeder zu.", "no": "Die Würfel rollen unter einen Tisch. Peinlich.", "w": "wo Leute sind"}, "Raufbold": {"ok": "Ein Schubser, ein Lachen, ein Armdrücken – {Name} hat neue Freunde. Grobe, aber ehrliche.", "no": "Niemand will sich mit {Name} anlegen. Das ist auch eine Antwort.", "w": "wo Leute sind"}, "Berserkerin": {"ok": "{Name} haut auf den Tisch, dass die Becher springen. Danach redet man respektvoll mit ihr.", "no": "{Name} schaut grimmig. Alle schauen weg.", "w": "wo Leute sind"}, "Fechter": {"ok": "{Name} wirft den Handschuh hin. Das Duell dauert drei Takte. Danach verbeugt man sich und redet.", "no": "Niemand hebt den Handschuh auf. {Name} hebt ihn selbst wieder auf. Schnell.", "w": "wo Leute sind"}, "Fechterin": {"ok": "{Name} sagt kein Wort, zieht nur die Klinge einen Fingerbreit. Das reicht.", "no": "{Name} wartet schweigend. Diesmal versteht es niemand.", "w": "wo Leute sind"}, "Spiegler": {"ok": "{Name} spricht mit der Stimme eines Wachmanns. Es wirkt. Erschreckend gut.", "no": "Die Stimme rutscht weg. Man starrt {Name} an.", "w": "wo Leute sind"}, "Spieglerin": {"ok": "{Name} macht die Haltung des Gegenübers nach. Es fühlt sich verstanden – und erzählt.", "no": "{Name} ist zu klein, um ernst genommen zu werden. Heute.", "w": "wo Leute sind"}, "Geschützmeister": {"ok": "Zwei Schrauben, ein Knall: {Name} hat es wieder zum Laufen gebracht. Und etwas Brauchbares bleibt übrig.", "no": "Es knallt. Leider an der falschen Stelle.", "w": "bei Mechanik, Holz und Kaputtem"}, "Geschützmeisterin": {"ok": "{Name} hat genau das passende Teil dabei. Natürlich. Doppelt.", "no": "Das eine Teil, das fehlt, hat {Name} nur einmal. Und das ist weg.", "w": "bei Mechanik, Holz und Kaputtem"}, "Tierwandlerin": {"ok": "{Name} riecht es, bevor es zu sehen ist: Hier war jemand. Gerade eben.", "no": "Zu viele Gerüche. {Name} niest.", "w": "bei Spuren, Tieren und Pflanzen"}, "Tierwandler": {"ok": "{Name} schnuppert, knurrt leise und zeigt in eine Richtung. Da war etwas.", "no": "Der Wind dreht. {Name} schüttelt den Kopf.", "w": "bei Spuren, Tieren und Pflanzen"}, "Tänzerin": {"ok": "{Name} wirbelt durch den Raum, die Bänder klingeln. Die Leute lachen und reden.", "no": "{Name} stolpert über ein Band. Gelächter – leider über sie.", "w": "wo Leute sind"}, "Tänzer": {"ok": "{Name} tanzt. Erst schaut einer, dann alle. Danach ist die Stimmung besser und die Zungen locker.", "no": "Niemand will tanzen. {Name} tanzt trotzdem. Allein.", "w": "wo Leute sind"}, "Eidritter": {"ok": "{Name} legt die Hand aufs Schild und schwört, zu helfen. Man glaubt ihm. Man hilft zurück.", "no": "Der Eid klingt hohl. Vielleicht war Kuchen im Spiel.", "w": "wo Leute sind oder jemand verletzt ist"}, "Eidritterin": {"ok": "{Name} stellt sich vor die Schwächsten und schwört. Das sieht jeder.", "no": "Der Schwur verhallt. Heute hört niemand zu.", "w": "wo Leute sind oder jemand verletzt ist"}, "Fallensteller": {"ok": "{Name} spannt einen Draht, wartet – und es zappelt. Etwas Brauchbares hängt drin.", "no": "Die Falle bleibt leer. Joris wartet trotzdem noch kurz.", "w": "bei Spuren, Tieren und engen Stellen"}, "Fallenstellerin": {"ok": "{Name} wirft das Netz, zieht – und da ist etwas drin.", "no": "Das Netz kommt leer zurück. Und nass.", "w": "bei Spuren, Tieren und engen Stellen"}, "Illusionist": {"ok": "{Name} malt ein Bild in die Luft. Alle schauen hin. Niemand schaut auf das, was dahinter geschieht.", "no": "Das Bild flackert und zerfällt. Man schaut eher {Name} an.", "w": "wo Leute sind oder es dunkel ist"}, "Illusionistin": {"ok": "In der Laterne erscheint ein Bild. Es zeigt, was hier fehlt.", "no": "Die Laterne bleibt dunkel. Diesmal.", "w": "wo Leute sind oder es dunkel ist"}};
-const TYPN64={"Kämpfer": "Zupacken", "Flinke": "Genau hinsehen", "Gelehrte": "Nachdenken", "Stützen": "Sich kümmern"};
-const SAATX64={"aldric": {"th": "Magie & Träume", "p": "Lehrmeisterin Walburga Funkelmoos, die ihm das Buch vermachte", "ps": "nur als Erinnerung", "w": "will herausfinden, ob sein Buch wirklich verzaubert ist und was hinter dem Lesezeichen steht"}, "brann": {"th": "Schulden", "p": "Wirtin Gerlinde Knarrholz, der die Tür gehörte", "ps": "ja", "w": "will der Wirtin ihre Türklinke zurückbringen, sobald er sich davon trennen kann"}, "mira": {"th": "Tiere & Wildnis", "p": "Krakel, der Eichelhäher, der sie aus dem Wald führte", "ps": "ja", "w": "will den Eichelhäher wiederfinden, der sich seitdem selbst ständig verläuft"}, "tilda": {"th": "Familie", "p": "Großmutter Hiltrud, Tüftlerin mit zwei Schraubenziehern", "ps": "ja", "w": "will ihrer Großmutter einen Apparat zeigen, der ganz von allein läuft"}, "juno": {"th": "Musik", "p": "Liedermacher Ferdinand Zwitscher, ihr alter Lehrer", "ps": "nur als Erinnerung", "w": "will eine Strophe schreiben über etwas, das wirklich passiert ist"}, "fenn": {"th": "Vergessen", "p": "Herr Bertram von Rübenau, ein vergesslicher Edelmann", "ps": "ja", "w": "will herausfinden, wem der Siegelring gehört, und ihn zurückgeben, bevor es jemand merkt"}, "oda": {"th": "Heimat", "p": "Kräuterfrau Mechthild Kamillenhaupt, ihre Lehrmeisterin", "ps": "nur als Erinnerung", "w": "will die Wiese wiederfinden, auf der ihre erste Kamille gewachsen ist"}, "kasimir": {"th": "Familie", "p": "Mutter Agathe Rübsam, die beste Rübensuppenköchin im Dorf", "ps": "ja", "w": "will beide Versprechen auf seiner Liste halten, ohne seiner Mutter das Herz zu brechen"}, "rieke": {"th": "Wissen", "p": "Apotheker Quendelin Mörser, bei dem sie Fläschchen spülte", "ps": "nur als Erinnerung", "w": "will herausfinden, was in ihrem ersten Gemisch eigentlich passiert ist"}, "bodo": {"th": "Handwerk & Tüftelei", "p": "Meister Hufnagel, der alte Hufschmied", "ps": "nur als Erinnerung", "w": "will ein Hufeisen schmieden, das seinem alten Meister gefallen hätte"}, "liska": {"th": "Verlust", "p": "Graubart, der alte Fuchs, mit dem sie sich unterhielt", "ps": "nur als Erinnerung", "w": "will die Geschichte zu Ende hören, die der alte Fuchs ihr damals angefangen hat"}, "nyx": {"th": "Familie", "p": "Urgroßmutter Rabenhild, eine sehr eingebildete Hexe", "ps": "nur als Erinnerung", "w": "will beweisen, dass sie eine mindestens so böse Hexe ist wie ihre Urgroßmutter"}, "wenzel": {"th": "Glaube", "p": "Abt Anselm Leisefuß aus seinem Kloster", "ps": "ja", "w": "will herausfinden, woher die überzählige Perle an seiner Gebetskette stammt"}, "yara": {"th": "Wasser & Meer", "p": "Kapitänin Margit Möwenfuß, ihre erste Schiffsherrin", "ps": "ja", "w": "will das Meer finden, das in ihrer Muschel rauscht"}, "gerda": {"th": "Rache", "p": "Grobian Knurrbart, der ihren ersten Schild zerbrach", "ps": "ja", "w": "will dem Rüpel von damals zeigen, dass sie nicht zerbrochen ist"}, "pim": {"th": "Ruhm & Gold", "p": "Zauberonkel Fridolin Plüsch, der ihm die rote Nase schenkte", "ps": "nur als Erinnerung", "w": "will einmal einen echten Trick vorführen, ganz ohne bezahlte Zuschauer"}, "elske": {"th": "Wissen", "p": "Sternwärter Kasparus Fernglas, ihr alter Lehrer", "ps": "nur als Erinnerung", "w": "will die Sterne zählen und zweimal hintereinander auf dieselbe Zahl kommen"}, "quirin": {"th": "Wasser & Meer", "p": "Tante Unke Quakmeier vom fast schönen Teich", "ps": "ja", "w": "will einen Teich finden, der ihm ganz und nicht nur fast gefällt"}, "hedda": {"th": "Verlust", "p": "Botin Hulda Siebenmeil, die ihr den Brief vor ihrer letzten Reise gab", "ps": "nur als Erinnerung", "w": "will herausfinden, für wen der Brief bestimmt war, den keiner haben wollte"}, "lorenz": {"th": "Wissen", "p": "Professorin Amalie Randnotiz, seine alte Lehrerin", "ps": "nur als Erinnerung", "w": "will das Buch finden, zu dem seine Fußnote gehört"}, "ulrich": {"th": "Schulden", "p": "Torvogt Balduin Knauser, der ihm zwanzig Jahre Lohn schuldet", "ps": "ja", "w": "will endlich seinen Lohn für zwanzig Jahre am Tor bekommen"}, "adela": {"th": "Adel & Ehre", "p": "Großmutter Kunigunde von Hagebutt, Ritterin", "ps": "nur als Erinnerung", "w": "will dem Wappen ihrer Großmutter Ehre machen, erst denkend und dann trotzdem"}, "jost": {"th": "Heimat", "p": "Vater Hermann Krautwedel, von dem er den Acker hat", "ps": "nur als Erinnerung", "w": "will nach dem Abenteuer die größte Rübe ernten, die sein Dorf je gesehen hat"}, "konrad": {"th": "Adel & Ehre", "p": "Hofmarschall Leberecht Zipfel, sein einziger Untertan", "ps": "ja", "w": "will das Land finden, über das er König ist, sobald er es genau erkennen kann"}, "wilma": {"th": "Tiere & Wildnis", "p": "Muhme Gundel Knollrich, die ihr die Namen der Wurzeln beibrachte", "ps": "nur als Erinnerung", "w": "will für Gerhard, ihre schüchterne Wurzel, einen guten Platz zum Wachsen finden"}, "kage": {"th": "Vergessen", "p": "Meister Schattwig, sein stummer Lehrmeister", "ps": "nur als Erinnerung", "w": "will sich erinnern, wann und von wem er das schwarze Halstuch bekommen hat"}, "gustav": {"th": "Gesetz & Gauner", "p": "Wärter Alfons Schlüsselbund, der ihm abends die Zelle aufhält", "ps": "ja", "w": "will einen Ausflug erleben, der so spannend ist, dass er abends nicht zurück will"}, "runa": {"th": "Schulden", "p": "Bäckerin Frieda Streusel, die ihr den ersten Sold in Kuchen zahlte", "ps": "ja", "w": "will der Bäckerin von damals endlich einmal selbst einen Kuchen ausgeben"}, "gerold": {"th": "Rache", "p": "Ritter Edelbert von Glanzhelm, sein ewiger Turnierrivale", "ps": "ja", "w": "will Ritter Edelbert beim nächsten Turnier mit frisch geölter Rüstung besiegen"}, "fips": {"th": "Ruhm & Gold", "p": "Schützenkönig Lambert Kerbholz, der ihm den Preis überreichte", "ps": "ja", "w": "will einmal genau im richtigen Moment treffen, wenn alle hinsehen"}, "hanne": {"th": "Familie", "p": "Bruder Till, den sie als Kind ständig verband", "ps": "ja", "w": "will ihrem Bruder beweisen, dass die Welt auch ohne ihn genug zu verbinden hat"}, "ouzo": {"th": "Musik", "p": "Rudelmutter Silberheul, die ihm das Heulen beibrachte", "ps": "ja", "w": "will einmal ein Lied in Moll heulen, ohne dabei traurig zu werden"}, "linail": {"th": "Glaube", "p": "Hohepriester Hilarius Weihrauch, ihr alter Lehrer", "ps": "nur als Erinnerung", "w": "will herausfinden, ob die Götter ihr stummes Glöckchen wirklich hören"}, "prime": {"th": "Vergessen", "p": "Haushälterin Adelheid Knöpfchen, die ihm früher die Schuhe band", "ps": "nur als Erinnerung", "w": "will sich erinnern, was auf den leeren Seiten seines Notizbuchs stand"}, "oratio": {"th": "Schulden", "p": "Händler Schnorr Falschgold, sein erster Auftraggeber", "ps": "ja", "w": "will den Händler finden, der ihm noch einen echten ersten Lohn schuldet"}, "glenys": {"th": "Magie & Träume", "p": "Schwertschmied Grimbart Funkenschlag, der ihr das Schwert verkaufte", "ps": "nur als Erinnerung", "w": "will herausfinden, wie man ein redendes Schwert zu einem netten Satz bringt"}, "hex": {"th": "Magie & Träume", "p": "Uhrmacherin Minuta Tickel, die ihr die Sanduhr verkaufte", "ps": "ja", "w": "will herausfinden, warum ihre Sanduhr nach oben rieselt"}, "ley": {"th": "Aufbruch", "p": "Tierpflegerin Mathilde Brummfell, bei der sie Knurren lernte", "ps": "nur als Erinnerung", "w": "will das Monster finden, dem ihr leeres Halsband passt"}, "wyvera": {"th": "Ruhm & Gold", "p": "Drachenzüchter Ottokar Schuppenglanz, von dem sie ihr Drachenei hat", "ps": "nur als Erinnerung", "w": "will, dass im ganzen Land jeder von ihrem Drachen weiß"}, "hinnerk": {"th": "Aufbruch", "p": "Mutter Hiltraut Strohbart, die ihm die Mistgabel mitgab", "ps": "ja", "w": "will die erste Seite seines Abenteuerbuchs mit etwas Richtigem füllen"}, "lotte": {"th": "Aufbruch", "p": "König Leopold der Gemütliche, ihr Vater", "ps": "ja", "w": "will beweisen, dass sie ohne Schloss genauso funkelt wie mit"}, "gunther": {"th": "Ruhm & Gold", "p": "Abenteurerin Erna Donnerknie, seine alte Weggefährtin", "ps": "nur als Erinnerung", "w": "will herausfinden, welche Fassung seiner Medaillengeschichte die wahre ist"}, "bolle": {"th": "Handwerk & Tüftelei", "p": "Uhrmachermeister Zacharias Unruh, dessen Uhr er reparierte", "ps": "ja", "w": "will eine Uhr so reparieren, dass sie richtig geht, natürlich mit dem Hammer"}, "eckhart": {"th": "Adel & Ehre", "p": "Großonkel Baron Eberhard von Pfennigsau, der ihm die Burgen vererbte", "ps": "nur als Erinnerung", "w": "will wenigstens eine seiner drei Burgen wieder trockenlegen"}, "greta": {"th": "Adel & Ehre", "p": "Gräfin Kunigunde von Eimerstein, ihre frühere Herrin", "ps": "ja", "w": "will eines ihrer drei Geheimnisse der richtigen Person verraten und einen Knoten lösen"}, "wicht": {"th": "Heimat", "p": "Großvater Moosbart, der älteste Wicht seines Waldes", "ps": "nur als Erinnerung", "w": "will das Moospolster finden, aus dem sein Kopfkissen stammt"}, "morla": {"th": "Magie & Träume", "p": "Zaubermeisterin Pomona Wackelstab, ihre Ausbilderin", "ps": "nur als Erinnerung", "w": "will einen Zauber schaffen, bei dem nichts zerbricht"}, "marlo": {"th": "Rache", "p": "Spielerin Rosamunde Kreuzass, gegen die er fast verloren hätte", "ps": "ja", "w": "will Rosamunde Kreuzass noch einmal gegenübersitzen und diesmal klar gewinnen"}, "deicen": {"th": "Schulden", "p": "Würfelwirt Kuno Pasch, der ihr noch eine Revanche schuldet", "ps": "ja", "w": "will beim Würfelwirt ihre Revanche einlösen und mit ihrem Würfel gewinnen"}, "zwambo": {"th": "Schulden", "p": "Raufbold Klotzmann, dem der Zahn an der Schnur gehört", "ps": "ja", "w": "will dem Besitzer des Zahns erklären, wie es dazu kam, und sich mit ihm vertragen"}, "dagny": {"th": "Wasser & Meer", "p": "Kapitän Haldor Sturmbart, mit dem das Schiff verschwand", "ps": "nur als Erinnerung", "w": "will herausfinden, was beim letzten Sturm aus ihrem Schiff geworden ist"}, "veit": {"th": "Musik", "p": "Fechtmeister Amadeus Taktstock, der ihm das Mitzählen beibrachte", "ps": "nur als Erinnerung", "w": "will einen Kampf so sauber im Takt fechten, dass man dazu tanzen könnte"}, "lioba": {"th": "Glaube", "p": "Schwester Benedikta Stillwasser, die ihr das Schweigen beibrachte", "ps": "ja", "w": "will ihrer alten Lehrerin zeigen, dass man auch mit der Klinge beten kann"}, "tobin": {"th": "Vergessen", "p": "Puppenspieler Gottlob Fadenzieh, der ihm das Nachmachen beibrachte", "ps": "nur als Erinnerung", "w": "will herausfinden, wie er selbst klingt, wenn er niemanden nachmacht"}, "ilva": {"th": "Heimat", "p": "Schneiderin Agnes Nadelöhr, der der Fingerhut gehörte", "ps": "ja", "w": "will die Nähstube wiederfinden, in deren Nähkorb sie aufgewachsen ist"}, "cord": {"th": "Handwerk & Tüftelei", "p": "Nachbarin Walpurga Schiefhaus, deren Haus seitdem schief steht", "ps": "ja", "w": "will einen Apparat bauen, der laut genug ist und trotzdem kein Haus verbiegt"}, "minna": {"th": "Familie", "p": "Vater Gerwin Messingmann, der das Rohr gravierte", "ps": "nur als Erinnerung", "w": "will herausfinden, was ihr Vater mit „Für später“ gemeint hat"}, "sunna": {"th": "Tiere & Wildnis", "p": "Brummhold, der Bär, der ihr die Kralle schenkte", "ps": "ja", "w": "will den Bären wiederfinden und klären, ob er die Kralle wirklich verschenkt hat"}, "enno": {"th": "Heimat", "p": "Rotpelz, die Füchsin, die ihn großzog", "ps": "nur als Erinnerung", "w": "will den Fuchsbau wiederfinden, in dem er großgeworden ist"}, "ronja": {"th": "Aufbruch", "p": "Tanzmeisterin Philippa Wirbelwind, die ihr den ersten Faden gab", "ps": "nur als Erinnerung", "w": "will in so vielen Städten tanzen, bis ihr Band einmal ums ganze Land reicht"}, "tamino": {"th": "Musik", "p": "Festwirt Florian Tanzbein, der ihn nie eingeladen hat", "ps": "ja", "w": "will einmal richtig zu einem Fest eingeladen werden und trotzdem die Maske tragen"}, "bram": {"th": "Gesetz & Gauner", "p": "Glöcknerin Ursel Klangreich aus der Glockenstube", "ps": "ja", "w": "will herausfinden, ob ein gebrochener Eid gegen Kuchen eigentlich zählt"}, "ottilie": {"th": "Vergessen", "p": "Ritterin Mechtild vom Haselbusch, die das Wappen zuletzt trug", "ps": "nur als Erinnerung", "w": "will herausfinden, wem das alte Wappen auf ihrem Schildsplitter gehört"}, "joris": {"th": "Handwerk & Tüftelei", "p": "Hirtin Lene Schnürschuh, die ihn aus seiner ersten Falle befreite", "ps": "ja", "w": "will eine Falle bauen, die alles fängt außer ihn selbst"}, "birte": {"th": "Wasser & Meer", "p": "Fischer Klaas Kiemenbart, ihr alter Lehrmeister", "ps": "nur als Erinnerung", "w": "will den Hecht fangen, der den Rest ihres ersten Netzes hat"}, "olek": {"th": "Magie & Träume", "p": "Zauberkünstler Valentin Nebelhut, sein alter Lehrer", "ps": "nur als Erinnerung", "w": "will herausfinden, warum die Murmel ihn zeigt, auch wenn er woanders ist"}, "fenja": {"th": "Aufbruch", "p": "Laternenmacher Jasper Dochtlos, der ihr die Laterne baute", "ps": "ja", "w": "will die Orte, die sie in die Luft malt, einmal wirklich sehen"}, "jarek": {"th": "Gesetz & Gauner", "p": "Stadtbüttel Kunibert Pickelhaube, der einen der Haftbefehle schrieb", "ps": "ja", "w": "will herausfinden, wofür die zwei Haftbefehle eigentlich ausgestellt sind"}, "dorte": {"th": "Heimat", "p": "Großvater Alois Meckerer, der ihr die Ziegen übergab", "ps": "nur als Erinnerung", "w": "will mit ihrer Herde einmal zur alten Alm ihres Großvaters zurück"}, "selma": {"th": "Wasser & Meer", "p": "Teichmuhme Seraphine Schilfrock, bei der sie aufwuchs", "ps": "nur als Erinnerung", "w": "will den Teich ihrer Kindheit wiederfinden und ihre Seerose dorthin zurückbringen"}, "immo": {"th": "Verlust", "p": "Glöckner Pankraz Läutwerk, der die Glocke zuletzt zog", "ps": "nur als Erinnerung", "w": "will die verstummte Glocke wieder zum Klingen bringen"}};
+const SATZ64={};
+const KNAME64={};
+const ANAME64={};
+const KATXT64={};
+const TYPN64={};
+const SAATX64={};
 
 
 // ================= Prototyp 64 (h): Pauls eigene Sätze für die Heldenauswahl =================
@@ -26574,31 +26574,40 @@ const FADE71=5;   // Tage, bis ein Gerücht ohne Neues verblasst
 // Gruppen über Orte hinweg (Vorschlag, Paul entscheidet die endgültige Liste): Mitglieder aus „Gehört zu:“ in den NPC-Dateien, sonst nach Name/Rolle
 const GRP71={schneewacht:{n:'Schneewacht',re:/schneewacht|olaf|jorinde|wache|wächter|soldat|irmel|\bivo\b|krull|zöllner/i},
   moenche:{n:'Mönche von Glockenstill',re:/mönch|bruder|abt\b|novize|glockenstill/i},
-  haendler:{n:'Händler',re:null}};
+  haendler:{n:'Händler',re:null},
+  // seit 02.11. nachmittags (Paul: „Die vorgeschlagenen Gruppen sind gut.“): Mitglieder über „Gehört zu:“ in den NPC-Dateien
+  fuerstenhof:{n:'Fürstenhof',re:/trahmes|ansgar krall|wendelin|herold/i},
+  gemeinderat:{n:'Gemeinderat Großensee',re:/^(mette|krumm|lirum)\b/i},
+  kontor:{n:'Kontor und Gassen von AIDA',re:/^(wiebke|die elster)\b/i},
+  seeleute:{n:'Seeleute und Fischer',re:/fischer|kapitän|hafenmeister|fährjunge|windleser/i},
+  haus:{n:'Das Haus in Friede Freude Land',re:/croupier|türsteher des casinos|wechselstube|dj der glitzerkugel/i}};
+// Welche Orte Furcht „mögen“ (Paul, 02.11.: AIDA ja, Kloster nein): Furcht dort wirkt zusätzlich auf das Ansehen (Anteil des Furcht-Anstiegs)
+const FMAG71={aida:.4,kloster:-.5};
+const FDECAY71=5;   // Furcht sinkt um 5 je Woche, in der am Ort nichts Neues Furcht macht (Paul, 02.11.: „Furcht baut ab.“)
 // ---------- Taten (Konzept Ansatz B) ----------
 // a = Ansehen, f = Furcht am Ort der Tat; reach = wie weit es sich herumspricht; fern = andere Werte für die übrigen Orte (sonst a/f, schwächer mit der Entfernung);
 // rum = Gerücht für die Spieler (Platzhalter-Texte, der Story-Chat darf sie ersetzen); grp = Gruppen; cap = höchstens einmal am Tag je Ort; gegen = widerlegt diese Gerüchte
 const TAT71={
-  helfen:{n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
+  helfen:{gro:{stahndor:{seeleute:{a:4}},weite:{seeleute:{a:4}}},n:'Geholfen',a:6,reach:'ort',gegen:['stehlen','schulden','schlecht']},
   helfen_gross:{n:'Großes geholfen',a:18,reach:'nah',rum:'Die Fremden haben in {ORT} aufgeräumt.',gegen:['stehlen','schulden','schlecht']},
-  aushang:{n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
-  spenden:{n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
+  aushang:{gro:{grossensee:{gemeinderat:{a:8}},aida:{kontor:{a:8}}},n:'Aushang oder Auftrag erledigt',a:10,reach:'nah',rum:'Auf die Fremden ist Verlass, heißt es in {ORT}.',grp:{haendler:{a:4}},gegen:['schulden','bank_ausfall']},
+  spenden:{gro:{grossensee:{gemeinderat:{a:6}},kloster:{moenche:{a:10}}},n:'Gespendet',a:15,reach:'nah',rum:'Die Fremden haben in {ORT} gespendet.',gegen:['stehlen','schulden']},
   show:{n:'Blad(e)iatoren-Show gewonnen',a:55,f:5,reach:'nah',rum:'Blad(e)iatoren-Bezwinger',grp:{schneewacht:{a:5,f:5}}},
   frosch:{n:'Froschkonzert bis zum Ende',a:15,reach:'weit',rum:'Frog Concert Enjoyer'},
   entfernos:{n:'Mit Entfernos gesungen',a:15,reach:'weit',rum:'Die Fremden haben mit Entfernos gesungen.'},
-  befreit:{n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
-  casino:{n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
-  arena:{n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
-  boss:{n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
-  olaf_sieg:{n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
+  befreit:{gro:{ffl:{haus:{a:-15,f:10}},grossensee:{gemeinderat:{a:15}}},n:'Ort befreit',a:45,f:5,reach:'land',rum:'{ORT} ist frei – dank der Fremden.'},
+  casino:{gro:{ffl:{haus:{a:-10,f:5}}},n:'Bank im Casino gesprengt',a:5,f:5,reach:'weit',rum:'Jemand hat die Bank im Casino gesprengt.'},
+  arena:{gro:{duppelbach:{fuerstenhof:{a:5,f:3}}},n:'Kampfabend gewonnen',a:8,f:6,reach:'nah',rum:'In der Arena von Duppelbach gewinnen neuerdings Fremde.',grp:{schneewacht:{f:4}}},
+  boss:{gro:{ffl:{haus:{a:-10,f:15}}},n:'Großen Gegner besiegt',a:15,f:10,reach:'weit',rum:'Die Fremden haben etwas Großes besiegt, heißt es.'},
+  olaf_sieg:{gro:{nordstollen:{fuerstenhof:{f:5}}},n:'Hauptmann Olaf besiegt',a:8,f:12,reach:'weit',rum:'Hauptmann Olaf hat gegen Fremde verloren.',grp:{schneewacht:{a:5,f:15}}},
   olaf_vorbei:{n:'An Olaf vorbeigekommen',a:4,reach:'ort',grp:{schneewacht:{a:3}}},
   gegner:{n:'Gegner besiegt',a:1,f:1,reach:'ort',cap:1},
-  ausbruch:{n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
+  ausbruch:{gro:{duppelbach:{fuerstenhof:{a:-6}}},n:'Aus dem Turm entkommen',a:-6,f:8,reach:'weit',fern:{a:3,f:3},rum:'Aus dem Turm von Duppelbach sind Gefangene entkommen.',grp:{schneewacht:{a:-8,f:5}}},
   flucht:{n:'Vor der Wache weggerannt',a:-10,reach:'nah',rum:'In Duppelbach sucht die Wache nach Fremden.',grp:{schneewacht:{a:-5}}},
-  stehlen:{n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
+  stehlen:{gro:{duppelbach:{fuerstenhof:{a:-5}},aida:{kontor:{a:-6}}},n:'Beim Stehlen erwischt',a:-15,f:3,reach:'nah',rum:'Die Fremden sollen gestohlen haben.'},
   zahlen:{n:'Rechnung bezahlt',a:6,reach:'ort',gegen:['schulden']},
   schulden:{n:'Rechnung nicht bezahlt',a:-8,reach:'ort',rum:'Die Fremden haben ihre Rechnung nicht bezahlt.'},
-  bank_ausfall:{n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
+  bank_ausfall:{gro:{duppelbach:{fuerstenhof:{a:-8}}},n:'Kredit nicht bezahlt',a:-10,reach:'nah',rum:'Die Fremden stehen im schwarzen Buch der Volksbank.',grp:{haendler:{a:-6}}},
   drohen:{n:'Gedroht',a:-3,f:8,reach:'ort',rum:'Die Fremden haben {N} bedroht.'},
   drohen_fehl:{n:'Drohung ging daneben',a:-4,reach:'ort'},
   furcht_weg:{n:'Auf den Ruf verwiesen',a:-2,f:2,reach:'ort'},
@@ -26642,14 +26651,15 @@ function dists71(){try{const sig=WROUTES.length+':'+Object.keys(WNODES).length;i
 function dist71(a,b){if(a===b)return 0;const D=dists71();return D[a]&&D[a][b]!=null?D[a][b]:null}
 function minPerPt71(){try{return ZEIT47.reiseJePunkt||3}catch(e){return 3}}
 // ---------- Werte ändern ----------
-function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
+function apply71(e,o,da,df){const R=R71(),O=R.o[o];if(!O)return;df=Math.round(df||0);if(df>0&&FMAG71[o])da=(da||0)+df*FMAG71[o];da=Math.round(da||0);if(!da&&!df)return;
+  if(df>0){R.fl=R.fl||{};R.fl[o]=today71()}
   const a0=O.a,f0=O.f,s0=aSt71(a0),t0=fSt71(f0);O.a=Math.max(-100,Math.min(100,a0+da));O.f=Math.max(0,Math.min(100,f0+df));
   if(e)e.ap.push({o,a:O.a-a0,f:O.f-f0});
   if(o===cur71()&&(aSt71(O.a)!==s0||fSt71(O.f)!==t0)){try{say('Die Stimmung der Leute hier ändert sich.','sys')}catch(x){}setTimeout(()=>{try{nickCheck71(o)}catch(x){}},400)}}
 function grpApply71(e,g,da,df){const R=R71();da=Math.round(da||0);df=Math.round(df||0);if(!da&&!df)return;
   if(g==='haendler'){try{const E=E43(),h0=E.hr;E.hr=Math.max(-5,Math.min(5,E.hr+da/20));if(e)e.ap.push({g,hr:E.hr-h0})}catch(x){}return}
-  const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
-function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const k=Object.keys(GRP71).find(k=>GRP71[k].n.toLowerCase().startsWith(GRPNPC71[n.name].toLowerCase().slice(0,6)));if(k)return k}}catch(e){}
+  if(df>0){R.fl=R.fl||{};R.fl['g:'+g]=today71()}const G=R.g[g]=R.g[g]||{a:0,f:0},a0=G.a,f0=G.f;G.a=Math.max(-100,Math.min(100,a0+da));G.f=Math.max(0,Math.min(100,f0+df));if(e)e.ap.push({g,a:G.a-a0,f:G.f-f0})}
+function grpOf71(n){if(!n||!n.name)return null;try{if(typeof GRPNPC71!=='undefined'&&GRPNPC71[n.name]){const v=GRPNPC71[n.name].toLowerCase().trim();const k=Object.keys(GRP71).find(k=>k===v||GRP71[k].n.toLowerCase()===v||GRP71[k].n.toLowerCase().startsWith(v.slice(0,6)));if(k)return k}}catch(e){}
   try{if(typeof HAND43!=='undefined'&&HAND43[n.name])return'haendler'}catch(e){}const s=(n.name||'')+' '+(n.role||'');return Object.keys(GRP71).find(k=>GRP71[k].re&&GRP71[k].re.test(s))||null}
 function grpA71(g){if(g==='haendler'){try{return Math.round(E43().hr*20)}catch(e){return 0}}const G=R71().g[g];return G?G.a:0}
 function grpF71(g){if(g==='haendler')return 0;const G=R71().g[g];return G?G.f:0}
@@ -26659,7 +26669,7 @@ function tat71(key,o){o=o||{};const T=TAT71[key];if(!T)return null;const R=R71()
   const mul=o.mul==null?1:o.mul,t=now71(),nm=o.npc&&o.npc.name;
   const e={id:++R.n,k:key,ort,t,d:today71(),ap:[],n:T.n,txt:o.txt||null,npc:nm||null};
   apply71(e,ort,(T.a||0)*mul,(T.f||0)*mul);
-  const gs=Object.assign({},T.grp||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
+  const gs=Object.assign({},T.grp||{},(T.gro&&T.gro[ort])||{});const gn=grpOf71(o.npc);if(gn&&!gs[gn])gs[gn]={a:(T.a||0)*.5,f:(T.f||0)*.5};
   Object.keys(gs).forEach(g=>grpApply71(e,g,(gs[g].a||0)*mul,(gs[g].f||0)*mul));
   // Weitergabe an andere Orte: kommt an, wenn die Gruppe selbst dort wäre
   const rr=REACH71[T.reach||'ort']||0;if(rr>0)ORTE71.forEach(x=>{if(x===ort)return;const d=dist71(ort,x);if(d==null||d>rr)return;
@@ -26704,7 +26714,10 @@ function widerlegt71(e,o,T){negHier71(o).forEach(r=>{if((T.gegen||[]).includes(r
 function gegen71(r,o,anteil,why){const R=R71();r.dem[o]=1;let neg=0;R.log.forEach(e=>{if(r.e.includes(e.id)&&!e.undone)(e.ap||[]).forEach(x=>{if(x.o===o&&x.a<0)neg+=x.a})});
   const back=Math.round(-neg*anteil);const e={id:++R.n,k:'gegen',ort:o,t:now71(),d:today71(),ap:[],n:'Gerücht entkräftet ('+why+'): „'+r.txt+'“'};if(back)apply71(e,o,back,0);R.log.unshift(e);
   try{addChron('Ruf: '+e.n+' · '+fx71(e),['u71_'+e.id],true)}catch(x){}setWorld71();return e}
-function tick71(){const R=R71(),t=now71();if(!R.pend.length&&!R.rum.length)return;
+function decay71(){const R=R71(),d=today71();if(R.fd==null){R.fd=d;return}if(d<=R.fd)return;R.fl=R.fl||{};
+  for(let x=R.fd+1;x<=Math.min(d,R.fd+60);x++){ORTE71.forEach(o=>{const O=R.o[o],l=R.fl[o]||0;if(O&&O.f>0&&x>l&&(x-l)%7===0)O.f=Math.max(0,O.f-FDECAY71)});
+    Object.keys(R.g).forEach(g=>{const G=R.g[g],l=R.fl['g:'+g]||0;if(G&&G.f>0&&x>l&&(x-l)%7===0)G.f=Math.max(0,G.f-FDECAY71)})}R.fd=d}
+function tick71(){const R=R71(),t=now71();try{decay71()}catch(e){}if(!R.pend.length&&!R.rum.length)return;
   const due=R.pend.filter(p=>p.at<=t);if(due.length){R.pend=R.pend.filter(p=>p.at>t);due.forEach(p=>{const e=R.log.find(x=>x.id===p.e);if(e&&e.undone)return;apply71(e||null,p.o,p.a,p.f)});setWorld71()}
   R.rum.forEach(r=>{if(!r.weg&&str71(r)<=0)r.weg=1})}
 // ---------- S.world.ruf = Ansehen-Stufe des aktuellen Orts ----------
@@ -26722,6 +26735,8 @@ function parseF71(line){const P=String(line).split('|').map(s=>s.trim()).filter(
     else if(q=p.match(/^Spitzname\s*:\s*(.+)$/i))f.eff.push({t:'spitz',v:q[1].replace(/^[„"]|[“"]$/g,'')});
     else if(q=p.match(/^Preise\s*([+\-−–])\s*(\d+)\s*%/i))f.eff.push({t:'preis',v:(q[1]==='+'?1:-1)*(+q[2])});
     else if(q=p.match(/^Spielleiter\s*:\s*(.+)$/i))f.eff.push({t:'sl',v:q[1]});
+    else if(q=p.match(/^Ende\s*:\s*(.+)$/i))f.eff.push({t:'ende',v:q[1]});
+    else if(q=p.match(/^Lagerfeuer\s*:\s*(.+)$/i))f.eff.push({t:'feuer',v:q[1]});
     else f.eff.push({t:'sl',v:p})});return f}
 let FOLGEN71=null;
 function folgenAll71(o){if(!FOLGEN71){FOLGEN71={};try{Object.keys(RUFORT71).forEach(k=>{FOLGEN71[k]=(RUFORT71[k].z||[]).map(parseF71).filter(Boolean)})}catch(e){}}return FOLGEN71[o]||[]}
@@ -26827,6 +26842,32 @@ if(typeof gruppe67==='function'){const _g71=gruppe67;gruppe67=function(p){const 
 {const _rw71=renderWorld;renderWorld=function(){const r=_rw71.apply(this,arguments);try{const seg=$('segRuf');if(seg){const h=seg.previousElementSibling;const o=cur71();if(h&&h.tagName==='H2')h.textContent=o?'Ruf der Gruppe in '+ortName71(o):'Ruf der Gruppe';
     let w=$('ruf71w');if(!w){w=document.createElement('div');w.id='ruf71w';seg.after(w)}w.innerHTML='';rufPanel71(w)}}catch(e){console.warn('p71r',e)}return r}}
 (function(){const st=document.createElement('style');st.textContent='.ruf71 .pm71 .dbtn,.ruf71 .sl67line .dbtn{padding:1px 5px;min-width:0;font-size:11px}.ruf71 details{margin:4px 0}.ruf71 select{max-width:60%}.ruf71s{margin-top:10px;border-top:1px dashed #6b5a44;padding-top:6px}.ruf71s p{margin:4px 0}';document.head.appendChild(st)})();
+// ================= Ruf in den Enden und im Finale (Paul, 02.11. nachmittags: 71.F1 und 71.F2 „sehr gute Ideen“) =================
+// Was die Orte über die Gruppe erzählen: zuerst Pauls Zeilen „Ende: …“ / „Lagerfeuer: …“ aus den Ruf-Folgen der Orts-Datei,
+// sonst ein schlichter Ersatzsatz je Stufe (ENDE71, Platzhalter für den Story-Chat). Neutrale Orte schweigen; höchstens drei Orte, die deutlichsten zuerst.
+const ENDE71={nick:'In {O} heißt ihr noch lange „{N}“.',4:'In {O} erzählt man noch lange von euch. Meistens stimmt sogar die Hälfte.',3:'In {O} hebt man den Becher, wenn euer Name fällt.',
+  1:'In {O} wird man vorsichtig, wenn euer Name fällt.',0:'In {O} spuckt man aus, wenn euer Name fällt. Aber man spricht ihn.',angst:'In {O} senkt man die Stimme, wenn euer Name fällt.'};
+function rufEnde71(art){const R=S.ruf71;if(!R)return[];const L=[];ORTE71.forEach(o=>{if(!visited71(o))return;const O=R.o[o];const sa=aSt71(O.a),sf=fSt71(O.f);
+    let own=[];try{own=eff71(o,art==='feuer'?'feuer':'ende')}catch(e){}
+    let txt=own.length?own[own.length-1].v:null,w=Math.abs(O.a)+(sf>=2?O.f:0);
+    if(!txt){if(sf>=2)txt=ENDE71.angst;else if(R.nick[o]&&sa!==2)txt=ENDE71.nick;else if(sa!==2)txt=ENDE71[sa];}
+    if(txt)L.push({o,w,t:txt.replace(/\{O\}/g,ortName71(o)).replace(/\{N\}/g,R.nick[o]||'')})});
+  return L.sort((a,b)=>b.w-a.w).slice(0,3)}
+// „Was aus ihnen wurde“: vor „Und ihr?“ eine Karte „Was man über euch erzählt“
+if(typeof cardList38==='function'){const _cl71=cardList38;cardList38=function(){const L=_cl71.apply(this,arguments);try{const E=rufEnde71('ende');if(E.length){const i=L.findIndex(x=>x[0]==='Und ihr?');
+    const card=['Was man über euch erzählt',E.map(x=>x.t).join(' ')];if(i>=0)L.splice(i,0,card);else L.push(card)}}catch(e){console.warn('p71r',e)}return L}}
+// Lagerfeuer: nach „Hoffentlich laut.“ erzählen die Orte, wie laut
+function rufLines71(lines){if(!Array.isArray(lines))return lines;{
+    const k=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Alle lachen. Oben in den Ästen lacht Linde mit.');
+    if(k>=0){const E=rufEnde71('feuer');if(E.length){lines=lines.slice();lines.splice(k+1,0,['Und es wird laut geredet. '+E.map(x=>x.t).join(' ')])}}
+    // Finale: der Gast greift auf, wie über die Gruppe geredet wird (ein Satz, nur wenn man sie kennt)
+    const j=lines.findIndex(x=>Array.isArray(x)&&x[0]==='Starker Körper. Starker Geist. Danke fürs Großziehen.');
+    if(j>=0&&S.ruf71){const R=S.ruf71;const known=ORTE71.filter(o=>visited71(o)&&R.o[o]);const angst=known.some(o=>fSt71(R.o[o].f)>=2),gut=known.some(o=>aSt71(R.o[o].a)>=3);
+      const satz=angst?GAST71.angst:gut?GAST71.gut:null;if(satz){lines=lines.slice();lines.splice(j+1,0,[satz,'npc','????'])}}
+  }return lines}
+{const _sq71=seq38;seq38=function(lines,step,done){try{lines=rufLines71(lines)}catch(e){console.warn('p71r',e)}return _sq71.call(this,lines,step,done)}}
+// Sätze des Gasts (Vorschlag aus dem Konzept, Story-Chat darf ersetzen)
+const GAST71={gut:'Sie werden euch vergessen. Bei mir nicht.',angst:'Sie haben Angst vor euch. Bei mir müsst ihr keine haben.'};
 
 
 // ================= Nachbesserung zu Prototyp 71 (w): Statisten laufen sauber (Paul 02.11., 13:28/13:30) =================
@@ -30172,10 +30213,10 @@ const GABE77={
   unbeugsam:['Unbeugsam','Einmal je Kampf bei 0 LP mit 1 LP stehen bleiben.']};
 const NATN77={stein:'Stein',strom:'Strom',glut:'Glut'},NATC77={stein:'#c8b08a',strom:'#7ac8ff',glut:'#ff8a4a'};
 function aus77(){return typeof window==='undefined'||!window.__atemAlt77}
-function on77(){try{return aus77()&&el57()>=2}catch(e){return false}}
+function onGab77(){try{return aus77()&&el57()>=2}catch(e){return false}}
 function nat77(id){const K=KUNST31[id];return K&&GABEN77[K.nat]?K.nat:'stein'}
 function gab77(h){h.gabe77=h.gabe77||{};return h.gabe77}
-function gHas77(h,g){if(!h||!on77())return false;const id=kAct31(h);if(!id)return false;const G=h.gabe77&&h.gabe77[id];return!!(G&&(G[5]===g||G[10]===g))}
+function gHas77(h,g){if(!h||!onGab77())return false;const id=kAct31(h);if(!id)return false;const G=h.gabe77&&h.gabe77[id];return!!(G&&(G[5]===g||G[10]===g))}
 function gOpen77(h,id){const K=h.kl31&&h.kl31[id];if(!K)return[];const G=(h.gabe77&&h.gabe77[id])||{},o=[];if((K.d5||K.lv>=5)&&!G[5])o.push(5);if((K.d10||K.lv>=10)&&!G[10])o.push(10);return o}
 function gWahl77(h,id,lv,g){if(!GABEN77[nat77(id)][lv].includes(g))return;const G=gab77(h);G[id]=G[id]||{};if(G[id][lv])return;G[id][lv]=g;
   say(h.name+' – Gabe aus „'+KUNST31[id].n+'“: '+GABE77[g][0]+'. '+GABE77[g][1],'new');try{addChron(h.name+': Gabe „'+GABE77[g][0]+'“ ('+KUNST31[id].n+')',[],false,'learn')}catch(e){}try{recalc27(h)}catch(e){}}
@@ -30183,18 +30224,18 @@ function gFrag77(h,id,lv){const P=GABEN77[nat77(id)][lv];choose27(h.name+' – D
 const ASK77={};
 // ---------- 1. Atemnetz still legen: alte Knoten-Abfragen auf die Gaben umlenken ----------
 // (Die Aufrufstellen in p73m/p73r fragen nach Ast und Knoten in der ursprünglichen Reihenfolge.)
-{const _ah77=aHas73;aHas73=function(h,br,i){if(!aus77())return _ah77.apply(this,arguments);if(!on77())return false;
+{const _ah77=aHas73;aHas73=function(h,br,i){if(!aus77())return _ah77.apply(this,arguments);if(!onGab77())return false;
   const k=br+i;if(k==='str2')return gHas77(h,'wuchten');if(k==='dex1')return gHas77(h,'schritt');if(k==='int1')return gHas77(h,'sparsam');
   if(k==='int2')return!!TAC&&gHas77(h,'blick');if(k==='wis2')return gHas77(h,'erster');if(k==='cha2')return gHas77(h,'wort');return false}}
 // ---------- 2. Kampfbeginn: Merker je Kampf, Wachsam, Band zum PaulMon ----------
 let F77={anf:0};
 function hasPet77(h){try{const p=h===hero?pet:(h.own&&h.own.pet);return!!(p&&!p.leaving)}catch(e){return false}}
 function pmHit77(h){return d(4)+Math.max(0,(typeof pmBonus28==='function'?pmBonus28(h):0)||0)}
-function wachBump77(fn){const L=on77()?PARTY.filter(h=>h.hp>0&&gHas77(h,'wachsam')):[];L.forEach(h=>{h.mods.dex=(h.mods.dex||0)+20});try{return fn()}finally{L.forEach(h=>{h.mods.dex-=20})}}
+function wachBump77(fn){const L=onGab77()?PARTY.filter(h=>h.hp>0&&gHas77(h,'wachsam')):[];L.forEach(h=>{h.mods.dex=(h.mods.dex||0)+20});try{return fn()}finally{L.forEach(h=>{h.mods.dex-=20})}}
 {const _is77=iniStart;iniStart=function(){const a=arguments,t=this;F77={anf:0};PARTY.forEach(h=>{h.g77f={}});const r=wachBump77(()=>_is77.apply(t,a));
-  try{if(on77())PARTY.filter(h=>h.hp>0&&gHas77(h,'band')&&hasPet77(h)).forEach((h,i)=>setTimeout(()=>{try{if(!enemy||enemy.dead||TAC)return;const n=pmHit77(h);enemy.hp-=n;enemy.hurt=10;float(enemy.x,enemyY()-12,'-'+n,'#fbf236');say('Band zum PaulMon: '+genit(h.name)+' PaulMon springt von selbst vor und trifft den Gegner. '+n+' Schaden.','roll')}catch(e){}},900+i*500))}catch(e){}return r}}
+  try{if(onGab77())PARTY.filter(h=>h.hp>0&&gHas77(h,'band')&&hasPet77(h)).forEach((h,i)=>setTimeout(()=>{try{if(!enemy||enemy.dead||TAC)return;const n=pmHit77(h);enemy.hp-=n;enemy.hurt=10;float(enemy.x,enemyY()-12,'-'+n,'#fbf236');say('Band zum PaulMon: '+genit(h.name)+' PaulMon springt von selbst vor und trifft den Gegner. '+n+' Schaden.','roll')}catch(e){}},900+i*500))}catch(e){}return r}}
 {const _ts77=tacStart;tacStart=function(){const a=arguments,t=this;F77={anf:0};PARTY.forEach(h=>{h.g77f={}});const r=wachBump77(()=>_ts77.apply(t,a));
-  try{if(TAC&&on77())PARTY.filter(h=>h.hp>0&&gHas77(h,'band')&&hasPet77(h)).forEach((h,i)=>setTimeout(()=>{try{if(!TAC)return;const b=TAC.units.find(u=>u.side!=='held'&&u.hp>0);if(!b)return;const n=pmHit77(h);b.hp=Math.max(1,b.hp-n);b.hurt=12;tFloat(b,'-'+n,'#ffd84a');tLog('Band zum PaulMon: '+genit(h.name)+' PaulMon springt vor und trifft '+b.name+'. '+n+' Schaden.')}catch(e){}},1200+i*500))}catch(e){}return r}}
+  try{if(TAC&&onGab77())PARTY.filter(h=>h.hp>0&&gHas77(h,'band')&&hasPet77(h)).forEach((h,i)=>setTimeout(()=>{try{if(!TAC)return;const b=TAC.units.find(u=>u.side!=='held'&&u.hp>0);if(!b)return;const n=pmHit77(h);b.hp=Math.max(1,b.hp-n);b.hurt=12;tFloat(b,'-'+n,'#ffd84a');tLog('Band zum PaulMon: '+genit(h.name)+' PaulMon springt vor und trifft '+b.name+'. '+n+' Schaden.')}catch(e){}},1200+i*500))}catch(e){}return r}}
 // ---------- 3. Schwere Treffer: Leichter Fuß, Standfest, Unbeugsam ----------
 function schwer77(max,hp0,dmg){return dmg>=Math.max(3,Math.ceil(max/4))||hp0-dmg<=0}
 function abfang77(h,hp0,dmg){// gibt den Schaden zurück, der wirklich ankommt, und einen Satz
@@ -30203,24 +30244,24 @@ function abfang77(h,hp0,dmg){// gibt den Schaden zurück, der wirklich ankommt, 
   if(dmg>0&&!f.stand&&gHas77(h,'standfest')&&schwer77(h.max,hp0,dmg)){f.stand=1;const n=Math.ceil(dmg/2);txt='Standfest: '+h.name+' fängt den Schlag ab, nur '+n+' statt '+dmg+' Schaden.';dmg=n}
   if(hp0-dmg<=0&&!f.unb&&gHas77(h,'unbeugsam')){f.unb=1;dmg=hp0-1;txt+=(txt?' ':'')+'Unbeugsam: '+h.name+' bleibt mit 1 LP stehen.'}
   return[dmg,txt]}
-EV31.push(function(H,k,n){if(k!=='dmgIn'||!on77()||TAC||!H)return;const hp0=H.hp+n;const[d2,txt]=abfang77(H,hp0,n);if(d2===n)return;H.hp=hp0-d2;if(txt){try{float(H.x,FLOOR-64,d2?'abgefangen':'ausgewichen','#7af0c8')}catch(e){}setTimeout(()=>say(txt,'roll'),0)}});
-{const _td77=tDmg27;tDmg27=function(a,b,dmg,txt,opt){try{if(on77()&&b&&b.side==='held'&&b.hero&&b.hp>0&&dmg>0){const[d2,t2]=abfang77(b.hero,b.hp,dmg);if(t2){if(d2<=0){tFloat(b,'ausgewichen','#7af0c8');return(txt||'')+' '+t2}const r=_td77.call(this,a,b,d2,txt,opt);return r+' '+t2}}}catch(e){}return _td77.apply(this,arguments)}}
+EV31.push(function(H,k,n){if(k!=='dmgIn'||!onGab77()||TAC||!H)return;const hp0=H.hp+n;const[d2,txt]=abfang77(H,hp0,n);if(d2===n)return;H.hp=hp0-d2;if(txt){try{float(H.x,FLOOR-64,d2?'abgefangen':'ausgewichen','#7af0c8')}catch(e){}setTimeout(()=>say(txt,'roll'),0)}});
+{const _td77=tDmg27;tDmg27=function(a,b,dmg,txt,opt){try{if(onGab77()&&b&&b.side==='held'&&b.hero&&b.hp>0&&dmg>0){const[d2,t2]=abfang77(b.hero,b.hp,dmg);if(t2){if(d2<=0){tFloat(b,'ausgewichen','#7af0c8');return(txt||'')+' '+t2}const r=_td77.call(this,a,b,d2,txt,opt);return r+' '+t2}}}catch(e){}return _td77.apply(this,arguments)}}
 // ---------- 4. Vorteil: Weiter Blick (normaler Kampf), Anfeuern ----------
 function anfHalter77(h){return PARTY.find(p=>p!==h&&p.hp>0&&gHas77(p,'anfeuern'))}
-{const _da77=doAtk27;doAtk27=function(o){try{const h=hero;if(on77()&&h&&!TAC&&o&&!o.adv){const W=o.W,fern=(W&&(W.ranged||W.art==='zauber'||W.form==='fern'))||o.spellFx;h.g77f=h.g77f||{};
+{const _da77=doAtk27;doAtk27=function(o){try{const h=hero;if(onGab77()&&h&&!TAC&&o&&!o.adv){const W=o.W,fern=(W&&(W.ranged||W.art==='zauber'||W.form==='fern'))||o.spellFx;h.g77f=h.g77f||{};
     if(fern&&!h.g77f.blick&&gHas77(h,'blick')){h.g77f.blick=1;o=Object.assign({},o,{adv:true})}
     else if(!F77.anf){const A=anfHalter77(h);if(A){F77.anf=1;o=Object.assign({},o,{adv:true});say('Anfeuern: '+A.name+' ruft '+h.name+' etwas zu – Vorteil.','sys')}}}}catch(e){}return _da77.call(this,o)}}
-{const _ta77=tAttack;tAttack=function(a,b,opt){try{if(on77()&&TAC&&a&&a.side==='held'&&a.hero&&!(opt&&opt.adv)&&!F77.anf){const A=anfHalter77(a.hero);if(A){F77.anf=1;opt=Object.assign({},opt||{},{adv:true});tLog('Anfeuern: '+A.name+' ruft '+a.hero.name+' etwas zu – Vorteil.')}}}catch(e){}return _ta77.call(this,a,b,opt)}}
+{const _ta77=tAttack;tAttack=function(a,b,opt){try{if(onGab77()&&TAC&&a&&a.side==='held'&&a.hero&&!(opt&&opt.adv)&&!F77.anf){const A=anfHalter77(a.hero);if(A){F77.anf=1;opt=Object.assign({},opt||{},{adv:true});tLog('Anfeuern: '+A.name+' ruft '+a.hero.name+' etwas zu – Vorteil.')}}}catch(e){}return _ta77.call(this,a,b,opt)}}
 // Proben: Wachsam (Wache halten), Band ohne PaulMon (Vorteil), Anfeuern (1× am Tag wiederholen)
 const BANDRE77=/tier|spur|fährte|faehrte|pflanz|kraut|kräut|krauter|natur|wild|jagd/;
-{const _ck77=check;check=function(stat,dc,label){if(!on77())return _ck77.apply(this,arguments);const h=hero,L=nk(label||'');
+{const _ck77=check;check=function(stat,dc,label){if(!onGab77())return _ck77.apply(this,arguments);const h=hero,L=nk(label||'');
   try{if(/wache halten/.test(L)){const w=PARTY.find(p=>p.hp>0&&gHas77(p,'wachsam'));if(w){say('Wachsam: '+w.name+' schläft mit einem offenen Auge. Nichts entgeht ihr oder ihm.','sys');return true}}}catch(e){}
   let ok=_ck77.apply(this,arguments);
   try{if(!ok&&h&&gHas77(h,'band')&&!hasPet77(h)&&BANDRE77.test(L)){say('Band zum PaulMon: '+h.name+' liest die Zeichen der Natur noch einmal (Vorteil).','sys');ok=_ck77.apply(this,arguments)}}catch(e){}
   try{if(!ok&&h&&!inFight()&&!TAC){const A=anfHalter77(h),day=Math.floor(clk()/1440);if(A&&(A.anfTag77!==day)){A.anfTag77=day;say('Anfeuern: '+A.name+' lässt '+h.name+' nicht aufgeben – noch einmal!','sys');ok=_ck77.apply(this,arguments)}}}catch(e){}
   return ok}}
 // ---------- 5. Wahl nach dem Durchbruch ----------
-{const _ra77=renderAll;renderAll=function(){const r=_ra77.apply(this,arguments);try{if(on77()&&!inFight()&&!TAC&&!document.querySelector('.choose27'))for(const h of PARTY){const id=kAct31(h);if(!id)continue;const o=gOpen77(h,id);if(!o.length)continue;const k=h.name+'|'+id+'|'+o[0];if(ASK77[k])continue;ASK77[k]=1;setTimeout(()=>{if(!document.querySelector('.choose27')&&!inFight()&&!TAC&&gOpen77(h,id).includes(o[0]))gFrag77(h,id,o[0])},1200);break}}catch(e){console.warn('p73gab Wahl',e)}return r}}
+{const _ra77=renderAll;renderAll=function(){const r=_ra77.apply(this,arguments);try{if(onGab77()&&!inFight()&&!TAC&&!document.querySelector('.choose27'))for(const h of PARTY){const id=kAct31(h);if(!id)continue;const o=gOpen77(h,id);if(!o.length)continue;const k=h.name+'|'+id+'|'+o[0];if(ASK77[k])continue;ASK77[k]=1;setTimeout(()=>{if(!document.querySelector('.choose27')&&!inFight()&&!TAC&&gOpen77(h,id).includes(o[0]))gFrag77(h,id,o[0])},1200);break}}catch(e){console.warn('p73gab Wahl',e)}return r}}
 // ---------- 6. Heldenbogen: Atemnetz aus, Karte „Methode & Gaben“ ----------
 function karte77(h){const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const id=kAct31(h);
   let A=null;try{A=typeof G68DATA!=='undefined'&&G68DATA.atem76}catch(x){}
@@ -30235,10 +30276,10 @@ function karte77(h){const e=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':
     else if(gOpen77(h,id).includes(lv))c+='<span>Gabe offen: </span>'+P.map(x=>'<button type="button" data-gabe77="'+id+'|'+lv+'|'+x+'" title="'+e(GABE77[x][1])+'">'+e(GABE77[x][0])+'</button>').join(' ');
     else c+='<span class="small">Durchbruch auf Stufe '+lv+': '+P.map(x=>e(GABE77[x][0])).join(' oder ')+'</span>';c+='</p>'});
   c+='</div></div></div>';return c}
-{const _bh77=bogenHtml31;bogenHtml31=function(h){let s=_bh77.apply(this,arguments);try{if(!on77())return s;const c=karte77(h);const i=s.indexOf('<div class="card2 atem73"');s=i>=0?s.slice(0,i)+c+s.slice(i):s+c}catch(e){console.warn('p73gab Bogen',e)}return s}}
+{const _bh77=bogenHtml31;bogenHtml31=function(h){let s=_bh77.apply(this,arguments);try{if(!onGab77())return s;const c=karte77(h);const i=s.indexOf('<div class="card2 atem73"');s=i>=0?s.slice(0,i)+c+s.slice(i):s+c}catch(e){console.warn('p73gab Bogen',e)}return s}}
 {const _rb77=renderBogen27;renderBogen27=function(){const r=_rb77.apply(this,arguments);try{const h=PARTY[BOGI27]||hero;BOG27.querySelectorAll('[data-gabe77]').forEach(b=>b.onclick=()=>{const[id,lv,g]=b.dataset.gabe77.split('|');gWahl77(h,id,+lv,g);try{renderBogen27()}catch(e){}renderAll()})}catch(e){}return r}}
 // Fenster F: Zeile „Gaben“ statt „Atemnetz“
-{const _fh77=fhHtml73;fhHtml73=function(h){let s=_fh77.apply(this,arguments);try{if(!on77())return s;const id=kAct31(h),G=(id&&h.gabe77&&h.gabe77[id])||{};const L=[G[5],G[10]].filter(Boolean).map(g=>GABE77[g][0]);
+{const _fh77=fhHtml73;fhHtml73=function(h){let s=_fh77.apply(this,arguments);try{if(!onGab77())return s;const id=kAct31(h),G=(id&&h.gabe77&&h.gabe77[id])||{};const L=[G[5],G[10]].filter(Boolean).map(g=>GABE77[g][0]);
   s=s.replace(/<p class="s73">Atemnetz:[^<]*<\/p>/,'<p class="s73">Gaben: '+(L.length?L.join(', '):'noch keine (Durchbruch auf Stufe 5 und 10)')+'</p>')}catch(e){}return s}}
 {const st=document.createElement('style');st.textContent=
   'body:not(.atemalt77) .atem73,body:not(.atemalt77) p:has(> [data-atem73n]){display:none!important}'+
@@ -31651,6 +31692,173 @@ function fight77(x,st){const sty=casSty68(),M=G77.meta[sty],im=img77(sty),OX=10;
 {const _sf77=slFight75;slFight75=function(x,st){try{if(typeof G77!=='undefined'&&fight77(x,st))return}catch(e){console.warn('p77 Kampf',e)}return _sf77.apply(this,arguments)}}
 // Auch ohne „Neue Grafik“ zeigt der Kampf den neuen Automaten, damit Symbole und Kampftexte zusammenpassen.
 {const _bd77=bandit34;bandit34=function(x,Sc,ox,oy,st){try{if(typeof TAC!=='undefined'&&TAC&&TAC.o&&TAC.o.slot34&&typeof SLOTEL34!=='undefined'&&SLOTEL34&&x.canvas.parentNode===SLOTEL34&&fight77(x,st))return}catch(e){console.warn('p77 Kampf',e)}return _bd77.apply(this,arguments)}}
+
+
+// ================= Prototyp 78 (h): Heldenbogen aufgeräumt, Spielstil beim Spielleiter, Szenen-Knöpfe in Gruppen =================
+// Pauls Wünsche vom 06.11. (11:00–11:56), gesammelt in _Spielleiter/heldenbogen-aufraeumen.md. Ziel: eine gute Übersicht.
+//  Heldenbogen: Spielstil → Spielleiter (Reiter „Gruppe“) · „Stützen“ heißt „Supporter“ · kein Zusatz hinter dem Klassentyp ·
+//   kein Typ-Knopf · Klassen-Aktion als kurze Zeile · Weg nur als Zeile (Technik-Linie und Ausrichtung im Fenster F) ·
+//   Lehrmeister in einer Karte (ohne „Ausgerüstet“) · Ultimate als Zeile in der Karte „Waffe“ · „Merkmale“ heißt „Persönlichkeit“ ·
+//   „Narben“ heißen „Achievements“ · Waffenbaum als eigener Kasten (beim Erzählabend gar nicht).
+//  Szene: Knöpfe in Gruppen „Hier“, „Leute“, „Wege“ (abgesetzt unten), gleichartige Knöpfe aufklappbar („Kapseln (6) ▸“),
+//   oben eine Zeile Ort · Uhrzeit mit „Rasten“, eine ruhige Farbe, nur der gerade wichtige Story-Knopf golden, keine Symbole.
+//  Alles nur Anzeige: die Knöpfe, ihre Wirkung und die Zähler bleiben. Alte Tests (window.__t56 ohne .p78) sehen alles wie vorher.
+function on78(){try{return !window.__t56||!!window.__t56.p78}catch(e){return true}}
+const E78=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// ---------- Wörter: Supporter, Persönlichkeit, Achievements ----------
+const WORT78=[[/\bStützen\b/g,'Supporter'],[/\bMerkmale\b/g,'Persönlichkeit'],[/\bNarben\b/g,'Achievements'],[/\bNarbe\b/g,'Achievement']];
+function wort78(t){WORT78.forEach(([r,n])=>{t=t.replace(r,n)});return t}
+function sup78(root){if(!root||!on78())return;try{const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const L=[];while((n=tw.nextNode()))if(/Stützen|Merkmale|Narbe/.test(n.data))L.push(n);
+  L.forEach(n=>{const v=wort78(n.data);if(v!==n.data)n.data=v});
+  root.querySelectorAll&&root.querySelectorAll('[data-tip64],[title]').forEach(el=>{['data-tip64','title'].forEach(a=>{const v=el.getAttribute(a);if(v&&/Stützen|Merkmale|Narbe/.test(v))el.setAttribute(a,wort78(v))})})}catch(e){}}
+// Heldenwahl, Heldenkarte, Fenster F: Wörter beim Erscheinen tauschen
+{const MO78=new MutationObserver(ms=>{if(!on78())return;ms.forEach(m=>m.addedNodes.forEach(nd=>{if(nd.nodeType===1)sup78(nd);else if(nd.nodeType===3&&/Stützen|Merkmale|Narbe/.test(nd.data))nd.data=wort78(nd.data)}))});
+  const watch=()=>{['pickScr','heroCard','faeh73','tip64'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.__mo78){el.__mo78=1;MO78.observe(el,{childList:true,subtree:true});sup78(el)}})};
+  setTimeout(watch,500);setInterval(watch,3000)}
+// ---------- Heldenbogen ----------
+function h3of78(c){return c&&c.querySelector(':scope > h3')}
+function h3txt78(c){const x=h3of78(c);return x?x.textContent.trim():''}
+function setH3_78(c,t){const x=h3of78(c);if(!x)return;const tn=[...x.childNodes].filter(n=>n.nodeType===3&&n.data.trim());if(tn.length){tn[0].data=t;tn.slice(1).forEach(n=>n.data='')}else x.appendChild(document.createTextNode(t))}
+function bogen78(){if(!on78()||typeof BOG27==='undefined'||!BOG27)return;const h=PARTY[BOGI27]||hero;const G=BOG27.querySelector('.grid');if(!G||!h)return;
+  const cards=()=>[...G.children].filter(c=>c.classList&&c.classList.contains('card2'));
+  const find=re=>cards().find(c=>re.test(h3txt78(c)));
+  // 1. Heldenkarte
+  const hc=cards()[0];if(hc){hc.querySelectorAll('p').forEach(p=>{const t=p.textContent;
+      if(/^Klassentyp:/.test(t)){const i=p.innerHTML.indexOf(' – ');if(i>0)p.innerHTML=p.innerHTML.slice(0,i);try{const A=aus73(h);if(A&&p.innerHTML.indexOf(E78(A.n))<0)p.innerHTML=p.innerHTML.replace(/(Weg: <b>[^<]*)(<\/b>)/,'$1 · '+E78(A.n)+'$2')}catch(e){}}
+      else if(/^Klassen-Aktion/.test(t)){const m=t.match(/Klassen-Aktion\s*[„"]([^“"]+)[“"]/);p.innerHTML='Klassen-Aktion: <b>'+E78(m?m[1]:'')+'</b>';p.title=t}})}
+  // 2. Weg-Karte weg (steht als Zeile in der Heldenkarte; Linie und Ausrichtung im Fenster F)
+  cards().filter(c=>c.classList.contains('weg73')).forEach(c=>c.remove());
+  // 3. Lehrmeister: eine Karte
+  const rep=cards().find(c=>c.classList.contains('rep73')),old=cards().find(c=>!c.classList.contains('rep73')&&/^Lehrmeister$/.test(h3txt78(c)));
+  if(rep){setH3_78(rep,'Lehrmeister');rep.style.gridColumn='';[...rep.querySelectorAll('p')].forEach(p=>{const t=p.textContent;
+      if(/^Ausgerüstet/.test(t))p.remove();
+      else if(/^Lehrmeister \(/.test(t)){const i=p.innerHTML.indexOf('. Eine neue Lektion');if(i>0){p.title=t.slice(t.indexOf('Eine neue Lektion'));p.innerHTML=p.innerHTML.slice(0,i)+'.'}p.innerHTML=p.innerHTML.replace(/^Lehrmeister \(/,'Meine Lehrmeister (')}});
+    if(old){[...old.querySelectorAll(':scope > p')].forEach(p=>{const t=p.textContent;if(/Noch keine Ausprägung|Noch keinen Lehrmeister gefragt|Allgemeine Lehrmeister|Lehrmeister achten/.test(t)){rep.title=(rep.title?rep.title+' ':'')+t;return}rep.appendChild(p)});old.remove()}}
+  // 4. Ultimate als Zeile in „Waffe“
+  const ult=cards().find(c=>c.classList.contains('ult73c')),waf=find(/^Waffe$/);
+  if(ult&&waf){const t=h3txt78(ult).replace(/^Ultimate:\s*/,''),d=[...ult.querySelectorAll('p')].map(p=>p.textContent.trim()).filter(Boolean).join(' ');
+    const p=document.createElement('p');p.className='small ult78';p.innerHTML='<b>Ultimate: '+E78(t)+'</b> – '+E78(d);waf.appendChild(p);ult.remove()}
+  // 5. Persönlichkeit
+  cards().filter(c=>c.classList.contains('merk73')).forEach(c=>setH3_78(c,'Persönlichkeit'));
+  // 6. Spielstil geht zum Spielleiter
+  cards().filter(c=>/^Spielstil$/.test(h3txt78(c))).forEach(c=>c.remove());
+  // 7. Achievements, Waffenbaum als eigener Kasten
+  const nar=find(/^Narben$/);if(nar){setH3_78(nar,'Achievements');nar.style.gridColumn='';
+    const wbc=[...nar.querySelectorAll('.card2')].find(c=>/Waffenbaum/.test(h3txt78(c)));
+    if(wbc){wbc.classList.add('wb78');try{wbc.style.gridColumn='';const at=find(/^Waffe$/);if(at&&at.nextSibling)G.insertBefore(wbc,at.nextSibling);else G.appendChild(wbc)}catch(e){G.appendChild(wbc)}}}
+  BOG27.querySelectorAll('.card2').forEach(c=>{if(!/Waffenbaum/.test(h3txt78(c)))return;let off=false;try{off=el57()<=1}catch(e){}if(off){c.remove();return}try{wbKarte78(c,h)}catch(e){}});
+  sup78(BOG27)}
+function wbKarte78(c,h){if(c.__k78)return;c.__k78=1;const B=wb49(h),T=T49(h),need=need49(h);const pf=B.pf||0,nx=['w1','w2','w3'].find(k=>!B.n[k]);
+  [...c.querySelectorAll(':scope > p')].forEach(p=>{if(!/Waffenkünste/.test(p.textContent)&&!p.querySelector('button'))p.remove()});
+  const p1=document.createElement('p');p1.innerHTML='Stufe <b>'+lvl49(h)+'/10</b> · Erfahrung '+(B.we||0)+'/'+need+((B.wp||0)?' · <b>'+B.wp+' Waffenpunkt'+(B.wp>1?'e':'')+' frei</b>':'');
+  const p2=document.createElement('p');p2.className='small';p2.title=(T.kurz||'')+' Eigenart – '+(T.eig||'');p2.innerHTML='Wesen: <b>'+E78(T.n)+'</b> – wächst durch '+E78(String(T.pf||'').replace(/\.$/,''))+(nx?' (Bindung '+pf+'/'+PFN49[nx]+')':'');
+  const h3=c.querySelector(':scope > h3');if(h3&&h3.nextSibling){c.insertBefore(p2,h3.nextSibling);c.insertBefore(p1,p2)}else{c.appendChild(p1);c.appendChild(p2)}}
+{const _rb78=renderBogen27;renderBogen27=function(){const r=_rb78.apply(this,arguments);try{bogen78()}catch(e){console.warn('p78 Bogen',e)}return r}}
+// ---------- Fenster F: Weg (Linie, Ausrichtung) hierher, Wörter ----------
+if(typeof fhHtml73==='function'){const _fh78=fhHtml73;fhHtml73=function(h){let s=_fh78.apply(this,arguments);if(!on78())return s;try{
+    const tmp=document.createElement('div');tmp.innerHTML=bogenHtml31(h);const w=tmp.querySelector('.weg73');
+    if(w){const t=w.querySelector('h3');const head=t?t.textContent:'Weg';if(t)t.remove();s+='<h4>'+E78(head)+'</h4><div class="weg78">'+w.innerHTML+'</div>'}
+    s=wort78(s)}catch(e){console.warn('p78 F',e)}return s}}
+// ---------- Spielleiter: Spielstil der Helden im Reiter „Gruppe“ ----------
+function stilHtml78(){return PARTY.map(h=>{const P=stil31(h),C=P.s;const top=['block','blockOK','dodge','dodgeOK','heavy','konter','lowhp','clean','fights','kills','heal','climb','read','music','talk','rest'].filter(k=>C[k]).map(k=>(ST31N[k]||k)+' '+C[k]).slice(0,10).join(' · ');
+  const met=((S.lern31&&S.lern31.log)||[]).filter(x=>x.h===(h.heroId||h.name)).map(x=>x.t);
+  return'<p style="margin:4px 0"><b>'+E78(h.name)+'</b>: '+E78(STIL31[P.key])+' – '+E78(STILTXT31[P.key])+'.<br><span class="small">'+E78(top||'noch nichts gezählt')+(met.length?' · Lehrmeister: '+E78(met.slice(-3).join(' · ')):'')+'</span></p>'}).join('')}
+function slStil78(){const P=document.getElementById('tab-gruppe67');if(!P)return;let d=P.querySelector('#stil78');
+  if(!d){d=document.createElement('details');d.id='stil78';d.innerHTML='<summary>Spielstil der Helden (nur für dich)</summary><div class="small" style="opacity:.8">Das Spiel zählt mit, was jeder Held oft tut. Lehrmeister bieten danach von sich aus passende Lektionen an.</div><div class="b78"></div>';P.appendChild(d)}
+  const html=stilHtml78(),b=d.querySelector('.b78');if(b.__s!==html){b.__s=html;b.innerHTML=html}}
+// ---------- Szene: Knöpfe in Gruppen ----------
+const GRP78=[{re:/^.+?(kapsel|-Kapsel) nehmen$/i,n:'Kapseln',min:3},{re:/^Aufheben: /,n:'Aufheben',min:3},{re:/^Ansehen: /,n:'Ansehen',min:4}];
+const OPEN78={};let BUSY78=false;
+function kind78(b){const t=(b.textContent||'').trim();
+  if(/^(Rasten|Lager aufschlagen|Draußen schlafen|Übernachten)/.test(t))return'rest';
+  if(/^Zur Ausgangsposition$/.test(t))return'go';
+  if(b.classList.contains('go')||/→|^Zurück[: ]|^Weiter erkunden$|verlassen$|^(Hinaus|Hinein|Hinauf|Hinunter)\b|^Nach (draußen|drinnen|oben|unten)\b/.test(t))return'go';
+  if(/^Mit .+ sprechen$|^Sprich mit |^Ansprechen: /.test(t)||b.classList.contains('gast23'))return'talk';
+  return'hier'}
+function still78(){try{return!!(talk||inFight()||(typeof TAC!=='undefined'&&TAC)||S.ko||(typeof RB48!=='undefined'&&RB48)||(typeof MP62!=='undefined'&&MP62&&MP62.role==='gast'))}catch(e){return true}}
+function szene78(){const gr=document.getElementById('genRow');if(!gr||BUSY78)return;BUSY78=true;try{
+    gr.querySelectorAll(':scope > .lb78, :scope > .hd78, :scope > .tg78').forEach(x=>x.remove());
+    const B=[...gr.children].filter(x=>x.tagName==='BUTTON');
+    if(!on78()||still78()||!B.length){gr.classList.remove('g78');B.forEach(b=>{b.style.order='';b.classList.remove('h78','sub78','gold78','rest78','calm78');delete b.dataset.k78});return}
+    gr.classList.add('g78');const has={hier:0,talk:0,go:0};
+    const lab=(t,o,cls)=>{const d=document.createElement('div');d.className='lb78'+(cls?' '+cls:'');d.textContent=t;d.style.order=o;gr.appendChild(d)};
+    // Gruppen gleichartiger Knöpfe
+    const grp={};B.forEach(b=>{const t=b.textContent.trim();if(kind78(b)!=='hier')return;const G=GRP78.find(g=>g.re.test(t));if(G)(grp[G.n]=grp[G.n]||[]).push(b)});
+    B.forEach(b=>{const k=kind78(b);b.dataset.k78=k;b.classList.remove('h78','sub78','gold78','rest78','calm78');
+      if(k==='rest'){b.style.order='-2';b.classList.add('rest78');const t=b.textContent.trim(),k2=t.replace(/\s*\(.*\)\s*$/,'');if(k2!==t){b.title=t;b.textContent=k2}return}
+      if(k==='go'){b.style.order='6';has.go++;return}
+      if(k==='talk'){b.style.order='4';has.talk++;return}
+      b.style.order='1';has.hier++});
+    // nur ein Story-Knopf golden: erst ein pulsierender, sonst „Untersuchen: …“, sonst ein hervorgehobener
+    {const H=B.filter(b=>b.dataset.k78==='hier');H.forEach(b=>b.classList.remove('calm78'));const g=H.find(b=>b.classList.contains('pulse64'))||H.find(b=>/^Untersuchen: /.test(b.textContent.trim()))||H.find(b=>b.classList.contains('mp68'));
+      if(g)g.classList.add('gold78');H.forEach(b=>{if(b!==g&&b.classList.contains('mp68'))b.classList.add('calm78')})}
+    Object.keys(grp).forEach(n=>{const L=grp[n],G=GRP78.find(g=>g.n===n);if(L.length<G.min)return;const open=!!OPEN78[S.scene+'|'+n];
+      L.forEach(b=>{b.style.order='2';b.classList.add(open?'sub78':'h78')});
+      const tg=document.createElement('button');tg.type='button';tg.className='chip tg78'+(open?' on':'');tg.textContent=n+' ('+L.length+') '+(open?'▾':'▸');tg.setAttribute('aria-expanded',open?'true':'false');tg.style.order='1';
+      tg.onclick=ev=>{ev.stopPropagation();OPEN78[S.scene+'|'+n]=!open;szene78()};gr.appendChild(tg)});
+    const hd=document.createElement('div');hd.className='hd78';hd.style.order='-3';let pl='';try{pl=placeTitle()}catch(e){}hd.textContent=pl+' · '+hhmm(clk());gr.appendChild(hd);
+    if(has.hier)lab('HIER','0');if(has.talk)lab('LEUTE','3');if(has.go)lab('WEGE','5','w78');
+  }catch(e){console.warn('p78 Szene',e)}finally{BUSY78=false;try{MOS78.takeRecords()}catch(e){}}}
+const MOS78=new MutationObserver(()=>{if(BUSY78)return;requestAnimationFrame(szene78)});
+{const st=()=>{const gr=document.getElementById('genRow');if(gr&&!gr.__mo78){gr.__mo78=1;MOS78.observe(gr,{childList:true})}};setTimeout(st,300);setInterval(st,3000)}
+{const _ra78=renderAll;renderAll=function(){const r=_ra78.apply(this,arguments);try{szene78()}catch(e){}try{slStil78()}catch(e){}try{document.body.classList.toggle('nowb78',on78()&&el57()<=1)}catch(e){}return r}}
+{const st=document.createElement('style');st.textContent=
+  '#genRow.g78{row-gap:6px}#genRow.g78 > .lbl{display:none}#genRow.g78 .chip.spont,#genRow.g78 .chip.learned,#genRow.g78 .chip.cls,#genRow.g78 .chip.go{border-color:var(--line);color:var(--fg)}'+
+  '#genRow.g78 .chip.gold78{border-color:#b08a3a;color:#f6d27a}'+'#genRow.g78 .chip.calm78{border:2px solid var(--line)!important;background:var(--panel2)!important;color:var(--fg)!important;font-weight:normal!important;box-shadow:none!important}'+
+  '#genRow.g78 .h78{display:none!important}#genRow.g78 .chip.sub78{background:#1f1a29;border-color:#8a7ab0}#genRow.g78 .chip.tg78.on{border-color:#8a7ab0;color:#f3ead6}'+
+  '#genRow.g78 .chip[data-k78="go"]{background:none;border-color:transparent;color:#c9bfd6;padding:0 6px}#genRow.g78 .chip[data-k78="go"]:hover{color:#fff2c4;text-decoration:underline}'+
+  '#genRow.g78 .chip.rest78{font-size:16px;padding:0 8px;border-color:var(--line);color:#c9bfd6}'+
+  '#genRow .lb78{flex-basis:100%;font-size:12px;letter-spacing:.12em;color:#a89cb8;margin-top:4px}#genRow .lb78.w78{border-top:1px dashed var(--line);padding-top:6px;margin-top:8px}'+
+  '#genRow .hd78{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#c9bfd6;font-size:16px;padding:1px 8px;background:#1b1720;border:1px solid #2c2634}'+
+  'body.nowb78 .wb49b{display:none!important}'+
+  '#stil78{margin-top:10px}#stil78 summary{cursor:pointer}';document.head.appendChild(st)}
+
+
+// ================= Prototyp 78 (w): Waffenbaum abgespeckt – ein Baum für alle =================
+// Paul (06.11., 11:22–11:56, _Spielleiter/heldenbogen-aufraeumen.md „Waffenbaum“):
+//  - Kern ist die Waffe: Waffenerfahrung → Waffenpunkte, Wetzsteine bleiben. Spürbar sind die Waffenkünste und die Ultimate.
+//  - Oben „Kunst“: Waffenkunst A → Waffenkunst B → Ausrichtung (Übung, Meisterschaft) · Krone der Waffenart (k6).
+//  - Unten „Wesen“: Wesens-Knoten 1–3 (Bindung) und daneben „Zweite Luft“ und die Klassensignatur (aus dem alten Klassen-Ast).
+//  - Mitte: Meisterstück (weckt mit Signatur und Ausrichtung die Ultimate) – ohne Werkbank und ohne Herzstein.
+//  - Weg: Schmiede-Ast, Klassen-Ast, reine +1-Knoten, „Erfahrung abgeben“, Zurücksetzen, Material-Zeile, langer Text.
+//    Material bleibt Ware für Markt und Handel. Gelernte alte Knoten: Waffenpunkte kommen einmal zurück.
+//  - Ein Baum für alle Spielarten; beim Erzählabend (Heldenentwicklung 1) gibt es keinen Waffenbaum.
+//  Alte Tests (window.__t56 ohne .p78) sehen den alten Baum.
+window.WB78=on78();
+const WBE78=['k2','k4','k6','a1','a2','w1','w2','w3','c2','c3','m'];
+if(on78()){
+  const _ws78=wbSet73;wbSet73=function(){const e=typeof el57==='function'?el57():3;return e<=1?[]:WBE78};
+  Object.assign(PRE49,{k2:[],k4:['k2'],k6:['k4'],a1:['k4'],a2:['a1'],c2:['w1'],c3:['c2']});
+  Object.assign(POSALL73,{k2:[200,104],k4:[200,68],k6:[200,30],a1:[156,68],a2:[112,68],w1:[200,176],w2:[200,212],w3:[200,248],c2:[244,176],c3:[288,176],m:[200,140]});
+  LINKALL73.length=0;[['m','k2'],['k2','k4'],['k4','k6'],['k4','a1'],['a1','a2'],['m','w1'],['w1','w2'],['w2','w3'],['w1','c2'],['c2','c3']].forEach(x=>LINKALL73.push(x));
+  Object.assign(BR49,{c:'Wesen',a:'Kunst'});
+}
+// wbSync73 (p73r) setzt die Bedingungen des Meisterstücks jedes Mal zurück: hier danach die neuen
+{const _sy78=wbSync73;wbSync73=function(){const r=_sy78.apply(this,arguments);try{if(on78())PRE49.m=['k6','w3','c3']}catch(e){}return r}}
+if(on78())PRE49.m=['k6','w3','c3'];
+// Meisterstück: nur Waffenpunkte
+{const _wy78=why49;why49=function(h,id){if(!on78()||id!=='m')return _wy78.apply(this,arguments);const B=wb49(h);if(B.n.m)return'gelernt';if(!wbOk73('m'))return'kein Waffenbaum in dieser Spielart';
+  const miss=PRE49.m.filter(p=>!B.n[p]);if(miss.length)return'erst: '+miss.map(p=>node49(h,p).n).join(', ');if((B.wp||0)<COST49.m)return COST49.m+' Waffenpunkte nötig ('+(B.wp||0)+' da)';return''}}
+// Einmalige Umstellung: alte Knoten außerhalb des neuen Baums geben ihre Waffenpunkte zurück
+function mig78(h){if(!on78())return;const B=h&&h.wb49;if(!B||B.mig78)return;B.mig78=1;let back=0;const gone=[];
+  Object.keys(B.n||{}).forEach(id=>{if(!WBE78.includes(id)&&COST49[id]){back+=COST49[id];gone.push(id);delete B.n[id]}});
+  if(back){B.wp=(B.wp||0)+back;try{say(h.name+': Der Waffenbaum ist neu geordnet. '+back+' Waffenpunkt'+(back>1?'e':'')+' kommen zurück.','sys')}catch(e){}}}
+{const _ra78w=renderAll;renderAll=function(){const r=_ra78w.apply(this,arguments);try{if(on78()&&GAME_STARTED)PARTY.forEach(mig78)}catch(e){}return r}}
+// Beim Erzählabend kein Waffenbaum
+{const _wo78=wbOpen49;wbOpen49=function(){try{if(on78()&&el57()<=1)return}catch(e){}return _wo78.apply(this,arguments)}}
+// Fenster: schlanker Text
+{const _wr78=wbRender49;wbRender49=function(){try{if(on78()&&typeof WBSEL49!=='undefined'&&!wbSet73().includes(WBSEL49))WBSEL49='k2'}catch(e){}const r=_wr78.apply(this,arguments);if(!on78())return r;try{const h=PARTY[WBI49]||PARTY[0];if(!h)return r;const B=wb49(h),T=T49(h);
+    const h2=WB49.querySelector('.wbh h2');if(h2)h2.textContent='WAFFENBAUM';
+    WB49.querySelectorAll('.wbe').forEach(x=>x.remove());
+    WB49.querySelectorAll('[data-a="opfer"],[data-a="reset"]').forEach(x=>x.remove());
+    WB49.querySelectorAll('.wbi p').forEach(p=>{if(/^Werkbank:/.test(p.textContent))p.remove()});
+    WB49.querySelectorAll('[data-a="learn"]').forEach(b=>{b.textContent=b.textContent.replace(/^Schmieden/,'Freischalten')});
+    const s=WB49.querySelector('.wbs');if(s){const need=need49(h),pct=Math.round(100*(B.we||0)/need);const pf=B.pf||0,nx=['w1','w2','w3'].find(k=>!B.n[k]);
+      s.innerHTML='<b>'+E78(wname49(h))+'</b> · Stufe <b>'+lvl49(h)+'/10</b> · <span class="bar49"><i style="width:'+pct+'%"></i></span> '+(B.we||0)+'/'+need+' bis zum nächsten Punkt'+((B.wp||0)?' · <b>'+B.wp+' Waffenpunkt'+(B.wp>1?'e':'')+' frei</b>':'')+
+        '<br><span title="'+E78((T.kurz||'')+' Eigenart – '+(T.eig||''))+'">Wesen: <b>'+E78(T.n)+'</b> – wächst durch '+E78(String(T.pf||'').replace(/\.$/,''))+(nx?' (Bindung '+pf+'/'+PFN49[nx]+')':'')+'</span>'}}catch(e){console.warn('p78 Waffenbaum',e)}return r}}
+// Fehler gefunden (06.11.): Das Meisterstück trägt in der Chronik den Vorschlag „stern“, den es nicht gibt – danach brach die Chronik ab.
+// Unbekannte Vorschläge werden jetzt übersprungen.
+{const _rc78=renderChron;renderChron=function(){try{(S.chron||[]).forEach(c=>{if(c&&c.sugg)c.sugg=c.sugg.filter(k=>typeof SUGG!=='undefined'&&SUGG[k])})}catch(e){}return _rc78.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
