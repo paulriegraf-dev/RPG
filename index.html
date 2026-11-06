@@ -31775,8 +31775,10 @@ function kind78(b){const t=(b.textContent||'').trim();
   if(b.classList.contains('go')||/→|^Zurück[: ]|^Weiter erkunden$|verlassen$|^(Hinaus|Hinein|Hinauf|Hinunter)\b|^Nach (draußen|drinnen|oben|unten)\b/.test(t))return'go';
   if(/^Mit .+ sprechen$|^Sprich mit |^Ansprechen: /.test(t)||b.classList.contains('gast23'))return'talk';
   return'hier'}
-function still78(){try{return!!(talk||inFight()||(typeof TAC!=='undefined'&&TAC)||S.ko||(typeof RB48!=='undefined'&&RB48)||(typeof MP62!=='undefined'&&MP62&&MP62.role==='gast'))}catch(e){return true}}
-function szene78(){const gr=document.getElementById('genRow');if(!gr||BUSY78)return;BUSY78=true;try{
+function still78(){try{return!!(talk||inFight()||(typeof TAC!=='undefined'&&TAC)||S.ko||(typeof RB48!=='undefined'&&RB48))}catch(e){return true}}
+// Mitspieler bekommen die Knöpfe fertig sortiert vom Spielleiter (mpFor63 ruft renderChips für ihren Helden); bei ihnen selbst nichts anfassen
+function gast78(){try{return typeof MP62!=='undefined'&&MP62&&MP62.role==='gast'}catch(e){return false}}
+function szene78(){const gr=document.getElementById('genRow');if(!gr||BUSY78||gast78())return;BUSY78=true;try{
     gr.querySelectorAll(':scope > .lb78, :scope > .hd78, :scope > .tg78').forEach(x=>x.remove());
     const B=[...gr.children].filter(x=>x.tagName==='BUTTON');
     if(!on78()||still78()||!B.length){gr.classList.remove('g78');B.forEach(b=>{b.style.order='';b.classList.remove('h78','sub78','gold78','rest78','calm78');delete b.dataset.k78});return}
@@ -31792,15 +31794,17 @@ function szene78(){const gr=document.getElementById('genRow');if(!gr||BUSY78)ret
     // nur ein Story-Knopf golden: erst ein pulsierender, sonst „Untersuchen: …“, sonst ein hervorgehobener
     {const H=B.filter(b=>b.dataset.k78==='hier');H.forEach(b=>b.classList.remove('calm78'));const g=H.find(b=>b.classList.contains('pulse64'))||H.find(b=>/^Untersuchen: /.test(b.textContent.trim()))||H.find(b=>b.classList.contains('mp68'));
       if(g)g.classList.add('gold78');H.forEach(b=>{if(b!==g&&b.classList.contains('mp68'))b.classList.add('calm78')})}
-    Object.keys(grp).forEach(n=>{const L=grp[n],G=GRP78.find(g=>g.n===n);if(L.length<G.min)return;const open=!!OPEN78[S.scene+'|'+n];
+    Object.keys(grp).forEach(n=>{const L=grp[n],G=GRP78.find(g=>g.n===n);if(L.length<G.min)return;const ok78=S.scene+'|'+(hero?hero.name:'')+'|'+n,open=!!OPEN78[ok78];
       L.forEach(b=>{b.style.order='2';b.classList.add(open?'sub78':'h78')});
       const tg=document.createElement('button');tg.type='button';tg.className='chip tg78'+(open?' on':'');tg.textContent=n+' ('+L.length+') '+(open?'▾':'▸');tg.setAttribute('aria-expanded',open?'true':'false');tg.style.order='1';
-      tg.onclick=ev=>{ev.stopPropagation();OPEN78[S.scene+'|'+n]=!open;szene78()};gr.appendChild(tg)});
+      tg.onclick=ev=>{ev.stopPropagation();OPEN78[ok78]=!open;szene78();try{if(typeof mpPush62==='function')mpPush62()}catch(e){}};gr.appendChild(tg)});
     const hd=document.createElement('div');hd.className='hd78';hd.style.order='-3';let pl='';try{pl=placeTitle()}catch(e){}hd.textContent=pl+' · '+hhmm(clk());gr.appendChild(hd);
     if(has.hier)lab('HIER','0');if(has.talk)lab('LEUTE','3');if(has.go)lab('WEGE','5','w78');
   }catch(e){console.warn('p78 Szene',e)}finally{BUSY78=false;try{MOS78.takeRecords()}catch(e){}}}
 const MOS78=new MutationObserver(()=>{if(BUSY78)return;requestAnimationFrame(szene78)});
 {const st=()=>{const gr=document.getElementById('genRow');if(gr&&!gr.__mo78){gr.__mo78=1;MOS78.observe(gr,{childList:true})}};setTimeout(st,300);setInterval(st,3000)}
+// Auch direkt nach renderChips sortieren: so sehen Mitspieler (mpFor63) ihre Knöpfe schon gruppiert
+{const _rc78=renderChips;renderChips=function(){const r=_rc78.apply(this,arguments);try{szene78()}catch(e){}return r}}
 {const _ra78=renderAll;renderAll=function(){const r=_ra78.apply(this,arguments);try{szene78()}catch(e){}try{slStil78()}catch(e){}try{document.body.classList.toggle('nowb78',on78()&&el57()<=1)}catch(e){}return r}}
 {const st=document.createElement('style');st.textContent=
   '#genRow.g78{row-gap:6px}#genRow.g78 > .lbl{display:none}#genRow.g78 .chip.spont,#genRow.g78 .chip.learned,#genRow.g78 .chip.cls,#genRow.g78 .chip.go{border-color:var(--line);color:var(--fg)}'+
