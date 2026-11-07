@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 80 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 81 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -2882,7 +2882,7 @@ function stageText(i){const d2=sceneDoc('Ilses Keller');const s=d2&&sec(d2,'der 
 function exploreCellar(force){S.cel=S.cel||{tries:0,stage:0,open:false};const c=S.cel;if(!force)say('Weiter erkunden','player',hero.name);
   if(c.open&&!force){const id=sceneIdByName('Altarraum');if(id)return walk(306,()=>switchScene(id));return}
   const chance=20+5*c.tries;c.tries++;
-  if(!force&&Math.random()*100<chance){c.open=true;S.facts.altarraum_offen=true;say(stageText(4),'dm');sog();addChron('Weiter erkunden: der Sog (Chance war '+chance+' %).',[],true);return renderAll()}
+  if(!force&&((typeof on81==='function'&&on81())?c.tries>=3:Math.random()*100<chance)){c.open=true;S.facts.altarraum_offen=true;say(stageText(4),'dm');sog();addChron('Weiter erkunden: der Sog (Chance war '+chance+' %).',[],true);return renderAll()}
   c.stage=c.stage<1?1:c.stage===1?2:c.stage===2?3:2;say(stageText(c.stage),'dm');if(c.stage===3)whisper();addChron('Weiter erkunden: Stufe '+c.stage+(force?' (Spielleiter)':' (Chance war '+chance+' %)'),[],true);renderAll()}
 function whisper(){const d2=sceneDoc('Ilses Keller'),s=d2&&sec(d2,'der weg').subs[2];const ok=s?fget(s,'bei erfolg'):'Ihr versteht das Flüstern.',near=s?fget(s,'bei knappem'):'Nur Bruchstücke.',no=s?fget(s,'bei misserfolg'):'Nur Wind.';
   PARTY.filter(h=>h.hp>0).forEach(h=>{const r=d(20),tot=r+(h.mods.wis||0);say(h.name+': Weisheit W20 '+r+' '+sgn(h.mods.wis||0)+' = '+tot+' → '+(tot>=13?ok:tot>=10?near:no),'roll')})}
@@ -32962,6 +32962,183 @@ if(typeof arIm72==='function'){const _ai80x=arIm72;arIm72=function(o){try{const 
       if(o.hurt>0&&F.hit&&F.hit.length)return mk(F.hit[Math.min(F.hit.length-1,Math.floor((12-Math.min(12,o.hurt))/12*F.hit.length))]);
       if(mv&&F.walk&&F.walk.length)return mk(F.walk[Math.floor(t/6)%F.walk.length]);
       if(o.hp!=null)return mk(F.O||F.vorne||F.S);return mk(TD?(F.S||F.vorne):(F.vorne||F.S))}}catch(e){}return _ai80x.apply(this,arguments)}}
+
+
+// ================= Prototyp 81 (07.11.) – Spielrunde, Teil 2: Hauptweg zuerst =================
+// Paul, 07.11. (_Spielleiter/sammlung-p81.md C, D, E und Entscheidungen): „overwhelming bzgl Knopfoptionen und Textmenge – gezielter einsetzen,
+// auf die Hauptstränge fokussieren, vor allem am Anfang.“
+//   – Story-Knöpfe: goldener Rand, pulsiert sanft bis zum ersten Klick (gilt im ganzen Spiel).
+//   – Optionales hinter „Mehr entdecken“: bewusste Entscheidung für Hintergründe; der Unterschied ist klar zu sehen.
+//   – Story-Gespräche im Log mit goldenem Rand.
+// Alte Tests: aus, wenn window.__t56 gesetzt ist und __t56.p81 fehlt.
+function on81(){return!(window.__t56&&!window.__t56.p81)}
+function g81(){S.g81=S.g81||{klick:{},open:{}};S.g81.klick=S.g81.klick||{};S.g81.open=S.g81.open||{};return S.g81}
+function ck81(b){return String(b.textContent||'').replace(/neu$/,'').replace(/\s*[▸▾]$/,'').replace(/\d+/g,'#').replace(/\s+/g,' ').trim()}
+function sk81(b){return S.scene+'|'+(typeof hero!=='undefined'&&hero?hero.name:'')+'|'+ck81(b)}
+function scn81(){try{return String((WORLD.scenes[S.scene]||{}).name||S.scene||'').toLowerCase()}catch(e){return''}}
+function objOf81(name){try{const D=WORLD.scenes[S.scene];return D&&D.objs?D.objs.find(o=>o.name===name):null}catch(e){return null}}
+function npcOf81(name){try{return Object.values(NPCS).find(n=>n&&n.name===name&&n.scene===S.scene)||Object.values(NPCS).find(n=>n&&n.name===name)}catch(e){return null}}
+// Hat die Person noch ein Thema, das etwas freischaltet (Mythos, Hinweis)? Vertrauen zählt nicht (kein Hardlock, Paul 24.10.).
+function npcStory81(n){try{if(!n||!n.imp||!n.imp.topics)return false;return n.imp.topics.some(tp=>tp.unlock&&FACTS[tp.unlock]&&!S.facts[tp.unlock]&&!(S.tdone&&S.tdone[n.id+'|'+lk24(tp.label)])&&topicOk27(n,tp))}catch(e){return false}}
+// Nur Dinge, die noch etwas freischalten (eine Probe allein macht nichts zur Story – Wachturm, Brunnen, Fässer waren sonst golden)
+function objStory81(o){try{return!!(o&&o.unlock&&FACTS[o.unlock]&&!S.facts[o.unlock])}catch(e){return false}}
+// Hand-Regeln für Story-Schritte ohne Daten-Kennung (Pauls Beispiele aus der Runde). w: wann, re: welcher Knopf.
+// Story-Schritte mit Klasse „learned“ aus sceneChips (Nebenaufträge wie Rübenernte/Herr Pfote zählen nicht)
+const STORYLAB81=/^(Weiter erkunden|Die PaulMons versöhnen|.+ versöhnen|Den PaulMons tiefer in den Wald folgen|Sanlep: „Was ist dir passiert\?“)$/;
+const STORY81=[
+  {id:'oeffnen',w:()=>true,re:/^Kapsel öffnen$/},
+  {id:'aushang',w:()=>!S.flags.sanlepCame,re:/^Ansehen: Aushängebrett$/},// K06: hier kommt Sanlep dazu
+  {id:'kapsel',w:()=>(PARTY||[]).every(h=>!(h.inv||[]).some(i=>i.kind==='capsule')),re:/kapsel nehmen$|^Kapseln/i},
+  {id:'galgen',w:()=>{try{return runaways().length>0&&!S.flags.deepDone}catch(e){return false}},re:/wald|PaulMons|versöhnen/i},
+  {id:'konzert',w:()=>{try{return/see/.test(scn81())&&S.fc&&!S.fc.on&&S.fc.stage>=1}catch(e){return false}},go:true},
+  {id:'ragna',w:()=>{try{const n=npcOf81('Ragna');return!!(n&&n.scene===S.scene&&!(S.metOnce&&S.metOnce[n.id]))}catch(e){return false}},re:/^Mit Ragna sprechen$/},
+];
+function story81(b){try{const t=(b.textContent||'').replace(/neu$/,'').trim();if(g81().klick[sk81(b)])return false;
+  if(b.classList.contains('learned')&&!b.closest('#learnRow')&&STORYLAB81.test(t))return true;// Story-Schritte, die die Szene selbst setzt
+  if(b.classList.contains('pulse64'))return true;
+  const m=t.match(/^Ansehen: (.+)$/);if(m&&objStory81(objOf81(m[1])))return true;
+  const p=t.match(/^Mit (.+) sprechen$/);if(p&&npcStory81(npcOf81(p[1])))return true;
+  for(const R of STORY81){let w=false;try{w=R.w()}catch(e){}if(!w)continue;if(R.go&&b.dataset.k78==='go')return true;if(R.re&&R.re.test(t))return true}
+  return false}catch(e){return false}}
+// Was hinter „Mehr entdecken“ kommt: Ansehen ohne offene Wirkung, Aufheben, Lehrstücke nach dem ersten Blick, Marktpreise,
+// und Personen ohne offenes Story-Thema, die weder handeln noch lehren noch zur Grundbesetzung gehören.
+function mehr81(b){try{if(b.classList.contains('gold81'))return false;const t=(b.textContent||'').replace(/neu$/,'').trim(),k=b.dataset.k78;
+  if(k==='hier'){if(/^(Ansehen|Aufheben|Lehrstück lesen): /.test(t)||b.classList.contains('mp68'))return true;
+    const u=t.match(/^Untersuchen: (.+)$/);if(u&&typeof LS73!=='undefined'){const L=LS73.find(x=>x.ding===u[1]);if(L&&ls73().fund[L.id])return true}return false}
+  if(k==='talk'){if(b.classList.contains('gast23'))return true;const p=t.match(/^Mit (.+) sprechen$/);if(!p)return false;const n=npcOf81(p[1]);if(!n||!n.imp)return false;
+    if(npcStory81(n))return false;if(typeof HAND43!=='undefined'&&HAND43[n.name])return false;try{if(Object.values(TEACH31).some(T=>T.npc===n.name||T.n===n.name))return false}catch(e){}
+    if(!(S.metOnce&&S.metOnce[n.id]))return false;// wer noch nie angesprochen wurde, bleibt vorne
+    return true}
+  return false}catch(e){return false}}
+{const st=document.createElement('style');st.textContent=
+  '@keyframes gold81{0%,100%{box-shadow:0 0 0 0 #f6c84a00}50%{box-shadow:0 0 0 3px #f6c84ab0}}'+
+  '#genRow .chip.gold81,#genRow.g78 .chip.gold81,#clsRow .chip.gold81{border-color:#e0b04a!important;color:#ffe08a!important;animation:gold81 1.8s ease-in-out infinite}'+
+  '#genRow .chip.gold81[data-k78="go"]{border:2px solid #e0b04a!important;background:#2a2112!important;padding:1px 8px!important}'+
+  '#genRow.g78 .h81{display:none!important}'+
+  '#genRow .chip.tg81{border-style:dashed!important;border-color:#6a6080!important;color:#b4a8c8!important;background:transparent!important;font-style:italic}'+
+  '#genRow .chip.tg81.on{border-color:#8a7ab0!important;color:#e8e0f4!important}#genRow .chip.sub81{border-color:#4a4058!important;color:#c9bfd6!important;background:#17141d!important}'+
+  '#log p.story81,#log div.story81{border-left:3px solid #e0b04a;padding-left:6px;background:linear-gradient(90deg,#e0b04a14,transparent 60%)}';document.head.appendChild(st)}
+if(typeof szene78==='function'){const _sz81=szene78;szene78=function(){const r=_sz81.apply(this,arguments);try{knoepfe81()}catch(e){console.warn('p81 Knöpfe',e)}return r}}
+let BUSY81=false;
+function knoepfe81(){const gr=document.getElementById('genRow');if(!gr||BUSY81||(typeof gast78==='function'&&gast78()))return;if(!on81()||!gr.classList.contains('g78')){gr.querySelectorAll('.tg81').forEach(x=>x.remove());return}
+  BUSY81=true;try{gr.querySelectorAll(':scope > .tg81').forEach(x=>x.remove());const B=[...gr.children].filter(x=>x.tagName==='BUTTON'&&!x.classList.contains('tg78'));
+    B.forEach(b=>{b.classList.remove('gold81','h81','sub81');if(story81(b)){b.classList.add('gold81');b.classList.remove('h78','calm78')}});
+    // Höchstens zwei goldene Knöpfe zugleich (Runde 07.11.: ein pulsierender Knopf plus fünf goldene Personen war zu viel). Vorrang: Szenen-Schritte, Dinge, Personen.
+    {const kap=b=>GRP78[0].re.test((b.textContent||'').trim());const G=B.filter(b=>b.classList.contains('gold81')&&!kap(b));const max=B.some(b=>b.classList.contains('gold81')&&kap(b))?1:2;const rk=b=>b.dataset.k78==='talk'?2:b.dataset.k78==='go'?1:0;G.sort((a,b)=>rk(a)-rk(b)).slice(max).forEach(b=>b.classList.remove('gold81'))}
+    // P78-Gruppen (Kapseln, Aufheben, Ansehen): die Gruppen-Knöpfe golden, wenn ein Mitglied golden ist
+    gr.querySelectorAll(':scope > .tg78').forEach(tg=>{const n=(tg.textContent||'').split(' (')[0];const G=(typeof GRP78!=='undefined'?GRP78:[]).find(g=>g.n===n);
+      if(!G)return;const mem=B.filter(b=>G.re.test((b.textContent||'').trim()));const kapsel=G.n==='Kapseln'&&STORY81[0].w();
+      if(kapsel||mem.some(b=>b.classList.contains('gold81')))tg.classList.add('gold81');else tg.classList.remove('gold81');
+      if(G.n==='Ansehen'||G.n==='Aufheben'){mem.forEach(b=>{if(!b.classList.contains('gold81'))b.dataset.m81='1'});tg.classList.add('h81')}});
+    const M=B.filter(b=>b.dataset.m81==='1'||mehr81(b));B.forEach(b=>{if(b.dataset.m81&&!M.includes(b))delete b.dataset.m81});
+    // Kapseln: nur der Gruppen-Knopf leuchtet, die Kapseln selbst bleiben eingeklappt (sonst wäre die Gruppe sinnlos)
+    const kg=[...gr.querySelectorAll(':scope > .tg78')].find(x=>/^Kapseln/.test(x.textContent||''));
+    B.forEach(b=>{if(kg&&GRP78[0].re.test((b.textContent||'').trim())){b.classList.remove('gold81');if(!kg.classList.contains('on'))b.classList.add('h78');return}if(b.classList.contains('gold81'))b.classList.remove('h78')});
+    if(M.length){const key=S.scene+'|'+(hero?hero.name:''),open=!!g81().open[key];
+      M.forEach(b=>{b.classList.remove('h78','sub78');b.classList.add(open?'sub81':'h81');b.style.order='8'});
+      const tg=document.createElement('button');tg.type='button';tg.className='chip tg81'+(open?' on':'');tg.textContent='Mehr entdecken ('+M.length+') '+(open?'▾':'▸');
+      tg.setAttribute('aria-expanded',open?'true':'false');tg.setAttribute('data-tip64','Mehr entdecken|Hintergründe und Kleinigkeiten. Für die Geschichte nicht nötig – aber wer sucht, findet.');tg.style.order='7';
+      tg.onclick=ev=>{ev.stopPropagation();g81().open[key]=!open;try{szene78()}catch(e){}try{if(typeof mpPush62==='function')mpPush62()}catch(e){}};
+      const br=document.createElement('div');br.className='lb78 br78 tg81';br.style.order='7';gr.appendChild(br);gr.appendChild(tg)}
+  }finally{BUSY81=false;try{MOS78.takeRecords()}catch(e){}}}
+// Goldener Rand bis zum ersten Klick
+document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('#genRow .chip.gold81,#clsRow .chip.gold81');if(!b||b.classList.contains('tg78'))return;g81().klick[sk81(b)]=1;b.classList.remove('gold81')}catch(err){}},true);
+// Story-Gespräche im Log: die Antwort, die etwas freischaltet, bekommt einen goldenen Rand
+{const _gf81=grantFact;grantFact=function(k){const had=!!(S.facts&&S.facts[k]);const r=_gf81.apply(this,arguments);try{if(on81()&&!had&&S.facts[k]){const lg=$('log');if(lg){const kids=[...lg.children].slice(-4);
+      kids.forEach(p=>{if(/\bnpc\b|\bdm\b|\bnew\b/.test(p.className))p.classList.add('story81')})}}}catch(e){}return r}}
+
+
+// ================= Prototyp 81 – Fundbeutel, Heldenbogen-Hinweis, mehr kurze Kämpfe am Anfang =================
+// Paul, 07.11. (sammlung-p81.md D 22/23/26, E 27): „sehr überfülltes Inventar mit Sachen, die man sich i. d. R. nicht wirklich näher anschaut“,
+// „ein Verweis auf Heldenbogen am Anfang hilft“, „ein paar mehr Kampfsequenzen … mehr Pepp und Aktion“.
+
+// ---------- Fundbeutel: Krimskrams ohne Nutzen braucht keinen Platz, jeder Händler kauft ihn ----------
+const USE81=/^(Leuchtstein|Alte Karte)$|Draht|Nagel/i;
+function fund81(it){try{if(!it||!on81())return false;if(it.kit47||it.mem47||it.s58||it.teach27||it.from43)return false;if(USE81.test(it.name||''))return false;
+  if(it.f81)return true;if(it.kind!=='trinket')return false;if(typeof STORY58!=='undefined'&&STORY58.test(it.name||''))return false;
+  try{if(prot43().has(it.name))return false}catch(e){}const t=tags43(it);return t.length===1&&t[0]==='kram'}catch(e){return false}}
+// Zufallsfunde (genLoot) sind immer Krimskrams – auch „…Ring“ oder „…Schlüssel“ (vorher Erinnerung/Story und dadurch unverkäuflich)
+if(typeof genLoot==='function'){const _gl81=genLoot;genLoot=function(){const r=_gl81.apply(this,arguments);try{if(r&&r.item&&on81())r.item.f81=1}catch(e){}return r}}
+{const _tg81=tags43;tags43=function(it){try{if(it&&it.f81&&on81())return['kram'];if(it&&it.name==='Alte Karte'&&on81())return['story']}catch(e){}return _tg81.apply(this,arguments)}}
+// Die Alte Karte aus dem Keller gehört zur Geschichte (Fakt norden) – vorher verkäuflich
+{const _st81=story58;story58=function(it){try{if(it&&it.name==='Alte Karte'&&on81())return true}catch(e){}return _st81.apply(this,arguments)}}
+{const _co81=counts58;counts58=function(it){if(fund81(it))return false;return _co81.apply(this,arguments)}}
+{const _ar81=art58;art58=function(it){if(fund81(it))return'Fundbeutel';return _ar81.apply(this,arguments)}}
+{const _bu81=buys43;buys43=function(nm,it){if(fund81(it))return true;return _bu81.apply(this,arguments)}}
+{const _li81=list58;list58=function(kind){if(!on81())return _li81.apply(this,arguments);const h=hero;if(!h)return;
+  if(kind==='f'){selItem=null;const its=h.inv.filter(fund81);const L=its.map(it=>[it.name,()=>{selItem=it}]);if(!L.length)L.push(['Der Fundbeutel ist leer.',()=>{}]);
+    fightMenu={title:'Fundbeutel · '+h.name+' – Kleinkram ohne festen Platz; jeder Händler kauft ihn',items:L,k58:'f',its};return renderInv()}
+  const r=_li81.apply(this,arguments);try{if(kind==='w'&&fightMenu&&fightMenu.its){const keep=fightMenu.its.map((it,i)=>[it,fightMenu.items[i]]).filter(x=>!fund81(x[0]));
+      fightMenu.its=keep.map(x=>x[0]);fightMenu.items=keep.map(x=>x[1]);if(!fightMenu.items.length)fightMenu.items=[['Nichts Wichtiges dabei.',()=>{}]];renderInv()}}catch(e){}return r}}
+{const _de81=deco58;deco58=function(){const r=_de81.apply(this,arguments);try{if(!on81())return r;const box=$('inv');if(!box||!hero||!hero.inv)return r;
+    const n=hero.inv.filter(fund81).length,w=box.querySelector('.k58w .k58n');if(w)w.textContent=Math.max(0,(+w.textContent||0)-n);
+    if(n){const b=document.createElement('button');b.type='button';b.className='slot k58w k58f';const t=document.createElement('span');t.className='k58t';t.textContent='Fundbeutel';b.appendChild(t);
+      const c=document.createElement('span');c.className='k58n';c.textContent=n;b.appendChild(c);b.setAttribute('data-tip64','Fundbeutel|Kleinkram ohne Nutzen ('+n+'). Braucht keinen Platz in der Tasche; jeder Händler kauft ihn.');
+      b.setAttribute('aria-pressed',String(!!(fightMenu&&fightMenu.k58==='f')));b.onclick=()=>{if(fightMenu&&fightMenu.k58==='f'){fightMenu=null;renderInv()}else list58('f')};box.appendChild(b)}}catch(e){console.warn('p81 Fundbeutel',e)}return r}}
+{const st=document.createElement('style');st.textContent='#inv .slot.k58f{border-style:dashed;opacity:.85}#inv .slot.k58f .k58t{color:#c9bfd6}';document.head.appendChild(st)}
+{const _gf81=giveFind24;giveFind24=function(h,item,why){const r=_gf81.apply(this,arguments);try{const H=h||hero,it=H&&H.inv[H.inv.length-1];if(it&&fund81(it))say('('+it.name+' kommt in den Fundbeutel.)','sys')}catch(e){}return r}}
+
+// ---------- Heldenbogen am Anfang zeigen ----------
+{const st=document.createElement('style');st.textContent='@keyframes hb81{0%,100%{box-shadow:0 0 0 0 #f6c84a00}50%{box-shadow:0 0 0 3px #f6c84ab0}}button.bogen27.hb81{border-color:#e0b04a!important;color:#ffe08a!important;animation:hb81 1.8s ease-in-out infinite}';document.head.appendChild(st)}
+function hb81(){try{if(!on81()||!GAME_STARTED||!S||S.hb81===2)return;const b=document.querySelector('button.bogen27');if(!b)return;
+  if(!S.hb81){S.hb81=1;setTimeout(()=>{try{say('Tipp: Im 📜 Heldenbogen oben links seht ihr, was eure Helden können – Werte, Waffe, Techniken. Ein Blick lohnt sich.','sys')}catch(e){}},4000)}
+  b.classList.add('hb81');if(!b.__hb81){b.__hb81=1;b.addEventListener('click',()=>{S.hb81=2;b.classList.remove('hb81')})}}catch(e){}}
+{const _ra81=renderAll;renderAll=function(){const r=_ra81.apply(this,arguments);hb81();return r}}
+
+// ---------- Mehr kurze Kämpfe am Anfang (je einmal, ohne Spielleiter, setzen keine Fakten) ----------
+// 1. Vor dem Haus nach dem Kellerkampf: eine Rostmilbe im Farn – erst friedlich (P80), man kann sie beruhigen, umgehen oder kämpfen.
+// 2. Dichter Tannenwald, nachdem die Schleife gelöst ist und kein PaulMon-Streit läuft: Rostmilben aus dem Moos (Hinterhalt, sofort Kampf).
+// 3. Rübenfeld beim ersten Betreten: der Rübenritter stapft aus dem Feld – erst friedlich (P80).
+function f81(){S.f81=S.f81||{};return S.f81}
+function frei81(){try{return!(inFight()||(typeof TAC!=='undefined'&&TAC)||(typeof RB!=='undefined'&&RB)||talk||S.ko||S.enc||(typeof busy27==='function'&&busy27())||(typeof DUNKEL72!=='undefined'&&DUNKEL72))}catch(e){return false}}
+const KAMPF81=[
+  {id:'farn',w:()=>/^vor dem haus$/.test(scn81())&&S.flags.cellarMilben,go:()=>{say('Im Farn neben dem Weg raschelt es. Eine Rostmilbe – klein, rostbraun, und sie hat euch schon gesehen.','dm');return start80('milbe')}},
+  {id:'moos',w:()=>/dichter tannenwald/.test(scn81())&&S.facts.schleife_geloest&&(!runaways().length||S.flags.deepDone),go:()=>{if(!rostDef73())return false;const n=Math.max(1,Math.min(3,Math.ceil((PARTY||[]).length/2)));
+    say('Am umgestürzten Stamm bewegt sich das Moos. Dann noch eine Stelle. Rostmilben – und sie haben Hunger.','dm');group29(Array.from({length:n},()=>'rostmilbe'),{quiet:true});return true}},
+  {id:'ruebe',w:()=>/rübenfeld|ruebenfeld/.test(scn81()),go:()=>{say('Zwischen den Reihen hebt sich ein Blätterhaufen. Er hat Beine.','dm');return start80('rübenritter')}},
+];
+function kampf81(){try{if(!on81()||!GAME_STARTED)return;const F=f81();if(inFight()){KAMPF81.forEach(K=>{try{if(!F[K.id]&&K.w())F[K.id]=1}catch(e){}});return}for(const K of KAMPF81){if(F[K.id])continue;let w=false;try{w=K.w()}catch(e){}if(!w)continue;
+    if(!frei81())return;const sc=S.scene;F[K.id]=1;setTimeout(()=>{try{if(S.scene!==sc||!frei81()){F[K.id]=0;return}if(!K.go())F[K.id]=0;renderAll()}catch(e){console.warn('p81 Kampf',e)}},1800);return}}catch(e){}}
+{const _sw81=switchScene;switchScene=function(){const r=_sw81.apply(this,arguments);try{setTimeout(kampf81,600)}catch(e){}return r}}
+setInterval(()=>{try{if(GAME_STARTED)kampf81()}catch(e){}},4000);
+
+
+// ================= Prototyp 81 – Anfang straffen: Keller und erster Besuch im Kiefernzapfen =================
+// Paul, 07.11. (sammlung-p81.md D 22, 24): „Kellerszene zu lang, man muss ewig oft erkunden“; „beim ersten Auftreffen im Kiefernzapfen
+// kommen sehr sehr viele Infos und Chatlogs auf einmal“. Fakten und Wissens-Flags bleiben dieselben, nur Ablauf und Auslöser ändern sich.
+
+// ---------- Keller: „Weiter erkunden“ führt beim dritten Mal sicher zum Sog (statt 20 % + 5 % je Versuch) ----------
+// Umgesetzt über rep() in mk27 (exploreCellar). Das Flüstern auf Stufe 3: eine Zeile mit dem besten Wurf statt einer Zeile je Held.
+{const _wh81=whisper;whisper=function(){if(!on81())return _wh81.apply(this,arguments);try{const d2=sceneDoc('Ilses Keller'),s=d2&&sec(d2,'der weg').subs[2];
+    const ok=s?fget(s,'bei erfolg'):'Ihr versteht das Flüstern.',near=s?fget(s,'bei knappem'):'Nur Bruchstücke.',no=s?fget(s,'bei misserfolg'):'Nur Wind.';
+    let best=null;PARTY.filter(h=>h.hp>0).forEach(h=>{const r=d(20),tot=r+(h.mods.wis||0);if(!best||tot>best.tot)best={h,r,tot}});if(!best)return;
+    say(best.h.name+' hört am genauesten hin: Weisheit W20 '+best.r+' '+sgn(best.h.mods.wis||0)+' = '+best.tot+' → '+(best.tot>=13?ok:best.tot>=10?near:no),'roll')}catch(e){return _wh81.apply(this,arguments)}}}
+// ---------- Keller: unter der Plane zuerst der Rucksack (die Spur zu L.), dann Laterne und Seil ----------
+{const _au81=ausruestung24;ausruestung24=function(){try{if(on81()&&RUCK24[0].name!=='Zerschlissener Rucksack'){const i=RUCK24.findIndex(x=>x.name==='Zerschlissener Rucksack');if(i>0)RUCK24.unshift(RUCK24.splice(i,1)[0])}}catch(e){}return _au81.apply(this,arguments)}}
+
+// ---------- Kiefernzapfen: erster Besuch in zwei Teilen ----------
+// Teil A beim Betreten (drei Zeilen: Wasser, der Vierte, Sanlep tippt sich an die Stirn). Teil B erst auf Klick „Sanlep: „Was ist dir passiert?““
+// (Unfall, Kraut, Stahndor – mit den Fakten heilkraut und stahndor wie bisher). So hat jeder Teil seinen eigenen Moment.
+function san81(){S.f81=S.f81||{};return S.f81}
+if(typeof schenkeIntro48==='function'){const _si81=schenkeIntro48;schenkeIntro48=function(){if(!on81())return _si81.apply(this,arguments);
+  if(S.flags.sanSchenke48||!sanHere48()||talk||inFight()||TAC)return;if(typeof befActive28==='function'&&befActive28())return;
+  if(S.flags.sanlepMem28){S.flags.sanSchenke48=1;return}
+  S.flags.sanSchenke48=1;S.facts.sanlep_intro48=true;const brett=!!S.flags.sanlepCame;
+  const A=[['Sanlep winkt euch an die Theke, bevor ihr euch setzen könnt, und schiebt jedem ein Glas hin. Wasser. „Erst reden, dann Bier.“','dm'],
+    brett?['Der Vierte mit dem Buch. Ich hab drüber nachgedacht. Ich glaub, ich hab den mal gekannt. Vor meinem Unfall.']
+      :['Ihr seid neu. Dann wisst ihr nichts von den Vieren. Steht alles am Aushang auf dem Dorfplatz: vier Leute, Richtung Berge, seit fast einem Jahr nichts. Drei davon kenn ich. Den Vierten auch – irgendwoher. Vor meinem Unfall, glaub ich.'],
+    ['Sanlep tippt sich an die Stirn.','dm']];
+  const t=lines27('Sanlep',A,1200);setTimeout(()=>{san81().sanB=1;renderAll()},t)}}
+function sanB81(){const F=san81();if(F.sanB!==1)return;F.sanB=2;say('Sanlep: Was ist dir passiert?','player',hero?hero.name:'');
+  const L=[['Vor zwanzig Jahren. Seitdem fehlt da oben was. Nicht viel. Nur das Wichtige. Am Abend davor hab ich was unterschrieben. Weiß nicht mehr, was.'],
+    ['Es soll ein Kraut geben, am alten See – wenn es den noch gibt. Silbrig, riecht nach Regen. Es holt zurück, was einem genommen wurde. Sagt man.'],
+    ['Bringt mir eins, und ich erzähl euch von Stahndor. Von meinem Labor da oben. Und von dem, was ich vergessen hab.']];
+  const t=lines27('Sanlep',L,600);const tk=600+dur48(L[0][0])+1500;setTimeout(()=>{try{grantFact('heilkraut','Sanlep')}catch(e){}},tk);
+  setTimeout(()=>{try{grantFact('stahndor','Sanlep')}catch(e){}addChron('Sanlep hat der Gruppe von seinem Unfall vor zwanzig Jahren erzählt und um ein Kraut vom alten See gebeten. Dann will er von Stahndor erzählen.',[],true);renderAll()},t);renderAll()}
+{const _sc81=sceneChips;sceneChips=function(chip){_sc81.apply(this,arguments);try{if(on81()&&san81().sanB===1&&sanHere48()&&!talk&&!inFight())chip('Sanlep: „Was ist dir passiert?“',()=>sanB81(),'learned')}catch(e){}}}
+// Wer die Schenke verlässt, bevor er gefragt hat: Sanlep erzählt den Rest, sobald man wieder da ist und fragt (der Knopf bleibt).
+// Mit drei Schritten kommt man durch zwei Abschnitte: der Weinkeller mit dem Bild (Hagen, Wenna, Odo, L.) kommt darum vor der Nische mit dem Schacht.
+{const _ec81=exploreCellar;exploreCellar=function(){try{if(on81()&&typeof CELSEC!=='undefined'&&CELSEC[3]&&/Weinkeller/.test(CELSEC[3].name)){const t=CELSEC[2];CELSEC[2]=CELSEC[3];CELSEC[3]=t}}catch(e){}return _ec81.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
