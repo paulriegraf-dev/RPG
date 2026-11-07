@@ -3513,7 +3513,7 @@ function gateDudePuff(){if(S.flags.gateDudeV||S.flags.gateDudeGone)return;S.flag
 // --- Aushang → Sanlep
 function sanlepId(){const n=Object.values(NPCS).find(n=>/sanlep/i.test(n.name||''));return n&&n.id}
 {const _il=impLook;impLook=function(w){const r=_il(w);try{const D=WORLD.scenes[S.scene];if(r&&D&&/dorfplatz/i.test(D.name)&&/(brett|aushang|zettel|auftrag|gesucht|belohnung|vermisst|aufruf|liste)/.test(w||'')&&!S.flags.sanlepCame){S.flags.sanlepCame=true;
-  setTimeout(()=>{const id=sanlepId();if(!id)return;impNpcEnter(id);setTimeout(()=>{say('„Ihr lest den Zettel mit den Vieren, was?“ Ein kräftiger Mann mit Schnauzbart und Lederschürze stellt sich neben euch. Er poliert ein Glas, obwohl weit und breit keine Theke ist. „Sanlep. Fragt ruhig.“','npc','Sanlep');addChron('Sanlep hat die Gruppe am Aushängebrett angesprochen.',[]);renderAll()},1400)},1600)}}catch(e){}return r}}
+  setTimeout(()=>{const id=sanlepId();if(!id)return;impNpcEnter(id);setTimeout(()=>{say((S.metOnce&&S.metOnce[id])?'„Na, wieder am Zettel mit den Vieren?“ Sanlep stellt sich neben euch und poliert ein Glas, obwohl weit und breit keine Theke ist. „Fragt ruhig. Ihr wisst ja, wo ihr mich findet.“':'„Ihr lest den Zettel mit den Vieren, was?“ Ein kräftiger Mann mit Schnauzbart und Lederschürze stellt sich neben euch. Er poliert ein Glas, obwohl weit und breit keine Theke ist. „Sanlep. Fragt ruhig.“','npc','Sanlep');addChron('Sanlep hat die Gruppe am Aushängebrett angesprochen.',[]);renderAll()},1400)},1600)}}catch(e){}return r}}
 function sanlepSync(){const id=sanlepId();if(!id)return;const n=NPCS[id],sch=sceneIdByName('Schenke Zum Kiefernzapfen');if(!n||!sch)return;
   if(S.scene===sch){n.scene=sch;n.present=true;n.x=n.tx=450;n.face=-1;n.queue=[]}
   else if(n.present&&n.scene!==S.scene&&n.scene!==sch){n.scene=sch}}
@@ -4602,13 +4602,13 @@ function giveHint(){const h=nextHint();say('Hinweis: '+h.t,'dm');addChron('Spiel
     Object.values(NPCS).forEach(n=>{if(!n||!n.name||n.present||n===NPCS.ilse||n===NPCS.pet)return;if(w.includes(norm(n.name))&&typeof impNpcEnter==='function'){try{impNpcEnter(n.id)}catch(e){}}})}}catch(e){}return r}}
 
 // ================= Ilse hält die Gruppe auf (ohne Dreiecks-Kette), Sanleps alte Verletzung =================
-const ILSE_STORY=['„Halt, halt! Wartet mal!“ Ilse kommt aus dem Haus geschlurft, ein Wolltuch über den Schultern. „Ihr wollt runter nach Großensee? Dann hört einer alten Frau kurz zu.“',
+const ILSE_STORY=window.ILSE_STORY80x=['„Halt, halt! Wartet mal!“ Ilse kommt aus dem Haus geschlurft, ein Wolltuch über den Schultern. „Ihr wollt runter nach Großensee? Dann hört einer alten Frau kurz zu.“',
   '„Großensee … Früher, sagen die Alten, lag da unten ein See, so groß, dass man das andere Ufer nicht sah. Heute? Ein Brunnen und viel Gerede.“',
   '„Und man erzählt sich, am Ufer wuchs ein Kraut, das jede Wunde schließt. Jede. Sogar die, die man nicht sieht.“',
   '„Ich glaub ja nicht alles, was die Leute sagen. Aber hört euch im Dorf um – über ihren See erzählen die sich die seltsamsten Geschichten. Vielleicht ist ja was dran.“',
   '„So. Und jetzt los, bevor es dunkel wird. Und grüßt mir den Wirt.“'];
-function ilseStoryDue(sc){if(S.flags.ilseStory||S.flags.hennigGone||S.flags.blackout)return false;return ortOf(S.scene)==='kiefernhang'&&ortOf(sc)==='grossensee'}
-function ilseStory(done){S.flags.ilseStoryRun=true;let i=0;const step=()=>{if(i<ILSE_STORY.length){say(ILSE_STORY[i++],'npc','Ilse');renderAll();setTimeout(step,i===ILSE_STORY.length?2200:3200);return}
+function ilseStoryDue(sc){if(S.flags.ilseStory||S.flags.blackout)return false;return ortOf(S.scene)==='kiefernhang'&&ortOf(sc)==='grossensee'}
+function ilseStory(done){S.flags.ilseStoryRun=true;let i=0;const ILSE_STORY=S.flags.hennigGone?['„Halt, wartet!“ Ilse kommt aus dem Haus, das Wolltuch schief über den Schultern, und schaut sich zweimal um, bevor sie weiterspricht. „Ihr wollt runter nach Großensee? Dann hört einer alten Frau kurz zu. Gerade heute.“'].concat(window.ILSE_STORY80x.slice(1)):window.ILSE_STORY80x;const step=()=>{if(i<ILSE_STORY.length){say(ILSE_STORY[i++],'npc','Ilse');renderAll();setTimeout(step,i===ILSE_STORY.length?2200:3200);return}
   S.flags.ilseStoryRun=false;S.flags.ilseStory=true;grantFact('dorf','Ilse');const L=FACTS.heilkraut&&FACTS.heilkraut.label;if(FACTS.heilkraut)FACTS.heilkraut.label='Ein Heilkraut soll am alten See bei Großensee wachsen – es heilt angeblich jede Wunde.';grantFact('heilkraut','Ilse');if(FACTS.heilkraut&&L)FACTS.heilkraut.label=L;
   addChron('Ilse erzählt vom alten See und einem Heilkraut. Im Dorf soll man sich umhören.',['auge'],true);done&&done()};step()}
 {const _swI=switchScene;switchScene=function(sc){if(S.flags.ilseStoryRun)return;if(ilseStoryDue(sc)){ilseStory(()=>switchScene(sc));return}return _swI(sc)}}
@@ -19261,7 +19261,7 @@ function show56(){const H=HOLD56;if(!H)return;const g=H.groups[H.i];if(!g){retur
   if(echtAll){hint.textContent='Eure Zahl vom Tisch.';ROLL56={g,phase:'show'};OV56.hidden=false;finish56(g,true);return}
   hint.textContent=spiel?'Diese Probe kam unerwartet – das Spiel würfelt. Klicken oder Leertaste.':(n>1?'Zwei Würfel (Vorteil). ':'')+'Klicken oder Leertaste zum Würfeln.';
   ROLL56={g,phase:'wait'};OV56.hidden=false;try{g.cv[0].focus({preventScroll:true})}catch(e){}}
-function go56(){const R=ROLL56;if(!R)return;if(R.phase==='show'){return next56()}if(R.phase!=='wait')return;R.phase='roll';const g=R.g,t0=performance.now(),dur=950;
+function go56(){const R=ROLL56;if(!R)return;if(R.phase==='show'){return next56()}if(R.phase!=='wait')return;R.phase='roll';const g=R.g,t0=performance.now(),dur=650;
   const hint=OV56.querySelector('.w56hint');hint.textContent='…';
   const step=()=>{const k=(performance.now()-t0)/dur;if(k>=1){g.cv.forEach((c,i)=>{c.style.transform='';die56(c,g.vals[i],{crit:g.vals[i]===20,fumble:g.vals[i]===1})});finish56(g,false);return}
     g.cv.forEach(c=>{die56(c,1+Math.floor(Math.random()*20));const a=(Math.random()-.5)*40*(1-k),dx=(Math.random()-.5)*10*(1-k),dy=-Math.abs(Math.sin(k*Math.PI*3))*18*(1-k);c.style.transform='translate('+dx+'px,'+dy+'px) rotate('+a+'deg)'});
@@ -21944,7 +21944,7 @@ const MPOVNO62=new Set(['worldDlg','startScr','pickScr','path58','saveDlg','bg29
 function mpOvList62(){return[...document.body.children].filter(el=>el.id&&!MPOVNO62.has(el.id)&&!el.classList.contains('app')&&!el.classList.contains('dmonly')&&!el.hidden&&el.tagName!=='SCRIPT'&&el.tagName!=='STYLE'&&getComputedStyle(el).display!=='none')}
 function mpSer62(root,outer,hide){const cl=root.cloneNode(true),a=root.querySelectorAll('canvas'),b=cl.querySelectorAll('canvas');
   a.forEach((c,i)=>{const d=b[i];if(!d)return;if(c.width*c.height>=3000){let k=MP62.cvKeys.get(c);if(!k){k='c'+(++MP62.cvN);MP62.cvKeys.set(c,k)}MP62.cvs.set(k,c);d.setAttribute('data-m62cv',k)}
-    else{const im=document.createElement('img');try{im.src=c.width&&c.height?c.toDataURL():''}catch(e){}im.className=c.className;if(c.getAttribute('style'))im.setAttribute('style',c.getAttribute('style'));im.width=c.width;im.height=c.height;im.style.imageRendering='pixelated';d.replaceWith(im)}});
+    else{const im=document.createElement('img');try{im.src=c.width&&c.height?c.toDataURL():''}catch(e){}im.className=c.className;if(c.getAttribute('style'))im.setAttribute('style',c.getAttribute('style'));im.width=c.width;im.height=c.height;try{const r80x=c.getBoundingClientRect();if(r80x.width>c.width+1){im.style.width=Math.round(r80x.width)+'px';im.style.height=Math.round(r80x.height)+'px'}}catch(e){}im.style.imageRendering='pixelated';d.replaceWith(im)}});
   const ia=root.querySelectorAll('input,select,textarea'),ib=cl.querySelectorAll('input,select,textarea');ia.forEach((x,i)=>{const y=ib[i];if(!y)return;if(x.type==='checkbox'||x.type==='radio'){if(x.checked)y.setAttribute('checked','');else y.removeAttribute('checked')}else if(x.tagName==='SELECT'){[...y.options].forEach((o,j)=>{if(j===x.selectedIndex)o.setAttribute('selected','');else o.removeAttribute('selected')})}else y.setAttribute('value',x.value)});
   cl.querySelectorAll('.mp62host').forEach(e=>e.remove());cl.querySelectorAll('.dmonly,[data-dm],.tdm,.b53dm'+(hide?','+hide:'')).forEach(e=>e.setAttribute('style','display:none'));return outer?cl.outerHTML:cl.innerHTML}
 function mpHeroes62(){return(PARTY||[]).map(h=>({name:h.name,cls:h.cls,owner:(mpOwner62(h.name)||{}).name||null,ko:h.hp<=0}))}
@@ -22174,7 +22174,7 @@ mpPush62=function(force){const gs=mpGuestsOn62();if(!gs.length)return;
   // Mit Mitspielern laufen die Helden einzeln (einmal, der Spielleiter kann zurückschalten)
   try{if(!MP62.solo63&&gs.some(G=>G.hero)&&!S.flags.solo28){MP62.solo63=1;setSolo28(true,true);say('Gemeinsam spielen: Jeder lenkt seinen Helden selbst, die Helden laufen einzeln. (Spielleiter: „Bewegung“ schaltet zurück.)','sys')}else if(gs.some(G=>G.hero))MP62.solo63=1}catch(e){}
   let V;try{MP62.cvs.clear();V={body:document.body.className,stage:mpSer62(document.querySelector('.stage')),actions:mpSer62(document.querySelector('.lower .actions')),narr:$('narrSlot')?mpSer62($('narrSlot')):'',
-    ovs:mpOvList62().map(el=>({id:el.id,html:mpSer62(el,true)})),heroes:JSON.stringify(mpHeroes62()),actor:mpActor62(),fight:mpFight62(),music:(typeof musicCur!=='undefined'&&musicCur&&typeof MUSIC!=='undefined'&&MUSIC[musicCur])?MUSIC[musicCur].src:''}}catch(e){console.warn('p63',e);return}
+    ovs:mpOvList62().map(el=>({id:el.id,html:mpSer62(el,true)})),heroes:JSON.stringify(mpHeroes62()),actor:mpActor62(),fight:mpFight62(),music:(typeof mpMusSrc80x==='function'?mpMusSrc80x():((typeof musicCur!=='undefined'&&musicCur&&typeof MUSIC!=='undefined'&&MUSIC[musicCur])?MUSIC[musicCur].src:''))}}catch(e){console.warn('p63',e);return}
   const lg=$('log');if(lg)[...lg.children].forEach(c=>{if(!c.dataset.m62)c.dataset.m62=String(++MP62.seq)});
   gs.forEach(G=>{const L=G.last,o={t:'view'};if(L.wait||L.pre){G.last={};}
     const mine=mpFor63(G),W=mine?Object.assign({},V,mine):V;
@@ -22290,7 +22290,7 @@ function mpMapClose63(){const m=$('mapOv');if(m&&m.dataset.p63)m.hidden=true;G62
     if(el)el.outerHTML=m.html;else document.body.insertAdjacentHTML('beforeend',m.html);G62.mapOwn=true;return}
   if(m.t==='view'&&m.body!=null){G62.tdHost=/\btd63\b/.test(m.body)}
   // Neuer Hinweis, neue Möglichkeit … : zusätzlich groß oben einblenden (Paul, 24.10., 00:33) – nur Zeilen, die noch nicht im Log stehen
-  let neu63=[];if(m.t==='log'&&!m.reset&&Array.isArray(m.add)){const lg=$('log');m.add.forEach(x=>{try{if(lg&&lg.querySelector('[data-m62="'+x.s+'"]'))return;const d=document.createElement('div');d.innerHTML=x.h;const p=d.firstElementChild;if(p&&p.classList.contains('new'))neu63.push(p.textContent)}catch(e){}})}
+  let neu63=[];if(m.t==='log'&&!m.reset&&Array.isArray(m.add)){const lg=$('log');m.add.forEach(x=>{try{if(lg&&lg.querySelector('[data-m62="'+x.s+'"]'))return;const d=document.createElement('div');d.innerHTML=x.h;const p=d.firstElementChild;if(p&&p.classList.contains('new')&&!p.classList.contains('nogast80x')&&!p.classList.contains('w56h'))neu63.push(p.textContent)}catch(e){}})}
   const r=_gm63.apply(this,arguments);neu63.forEach(mpToast63);
   if(m.t==='view'&&m.ovs&&('mapOv' in m.ovs)){G62.mapOwn=false}
   if(m.t==='view'&&m.act!=null)G62.act=m.act;
@@ -23926,7 +23926,7 @@ let Q66=[],TM66=0,BUSY66=0;                    // Warteschlange, Zeitgeber, „b
 const NEUTRAL66=/^(sys|player|new|roll|note)$/;
 function aktiv66(){return !window.__no65&&!window.__fast38&&TEMPO66!=='aus'&&!(typeof TAC!=='undefined'&&TAC)&&!document.body.classList.contains('gast62')}
 function dauer66(txt){const len=String(txt||'').length;return Math.min(7000,Math.max(900,len*(TEMPO_MS66[TEMPO66]||34)))}
-function sätze66(t){const a=String(t).match(/[^.!?…“]+[.!?…]+[“"]?\s*|[^.!?…]+$/g);return a&&a.length>1?a:[t]}
+function sätze66(t){const a=String(t).match(/[^.!?…]+[.!?…]+[“"»]?\s*|[^.!?…]+$/g);return a&&a.length>1?a:[t]}
 function einfügen66(it){const p=it.p;try{p.dataset.f66=String(it.full||'').length}catch(e){}log.appendChild(p);try{pinLog()}catch(e){}
   if(it.sent&&it.sent.length>1){const tn=it.tn;tn.nodeValue=it.sent[0];let k=1;const step=()=>{if(!p.isConnected&&!log.contains(p)){return}if(k>=it.sent.length)return;tn.nodeValue+=it.sent[k++];try{pinLog()}catch(e){}
       if(k<it.sent.length)it.tm=setTimeout(step,dauer66(it.sent[k-1]))};it.tm=setTimeout(step,dauer66(it.sent[0]))}
@@ -25110,7 +25110,7 @@ setInterval(()=>{try{if(TD||inFight()||TAC||S.scene==='haus'&&false)return;PARTY
   document.head.appendChild(st)}
 const W69={key:'',bye:0};
 function wevCard69(){let el=document.getElementById('wev69');if(!el){el=document.createElement('div');el.id='wev69';el.hidden=true;document.body.appendChild(el)}return el}
-function wevSync69(){try{const el=wevCard69(),A=typeof WEV32!=='undefined'&&WEV32.act;
+function wevSync69(){try{if(typeof G62!=='undefined'&&G62.on)return;const el=wevCard69(),A=typeof WEV32!=='undefined'&&WEV32.act;
   if(W69.bye&&Date.now()<W69.bye)return;if(W69.bye){W69.bye=0;W69.key=''}
   if(!A||!A.talk){if(!el.hidden){el.hidden=true;W69.key=''}return}
   const D=WEVDEF32[A.k],s=D&&D.steps[A.step];if(!s){el.hidden=true;return}
@@ -27026,7 +27026,7 @@ function arIm72(o){const G=G68.h[o.hid];if(!G)return null;const mv=Math.abs(o.x-
   if(o.hp!=null)return G.east||G.front;return TD?(G.south||G.front):(G.front||G.south)}
 function arBase72(o){return TD?Math.round(FLOOR-(o.lane!=null?o.lane:14)):FLOOR+(typeof feet68==='function'?feet68():0)}
 {const _ad=arDrawFig;arDrawFig=function(o){if(!ar72()||!o||!G68.h[o.hid])return _ad.apply(this,arguments);const im=arIm72(o);if(!im||!im.width)return _ad.apply(this,arguments);
-  const K=TD?1:2,x=Math.round(o.x),b=arBase72(o),w=im.width*K,h=im.height*K,hop=o.hop>0?Math.round(Math.sin((24-o.hop)/24*Math.PI)*4*K):0,side=o.hp!=null||Math.abs(o.x-o.tx)>.6;
+  const K=(im&&im.k80x)?1:(TD?1:2),x=Math.round(o.x),b=arBase72(o),w=im.width*K,h=im.height*K,hop=o.hop>0?Math.round(Math.sin((24-o.hop)/24*Math.PI)*4*K):0,side=o.hp!=null||Math.abs(o.x-o.tx)>.6;
   g.save();g.imageSmoothingEnabled=false;g.globalAlpha=.3;px(x-7*K,b-1,14*K,2,'#000');g.globalAlpha=1;
   if(o.fallen){g.globalAlpha=Math.max(0,1-(o.fallen>60?(o.fallen-60)/60:0));g.translate(x,b-4);g.rotate(o.dir*Math.PI/2);g.drawImage(G68.h[o.hid].front||im,-w/2,-h+6,w,h);g.restore();return}
   const lx=o.lunge>0?o.face*Math.min(o.lunge,5)*K:0;if(side&&o.face<0){g.translate(x+lx,0);g.scale(-1,1);g.drawImage(im,-w/2,b-h-hop,w,h)}else g.drawImage(im,Math.round(x+lx-w/2),b-h-hop,w,h);
@@ -32860,6 +32860,108 @@ window.addEventListener('mouseover',e=>{try{const b=e.target&&e.target.closest&&
 {const _ss80=startSetzen73;startSetzen73=function(h,id){const r=_ss80.apply(this,arguments);try{const alt=window.__t80start===false&&!(window.__t56&&window.__t56.lm80u);if(!alt&&on80u()&&h&&h.tech){const W=WEG73[weg73(h)];if(W){const weg=new Set([W.start].concat(W.linie||[]));
     const vor=h.tech.length;h.tech=h.tech.filter(t=>t.id===id||!weg.has(t.id));if(h.tech.length<vor)h.ohneWeg80=1}}}catch(e){console.warn('p80u Start',e)}return r}}
 {const _wn80=wegNext73;wegNext73=function(h){try{if(on80u()){const W=WEG73[weg73(h)];if(W&&W.start&&TECH27[W.start]&&!known73(h,W.start))return W.start}}catch(e){}return _wn80.apply(this,arguments)}}
+
+
+// ================= Nachbesserung 4 zu Prototyp 80 (07.11.) – Beobachtungen aus der Spielrunde, Teil 1: Mitspieler und kleine Fehler =================
+// Paul, 07.11., 17:47 (_Spielleiter/sammlung-p81.md, Abschnitte A und B). Teil 2 (Hervorhebung, Anfang straffen, mehr Kampf) folgt als P81.
+
+// ---------- A2: Musik auch beim Mitspieler (Froschkonzert/Galgenmännchen, stummgeschalteter Spielleiter, eigene Stücke) ----------
+// Bisher ging nur MUSIC[musicCur] an die Gäste. Das Froschkonzert spielt ein eigenes Audio (CA) und setzt musicCur=null – die Gäste bekamen Stille.
+// Jetzt: Konzert-Stück > laufende Musik > die Musik, die der Ort spielen würde (auch wenn der Spielleiter selbst die Musik aus hat).
+// Allgemein gilt (für neue Szenen): Wer Musik ohne MUSIC/musicCur abspielt, trägt sie hier in mpMusSrc80x ein, sonst hören die Gäste sie nicht.
+function mpMusSrc80x(){try{
+  if(typeof CA!=='undefined'&&CA&&!CA.paused&&typeof FCTRACK!=='undefined'){const t=FCTRACK[CAstage];const s=typeof t==='string'?t:t&&t.src;if(s)return s+'#once'}
+  let k=(typeof musicCur!=='undefined'&&musicCur)||null;if(!k&&typeof musicSlot==='function'&&!(typeof fcPlaying==='function'&&fcPlaying()))k=musicSlot();
+  return k&&typeof MUSIC!=='undefined'&&MUSIC[k]?MUSIC[k].src:''}catch(e){return''}}
+if(typeof mpMusic62==='function'){const _mm80x=mpMusic62;mpMusic62=function(src,force){const once=typeof src==='string'&&/#once$/.test(src);const s=once?src.replace(/#once$/,''):src;
+  const r=_mm80x.call(this,s,force);try{const a=G62.audio;if(a&&a.dataset.src===s){a.loop=!once;
+      if(!a.dataset.fb80x){a.dataset.fb80x='1';a.addEventListener('error',()=>{try{const fb=MUSIC.erkunden&&MUSIC.erkunden.src;if(fb&&a.dataset.src!==fb)_mm80x.call(null,fb,true)}catch(e){}})}}}catch(e){}return r}}
+
+// ---------- A4: Karten-Begegnungen (z. B. Bruder Benno) beim Mitspieler sichtbar ----------
+// Der Gast hat kein eigenes WEV32.act; seine eigene Abgleich-Schleife versteckte das gespiegelte Fenster sofort wieder (Patch in p69c.js über MP52).
+
+// ---------- A7: Taktik-Kampf beim Mitspieler nicht unter der Gast-Leiste ----------
+{const st=document.createElement('style');st.textContent=
+  'body.gast62 #tacOv{bottom:var(--mp62h,58px)}body.gast62 #mapOv{bottom:var(--mp62h,58px)}'+
+  'body.gast62 #tacOv.ws68 canvas{max-height:calc(100vh - var(--mp62h,58px) - 8px)}';document.head.appendChild(st)}
+function mpBarH80x(){try{const b=document.getElementById('mp62bar');if(b&&!b.hidden&&b.offsetHeight)document.body.style.setProperty('--mp62h',b.offsetHeight+'px')}catch(e){}}
+setInterval(()=>{try{if(typeof G62!=='undefined'&&G62.on)mpBarH80x()}catch(e){}},700);
+
+// ---------- A8: Karte für die Mitspieler – „Karte“ blinkt, wenn ein neues Gebiet dazukommt, offene Karte frischt sich auf ----------
+{const st=document.createElement('style');st.textContent='@keyframes neu80x{0%,100%{box-shadow:0 0 0 0 #f6c84a00}50%{box-shadow:0 0 0 3px #f6c84acc}}#mp62map.neu80x{animation:neu80x 1.1s ease-in-out infinite;border-color:#f6c84a!important;color:#f6c84a!important}#mp62map.neu80x::after{content:" • neu"}';document.head.appendChild(st)}
+function knownSig80x(){try{return Object.keys(WNODES).filter(k=>mapKnown(k)).length}catch(e){return 0}}
+// Spielleiter: Anzahl bekannter Orte geht mit dem Bild an die Gäste
+if(typeof mpPush62==='function'){const _pp80x=mpPush62;mpPush62=function(force){const r=_pp80x.apply(this,arguments);try{logBase80x()}catch(e){}try{const n=knownSig80x();if(MP62&&MP62.guests&&n!==MP62.known80x){MP62.known80x=n;MP62.guests.forEach(G=>{try{if(G.on&&G.conn)G.conn.send({t:'known80x',n})}catch(e){}})}}catch(e){}return r}}
+if(typeof mpGuestMsg62==='function'){const _gm80x=mpGuestMsg62;mpGuestMsg62=function(m){if(m&&m.t==='known80x'){try{const b=document.getElementById('mp62map');if(G62.known80x!=null&&m.n>G62.known80x&&b)b.classList.add('neu80x');G62.known80x=m.n}catch(e){}return}
+  if(m&&m.t==='mapview'){try{const b=document.getElementById('mp62map');if(b)b.classList.remove('neu80x')}catch(e){}}return _gm80x.apply(this,arguments)}}
+
+// ---------- A10: Ein Gast darf alle Helden steuern (Schalter beim Spielleiter) ----------
+// G.all: Der Gast übernimmt jeweils den Helden, den er anklickt; im Kampf ist er bei jedem Helden dran. Nur ein Gast zugleich.
+if(typeof mpCan62==='function'){const _mc80x=mpCan62;mpCan62=function(G){if(G&&G.all){try{if(mpFight62()){const a=mpActor62();if(a&&(PARTY||[]).some(h=>h.name===a)){G.hero=a;return true}}}catch(e){}}return _mc80x.apply(this,arguments)}}
+if(typeof mpHostMsg62==='function'){const _hm80x=mpHostMsg62;mpHostMsg62=function(G,m){try{if(G&&G.all&&m&&m.t==='click'&&!mpFight62()){const el=mpResolve62(m),pm=el&&el.closest&&el.closest('#heroCard button.pm');if(pm){const i=[...$('heroCard').querySelectorAll('button.pm')].indexOf(pm),h=PARTY[i];if(h){const o=mpOwner62(h.name);if(o&&o!==G)o.hero=null;G.hero=h.name}}}
+    if(G&&G.all&&mpFight62()){const a=mpActor62();if(a&&(PARTY||[]).some(h=>h.name===a))G.hero=a}}catch(e){}return _hm80x.apply(this,arguments)}}
+// Kontrollkästchen im Raum-Fenster des Spielleiters
+setInterval(()=>{try{if(typeof MP62==='undefined'||!MP62.guests)return;const gs=[...MP62.guests.values()];document.querySelectorAll('.mp62g select[data-g]').forEach(s=>{const i=+s.dataset.g,G=gs[i];if(!G)return;
+    let lb=s.parentElement.querySelector('label.all80x');if(!lb){lb=document.createElement('label');lb.className='small all80x';lb.style.marginLeft='6px';lb.innerHTML='<input type="checkbox"> steuert alle Helden';s.after(lb);
+      lb.querySelector('input').onchange=e=>{gs.forEach(x=>{if(x!==G)x.all=false});G.all=e.target.checked;try{G.conn.send({t:'note',text:G.all?'Du steuerst jetzt alle Helden: Klick auf einen Helden, um ihn zu übernehmen.':'Du steuerst wieder nur deinen Helden.'})}catch(x){}try{mpUI62()}catch(x){}mpPush62(true)}}
+    lb.querySelector('input').checked=!!G.all})}catch(e){}},600);
+
+// ---------- A5/A6: Log-Zeilen, die sich nach dem Senden noch ändern, gehen neu an die Gäste ----------
+// Ursachen: Zeilen während des Würfelns (P56, Klasse w56h) und Erzähltext im Lesetempo (P66, Satz für Satz) wurden halb oder versteckt geschickt
+// und nie wieder. Jetzt vergleicht der Spielleiter die letzten 40 Zeilen und schickt geänderte als {t:'log',upd:[…]}.
+// Dazu (mk27, MP52 p66a.js): Sätze, die auf „…“. enden, gingen beim Aufteilen verloren – auch beim Spielleiter, bis man klickte.
+function logUpd80x(){try{if(typeof MP62==='undefined'||!MP62.guests||!MP62.guests.size)return;const lg=$('log');if(!lg)return;
+  const kids=[...lg.children].slice(-40).filter(c=>c.dataset&&c.dataset.m62);const cur=new Map();kids.forEach(c=>{try{cur.set(+c.dataset.m62,mpSer62(c,true))}catch(e){}});
+  MP62.guests.forEach(G=>{if(!G.on||!G.conn)return;G.sent80x=G.sent80x||new Map();const upd=[];
+    cur.forEach((h,s)=>{if(s>(G.logSeq||0))return;const old=G.sent80x.get(s);if(old==null){G.sent80x.set(s,h);return}if(old!==h){upd.push({s,h});G.sent80x.set(s,h)}});
+    if(G.sent80x.size>120){const ks=[...G.sent80x.keys()].sort((a,b)=>a-b);ks.slice(0,ks.length-80).forEach(k=>G.sent80x.delete(k))}
+    if(upd.length)try{G.conn.send({t:'log',upd})}catch(e){}})}catch(e){}}
+setInterval(logUpd80x,400);
+// Gleich nach dem Senden festhalten, wie die Zeile beim Gast angekommen ist (sonst fällt eine schnelle Änderung durchs Raster)
+function logBase80x(){try{if(typeof MP62==='undefined'||!MP62.guests||!MP62.guests.size)return;const lg=$('log');if(!lg)return;const kids=[...lg.children].slice(-40).filter(c=>c.dataset&&c.dataset.m62);
+  MP62.guests.forEach(G=>{if(!G.on||!G.conn)return;G.sent80x=G.sent80x||new Map();kids.forEach(c=>{const s=+c.dataset.m62;if(s<=(G.logSeq||0)&&!G.sent80x.has(s))try{G.sent80x.set(s,mpSer62(c,true))}catch(e){}})})}catch(e){}}
+if(typeof mpGuestMsg62==='function'){const _gl80x=mpGuestMsg62;mpGuestMsg62=function(m){if(m&&m.t==='log'&&Array.isArray(m.upd)&&!m.add){try{const lg=$('log');m.upd.forEach(x=>{const o=lg&&lg.querySelector('[data-m62="'+x.s+'"]');if(o)o.outerHTML=x.h})}catch(e){}return}
+  return _gl80x.apply(this,arguments)}}
+
+// ---------- A9: „Neues Gesprächsthema …“ nicht im Log der Mitspieler (sie sehen es an den Knöpfen) ----------
+{const _sy80x=say;say=function(t,c){const p=_sy80x.apply(this,arguments);try{if(p&&p.classList&&c==='new'&&typeof t==='string'&&/^Neue[s]? Gesprächsthem/.test(t))p.classList.add('nogast80x')}catch(e){}return p}}
+{const st=document.createElement('style');st.textContent='body.gast62 #log .nogast80x{display:none!important}';document.head.appendChild(st)}
+
+// ---------- A1: Neu entdeckte Knöpfe sind markiert – auch beim Mitspieler und nach dem Wiedereinstieg ----------
+// Was beim Betreten einer Szene schon da ist, gilt als bekannt. Kommt danach ein Knopf dazu (Entdeckt, neue Handlungsweise, neues Thema),
+// trägt er „neu“ und leuchtet, bis er einmal angeklickt wurde. Der Zustand steht im Spielstand (S.neu80x) und in den Knöpfen selbst,
+// darum sehen ihn die Gäste mit (ihre Knöpfe werden je Held gebaut und mitgeschickt).
+{const st=document.createElement('style');st.textContent='@keyframes neu80xb{0%,100%{box-shadow:0 0 0 0 #9fe8a800}50%{box-shadow:0 0 0 3px #9fe8a8aa}}'+
+  '.actions .chip.neu80x,#genRow.g78 .chip.neu80x{border-color:#9fe8a8!important;animation:neu80xb 1.6s ease-in-out 4}.actions .chip.neu80x::after{content:"neu";font-size:10px;color:#0b0a0d;background:#9fe8a8;padding:0 3px;margin-left:5px;border-radius:2px;vertical-align:1px}';document.head.appendChild(st)}
+function chipKey80x(b){return String(b.textContent||'').replace(/neu$/,'').replace(/\d+/g,'#').replace(/\s+/g,' ').trim()}
+function neu80xS(){S.neu80x=S.neu80x||{sc:null,seen:[],neu:[]};return S.neu80x}
+function markNeu80x(){try{if(typeof S==='undefined'||!S||!S.scene)return;const N=neu80xS();const bs=[...document.querySelectorAll('#genRow .chip,#learnRow .chip,#clsRow .chip,#spontRow .chip')];
+  if(!bs.length)return;const keys=bs.map(chipKey80x);
+  if(N.sc!==S.scene||(typeof talk!=='undefined'&&talk)!==N.talk){N.sc=S.scene;N.talk=(typeof talk!=='undefined'&&talk)||null;N.seen=keys.slice();N.neu=[];return}
+  const seen=new Set(N.seen),neu=new Set(N.neu);keys.forEach(k=>{if(!seen.has(k)){seen.add(k);if(!/^(Zurück|Gespräch beenden|Mehr|Weniger)/.test(k))neu.add(k)}});
+  N.seen=[...seen].slice(-200);N.neu=[...neu];bs.forEach((b,i)=>{if(neu.has(keys[i]))b.classList.add('neu80x')})}catch(e){}}
+{const _rc80x=renderChips;renderChips=function(){const r=_rc80x.apply(this,arguments);markNeu80x();return r}}
+document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('.chip.neu80x');if(!b)return;const N=neu80xS(),k=chipKey80x(b);N.neu=N.neu.filter(x=>x!==k);b.classList.remove('neu80x')}catch(err){}},true);
+
+// ---------- B11: Würfel nicht langsamer als der Log ----------
+// Der Wurf dauert jetzt 650 statt 950 ms (mk27, MP52 p56w.js). Zeilen, die das Lesetempo (P66) während des Wurfs zurückgehalten hat,
+// erscheinen mit dem Ergebnis sofort statt danach im Lesetempo.
+if(typeof reveal56==='function'){const _rv80x=reveal56;reveal56=function(g){const r=_rv80x.apply(this,arguments);try{if(g&&g.els&&typeof Q66!=='undefined'){g.els.forEach(e=>{if(e.isConnected)return;const i=Q66.findIndex(it=>it&&it.p===e);
+    if(i>=0){const it=Q66.splice(i,1)[0];log.appendChild(it.p);if(it.tn&&it.full)it.tn.nodeValue=it.full}});if(typeof BUSY66!=='undefined')BUSY66=0;try{pinLog()}catch(e){}}}catch(e){}return r}}
+
+// ---------- B13: Hennig – kein „Weg ins Dorf“ mehr, wenn man schon dort ist; nur ein „Handeln“ ----------
+{const _tt80x=talkTopics;talkTopics=function(){let r=_tt80x.apply(this,arguments);try{if(talk==='hennig'&&Array.isArray(r)){
+    if(S.flags.hennigGone||ortOf(S.scene)==='grossensee')r=r.filter(x=>x[1]!=='dorf');if(r.some(x=>x[1]==='h43'))r=r.filter(x=>x[1]!=='handel')}}catch(e){}return r}}
+
+// ---------- B15: Arena der Blad(e)iatoren – alle Helden mit feiner, bewegter Figur ----------
+// Die 24 neuen Helden hatten im Arena-Bild nur ein stehendes Bild. Jetzt nehmen sie (wie im Taktik-Kampf) ihre feinen Figuren FOE68['<id>72']:
+// Laufen, Angriff, Treffer. Diese Bilder sind schon fein, darum Faktor 1 (mk27, MP52 p71k.js).
+if(typeof arIm72==='function'){const _ai80x=arIm72;arIm72=function(o){try{const G=G68.h[o.hid],F=typeof FOE68!=='undefined'&&FOE68[o.hid+'72'];
+    if(F&&!(G&&G.walk&&G.walk.east&&G.atk&&G.atk.length)){const mk=a=>{try{if(a)a.k80x=1}catch(e){}return a};const mv=Math.abs(o.x-o.tx)>.6;
+      if(o.lunge>0&&F.atk&&F.atk.length)return mk(F.atk[Math.min(F.atk.length-1,Math.floor((8-Math.min(8,o.lunge))/8*F.atk.length))]);
+      if(o.hurt>0&&F.hit&&F.hit.length)return mk(F.hit[Math.min(F.hit.length-1,Math.floor((12-Math.min(12,o.hurt))/12*F.hit.length))]);
+      if(mv&&F.walk&&F.walk.length)return mk(F.walk[Math.floor(t/6)%F.walk.length]);
+      if(o.hp!=null)return mk(F.O||F.vorne||F.S);return mk(TD?(F.S||F.vorne):(F.vorne||F.S))}}catch(e){}return _ai80x.apply(this,arguments)}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
