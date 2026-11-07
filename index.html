@@ -32939,7 +32939,11 @@ function markNeu80x(){try{if(typeof S==='undefined'||!S||!S.scene)return;const N
   if(!bs.length)return;const keys=bs.map(chipKey80x);
   if(N.sc!==S.scene||(typeof talk!=='undefined'&&talk)!==N.talk){N.sc=S.scene;N.talk=(typeof talk!=='undefined'&&talk)||null;N.seen=keys.slice();N.neu=[];return}
   const seen=new Set(N.seen),neu=new Set(N.neu);keys.forEach(k=>{if(!seen.has(k)){seen.add(k);if(!/^(Zurück|Gespräch beenden|Mehr|Weniger)/.test(k))neu.add(k)}});
-  N.seen=[...seen].slice(-200);N.neu=[...neu];bs.forEach((b,i)=>{if(neu.has(keys[i]))b.classList.add('neu80x')})}catch(e){}}
+  N.ts=N.ts||{};const now=Date.now();[...neu].forEach(k=>{if(!N.ts[k])N.ts[k]=now});
+  // Paul (07.11., 21:48): „neu“ nur ein paar Sekunden zeigen, nicht dauerhaft – sonst wirkt es wie ein Köder („Auch die Kapsel nehmen“)
+  [...neu].forEach(k=>{if(now-N.ts[k]>NEUMS80X){neu.delete(k)}});N.seen=[...seen].slice(-200);N.neu=[...neu];
+  bs.forEach((b,i)=>{if(neu.has(keys[i])){b.classList.add('neu80x');const k=keys[i];setTimeout(()=>{try{b.classList.remove('neu80x');const M=neu80xS();M.neu=M.neu.filter(x=>x!==k)}catch(e){}},Math.max(200,NEUMS80X-(now-N.ts[k])))}})}catch(e){}}
+const NEUMS80X=6000;
 {const _rc80x=renderChips;renderChips=function(){const r=_rc80x.apply(this,arguments);markNeu80x();return r}}
 document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('.chip.neu80x');if(!b)return;const N=neu80xS(),k=chipKey80x(b);N.neu=N.neu.filter(x=>x!==k);b.classList.remove('neu80x')}catch(err){}},true);
 
@@ -32984,7 +32988,7 @@ function npcStory81(n){try{if(!n||!n.imp||!n.imp.topics)return false;return n.im
 function objStory81(o){try{return!!(o&&o.unlock&&FACTS[o.unlock]&&!S.facts[o.unlock])}catch(e){return false}}
 // Hand-Regeln für Story-Schritte ohne Daten-Kennung (Pauls Beispiele aus der Runde). w: wann, re: welcher Knopf.
 // Story-Schritte mit Klasse „learned“ aus sceneChips (Nebenaufträge wie Rübenernte/Herr Pfote zählen nicht)
-const STORYLAB81=/^(Weiter erkunden|Die PaulMons versöhnen|.+ versöhnen|Den PaulMons tiefer in den Wald folgen|Sanlep: „Was ist dir passiert\?“)$/;
+const STORYLAB81=/^(Weiter erkunden|Die PaulMons versöhnen|.+ versöhnen|Den PaulMons tiefer in den Wald folgen|Sanlep: „Was ist dir passiert\?“|Mit dem normalen Typ sprechen)$/;
 const STORY81=[
   {id:'oeffnen',w:()=>true,re:/^Kapsel öffnen$/},
   {id:'aushang',w:()=>!S.flags.sanlepCame,re:/^Ansehen: Aushängebrett$/},// K06: hier kommt Sanlep dazu
@@ -33139,6 +33143,57 @@ function sanB81(){const F=san81();if(F.sanB!==1)return;F.sanB=2;say('Sanlep: Was
 // Wer die Schenke verlässt, bevor er gefragt hat: Sanlep erzählt den Rest, sobald man wieder da ist und fragt (der Knopf bleibt).
 // Mit drei Schritten kommt man durch zwei Abschnitte: der Weinkeller mit dem Bild (Hagen, Wenna, Odo, L.) kommt darum vor der Nische mit dem Schacht.
 {const _ec81=exploreCellar;exploreCellar=function(){try{if(on81()&&typeof CELSEC!=='undefined'&&CELSEC[3]&&/Weinkeller/.test(CELSEC[3].name)){const t=CELSEC[2];CELSEC[2]=CELSEC[3];CELSEC[3]=t}}catch(e){}return _ec81.apply(this,arguments)}}
+
+
+// ================= Nachbesserung zu Prototyp 81 (07.11., 21:48) – Der normale Typ erklärt das Spiel =================
+// Paul: „Lass uns mitsamt dem normal dude in der ersten Szene die Hinweise erklären auf die einzelnen Komponenten im Spiel.
+// Die Sachen sollten erklärt werden, damit man direkt reinstarten kann!“ Fragen (Pauls Liste):
+//   Wie werden wir stärker? · Wem gehört dieses Haus? · Wer bist du? · Wer hat die Kapseln hingelegt? · Wissenslog („Was wir wissen“) ·
+//   Was bringt uns der Heldenbogen? – öffnet den Heldenbogen und geht danach weiter zu Waffenbaum und Fähigkeiten.
+// Inhalt ohne Story-Verrat: Der Typ verweist bei den Kapseln an die Hausherrin (dort liegt w_sponsor_existiert, K01) und bleibt „ganz normal“.
+const DUDE81=[
+  ['Wie werden wir stärker?',()=>[{t:'Stärker? Durch das, was ihr tut. Jeder Kampf, jede gewagte Probe macht euch ein Stück erfahrener.'},
+    {t:'Und durch Leute, die mehr können als ihr: Lehrmeister. Jeder von euch darf bei höchstens drei in die Lehre. Wählt mit Bedacht.'},
+    {t:'Eure Waffe wächst übrigens mit. Steckt Erfahrung in die Waffe, dann lernt sie Neues. Steht alles im Heldenbogen.'}]],
+  ['Wem gehört dieses Haus?',null],
+  ['Wer bist du eigentlich?',null],
+  ['Wer hat die Kapseln hingelegt?',()=>[{t:'Ich habe sie nur ordentlich hingelegt. In jeder schläft ein PaulMon – nehmt euch eine, öffnet sie, seid nett zu dem, was herauskommt.'},
+    {t:'Wer sie bestellt hat? Fragt die Hausherrin. Ich bin nur für die Ankünfte da.'}]],
+  ['Was wissen wir eigentlich? (Wissenslog)',()=>{setTimeout(()=>tour81('wissen'),300);return[{t:'Gute Frage. Ich zeig’s euch.'}]}],
+  ['Was bringt uns der Heldenbogen?',()=>{setTimeout(()=>tour81('bogen'),300);return[{t:'Oh, der ist wichtig. Kommt, ich zeig’s euch.'}]}],
+];
+// Die alten Themen bleiben, wo Pauls Liste sie meint (Haus, Wer bist du, Keller); „Wie funktioniert das“, „Helden wechseln“, „Ärger“ stecken jetzt in der Führung.
+function dude81(){try{if(!on81()||DUDE_TOPICS.__p81)return;const alt=k=>{const x=DUDE_TOPICS.find(d=>d[0]===k);return x?x[1]:()=>[]};
+  const keller=DUDE_TOPICS.find(d=>/Keller/.test(d[0]));const neu=DUDE81.map(([l,fn])=>[l,fn||alt(l)]);if(keller)neu.push(keller);
+  DUDE_TOPICS.length=0;neu.forEach(x=>DUDE_TOPICS.push(x));DUDE_TOPICS.__p81=1}catch(e){console.warn('p81t',e)}}
+{const _sc81t=sceneChips;sceneChips=function(chip){dude81();return _sc81t.apply(this,arguments)}}
+// Der Knopf zum Typen leuchtet, bis man ihn einmal angesprochen hat (Hand-Regel für p81s)
+// Der Knopf zum Typen ist golden, bis man ihn einmal anklickt (STORYLAB81 in p81s.js)
+document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('#genRow .chip');if(b&&/^Mit dem normalen Typ sprechen$/.test(b.textContent.replace(/neu$/,'').trim()))S.flags.dudeAsked81=1}catch(err){}},true);
+
+// ---------- Führung: Fenster öffnen, erklären, weiter ----------
+const TOUR81={
+  wissen:[{open:()=>open57(),close:()=>close57(),t:['Alles, was ihr unterwegs erfahrt, landet hier: „Was wir wissen“ – oben links oder Taste L.','Offene Fragen, Spuren und wer euch was erzählt hat. Wenn ihr nicht weiterwisst: hier nachsehen.']}],
+  bogen:[
+    {open:()=>openBogen27(),close:()=>{BOG27.hidden=true;renderAll()},t:['Das ist euer Heldenbogen: Werte, Waffe, Techniken, Persönlichkeit – alles über einen Helden auf einen Blick.','Oben wechselt ihr zwischen euch. Im Bild oben links genauso: anklicken, wer dran ist.']},
+    {open:()=>wbOpen49(),close:()=>wbClose49(),t:['Der Waffenbaum. Eure Waffe lernt mit euch: Steckt Erfahrung in die Waffe, dann wachsen neue Zweige.','Stärker, schneller, eigene Waffenkünste. Material vom Weg hilft beim Schmieden.']},
+    {open:()=>fhOpen73(),close:()=>{try{FH73.hidden=true}catch(e){}renderAll()},t:['Und hier eure Fähigkeiten: Techniken und Methoden. Was ihr bei Lehrmeistern lernt, landet hier.','Fahrt mit der Maus über eine Technik und wartet kurz – dann steht da, was sie tut.']},
+    {t:['Das war’s. Mehr braucht ihr erst mal nicht. Und jetzt: Kapseln!']}]};
+let T81=null;
+{const st=document.createElement('style');st.textContent='#tour81{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:9500;width:min(640px,94vw);background:#fffdf6;color:#1b1820;border:3px solid #1b1820;box-shadow:4px 4px 0 #1b1820;padding:10px 14px 10px;font-family:"Pixelify Sans",monospace;font-size:17px;line-height:1.35}'+
+  '#tour81 b{display:block;font-size:13px;color:#7a5a20;margin-bottom:2px}#tour81 .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px}#tour81 button{font:inherit;font-size:15px;padding:5px 12px;border:2px solid #1b1820;background:#f6c84a;cursor:pointer}#tour81 button.x{background:transparent;font-size:13px}#tour81 .n{font-size:12px;color:#6a6070}';document.head.appendChild(st)}
+function tour81(k){try{if(T81)tourEnd81();const L=TOUR81[k];if(!L)return;T81={k,i:-1,L};const box=document.createElement('div');box.id='tour81';box.setAttribute('role','dialog');box.setAttribute('aria-live','polite');document.body.appendChild(box);T81.box=box;
+  T81.kd=e=>{if(!T81)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();tourEnd81()}else if(e.key==='Enter'){e.preventDefault();e.stopImmediatePropagation();tourNext81()}};window.addEventListener('keydown',T81.kd,true);tourNext81()}catch(e){console.warn('tour81',e)}}
+function tourNext81(){const T=T81;if(!T)return;const cur=T.L[T.i];try{if(cur&&cur.close)cur.close()}catch(e){}T.i++;const st=T.L[T.i];if(!st)return tourEnd81();try{if(st.open)st.open()}catch(e){console.warn('tour81 open',e)}
+  const last=T.i===T.L.length-1;T.box.innerHTML='<b></b><div class="tx"></div><div class="row"><button class="x" type="button">Führung beenden (Esc)</button><span class="n"></span><button class="go" type="button"></button></div>';
+  T.box.querySelector('b').textContent=typeof dudeName==='function'?dudeName():'Der normale Typ';T.box.querySelector('.tx').textContent=st.t.join(' ');T.box.querySelector('.n').textContent=(T.i+1)+' / '+T.L.length;
+  const go=T.box.querySelector('.go');go.textContent=last?'Verstanden':'Weiter ▸';go.onclick=()=>tourNext81();T.box.querySelector('.x').onclick=()=>tourEnd81();
+  try{st.t.forEach(x=>say('„'+x+'“','npc',T.box.querySelector('b').textContent))}catch(e){}setTimeout(()=>{try{go.focus()}catch(e){}},50)}
+function tourEnd81(){const T=T81;if(!T)return;T81=null;try{const cur=T.L[T.i];if(cur&&cur.close)cur.close()}catch(e){}window.removeEventListener('keydown',T.kd,true);try{T.box.remove()}catch(e){}try{renderAll()}catch(e){}}
+
+// ---------- Kleine Anpassungen (Paul 21:48) ----------
+// „Sich kümmern“ und die anderen Typ-Knöpfe: keine Sonderhervorhebung, eher unauffällig.
+{const st=document.createElement('style');st.textContent='#clsRow .ka64.typ64{border-style:solid!important;border-color:#3a3346!important;color:#a89fb4!important;background:transparent!important;animation:none!important;box-shadow:none!important}';document.head.appendChild(st)}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
