@@ -33481,7 +33481,9 @@ function wirk82(s){const out=[];String(s||'').split(/;/).map(x=>x.trim()).filter
 {const _ke82=kaEffects27;kaEffects27=function(s,h,src){const r=_ke82.apply(this,arguments);try{if(on82()){const w=wirk82(s);if(w.length)setTimeout(()=>{try{say('→ Wirkung: '+w.join(' · ')+'.','sys')}catch(e){}},500)}}catch(e){}return r}}
 
 // ---------- B14: Beim Darüberfahren über eine Technik auch den Schaden zeigen ----------
-function dmg82(id,h){try{const D=TECH27[id];if(!D)return'';const d=String(D.desc||D.d||'');const T=h&&(h.tech||[]).find(x=>x.id===id);const ms=T?(T.m||1):1;
+function dmg82(id,h){try{const T0=h&&(h.tech||[]).find(x=>x.id===id);const TT=typeof TX31!=='undefined'&&TX31[id];
+  if(/^ka69/.test(id))return'';if(TT&&TT.lvd&&T0&&typeof effL31==='function'){const t=String(TT.lvd(effL31(h,T0))||'').replace(/^Treffen \+0, /,'').replace(/[.\s]+$/,'');if(t)return'Jetzt: '+t}
+  const D=TECH27[id];if(!D)return'';const d=String(D.desc||D.d||'');const T=h&&(h.tech||[]).find(x=>x.id===id);const ms=T?(T.m||1):1;
   const m=d.match(/(\d*)W(\d+)(\s*\+\s*Meisterschaft)?/);if(!m)return'';const n=+(m[1]||1),w=+m[2],plus=m[3]?ms:0;const avg=n*(w+1)/2+plus;
   const heil=/heilt|LP\b|Lebenspunkte/.test(d.slice(Math.max(0,m.index-40),m.index+m[0].length+30))&&!/Schaden/.test(d.slice(m.index,m.index+m[0].length+20));
   return(heil?'Heilung':'Schaden')+': '+(n>1?n:'')+'W'+w+(plus?' + '+plus:'')+' (im Schnitt '+String(Math.round(avg*10)/10).replace('.',',')+')'}catch(e){return''}}
