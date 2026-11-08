@@ -4608,9 +4608,9 @@ const ILSE_STORY=window.ILSE_STORY80x=['„Halt, halt! Wartet mal!“ Ilse kommt
   '„Ich glaub ja nicht alles, was die Leute sagen. Aber hört euch im Dorf um – über ihren See erzählen die sich die seltsamsten Geschichten. Vielleicht ist ja was dran.“',
   '„So. Und jetzt los, bevor es dunkel wird. Und grüßt mir den Wirt.“'];
 function ilseStoryDue(sc){if(S.flags.ilseStory||S.flags.blackout)return false;return ortOf(S.scene)==='kiefernhang'&&ortOf(sc)==='grossensee'}
-function ilseStory(done){S.flags.ilseStoryRun=true;let i=0;const ILSE_STORY=S.flags.hennigGone?['„Halt, wartet!“ Ilse kommt aus dem Haus, das Wolltuch schief über den Schultern, und schaut sich zweimal um, bevor sie weiterspricht. „Ihr wollt runter nach Großensee? Dann hört einer alten Frau kurz zu. Gerade heute.“'].concat(window.ILSE_STORY80x.slice(1)):window.ILSE_STORY80x;const step=()=>{if(i<ILSE_STORY.length){say(ILSE_STORY[i++],'npc','Ilse');renderAll();setTimeout(step,i===ILSE_STORY.length?2200:3200);return}
+function ilseStory(done){S.flags.ilseStoryRun=true;let i=0;const ILSE_STORY=S.flags.hennigGone?['„Halt, wartet!“ Ilse kommt aus dem Haus, das Wolltuch schief über den Schultern, und schaut sich zweimal um, bevor sie weiterspricht. „Ihr wollt runter nach Großensee? Dann hört einer alten Frau kurz zu. Gerade heute.“'].concat(window.ILSE_STORY80x.slice(1)):window.ILSE_STORY80x;const step=()=>{if(i<ILSE_STORY.length){say(ILSE_STORY[i++],'npc','Ilse');renderAll();setTimeout(step,window.ilseT82?ilseT82(i,ILSE_STORY):(i===ILSE_STORY.length?2200:3200));return}
   S.flags.ilseStoryRun=false;S.flags.ilseStory=true;grantFact('dorf','Ilse');const L=FACTS.heilkraut&&FACTS.heilkraut.label;if(FACTS.heilkraut)FACTS.heilkraut.label='Ein Heilkraut soll am alten See bei Großensee wachsen – es heilt angeblich jede Wunde.';grantFact('heilkraut','Ilse');if(FACTS.heilkraut&&L)FACTS.heilkraut.label=L;
-  addChron('Ilse erzählt vom alten See und einem Heilkraut. Im Dorf soll man sich umhören.',['auge'],true);done&&done()};step()}
+  addChron('Ilse erzählt vom alten See und einem Heilkraut. Im Dorf soll man sich umhören.',['auge'],true);done&&done()};window.ilseGo82?ilseGo82(step):step()}
 {const _swI=switchScene;switchScene=function(sc){if(S.flags.ilseStoryRun)return;if(ilseStoryDue(sc)){ilseStory(()=>switchScene(sc));return}return _swI(sc)}}
 // Ilses Thema „Der Name Großensee“ erst, wenn die Gruppe vom Dorf weiß (Ilses Erzählung oder Besuch)
 {const _tt3=talkTopics;talkTopics=function(){let r=_tt3();if(talk==='ilse'&&!(S.flags.ilseStory||mapVisited('grossensee')))r=r.filter(x=>x[1]!=='gsname');
@@ -21973,7 +21973,7 @@ function mpPush62(force){const gs=mpGuestsOn62();if(!gs.length)return;
 function mpHname62(id){try{return pickNames[id]||hdata(id).name}catch(e){return String(id)}}
 function mpLobbyList62(){return[...MP62.guests.values()].filter(G=>G.token).map(G=>({n:G.name,on:G.on,h:G.hero||(G.pickId?mpHname62(G.pickId):null)}))}
 function mpPre62(gs,force){const ps=$('pickScr'),weg=!!($('path58')&&!$('path58').hidden),pick=!weg&&!!(ps&&!ps.hidden),lob=JSON.stringify(mpLobbyList62());let html=null;
-  if(pick){try{MP62.cvs.clear();html=mpSer62(ps,true,'#pickReady,#pickRand,#pickBack,#pickToggle,#pickNameRow,#pickFil')}catch(e){console.warn('p62',e)}}
+  if(pick){try{MP62.cvs.clear();html=mpSer62(ps,true,'#pickReady,#pickRand,#pickBack,#pickToggle,#pickNameRow')}catch(e){console.warn('p62',e)}}
   const phase=weg?'weg':pick?'pick':'start';
   gs.forEach(G=>{const L=G.last;if(!L.pre){G.last={};}const K=G.last;if(!force&&K.pre===phase&&K.lob===lob&&K.pid===G.pickId&&K.hero===G.hero&&(!pick||K.pickHtml===html))return;K.hero=G.hero;
     K.pre=phase;K.lob=lob;K.pid=G.pickId;const o={t:'pre',phase,lobby:lob,mine:G.pickId?mpHname62(G.pickId):(G.hero||null)};if(pick&&(force||K.pickHtml!==html)){o.html=html;K.pickHtml=html}G.conn.send(o)})}
@@ -22066,7 +22066,7 @@ function mpGuestInit62(){document.body.classList.add('gast62');setInterval(()=>{
     if((r=t.closest('.stage')))return{key:'stage',el:r};if((r=t.closest('.lower .actions')))return{key:'actions',el:r};if((r=t.closest('#narrSlot')))return{key:'narr',el:r};
     let o=t;while(o&&o.parentElement!==document.body)o=o.parentElement;if(o&&o.id&&G62.ovs.has(o.id))return{key:'ov:'+o.id,el:o};return null};
   const pathOf=(root,t)=>{const p=[];let e=t;while(e&&e!==root){const par=e.parentElement;if(!par)return null;p.unshift([...par.children].indexOf(e));e=par}return e===root?p:null};
-  const own=t=>t.closest&&t.closest('#mp62bar,.mp62dlg,.mobnav,#form,#mini31.mp63own,#mp63toast,#rbOv.mp64own');
+  const own=t=>t.closest&&t.closest('#mp62bar,.mp62dlg,.mobnav,#form,#mini31.mp63own,#mp63toast,#rbOv.mp64own,#ub80');
   window.addEventListener('click',e=>{if(!G62.on)return;const t=e.target;if(!t||!t.closest||own(t))return;const R=rootOf(t);e.preventDefault();e.stopImmediatePropagation();if(!R||!G62.conn)return;
     if(t.tagName==='CANVAS'&&t.dataset.m62cv){const r=t.getBoundingClientRect();G62.conn.send({t:'cv',key:t.dataset.m62cv,fx:(e.clientX-r.left)/r.width,fy:(e.clientY-r.top)/r.height});return}
     let tg=t.closest('button,a,label,[role=button],input,select,textarea,summary,[data-k],[tabindex]')||t;if(!R.el.contains(tg))tg=t;
@@ -33233,7 +33233,8 @@ setInterval(e82check,1500);
       setTimeout(()=>{try{addSilver(5,'eine alte Geschichte erfahren');say('Mythen gesammelt: '+m+(m<2?' – noch eine, dann wisst ihr, wohin.':m===2?' – genug, um weiterzukommen.':''),'sys')}catch(e){}},900)}}catch(e){}return r}}
 
 // ---------- Auftragsleiste oben im Bild ----------
-{const st=document.createElement('style');st.textContent='#auftrag82{position:absolute;left:8px;top:8px;z-index:6;max-width:min(62%,520px);background:#16121ce6;border:1px solid #e0b04a;color:#f3ead6;font-family:"Pixelify Sans",monospace;font-size:14px;line-height:1.3;padding:5px 9px;pointer-events:none;box-shadow:2px 2px 0 #0b0a0d}'+
+{const st=document.createElement('style');// Paul 08.11., 19:25: nicht über dem Bild, sondern fest angeheftet über dem Chat-Log („locked in“)
+  st.textContent='#auftrag82{flex:0 0 auto;margin:0 6px 6px 0;background:#1d1824;border-left:3px solid #e0b04a;color:#e9e0cc;font-size:13px;line-height:1.3;padding:3px 8px;pointer-events:none;opacity:.92}#auftrag82::before{content:"📌 ";font-size:11px}'+
   '#auftrag82 b{color:#f6d27a;font-weight:normal;margin-right:6px}#auftrag82.neu82{animation:au82 1.2s ease-in-out 3}@keyframes au82{50%{box-shadow:0 0 0 3px #f6c84ab0}}body.dicht78s #auftrag82{font-size:12px;padding:3px 7px}';document.head.appendChild(st)}
 function hasHerb82(){try{return PARTY.some(h=>(h.inv||[]).some(i=>i.kind==='heilkraut'))}catch(e){return false}}
 function auftragTxt82(){try{const cap=PARTY.some(h=>(h.inv||[]).some(i=>i.kind==='capsule'));
@@ -33248,9 +33249,9 @@ function auftragTxt82(){try{const cap=PARTY.some(h=>(h.inv||[]).some(i=>i.kind==
   if(!mapVisited('grossensee'))return['Ankunft',S.flags.ilseStory?'Ilse hat von einem Heilkraut erzählt. Geht hinunter nach Großensee.':'Geht hinunter nach Großensee.'];
   if(!S.flags.sanSchenke48)return['Großensee','Hört euch um. In der Schenke „Zum Kiefernzapfen“ wartet jemand.'];
   return['Großensee','Sprecht mit Sanlep in der Schenke.']}catch(e){return null}}
-function auftragUI82(){try{const st=document.querySelector('.play > .stage')||document.querySelector('.stage');if(!st)return;let el=document.getElementById('auftrag82');
+function auftragUI82(){try{const lg=document.getElementById('log');if(!lg||!lg.parentNode)return;let el=document.getElementById('auftrag82');
   if(!on82()||!GAME_STARTED||inFight()||(typeof TAC!=='undefined'&&TAC)){if(el)el.remove();return}
-  const t=auftragTxt82();if(!t){if(el)el.remove();return}if(!el){el=document.createElement('div');el.id='auftrag82';el.setAttribute('aria-live','polite');st.appendChild(el)}
+  const t=auftragTxt82();if(!t){if(el)el.remove();return}if(!el){el=document.createElement('div');el.id='auftrag82';el.setAttribute('aria-live','polite')}if(el.nextSibling!==lg)lg.parentNode.insertBefore(el,lg);
   const html='<b>'+t[0]+'</b>'+t[1];if(el.innerHTML!==html.replace(/&/g,'&amp;')){const neu=el.dataset.t&&el.dataset.t!==t[1];el.innerHTML='';const b=document.createElement('b');b.textContent=t[0];el.appendChild(b);el.appendChild(document.createTextNode(t[1]));
     if(neu){el.classList.remove('neu82');void el.offsetWidth;el.classList.add('neu82')}el.dataset.t=t[1]}}catch(e){}}
 {const _ra82=renderAll;renderAll=function(){const r=_ra82.apply(this,arguments);auftragUI82();return r}}
@@ -33346,6 +33347,146 @@ setInterval(()=>{try{if(!on82()||!GAME_STARTED||S.kampf82||!inFight())return;if(
 // ---------- PaulMons weggelaufen: deutlicher Hinweis ----------
 setInterval(()=>{try{if(!on82()||!GAME_STARTED||S.weg82)return;if(!(runaways().length&&!S.flags.deepDone))return;S.weg82=1;
   setTimeout(()=>{try{say('Eure PaulMons sind fort. Im Farn sind kleine Spuren – sie führen den Hang hinauf, in den Galgenwald. Geht ihnen nach, bevor es dunkel wird.','dm')}catch(e){}},1500)}catch(e){}},1000);
+
+
+// ================= Prototyp 82, Lieferung 2 – Mitspieler (sammlung-p82.md G31–G36) =================
+// Paul, 08.11.: Zwischensequenzen wurden beim Testspieler durch Knopf-Spam übersprungen und nicht sauber angezeigt; Übungsspiele hingen beim Gast;
+// Handeln-Fenster und Spieltische erschienen nur beim Spielleiter; in der Heldenauswahl konnte sich der Gast nicht frei umsehen.
+
+// ---------- G33: Zwischensequenzen ----------
+// Gäste können eine Sequenz weder weiterblättern noch überspringen – sie läuft im Lesetempo von selbst. Beim Spielleiter gilt eine
+// Mindest-Lesezeit je Zeile (Klick-Spam überspringt nichts mehr); „Überspringen“ gibt es nur noch oben rechts im Bild bzw. mit Esc.
+let SZT82=0;
+{const _st82=szStep72;szStep72=function(){SZT82=performance.now();return _st82.apply(this,arguments)}}
+{const _nx82=szNext72;szNext72=function(){if(performance.now()-SZT82<1100)return;return _nx82.apply(this,arguments)}}
+{const _rc82=renderChips;renderChips=function(){const r=_rc82.apply(this,arguments);try{if(SZ72.on){const gr=$('genRow');if(gr)[...gr.querySelectorAll('button')].forEach(b=>{if(/Überspringen/.test(b.textContent))b.remove()})}}catch(e){}return r}}
+if(typeof mpHostMsg62==='function'){const _hm82=mpHostMsg62;mpHostMsg62=function(G,m){try{if(SZ72&&SZ72.on&&m&&(m.t==='click'||m.t==='key'||m.t==='cmd'||m.t==='cv')){
+      if(!G.sz82||Date.now()-G.sz82>4000){G.sz82=Date.now();try{G.conn.send({t:'note',text:'Eine Szene läuft – sie geht von selbst weiter.'})}catch(e){}}return}}catch(e){}return _hm82.apply(this,arguments)}}
+// Gast: die Sequenz liegt genau über dem eigenen Bild (sie kommt mit den Maßen des Spielleiter-Bildschirms an)
+function sz82fit(){try{const r=document.getElementById('sz72');if(!r)return;const cv=document.getElementById('scene');if(!cv)return;const b=cv.getBoundingClientRect();if(!b.width)return;
+  const hw=parseFloat(r.style.width)||b.width;r.style.left=b.left+'px';r.style.top=b.top+'px';r.style.transformOrigin='0 0';r.style.transform='scale('+(b.width/hw)+')';
+  const sk=r.querySelector('.skip');if(sk)sk.style.display='none';const tp=r.querySelector('.tip');if(tp)tp.textContent='Die Szene läuft von selbst weiter.'}catch(e){}}
+
+// ---------- G34: Übungsspiele beim Gast ----------
+// Ursache: Beim Gast fing die Sperre aus P62 alle Tasten und Klicks ab, bevor das Übungsspiel sie bekam; bricht der Spielleiter ab, blieb das
+// Fenster beim Gast offen. Jetzt bekommt das Spiel Tasten und Klicks zuerst, und „abgebrochen“ schließt es auch beim Gast.
+if(typeof mpGuestInit62==='function'){const _gi82=mpGuestInit62;mpGuestInit62=function(){
+  window.addEventListener('keydown',e=>{try{if(G62.on&&UB80&&UB80.kd)UB80.kd(e)}catch(x){}},true);
+  window.addEventListener('keyup',e=>{try{if(G62.on&&UB80&&UB80.ku){UB80.ku(e);e.stopImmediatePropagation()}}catch(x){}},true);
+  return _gi82.apply(this,arguments)}}
+if(typeof mpGuestMsg62==='function'){const _gm82=mpGuestMsg62;mpGuestMsg62=function(m){
+  if(m&&m.t==='sty82'){sty82(m.css);return}
+  if(m&&m.t==='miniend'&&UB80){const me=G62.mini63;if(me&&me.id===m.id){me.dead=true;try{ubEnd80(true)}catch(e){}mpNote62(m.take?'Der Spielleiter hat die Übung übernommen.':'Der Spielleiter hat die Übung abgebrochen.')}return}
+  const r=_gm82.apply(this,arguments);if(m&&m.t==='view')sz82fit();return r}}
+window.addEventListener('resize',()=>{try{if(typeof G62!=='undefined'&&G62.on)sz82fit()}catch(e){}});
+
+// ---------- G35/G36: Handeln-Fenster, Spieltische und andere Fenster mit eigenem Stil ----------
+// Ursache: Diese Fenster legen ihren Stil erst beim ersten Öffnen an – beim Gast nie. Das gespiegelte Fenster kam an, stand aber ohne Stil
+// unsichtbar unten auf der Seite. Der Spielleiter schickt jetzt jeden später angelegten Stil einmal an die Gäste mit.
+const STYB82=document.head.querySelectorAll('style').length;
+if(typeof mpPush62==='function'){const _pu82=mpPush62;mpPush62=function(force){const r=_pu82.apply(this,arguments);try{const all=[...document.head.querySelectorAll('style')].slice(STYB82);
+    mpGuestsOn62().forEach(G=>{if(force)G.sty82=0;const n=G.sty82||0;if(all.length>n&&G.conn){G.conn.send({t:'sty82',css:all.slice(n).map(x=>x.textContent)});G.sty82=all.length}})}catch(e){}return r}}
+const STYH82=new Set();
+function sty82(list){(list||[]).forEach(t=>{t=String(t||'');if(!t||STYH82.has(t))return;STYH82.add(t);const st=document.createElement('style');st.className='sty82';st.textContent=t;document.head.appendChild(st)})}
+
+// ---------- G32: Heldenauswahl – Gäste können die Reiter (Alle, Kämpfer, Flinke, Gelehrte, Supporter) selbst umschalten ----------
+// Die Reiter gelten für alle am Tisch (es gibt ein gemeinsames Bild der Heldenauswahl).
+if(typeof mpHostMsg62==='function'){const _hp82=mpHostMsg62;mpHostMsg62=function(G,m){try{if(m&&m.root==='ov:pickScr'&&m.t==='click'&&!GAME_STARTED){const el=mpResolve62(m),b=el&&el.closest&&el.closest('#pickFil button');if(b){b.click();try{mpPush62(true)}catch(e){}return}}}catch(e){}return _hp82.apply(this,arguments)}}
+
+// Gast: das gespiegelte Warte-Fenster des Spielleiters („… übt gerade“) liegt nicht über dem eigenen Übungsspiel
+{const st=document.createElement('style');st.textContent='body.gast62:has(#ub80) #mp63wait{display:none!important}';document.head.appendChild(st)}
+
+
+// ================= Prototyp 82, Lieferung 2 – Spielleiter (sammlung-p82.md F28, F29) =================
+
+// ---------- F28: Galgenmännchen auch in der Erzähler-Ansicht („Beide“, „Spielleiter“) steuern ----------
+// Bisher lagen Wort-Eingabe und Lied-Knopf nur im alten Szenen-Kasten (Autor). Jetzt steht beim Froschkonzert eine Karte oben in „Jetzt“.
+let HMD82='';
+function galKarte82(p){try{if(!p||!window.el67)return;const old=p.querySelector('#sl82gal');if(old)old.remove();if(typeof fcOn!=='function'||!fcOn())return;const F=S.fc;
+  const c=el67('div',null,'sl67card ev');c.id='sl82gal';c.appendChild(el67('span','FROSCHKONZERT · DU ENTSCHEIDEST','k'));
+  if(F.gal&&!F.word){c.appendChild(el67('span','Galgenmännchen: Lege ein Wort fest. Die Spieler sehen nur die Striche und raten Buchstaben.'));
+    const row=el67('div',null,'sl67row');const inp=document.createElement('input');inp.type='text';inp.id='hm82';inp.autocomplete='off';inp.placeholder='z. B. Wassermelone';inp.value=HMD82;
+    inp.style.cssText='flex:1;min-width:120px;font:inherit;font-size:14px;padding:4px 6px;background:#14111a;color:#f3ead6;border:1px solid #5a4a3a';
+    inp.oninput=()=>{HMD82=inp.value};const go=()=>{hmSet(inp.value);HMD82='';try{SIG67.jetzt67=''}catch(e){}renderAll()};inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go()}};
+    row.append(inp,bt67('Wort festlegen',go));c.appendChild(row)}
+  else if(F.gal&&F.word)c.appendChild(el67('span',F.hm?'Galgenmännchen vorbei („'+F.word+'“, '+(F.hm==='win'?'gelöst':'verloren')+').':'Wort: „'+F.word+'“ · Fehler '+F.wrong.length+'/'+HM_MAX+' · geraten: '+(F.guessed.join(' ')||'–')));
+  else c.appendChild(el67('span','Die Frösche spielen. Lied '+(F.stage||1)+' von 3.'));
+  if(typeof fcPlaying==='function'&&fcPlaying()){const r2=el67('div',null,'sl67row');r2.appendChild(bt67('Lied '+F.stage+' ist zu Ende',()=>{fcTrackEnd(F.stage);renderAll()}));c.appendChild(r2)}
+  const st=p.querySelector('#sl67steht');p.insertBefore(c,st||p.firstChild);
+  if(document.activeElement&&document.activeElement.id==='hm82'){}}catch(e){console.warn('p82 galgen',e)}}
+{const _j82=typeof jetzt67==='function'?jetzt67:null;if(_j82)jetzt67=function(p){const had=document.activeElement&&document.activeElement.id==='hm82';const r=_j82.apply(this,arguments);galKarte82(p);if(had){const i=document.getElementById('hm82');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}}return r}}
+{const _s82=typeof sig67==='function'?sig67:null;if(_s82)sig67=function(k){let s=_s82.apply(this,arguments);try{const F=S.fc;if(F&&fcOn())s+='|fc'+F.stage+':'+(F.word||'')+':'+(F.wrong||[]).length+':'+(F.guessed||[]).length+':'+(F.hm||'')}catch(e){}return s}}
+
+// ---------- F29: Kampf zusammenstellen (Erzähler wie Autor: Anzahl und Art, nur Gegner der Gegend) ----------
+const BAU82={};
+function key82(id){if(id==='b:milbe')return(WORLD.foes&&WORLD.foes.p23_rostmilbe)?'rostmilbe':null;if(/^p23_/.test(id))return id.slice(4);return null}
+function bau82(p){try{const h=p.querySelector('#sl67foes');if(!h)return;const k=ortKey67();const B=BAU82[k]=BAU82[k]||{};const F=hereFoes67().filter(id=>key82(id));if(!F.length)return;
+  const box=el67('div',null,'sl82bau');box.style.cssText='border:1px dashed #5a4a3a;padding:6px 8px;margin:6px 0;display:flex;flex-direction:column;gap:4px';
+  box.appendChild(el67('span','Kampf zusammenstellen','k'));
+  F.forEach(id=>{const r=el67('div',null,'sl67row');r.style.alignItems='center';const n=B[id]||0;
+    r.append(el67('span',foeName67(id),'small'),bt67('−',()=>{B[id]=Math.max(0,(B[id]||0)-1);SIG67.szene67='';render67(true)}),el67('span',String(n)),bt67('+',()=>{const sum=Object.values(B).reduce((a,b)=>a+b,0);if(sum>=6)return;B[id]=(B[id]||0)+1;SIG67.szene67='';render67(true)}));box.appendChild(r)});
+  const sum=Object.values(B).reduce((a,b)=>a+b,0);const go=el67('div',null,'sl67row');
+  go.appendChild(bt67(sum?'Kampf starten ('+sum+' Gegner)':'Erst Gegner wählen',()=>{if(!sum)return;if(typeof busy67==='function'&&busy67())return say('(Erst den laufenden Kampf beenden.)','sys');
+    const keys=[];Object.entries(B).forEach(([id,n])=>{const kk=key82(id);for(let i=0;i<n;i++)keys.push(kk)});Object.keys(B).forEach(x=>B[x]=0);group29(keys);SIG67.szene67='';render67(true)}));
+  if(sum)go.appendChild(bt67('Leeren',()=>{Object.keys(B).forEach(x=>B[x]=0);SIG67.szene67='';render67(true)}));box.appendChild(go);
+  // nach der Zeile mit den Einzel-Gegnern einhängen
+  let at=h.nextSibling;while(at&&at.classList&&!at.classList.contains('sl67row'))at=at.nextSibling;const ref=at?at.nextSibling:h.nextSibling;h.parentNode.insertBefore(box,ref);try{box.style.order=getComputedStyle(h).order}catch(e){}}catch(e){console.warn('p82 bau',e)}}
+if(typeof szene79==='function'){const _sz82=szene79;szene79=function(p){const r=_sz82.apply(this,arguments);bau82(p);return r}}
+
+
+// ================= Prototyp 82, Lieferung 2 – Texte, Gespräche, Klassen-Aktionen, Technik-Schaden =================
+// Paul, 08.11. (sammlung-p82.md C16, C17, C19, C21, C22, E27, B14).
+
+// ---------- C16/C17: Themen, auf die (noch) keine Antwort kommt, erscheinen nicht ----------
+// „Frag mich später noch mal“ oder „Darüber rede ich nicht“ bedeutet: das Vertrauen reicht noch nicht (tp.ab). Das Thema kommt erst, wenn es eine Antwort gibt.
+{const _tt82t=talkTopics;talkTopics=function(){let r=_tt82t.apply(this,arguments);try{if(!on82())return r;const n=NPCS[talk];
+    if(n&&n.imp&&n.imp.topics){const tr=tier(n);r=r.filter(x=>{const m=/^imp:(\d+)$/.exec(x[1]);if(!m)return true;const tp=n.imp.topics[+m[1]];return!tp||!(tr<tp.ab)})}
+    // E27: Herr Pfote lässt sich auch im Gespräch mit Mette zurückgeben
+    if(n&&n.name==='Mette'&&Q().pfote.st==='gefunden'&&!r.some(x=>x[1]==='pfote82'))r.unshift(['Herr Pfote ist wieder da!','pfote82'])}catch(e){console.warn('p82t Themen',e)}return r}}
+{const _tp82t=topic;topic=function(k){if(k==='pfote82'&&on82()){try{talk=null;returnCat()}catch(e){console.warn('p82t Pfote',e)}return renderAll()}return _tp82t.apply(this,arguments)}}
+
+// ---------- C19: Aushang in Großensee – vier Zettel statt eines Textblocks ----------
+{const _sy82a=say;say=function(text,cls,who){try{if(on82()&&typeof text==='string'&&text.indexOf('AUFRUF DES GEMEINDERATS')>=0&&text.indexOf(' · ')>0&&!say.in82){say.in82=1;
+      const Z=['Am Brett hängen vier Zettel.',
+        '📌 Bauer Krumm sucht Helfer beim Rübenernten (Rübenfeld hinter der Hauptstraße). Lohn: Silber.',
+        '📌 Verloren: graue Katze, hört auf „Herr Pfote“. Bitte bei Mette in der Schenke melden.',
+        '📌 Blaues Siegel, zwei gekreuzte Eiszapfen: Der Weg ins Berg-Sprung-Gebirge ist ab der dritten Ebene gesperrt. Darunter mit Kreide: „Nicht euer Gebirge!“',
+        '📌 Groß, mit rotem Rand – der Gemeinderat sucht vier Reisende, die vor fast einem Jahr von Ilse aus nach Norden gezogen sind: ein großer Mann mit Seil und Kletterhaken, eine Frau mit grüner Kapuze, Odo (Ottmars Sohn) und ihr Anführer mit dreieckigem Schild und Buch. Für Nachricht gibt es 30 Silber.',
+        'Darunter, an einer Schnur: ein Stift und die Nordliste – wer nach Norden geht, trägt sich ein.'];
+      let p=null;Z.forEach((z,i)=>{p=_sy82a.call(this,z,i?'sys':'dm')});say.in82=0;return p}}catch(e){say.in82=0}return _sy82a.apply(this,arguments)}}
+
+// ---------- C21: Ilse – erst anlaufen, dann die Blase; 20 % langsamer; wichtige Worte hervorgehoben ----------
+const KW82=/(Großensee|Heilkraut|Kraut|See|jede Wunde|Wirt|Lehrmeister|Lernzeichen)/g;
+function ilseT82(i,L){if(!on82())return i===L.length?2200:3200;if(i===L.length)return 2600;const s=(typeof ilseSpeech64==='function'?ilseSpeech64(L[i-1]):L[i-1])||'';return Math.max(3840,s.length*62)}
+function ilseGo82(step){if(!on82())return step();const t0=Date.now();const w=()=>{const I=typeof ILSE64!=='undefined'?ILSE64:null;if(!I||I.ref||I.arrived||Date.now()-t0>3500)return step();setTimeout(w,120)};setTimeout(w,200)}
+{const _sy82i=say;say=function(text,cls,who){const r=_sy82i.apply(this,arguments);try{if(on82()&&who==='Ilse'&&typeof ILSE64!=='undefined'&&ILSE64&&ILSE64.sc===S.scene){
+    const s=ilseSpeech64(text);ILSE64.until=now64()+Math.max(3100,s.length*66);const sp=IBUB64.querySelector('span');sp.innerHTML='';
+    String(s).split(KW82).forEach((part,i)=>{if(!part)return;if(i%2){const b=document.createElement('b');b.className='kw82';b.textContent=part;sp.appendChild(b)}else sp.appendChild(document.createTextNode(part))});
+    if(r&&r.dataset)r.dataset.kw82='1'}}catch(e){}return r}}
+{const _bp82=ilseBubPos64;ilseBubPos64=function(){try{const I=ILSE64;if(on82()&&I&&!I.ref&&!I.arrived){IBUB64.style.display='none';I.until=Math.max(I.until||0,now64()+3100);return}}catch(e){}return _bp82.apply(this,arguments)}}
+{const st=document.createElement('style');st.textContent='#ilseBub64 b.kw82{display:inline;font-size:1em;letter-spacing:0;color:#8a3a1a;margin:0}#log .kw82{color:#f0c060}';document.head.appendChild(st)}
+// Im Log: hervorheben, sobald die Zeile ganz zu sehen ist (das Lesetempo baut sie Stück für Stück auf)
+setInterval(()=>{try{document.querySelectorAll('#log [data-kw82="1"]').forEach(p=>{if(p.classList.contains('w56h')||p.querySelector('.w56h'))return;p.dataset.kw82='2';
+  const tw=document.createTreeWalker(p,NodeFilter.SHOW_TEXT),ns=[];while(tw.nextNode())ns.push(tw.currentNode);
+  ns.forEach(nd=>{if(nd.parentNode&&nd.parentNode.closest&&nd.parentNode.closest('b,.who,.nm'))return;const t=nd.nodeValue;KW82.lastIndex=0;if(!KW82.test(t))return;KW82.lastIndex=0;const f=document.createDocumentFragment();
+    t.split(KW82).forEach((part,i)=>{if(!part)return;if(i%2){const b=document.createElement('span');b.className='kw82';b.textContent=part;f.appendChild(b)}else f.appendChild(document.createTextNode(part))});nd.parentNode.replaceChild(f,nd)})})}catch(e){}},700);
+
+// ---------- C22: Klassen-Aktionen sagen, was sie bewirken ----------
+function wirk82(s){const out=[];String(s||'').split(/;/).map(x=>x.trim()).filter(Boolean).forEach(e=>{let m;
+  if((m=e.match(/^vertrauen\s+(.+?)\s*([+-]\d+)$/i)))out.push(+m[2]>0?m[1].trim()+' vertraut euch jetzt mehr':m[1].trim()+' ist verstimmt');
+  else if((m=e.match(/^probe-?bonus\s*\+?(\d+)/i)))out.push('Mut gefasst: die nächste Probe jedes Helden +'+m[1]);
+  else if((m=e.match(/^lp\s*\+(\d+)/i)))out.push('alle erholen sich ein wenig');
+  else if((m=e.match(/^geist\s*\+(\d+)/i)))out.push('neue Kraft: etwas Geist für alle');
+  else if((m=e.match(/^lehre\s+(\S+)/i)))out.push('ihr habt etwas über eine Lehre erfahren')});return out}
+{const _ke82=kaEffects27;kaEffects27=function(s,h,src){const r=_ke82.apply(this,arguments);try{if(on82()){const w=wirk82(s);if(w.length)setTimeout(()=>{try{say('→ Wirkung: '+w.join(' · ')+'.','sys')}catch(e){}},500)}}catch(e){}return r}}
+
+// ---------- B14: Beim Darüberfahren über eine Technik auch den Schaden zeigen ----------
+function dmg82(id,h){try{const D=TECH27[id];if(!D)return'';const d=String(D.desc||D.d||'');const T=h&&(h.tech||[]).find(x=>x.id===id);const ms=T?(T.m||1):1;
+  const m=d.match(/(\d*)W(\d+)(\s*\+\s*Meisterschaft)?/);if(!m)return'';const n=+(m[1]||1),w=+m[2],plus=m[3]?ms:0;const avg=n*(w+1)/2+plus;
+  const heil=/heilt|LP\b|Lebenspunkte/.test(d.slice(Math.max(0,m.index-40),m.index+m[0].length+30))&&!/Schaden/.test(d.slice(m.index,m.index+m[0].length+20));
+  return(heil?'Heilung':'Schaden')+': '+(n>1?n:'')+'W'+w+(plus?' + '+plus:'')+' (im Schnitt '+String(Math.round(avg*10)/10).replace('.',',')+')'}catch(e){return''}}
+{const _ttp82=tipTech80;tipTech80=function(id){const r=_ttp82.apply(this,arguments);try{if(!r||!on82())return r;let h=(typeof hero!=='undefined'&&hero&&(hero.tech||[]).some(x=>x.id===id))?hero:(PARTY||[]).find(x=>(x.tech||[]).some(y=>y.id===id));
+    const z=dmg82(id,h);if(z)return r+' '+z+'.'}catch(e){}return r}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
