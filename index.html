@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 81 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 82 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -32932,7 +32932,7 @@ if(typeof mpGuestMsg62==='function'){const _gl80x=mpGuestMsg62;mpGuestMsg62=func
 // trägt er „neu“ und leuchtet, bis er einmal angeklickt wurde. Der Zustand steht im Spielstand (S.neu80x) und in den Knöpfen selbst,
 // darum sehen ihn die Gäste mit (ihre Knöpfe werden je Held gebaut und mitgeschickt).
 {const st=document.createElement('style');st.textContent='@keyframes neu80xb{0%,100%{box-shadow:0 0 0 0 #9fe8a800}50%{box-shadow:0 0 0 3px #9fe8a8aa}}'+
-  '.actions .chip.neu80x,#genRow.g78 .chip.neu80x{border-color:#9fe8a8!important;animation:neu80xb 1.6s ease-in-out 4}.actions .chip.neu80x::after{content:"neu";font-size:10px;color:#0b0a0d;background:#9fe8a8;padding:0 3px;margin-left:5px;border-radius:2px;vertical-align:1px}';document.head.appendChild(st)}
+  '.actions .chip.neu80x,#genRow.g78 .chip.neu80x{border-color:#9fe8a8!important;animation:neu80xb 1.6s ease-in-out 4}.actions .chip.neu80x::after{content:none;font-size:10px;color:#0b0a0d;background:#9fe8a8;padding:0 3px;margin-left:5px;border-radius:2px;vertical-align:1px}';document.head.appendChild(st)}
 function chipKey80x(b){return String(b.textContent||'').replace(/neu$/,'').replace(/\d+/g,'#').replace(/\s+/g,' ').trim()}
 function neu80xS(){S.neu80x=S.neu80x||{sc:null,seen:[],neu:[]};return S.neu80x}
 function markNeu80x(){try{if(typeof S==='undefined'||!S||!S.scene)return;const N=neu80xS();const bs=[...document.querySelectorAll('#genRow .chip,#learnRow .chip,#clsRow .chip,#spontRow .chip')];
@@ -32943,7 +32943,7 @@ function markNeu80x(){try{if(typeof S==='undefined'||!S||!S.scene)return;const N
   // Paul (07.11., 21:48): „neu“ nur ein paar Sekunden zeigen, nicht dauerhaft – sonst wirkt es wie ein Köder („Auch die Kapsel nehmen“)
   [...neu].forEach(k=>{if(now-N.ts[k]>NEUMS80X){neu.delete(k)}});N.seen=[...seen].slice(-200);N.neu=[...neu];
   bs.forEach((b,i)=>{if(neu.has(keys[i])){b.classList.add('neu80x');const k=keys[i];setTimeout(()=>{try{b.classList.remove('neu80x');const M=neu80xS();M.neu=M.neu.filter(x=>x!==k)}catch(e){}},Math.max(200,NEUMS80X-(now-N.ts[k])))}})}catch(e){}}
-const NEUMS80X=6000;
+const NEUMS80X=3000;// Paul 08.11.: 3 Sekunden
 {const _rc80x=renderChips;renderChips=function(){const r=_rc80x.apply(this,arguments);markNeu80x();return r}}
 document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('.chip.neu80x');if(!b)return;const N=neu80xS(),k=chipKey80x(b);N.neu=N.neu.filter(x=>x!==k);b.classList.remove('neu80x')}catch(err){}},true);
 
@@ -32988,7 +32988,7 @@ function npcStory81(n){try{if(!n||!n.imp||!n.imp.topics)return false;return n.im
 function objStory81(o){try{return!!(o&&o.unlock&&FACTS[o.unlock]&&!S.facts[o.unlock])}catch(e){return false}}
 // Hand-Regeln für Story-Schritte ohne Daten-Kennung (Pauls Beispiele aus der Runde). w: wann, re: welcher Knopf.
 // Story-Schritte mit Klasse „learned“ aus sceneChips (Nebenaufträge wie Rübenernte/Herr Pfote zählen nicht)
-const STORYLAB81=/^(Weiter erkunden|Die PaulMons versöhnen|.+ versöhnen|Den PaulMons tiefer in den Wald folgen|Sanlep: „Was ist dir passiert\?“|Mit dem normalen Typ sprechen)$/;
+const STORYLAB81=/^(Weiter erkunden|Die PaulMons versöhnen|.+ versöhnen|Den PaulMons tiefer in den Wald folgen|Sanlep: „Was ist dir passiert\?“|Mit Sanlep reden|Mit dem normalen Typ sprechen)$/;
 const STORY81=[
   {id:'oeffnen',w:()=>true,re:/^Kapsel öffnen$/},
   {id:'aushang',w:()=>!S.flags.sanlepCame,re:/^Ansehen: Aushängebrett$/},// K06: hier kommt Sanlep dazu
@@ -33132,14 +33132,16 @@ if(typeof schenkeIntro48==='function'){const _si81=schenkeIntro48;schenkeIntro48
     brett?['Der Vierte mit dem Buch. Ich hab drüber nachgedacht. Ich glaub, ich hab den mal gekannt. Vor meinem Unfall.']
       :['Ihr seid neu. Dann wisst ihr nichts von den Vieren. Steht alles am Aushang auf dem Dorfplatz: vier Leute, Richtung Berge, seit fast einem Jahr nichts. Drei davon kenn ich. Den Vierten auch – irgendwoher. Vor meinem Unfall, glaub ich.'],
     ['Sanlep tippt sich an die Stirn.','dm']];
+  // P82 (Paul 08.11.): beim Betreten nur das Wasser – der Rest erst, wenn man Sanlep anspricht („erst Luft zum Atmen“)
+  if(typeof on82==='function'&&on82()){san81().sanA82=[A[1],A[2]];const t=lines27('Sanlep',[A[0]],1200);setTimeout(()=>{san81().sanB=1;renderAll()},t);return}
   const t=lines27('Sanlep',A,1200);setTimeout(()=>{san81().sanB=1;renderAll()},t)}}
-function sanB81(){const F=san81();if(F.sanB!==1)return;F.sanB=2;say('Sanlep: Was ist dir passiert?','player',hero?hero.name:'');
+function sanB81(){const F=san81();if(F.sanB!==1)return;F.sanB=2;if(F.sanA82){const A=F.sanA82;F.sanA82=null;const t0=lines27('Sanlep',A,300);return setTimeout(()=>{F.sanB=1;sanB81()},t0+600)}say('Sanlep: Was ist dir passiert?','player',hero?hero.name:'');
   const L=[['Vor zwanzig Jahren. Seitdem fehlt da oben was. Nicht viel. Nur das Wichtige. Am Abend davor hab ich was unterschrieben. Weiß nicht mehr, was.'],
     ['Es soll ein Kraut geben, am alten See – wenn es den noch gibt. Silbrig, riecht nach Regen. Es holt zurück, was einem genommen wurde. Sagt man.'],
     ['Bringt mir eins, und ich erzähl euch von Stahndor. Von meinem Labor da oben. Und von dem, was ich vergessen hab.']];
   const t=lines27('Sanlep',L,600);const tk=600+dur48(L[0][0])+1500;setTimeout(()=>{try{grantFact('heilkraut','Sanlep')}catch(e){}},tk);
   setTimeout(()=>{try{grantFact('stahndor','Sanlep')}catch(e){}addChron('Sanlep hat der Gruppe von seinem Unfall vor zwanzig Jahren erzählt und um ein Kraut vom alten See gebeten. Dann will er von Stahndor erzählen.',[],true);renderAll()},t);renderAll()}
-{const _sc81=sceneChips;sceneChips=function(chip){_sc81.apply(this,arguments);try{if(on81()&&san81().sanB===1&&sanHere48()&&!talk&&!inFight())chip('Sanlep: „Was ist dir passiert?“',()=>sanB81(),'learned')}catch(e){}}}
+{const _sc81=sceneChips;sceneChips=function(chip){_sc81.apply(this,arguments);try{if(on81()&&san81().sanB===1&&sanHere48()&&!talk&&!inFight())chip(san81().sanA82?'Mit Sanlep reden':'Sanlep: „Was ist dir passiert?“',()=>sanB81(),'learned')}catch(e){}}}
 // Wer die Schenke verlässt, bevor er gefragt hat: Sanlep erzählt den Rest, sobald man wieder da ist und fragt (der Knopf bleibt).
 // Mit drei Schritten kommt man durch zwei Abschnitte: der Weinkeller mit dem Bild (Hagen, Wenna, Odo, L.) kommt darum vor der Nische mit dem Schacht.
 {const _ec81=exploreCellar;exploreCellar=function(){try{if(on81()&&typeof CELSEC!=='undefined'&&CELSEC[3]&&/Weinkeller/.test(CELSEC[3].name)){const t=CELSEC[2];CELSEC[2]=CELSEC[3];CELSEC[3]=t}}catch(e){}return _ec81.apply(this,arguments)}}
@@ -33194,6 +33196,156 @@ function tourEnd81(){const T=T81;if(!T)return;T81=null;try{const cur=T.L[T.i];if
 // ---------- Kleine Anpassungen (Paul 21:48) ----------
 // „Sich kümmern“ und die anderen Typ-Knöpfe: keine Sonderhervorhebung, eher unauffällig.
 {const st=document.createElement('style');st.textContent='#clsRow .ka64.typ64{border-style:solid!important;border-color:#3a3346!important;color:#a89fb4!important;background:transparent!important;animation:none!important;box-shadow:none!important}';document.head.appendChild(st)}
+
+
+// ================= Prototyp 82 (08.11.) – Zweite Spielrunde: der Hauptfaden führt =================
+// Paul, 08.11. (_Spielleiter/sammlung-p82.md, Entscheidungen): „Erst Führung, Tisch-Modus danach“, „Hard-Lock in Etappen“,
+// „Lernen an Fortschritt“, „Auftragsleiste + Belohnung“. Das Heilkraut ist Priorität Nr. 1.
+// Etappen (Vorschlag, mit Paul abgestimmt am Beispiel):
+//   1 Ankunft        – Ilses Anwesen, Galgenwald, Großensee, Gebirge (Olaf sperrt ohnehin)
+//   2 Auftrag        – Sanlep bittet um das Heilkraut (Fakt stahndor bzw. Nebenauftrag offen)
+//   3 Viellos        – mit Auftrag und mindestens zwei Mythen; Viellos erscheint auf der Karte
+//   4 Oase           – Erkenntnis am Brunnen (see_norden)
+//   5 Die Welt öffnet sich – nach dem ersten Besuch der Oase: Stahndor, Kloster, Friede Freude Land, Kehrwieder, Duppelbach, AIDA, Weite …
+// Jede neue Etappe: +1 Lernzeichen für jeden Helden (Lernen an Fortschritt, p82l.js).
+function on82(){return!(window.__t56&&!window.__t56.p82)}
+function e82s(){S.e82=S.e82||{n:1};return S.e82}
+function myth82(){try{return MYTHS.filter(k=>S.facts[k]).length}catch(e){return 0}}
+function auftrag82(){try{return!!(S.facts.stahndor||S.flags.sanlepQ)}catch(e){return false}}
+function etappe82(){try{let n=1;if(auftrag82())n=2;if(n>=2&&myth82()>=2)n=3;if(n>=2&&S.facts.see_norden)n=4;if(n>=4&&mapVisited('oase'))n=5;
+  // alte Spielstände: wer schon weiter war, verliert nichts
+  return Math.max(n,e82s().n||1)}catch(e){return 1}}
+const NODE82={grossensee:1,kiefernhang:1,tannenwald:1,nordstollen:1,viellos:3,oase:4};// alles andere ab Etappe 5
+function nodeE82(k){return NODE82[k]||5}
+{const _mk82=mapKnown;mapKnown=function(k){const r=_mk82.apply(this,arguments);try{if(r&&on82()&&!mapVisited(k)&&nodeE82(k)>etappe82())return false}catch(e){}return r}}
+// Karten-Begegnungen, die einen späteren Ort verraten (Bruder Benno → Kloster, Blumen → Friede Freude Land), erst ab Etappe 5
+try{['moench','blumen'].forEach(k=>{const W=WEVDEF32[k];if(W&&typeof W.ok==='function'){const _o=W.ok;W.ok=function(){if(on82()&&etappe82()<5)return false;return _o.apply(this,arguments)}}})}catch(e){}
+// Etappen-Wechsel: Nachricht, Lernzeichen, bei Etappe 3 erscheint Viellos auf der Karte
+const ETXT82={2:'Ein Auftrag: Sanlep braucht das Heilkraut vom alten See.',3:'Die alten Geschichten zeigen in eine Richtung: Viellos. Dort weiß man mehr über alte Karten und Bilder.',4:'Der See liegt im Norden – hinter dem Gebirge, bei der Oase.',5:'Die Welt wird größer: Neue Wege tauchen auf der Karte auf.'};
+function e82check(){try{if(!on82()||!GAME_STARTED||!PARTY||!PARTY.length)return;const E=e82s(),n=etappe82();if(n<=(E.n||1))return;const von=E.n||1;E.n=n;
+  for(let i=von+1;i<=n;i++){say('✦ '+ETXT82[i],'new');if(i===3&&!S.facts.viellos){try{grantFact('viellos','Etappe')}catch(e){}}}
+  const al=(PARTY||[]).filter(h=>h&&h.hp>0);al.forEach(h=>{try{lzAdd73(h,n-von)}catch(e){}});
+  if(al.length)say('Lernzeichen: Jeder Held hat aus dem Erlebten etwas mitgenommen (+'+(n-von)+'). Ein Lehrmeister kann jetzt etwas zeigen.','sys');
+  try{addChron('Neue Etappe: '+ETXT82[n],[],true)}catch(e){}renderAll()}catch(e){console.warn('p82 Etappe',e)}}
+setInterval(e82check,1500);
+// Belohnung für jeden der ersten Mythen: etwas Silber und eine klare Rückmeldung (früher Payoff, Paul)
+{const _gf82=grantFact;grantFact=function(k){const had=!!(S.facts&&S.facts[k]);const r=_gf82.apply(this,arguments);try{if(on82()&&!had&&/^mythos_/.test(k)&&S.facts[k]){const m=myth82();
+      setTimeout(()=>{try{addSilver(5,'eine alte Geschichte erfahren');say('Mythen gesammelt: '+m+(m<2?' – noch eine, dann wisst ihr, wohin.':m===2?' – genug, um weiterzukommen.':''),'sys')}catch(e){}},900)}}catch(e){}return r}}
+
+// ---------- Auftragsleiste oben im Bild ----------
+{const st=document.createElement('style');st.textContent='#auftrag82{position:absolute;left:8px;top:8px;z-index:6;max-width:min(62%,520px);background:#16121ce6;border:1px solid #e0b04a;color:#f3ead6;font-family:"Pixelify Sans",monospace;font-size:14px;line-height:1.3;padding:5px 9px;pointer-events:none;box-shadow:2px 2px 0 #0b0a0d}'+
+  '#auftrag82 b{color:#f6d27a;font-weight:normal;margin-right:6px}#auftrag82.neu82{animation:au82 1.2s ease-in-out 3}@keyframes au82{50%{box-shadow:0 0 0 3px #f6c84ab0}}body.dicht78s #auftrag82{font-size:12px;padding:3px 7px}';document.head.appendChild(st)}
+function hasHerb82(){try{return PARTY.some(h=>(h.inv||[]).some(i=>i.kind==='heilkraut'))}catch(e){return false}}
+function auftragTxt82(){try{const cap=PARTY.some(h=>(h.inv||[]).some(i=>i.kind==='capsule'));
+  if(!cap)return['Ankunft','Nehmt euch je eine Kapsel.'];
+  try{if(runaways().length&&!S.flags.deepDone)return['Eure PaulMons','Sie sind weggelaufen – folgt ihnen in den Galgenwald.']}catch(e){}
+  if(S.flags.sanlepQ==='fertig'||S.flags.sanlepQ==='erledigt')return['Weiter','Folgt euren Spuren – „Was wir wissen“ (Taste L).'];
+  if(hasHerb82())return['Auftrag','Bringt Sanlep das Heilkraut vom See.'];
+  const n=etappe82(),m=myth82();
+  if(n>=4)return['Auftrag · Heilkraut','Der See liegt im Norden – über das Gebirge zur Oase.'];
+  if(n===3)return['Auftrag · Heilkraut','In Viellos weiß man mehr über alte Karten und Bilder. ('+m+' Mythen)'];
+  if(n===2)return['Auftrag · Heilkraut','Sanlep braucht ein Kraut vom alten See. Hört euch nach alten Geschichten um: '+Math.min(m,2)+' / 2 Mythen.'];
+  if(!mapVisited('grossensee'))return['Ankunft',S.flags.ilseStory?'Ilse hat von einem Heilkraut erzählt. Geht hinunter nach Großensee.':'Geht hinunter nach Großensee.'];
+  if(!S.flags.sanSchenke48)return['Großensee','Hört euch um. In der Schenke „Zum Kiefernzapfen“ wartet jemand.'];
+  return['Großensee','Sprecht mit Sanlep in der Schenke.']}catch(e){return null}}
+function auftragUI82(){try{const st=document.querySelector('.play > .stage')||document.querySelector('.stage');if(!st)return;let el=document.getElementById('auftrag82');
+  if(!on82()||!GAME_STARTED||inFight()||(typeof TAC!=='undefined'&&TAC)){if(el)el.remove();return}
+  const t=auftragTxt82();if(!t){if(el)el.remove();return}if(!el){el=document.createElement('div');el.id='auftrag82';el.setAttribute('aria-live','polite');st.appendChild(el)}
+  const html='<b>'+t[0]+'</b>'+t[1];if(el.innerHTML!==html.replace(/&/g,'&amp;')){const neu=el.dataset.t&&el.dataset.t!==t[1];el.innerHTML='';const b=document.createElement('b');b.textContent=t[0];el.appendChild(b);el.appendChild(document.createTextNode(t[1]));
+    if(neu){el.classList.remove('neu82');void el.offsetWidth;el.classList.add('neu82')}el.dataset.t=t[1]}}catch(e){}}
+{const _ra82=renderAll;renderAll=function(){const r=_ra82.apply(this,arguments);auftragUI82();return r}}
+setInterval(auftragUI82,1000);
+
+
+// ================= Prototyp 82 – Lernen an Fortschritt, Ilse als Wegweiserin =================
+// Paul, 08.11. (sammlung-p82.md A1, A2, B11–B13; Entscheidung „Lernen an Fortschritt“):
+//   – Ilse lehrt nicht mehr. Ihre Gespräche: „Über die Kapseln und woher sie kommen“, „Wer bist du?“ – daraus „Kannst du uns etwas beibringen?“
+//     mit einer Erklärung, wie Lehrmeister funktionieren und wo man sie findet.
+//   – Lernzeichen gibt es nur noch mit jeder Etappe des Auftrags (p82e.js), nicht mehr mit der Zeit; zu Beginn hat niemand eins.
+//   – Jeder Lehrmeister will vorher eine kleine Gefälligkeit (GEF82, Vorschlag zum Prüfen).
+//   – Der Bauplan mit dem Federwerk in Ilses Restekiste fällt weg (Paul: „später z. B. in AIDA als Skill im Buch“).
+
+// ---------- Lernzeichen ----------
+{const _ls82=lzSt73;lzSt73=function(h){try{if(on82()&&h){const s=r73(),k=hid31(h);if(!s.lz[k])s.lz[k]={n:0,d:dayR73()};s.lz[k].d=dayR73()}}catch(e){}return _ls82.apply(this,arguments)}}
+{const _lt82=lzTxt73;lzTxt73=function(h){if(!on82())return _lt82.apply(this,arguments);return lz73(h)+' Lernzeichen (neue mit jedem Schritt im Auftrag)'}}
+
+// ---------- Gefälligkeiten der Lehrmeister (Vorschlag) ----------
+const GEF82={
+  sanlep:{t:'Erst die Arbeit, dann die Lehre. Bringt mir das Kraut vom alten See – dann zeig ich euch, wie man richtig zupackt.',ok:()=>S.flags.sanlepQ==='fertig'||S.flags.sanlepQ==='erledigt'||hasHerb82()},
+  ragna:{t:'Zeig mir erst, dass du kämpfen kannst. Komm wieder, wenn ihr einen echten Kampf hinter euch habt.',ok:()=>{try{return!!lm80().kampf}catch(e){return false}}},
+  mette:{t:'Erzählt mir eine Geschichte, die ich noch nicht kenne. Eine von den alten. Dann reden wir.',ok:()=>myth82()>=1},
+  lirum:{t:'Hört euch erst mein Lied an. Ganz. Dann bring ich euch was bei.',ok:()=>!!S.facts.mythos_lied},
+  ottmar:{t:'Fragt mich erst nach dem See. Wer das nicht wissen will, will auch nichts lernen.',ok:()=>!!S.facts.kein_see},
+  brunhild:{t:'Fremden bring ich nichts bei. Wer für Sanlep unterwegs ist, ist kein Fremder mehr.',ok:()=>etappe82()>=2},
+  krumm:{t:'Erst helfen, dann lernen. Das Feld wartet nicht.',ok:()=>etappe82()>=2},
+  entfernos:{t:'Quak. (Er zeigt auf die Bühne. Erst zuhören.)',ok:()=>{try{return!!(S.fc&&S.fc.stage>=1)}catch(e){return false}}},
+};
+function gefOk82(tid){try{const G=GEF82[tid];return!G||!on82()||!!G.ok()}catch(e){return true}}
+{const _jz82=jetzt73;jetzt73=function(tid,h){const r=_jz82.apply(this,arguments);if(!r||!on82())return r;if(tid==='ilse')return false;return gefOk82(tid)}}
+{const _wa82=warum73;warum73=function(tid,h){try{if(on82()&&GEF82[tid]&&!gefOk82(tid)&&h&&h.hp>0)return GEF82[tid].t}catch(e){}return _wa82.apply(this,arguments)}}
+{const _wo82=wegOk73;wegOk73=function(tid,h){const r=_wo82.apply(this,arguments);if(!r||!on82())return r;if(tid==='ilse')return false;return gefOk82(tid)}}
+{const _to82=teachOpen31;teachOpen31=function(tid){if(on82()&&tid==='ilse')return false;return _to82.apply(this,arguments)}}
+
+// ---------- Ilse: weniger Themen, Erklärung statt Lektion ----------
+const ILSEWEG82=['kapseln','leer','hilfe','geruechte','x28_kap','l31_ask','l73_weg','l73_aus','l73_dbm','lm80_ilse0'];
+{const _tt82=talkTopics;talkTopics=function(){let r=_tt82.apply(this,arguments);try{if(!on82()||talk!=='ilse')return r;
+    r=r.filter(x=>!ILSEWEG82.includes(x[1]));const at=0;
+    if(!S.flags.ilseKap82)r.splice(at,0,['Über die Kapseln und woher sie kommen','kap82']);
+    if(S.flags.ilseWer82&&!S.flags.ilseLehr82){const w=r.findIndex(x=>x[1]==='wer');r.splice(w>=0?w+1:r.length-1,0,['Kannst du uns etwas beibringen?','lehr82'])}
+    if(S.flags.ilseWer82)r=r.filter(x=>x[1]!=='wer')}catch(e){console.warn('p82 Ilse',e)}return r}}
+function busyWait82(fn,n){if(typeof busy27==='function'&&busy27()&&(n||0)<60)return setTimeout(()=>busyWait82(fn,(n||0)+1),250);fn()}
+{const _tp82=topic;topic=function(k){if(!on82()||talk!=='ilse')return _tp82.apply(this,arguments);
+  if(k==='kap82'){S.flags.ilseKap82=1;const r=_tp82.call(this,'kapseln');busyWait82(()=>{try{if(!S.flags.ilseKap28)_tp82.call(this,'x28_kap')}catch(e){}renderAll()});return r}
+  if(k==='wer'){const r=_tp82.apply(this,arguments);S.flags.ilseWer82=1;busyWait82(()=>{try{say31('ilse',['Früher hab ich auch den Jungen aus dem Dorf was beigebracht. Heute schick ich sie lieber zu Leuten, die schneller sind als meine Knie.'])}catch(e){}renderAll()});return r}
+  if(k==='lehr82'){S.flags.ilseLehr82=1;lehrTut82();return renderAll()}
+  return _tp82.apply(this,arguments)}}
+function lehrTut82(){const tk=talk;const st=[
+  {w:'Ilse',t:'Beibringen? Ich? Nicht mehr. Aber ich kann euch sagen, wie das läuft.'},
+  {w:'Ilse',t:'Lehrmeister gibt es überall. In Großensee: Ragna auf dem Dorfplatz, in der Schenke Sanlep, Mette, Brunhild und Lirum, und Ottmar am Brunnen.'},
+  {w:'Ilse',t:'Keiner lehrt umsonst. Jeder will erst etwas sehen: eine kleine Gefälligkeit, eine Geschichte, einen bestandenen Kampf.'},
+  {e:'Lehrmeister zeigen euch neue Techniken – mit einer kurzen Übung. Jeder Held lernt bei höchstens drei. Eine Lektion kostet ein Lernzeichen; neue Lernzeichen gibt es mit jedem Schritt im Auftrag. Was ihr könnt, steht unter „Fähigkeiten“ (Taste F).'},
+  {w:'Ilse',t:'Und jetzt kümmert euch erst mal um das Wichtige.'}];
+  const go=()=>{try{if(talk==null)talk=tk}catch(e){}renderAll()};
+  if(typeof szene72==='function'&&!window.__no65)return szene72(st,{id:'lehr82',onEnd:go});
+  st.forEach(x=>{try{say(x.e||('„'+x.t+'“'),x.e?'dm':'npc',x.e?undefined:'Ilse')}catch(e){}});go()}
+
+// ---------- Bauplan mit dem Federwerk entfällt ----------
+{const _sc82=sceneChips;sceneChips=function(chip){const r=_sc82.apply(this,arguments);try{if(on82()){['genRow','spontRow'].forEach(id=>{const R=$(id);if(R)[...R.querySelectorAll('button')].forEach(b=>{if(/Bauplan in Ilses Restekiste/.test(b.textContent))b.remove()})})}}catch(e){}return r}}
+
+
+// ================= Prototyp 82 – kleinere Führungs-Stellen am Anfang =================
+// Paul, 08.11. (sammlung-p82.md A3–A6, C15).
+
+// ---------- „neu“ nur im Gespräch (neue Pfade in der Unterhaltung), nie im Kampf; 3 s, ohne Wort (p80x) ----------
+{const _mn82=markNeu80x;markNeu80x=function(){if(on82()&&((typeof talk==='undefined'||!talk)||inFight()||(typeof TAC!=='undefined'&&TAC))){try{document.querySelectorAll('.chip.neu80x').forEach(b=>b.classList.remove('neu80x'));const N=neu80xS();N.sc=null}catch(e){}return}return _mn82.apply(this,arguments)}}
+
+// ---------- Heldenbogen und Co. erst, wenn der normale Typ es erklärt hat ----------
+// Im Kapselhaus erscheinen Heldenbogen, Waffenbaum, „Was wir wissen“ und Fähigkeiten, sobald man den Typen angesprochen hat
+// (oder spätestens, wenn die Gruppe das Haus verlässt).
+{const st=document.createElement('style');st.textContent='body.zu82 #heroCard .bogen27,body.zu82 #heroCard .wb49b,body.zu82 #heroCard .fh73b,body.zu82 #heroCard .wiss57b,body.zu82 #heroCard [class*="wb49"]{display:none!important}';document.head.appendChild(st)}
+function zu82(){try{const zu=on82()&&GAME_STARTED&&S&&S.scene==='haus'&&!S.flags.dudeAsked81&&!S.flags.dudeVanish&&!S.flags.offen82;if(!zu&&GAME_STARTED&&S&&S.scene!=='haus')S.flags.offen82=1;document.body.classList.toggle('zu82',!!zu)}catch(e){}}
+{const _ra82k=renderAll;renderAll=function(){const r=_ra82k.apply(this,arguments);zu82();return r}}
+// Kurzbefehle (H, U, F, L) ebenfalls erst danach
+window.addEventListener('keydown',e=>{try{if(!document.body.classList.contains('zu82'))return;const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'))return;if(/^[hufl]$/i.test(e.key)){e.stopImmediatePropagation();e.preventDefault()}}catch(err){}},true);
+// Die Führung des Typen öffnet die Fenster trotzdem
+{const _t82=tour81;tour81=function(){try{S.flags.dudeAsked81=1;zu82()}catch(e){}return _t82.apply(this,arguments)}}
+
+// ---------- Kapseln: „Auch die … nehmen“ liegt hinter „Mehr“, kurze Sperre nach jeder Kapsel-Aktion ----------
+{const _mh82=mehr81;mehr81=function(b){try{if(on82()&&/^Auch die .+ nehmen$/.test((b.textContent||'').trim()))return true}catch(e){}return _mh82.apply(this,arguments)}}
+let KAPSEL82=0;
+document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('#genRow .chip');if(!b||!on82())return;const t=(b.textContent||'').trim();
+  if(/^Auch die .+ nehmen$/.test(t)&&Date.now()-KAPSEL82<2500){e.stopImmediatePropagation();e.preventDefault();say('(Einen Moment – die Kapsel in der Hand summt noch.)','sys');return}
+  if(/kapsel nehmen$|^Kapsel öffnen$/i.test(t))KAPSEL82=Date.now()}catch(err){}},true);
+
+// ---------- Erster Kampf: kurz erklären, wie gekämpft wird ----------
+TOUR81.kampf=[{t:['Ein Kampf! Kurz, wie das geht: Zuerst wird die Reihenfolge ausgewürfelt (Initiative: ein W20 – ein Würfel mit 20 Seiten – plus Geschick). Wer oben in der Reihe steht, ist dran.']},
+  {t:['Angreifen: Ein W20 plus euer Bonus muss die Rüstung (RK) des Gegners erreichen. Trifft er, würfelt die Waffe den Schaden – die Zahlen stehen im Log.']},
+  {t:['„Geist“ ist eure Kraft für Techniken: jede Technik kostet etwas Geist, Rasten füllt ihn wieder auf. Die Kampfregeln findet ihr jederzeit unter „❔ Regeln“.']}];
+setInterval(()=>{try{if(!on82()||!GAME_STARTED||S.kampf82||!inFight())return;if(typeof TAC!=='undefined'&&TAC)return;S.kampf82=1;setTimeout(()=>{try{if(inFight())tour81('kampf')}catch(e){}},700)}catch(e){}},600);
+
+// ---------- PaulMons weggelaufen: deutlicher Hinweis ----------
+setInterval(()=>{try{if(!on82()||!GAME_STARTED||S.weg82)return;if(!(runaways().length&&!S.flags.deepDone))return;S.weg82=1;
+  setTimeout(()=>{try{say('Eure PaulMons sind fort. Im Farn sind kleine Spuren – sie führen den Hang hinauf, in den Galgenwald. Geht ihnen nach, bevor es dunkel wird.','dm')}catch(e){}},1500)}catch(e){}},1000);
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
