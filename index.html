@@ -21840,7 +21840,7 @@ function mpSig62(id,onMsg,onOpen,onErr){const tok=mpRnd62(12,'abcdefghijklmnopqr
 // Datenkanal mit Stückelung (große Texte) und Bildern (binär)
 function mpWire62(dc,C){dc.binaryType='arraybuffer';const parts={};let cid=0;
   C.send=o=>{if(dc.readyState!=='open')return;const s=JSON.stringify(o);try{if(s.length<=15000){dc.send(s);return}const id=++cid,n=Math.ceil(s.length/15000);for(let i=0;i<n;i++)dc.send(JSON.stringify({t:'chunk',id,i,n,d:s.slice(i*15000,(i+1)*15000)}))}catch(e){}};
-  C.sendBin=buf=>{if(dc.readyState==='open'&&dc.bufferedAmount<1500000){try{dc.send(buf)}catch(e){}}};
+  C.sendBin=buf=>{if(dc.readyState==='open'&&dc.bufferedAmount<((typeof lag82==='function'&&lag82())?BUF82:1500000)){try{dc.send(buf)}catch(e){}}};
   C.close=()=>{try{dc.close()}catch(e){}try{C.pc&&C.pc.close()}catch(e){}};
   dc.onmessage=e=>{if(typeof e.data!=='string'){C.onbin&&C.onbin(e.data);return}let m;try{m=JSON.parse(e.data)}catch(x){return}
     if(m.t==='chunk'){const P=parts[m.id]=parts[m.id]||{n:m.n,got:0,d:[]};if(P.d[m.i]==null){P.d[m.i]=m.d;P.got++}if(P.got===P.n){delete parts[m.id];try{C.onmsg&&C.onmsg(JSON.parse(P.d.join('')))}catch(x){}}return}
@@ -21944,7 +21944,7 @@ const MPOVNO62=new Set(['worldDlg','startScr','pickScr','path58','saveDlg','bg29
 function mpOvList62(){return[...document.body.children].filter(el=>el.id&&!MPOVNO62.has(el.id)&&!el.classList.contains('app')&&!el.classList.contains('dmonly')&&!el.hidden&&el.tagName!=='SCRIPT'&&el.tagName!=='STYLE'&&getComputedStyle(el).display!=='none')}
 function mpSer62(root,outer,hide){const cl=root.cloneNode(true),a=root.querySelectorAll('canvas'),b=cl.querySelectorAll('canvas');
   a.forEach((c,i)=>{const d=b[i];if(!d)return;if(c.width*c.height>=3000){let k=MP62.cvKeys.get(c);if(!k){k='c'+(++MP62.cvN);MP62.cvKeys.set(c,k)}MP62.cvs.set(k,c);d.setAttribute('data-m62cv',k)}
-    else{const im=document.createElement('img');try{im.src=c.width&&c.height?c.toDataURL():''}catch(e){}im.className=c.className;if(c.getAttribute('style'))im.setAttribute('style',c.getAttribute('style'));im.width=c.width;im.height=c.height;try{const r80x=c.getBoundingClientRect();if(r80x.width>c.width+1){im.style.width=Math.round(r80x.width)+'px';im.style.height=Math.round(r80x.height)+'px'}}catch(e){}im.style.imageRendering='pixelated';d.replaceWith(im)}});
+    else{const im=document.createElement('img');try{im.src=c.width&&c.height?(typeof du82==='function'?du82(c):c.toDataURL()):''}catch(e){}im.className=c.className;if(c.getAttribute('style'))im.setAttribute('style',c.getAttribute('style'));im.width=c.width;im.height=c.height;try{const r80x=c.getBoundingClientRect();if(r80x.width>c.width+1){im.style.width=Math.round(r80x.width)+'px';im.style.height=Math.round(r80x.height)+'px'}}catch(e){}im.style.imageRendering='pixelated';d.replaceWith(im)}});
   const ia=root.querySelectorAll('input,select,textarea'),ib=cl.querySelectorAll('input,select,textarea');ia.forEach((x,i)=>{const y=ib[i];if(!y)return;if(x.type==='checkbox'||x.type==='radio'){if(x.checked)y.setAttribute('checked','');else y.removeAttribute('checked')}else if(x.tagName==='SELECT'){[...y.options].forEach((o,j)=>{if(j===x.selectedIndex)o.setAttribute('selected','');else o.removeAttribute('selected')})}else y.setAttribute('value',x.value)});
   cl.querySelectorAll('.mp62host').forEach(e=>e.remove());cl.querySelectorAll('.dmonly,[data-dm],.tdm,.b53dm'+(hide?','+hide:'')).forEach(e=>e.setAttribute('style','display:none'));return outer?cl.outerHTML:cl.innerHTML}
 function mpHeroes62(){return(PARTY||[]).map(h=>({name:h.name,cls:h.cls,owner:(mpOwner62(h.name)||{}).name||null,ko:h.hp<=0}))}
@@ -22215,8 +22215,8 @@ mpFrames62=function(){const gs=mpGuestsOn62();if(!gs.length)return;const sceneKe
   MP62.cvs.forEach((c,key)=>{if(MP62.busyKeys.has(key)||!c.isConnected||c.offsetParent===null)return;
     let norm=gs,alt=[];if(c===cv){norm=gs.filter(G=>G.td==null||G.td===TD);alt=gs.filter(G=>G.td!=null&&G.td!==TD)}
     MP62.busyKeys.add(key);let n=0;const done=()=>{if(--n<=0)MP62.busyKeys.delete(key)};
-    if(norm.length){n++;try{c.toBlob(b=>{mpSendFrame63(key,b,norm);done()},'image/webp',0.92)}catch(e){done()}}
-    if(alt.length&&!(typeof TAC!=='undefined'&&TAC)){n++;let ok=false;try{TD=!TD;mpSceneDraw63();ok=true;c.toBlob(b=>{mpSendFrame63(key,b,alt);done()},'image/webp',0.92)}catch(e){if(!ok)done()}finally{TD=!TD;try{mpSceneDraw63()}catch(e){}}}
+    if(norm.length){n++;try{c.toBlob(b=>{mpSendFrame63(key,b,norm);done()},'image/webp',typeof q82==='function'?q82():0.92)}catch(e){done()}}
+    if(alt.length&&!(typeof TAC!=='undefined'&&TAC)){n++;let ok=false;try{TD=!TD;mpSceneDraw63();ok=true;c.toBlob(b=>{mpSendFrame63(key,b,alt);done()},'image/webp',typeof q82==='function'?q82():0.92)}catch(e){if(!ok)done()}finally{TD=!TD;try{mpSceneDraw63()}catch(e){}}}
     if(!n)MP62.busyKeys.delete(key)})};
 
 // ---------- 4. Karte für sich ----------
@@ -33489,6 +33489,36 @@ function dmg82(id,h){try{const T0=h&&(h.tech||[]).find(x=>x.id===id);const TT=ty
   return(heil?'Heilung':'Schaden')+': '+(n>1?n:'')+'W'+w+(plus?' + '+plus:'')+' (im Schnitt '+String(Math.round(avg*10)/10).replace('.',',')+')'}catch(e){return''}}
 {const _ttp82=tipTech80;tipTech80=function(id){const r=_ttp82.apply(this,arguments);try{if(!r||!on82())return r;let h=(typeof hero!=='undefined'&&hero&&(hero.tech||[]).some(x=>x.id===id))?hero:(PARTY||[]).find(x=>(x.tech||[]).some(y=>y.id===id));
     const z=dmg82(id,h);if(z)return r+' '+z+'.'}catch(e){}return r}}
+
+
+// ================= Prototyp 82, Lieferung 2 – Mitspieler ohne Ruckeln (sammlung-p82.md G31) =================
+// Paul, 08.11.: „soll möglichst glatt laufen, wenn Leute in Räume gehen“. Befund (gemessen mit tests/_lag82.js):
+//  1. Alle 200 ms baut der Spielleiter für JEDEN Gast Heldenkarte, Taschen und Knöpfe neu auf (mpFor63) – auch wenn sich nichts geändert hat.
+//  2. Kleine Bilder (Porträts, Symbole) werden bei jedem Durchgang neu als Bild kodiert; bewegt sich ein Porträt, geht die ganze Bühne neu raus.
+//  3. Das Szenenbild geht 6-mal pro Sekunde in hoher Qualität raus, auch wenn es sich nicht verändert hat.
+// Abhilfe: (1) Ergebnis je Gast merken, bis sich etwas ändert (renderAll, Szene, aktiver Held) oder 1,5 s vergehen.
+//          (2) Kleine Bilder höchstens einmal pro Sekunde neu kodieren. (3) Gleiche Bilder nicht erneut senden (spätestens alle 3 s doch),
+//          verlustfreie Bilder (bei Pixelgrafik kleiner als 0,92), und (4) Bilder drängeln sich nicht vor Klicks und Text.
+function lag82(){return!window.__lag82off}
+let RV82=0;{const _ra82n=renderAll;renderAll=function(){RV82++;return _ra82n.apply(this,arguments)}}
+// (1)
+if(typeof mpFor63==='function'){const _mf82=mpFor63;mpFor63=function(G){if(!lag82()||!G)return _mf82.apply(this,arguments);
+  const k=RV82+'|'+(S&&S.scene)+'|'+(hero&&hero.name)+'|'+G.hero+'|'+(typeof inFight==='function'&&inFight()?1:0);const now=Date.now();
+  if(G.mf82&&G.mf82.k===k&&now-G.mf82.t<1500)return G.mf82.v;const v=_mf82.apply(this,arguments);G.mf82={k,t:now,v};return v}}
+// (2)
+const DU82=new WeakMap();
+function du82(c){try{if(!lag82())return c.toDataURL();const now=Date.now(),e=DU82.get(c);if(e&&now-e.t<1000&&e.w===c.width&&e.h===c.height)return e.u;const u=c.toDataURL();DU82.set(c,{t:now,u,w:c.width,h:c.height});return u}catch(x){return''}}
+// (3)
+function hash82(buf){const a=new Uint8Array(buf);let h=2166136261^a.length;const st=Math.max(1,a.length>>11);for(let i=0;i<a.length;i+=st){h^=a[i];h=Math.imul(h,16777619)}return h>>>0}
+if(typeof mpSendFrame63==='function'){const _sf82=mpSendFrame63;mpSendFrame63=function(key,blob,gs){if(!lag82()||!blob)return _sf82.apply(this,arguments);
+  blob.arrayBuffer().then(buf=>{const h=hash82(buf),now=Date.now();const send=(gs||[]).filter(G=>{G.fr82=G.fr82||{};const L=G.fr82[key];if(L&&L.h===h&&now-L.t<3000)return false;G.fr82[key]={h,t:now};return true});
+    if(!send.length)return;const kb=new TextEncoder().encode(key),out=new Uint8Array(2+kb.length+buf.byteLength);out[0]=kb.length;out[1]=1;out.set(kb,2);out.set(new Uint8Array(buf),2+kb.length);
+    send.forEach(G=>{try{G.conn.sendBin(out.buffer);G.by82=(G.by82||0)+out.byteLength}catch(e){}})})}}
+// Bildqualität (wird in mk27 über MP52 in p63m.js eingesetzt)
+function q82(){return lag82()?1:0.92}// 1 = verlustfrei: bei Pixelbildern kleiner und scharf (gemessen 50 statt 75 KB/s)
+// (4) Bilder stellen sich nicht mehr vor Text an: Liegt mehr als 64 KB im Kanal, wird das Bild ausgelassen (vorher 1,5 MB –
+//     dann warteten Klicks und Log-Zeilen hinter vielen Bildern, besonders über den Umweg-Server).
+const BUF82=65536;
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
