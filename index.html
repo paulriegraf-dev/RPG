@@ -381,7 +381,7 @@ textarea{resize:vertical;min-height:50px;width:100%;box-sizing:border-box}
 <div class="app">
   <header>
 <meta name="robots" content="noindex,nofollow">
-    <h1>Pauls Mini-Adventure <span>Prototyp 82 · Pauluso-Tanien</span></h1>
+    <h1>Pauls Mini-Adventure <span>Prototyp 83 · Pauluso-Tanien</span></h1>
     <div class="music"><button id="menuBtn" class="mbtn" title="Zum Startmenü">☰ Menü</button><button id="saveBtn" class="pxbtn pink dmonly" aria-haspopup="dialog" title="Spielstand speichern und laden">Spielstand</button><button id="worldBtn" class="pxbtn dmonly" aria-haspopup="dialog" aria-expanded="false" aria-controls="worldDlg" title="Deinen Projektordner ins laufende Spiel einlesen">Welt laden</button><button id="musicBtn" class="mbtn" aria-pressed="false">♪ Musik an</button><button id="tdBtn" class="mbtn" aria-pressed="false">◧ Poke-Perspektive</button><input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Lautstärke"><span id="musicNow" class="mnow"></span></div>
     <div class="mode" role="group" aria-label="Ansicht">
       <button data-mode="player" aria-pressed="false">Spieler</button>
@@ -24970,7 +24970,7 @@ function lakeSay69(raw){const T=S.lakeTalk;if(!T)return false;const w=nrm67(raw|
     else chip('Mit '+nm+' sprechen',()=>lakeStart69(r),'learned')})}catch(e){console.warn('p69b chips',e)}}}
 
 // ---------- Spielleiter-Karte „Gespräch am See“ ----------
-function seeKarte69(p){try{if(!p||!lakeOn69()||!window.el67)return;const old=p.querySelector('#sl69see');if(old)old.remove();
+function seeKarte69(p){try{if(!p||!lakeOn69()||typeof el67!=='function')return;const old=p.querySelector('#sl69see');if(old)old.remove();
   const T=S.lakeTalk;const c=el67('div',null,'sl67card ev');c.id='sl69see';c.appendChild(el67('span','AM STILLEN SEE · DU ENTSCHEIDEST','k'));
   const row=el67('div',null,'sl67row');
   if(T){const nm=CAPS[T.kind].pet;c.appendChild(el67('span',nm+' hört zu · passende Sätze: '+T.tr+' von 2'+(T.last?' · letzter Satz: „'+T.last+'“':'')));
@@ -26541,8 +26541,8 @@ window.P70=P70;window.satzAI70=satzAI70;window.satzEnde70=satzEnde70;window.chro
 
 
 // Prototyp 71: beim Bau aus den Orts-Dateien gelesen (Ruf der Gruppe hier, ## Ruf-Folgen) und aus den NPC-Dateien (Gehört zu)
-const RUFORT71={"aida": {"fehlt": 0, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 0, "start": "neutral", "z": []}, "ffl": {"fehlt": 0, "start": "neutral", "z": []}, "grossensee": {"fehlt": 0, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 0, "start": "neutral", "z": []}, "kiefernhang": {"fehlt": 0, "start": "neutral", "z": []}, "kloster": {"fehlt": 0, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 0, "start": "neutral", "z": []}, "oase": {"fehlt": 0, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 0, "start": "neutral", "z": []}, "stahndor": {"fehlt": 0, "start": "neutral", "z": []}, "viellos": {"fehlt": 0, "start": "neutral", "z": []}, "weite": {"fehlt": 0, "start": "neutral", "z": []}};
-const GRPNPC71={};
+const RUFORT71={"aida": {"fehlt": 9, "start": "neutral", "z": []}, "duppelbach": {"fehlt": 9, "start": "neutral", "z": []}, "ffl": {"fehlt": 9, "start": "freundlich", "z": []}, "grossensee": {"fehlt": 9, "start": "neutral", "z": []}, "kehrwieder": {"fehlt": 9, "start": "misstrauisch", "z": []}, "kiefernhang": {"fehlt": 9, "start": "neutral", "z": []}, "kloster": {"fehlt": 9, "start": "neutral", "z": []}, "nordstollen": {"fehlt": 9, "start": "neutral", "z": []}, "oase": {"fehlt": 9, "start": "neutral", "z": []}, "platzhalter": {"fehlt": 9, "start": "neutral", "z": []}, "stahndor": {"fehlt": 9, "start": "neutral", "z": []}, "viellos": {"fehlt": 9, "start": "neutral", "z": []}, "weite": {"fehlt": 9, "start": "neutral", "z": []}};
+const GRPNPC71={"Alt-Rat Wendelin": "Fürstenhof", "Ambros": "Mönche", "Anselm": "Mönche", "Ansgar Krall": "Fürstenhof", "Ausrufer Lambert": "Fürstenhof", "Benno": "Mönche", "Bruno": "Das Haus in Friede Freude Land", "Die Elster": "Kontor und Gassen von AIDA", "Fischer Jos": "Seeleute und Fischer", "Folio": "Mönche", "Fortunato": "Das Haus in Friede Freude Land", "Fürst Trahmes": "Fürstenhof", "General Krull": "Schneewacht", "Goldine": "Das Haus in Friede Freude Land", "Hauptmann Olaf": "Schneewacht", "Hedda": "Seeleute und Fischer", "Herold Gisbert": "Fürstenhof", "Hulda": "Mönche", "Isidor": "Schneewacht", "Jannes": "Seeleute und Fischer", "Jorinde": "Schneewacht", "Knut": "Seeleute und Fischer", "Krumm": "Gemeinderat Großensee", "Lirum": "Gemeinderat Großensee", "Lux": "Das Haus in Friede Freude Land", "Mette": "Gemeinderat Großensee", "Ole": "Seeleute und Fischer", "Ottmar": "Seeleute und Fischer", "Ruprecht": "Schneewacht", "Seilerin Ida": "Seeleute und Fischer", "Swantje": "Seeleute und Fischer", "Wache Ivo": "Schneewacht", "Wachhabende Irmel": "Schneewacht", "Wiebke": "Kontor und Gassen von AIDA", "Zöllnerin Agathe": "Schneewacht"};
 
 
 // ================= Prototyp 71 (r): Ruf je Ort – Ansehen und Furcht, Taten, reisende Gerüchte =================
@@ -33402,7 +33402,7 @@ if(typeof mpHostMsg62==='function'){const _hp82=mpHostMsg62;mpHostMsg62=function
 // ---------- F28: Galgenmännchen auch in der Erzähler-Ansicht („Beide“, „Spielleiter“) steuern ----------
 // Bisher lagen Wort-Eingabe und Lied-Knopf nur im alten Szenen-Kasten (Autor). Jetzt steht beim Froschkonzert eine Karte oben in „Jetzt“.
 let HMD82='';
-function galKarte82(p){try{if(!p||!window.el67)return;const old=p.querySelector('#sl82gal');if(old)old.remove();if(typeof fcOn!=='function'||!fcOn())return;const F=S.fc;
+function galKarte82(p){try{if(!p||typeof el67!=='function')return;const old=p.querySelector('#sl82gal');if(old)old.remove();if(typeof fcOn!=='function'||!fcOn())return;const F=S.fc;
   const c=el67('div',null,'sl67card ev');c.id='sl82gal';c.appendChild(el67('span','FROSCHKONZERT · DU ENTSCHEIDEST','k'));
   if(F.gal&&!F.word){c.appendChild(el67('span','Galgenmännchen: Lege ein Wort fest. Die Spieler sehen nur die Striche und raten Buchstaben.'));
     const row=el67('div',null,'sl67row');const inp=document.createElement('input');inp.type='text';inp.id='hm82';inp.autocomplete='off';inp.placeholder='z. B. Wassermelone';inp.value=HMD82;
@@ -33519,6 +33519,121 @@ function q82(){return lag82()?1:0.92}// 1 = verlustfrei: bei Pixelbildern kleine
 // (4) Bilder stellen sich nicht mehr vor Text an: Liegt mehr als 64 KB im Kanal, wird das Bild ausgelassen (vorher 1,5 MB –
 //     dann warteten Klicks und Log-Zeilen hinter vielen Bildern, besonders über den Umweg-Server).
 const BUF82=65536;
+
+
+// Prototyp 83: beim Bau aus den szene.md-Dateien gelesen (Blöcke „## Geführt“)
+const GEF83={"Alter Stollen": {"ansicht": "raster", "aufdecken": "erzähler", "bewegung": "feldweise", "e": [{"art": "direkt", "m": "Umsehen", "pflicht": false}, {"art": "direkt", "m": "Fackel anzünden", "pflicht": false}, {"art": "umsehen", "m": "Im Geröll nach Brauchbarem suchen*", "pflicht": false}, {"art": "auto", "m": "Lauernder Gegner", "pflicht": false}, {"art": "erzaehler", "m": "Kampf beginnen", "pflicht": true}], "kollision": "aus", "st": {}, "text": "alle", "umsehen": "automatisch", "wege": "gesperrt"}, "Kapselhaus": {"bewegung": "eingefroren", "e": [{"art": "direkt", "m": "Umsehen", "pflicht": false}, {"art": "direkt", "m": "Mit dem normalen Typ sprechen", "pflicht": false, "zn": "typ", "zp": [252, 106]}, {"art": "umsehen", "m": "Zettel nehmen", "pflicht": false, "zn": "werkbank", "zp": [214, 106]}, {"art": "umsehen", "m": "*kapsel nehmen", "pflicht": false, "zn": "tisch", "zp": [190, 106]}, {"art": "auto", "m": "Kapsel öffnen", "pflicht": false, "zn": "tisch", "zp": [190, 106]}, {"art": "erzaehler", "ev": "ilse", "frei": ["Mit Ilse sprechen"], "m": "Ilse kommt herein", "pflicht": true}, {"art": "erzaehler", "m": "Mit Ilse sprechen", "pflicht": true, "zn": "tür", "zp": [30, 112]}, {"art": "umsehen", "m": "Ilses Restekiste durchsehen", "pflicht": false, "zn": "270", "zp": [280, 112]}, {"art": "umsehen", "m": "Ansehen: Teppich", "pflicht": false, "zn": "150", "zp": [80, 96]}, {"art": "erzaehler", "m": "Rasten", "pflicht": false}, {"art": "erzaehler", "m": "Haus verlassen", "pflicht": false, "weg": true, "zn": "tür", "zp": [30, 112]}], "kollision": "aus", "st": {"tisch": [206, 190, 106], "typ": [250, 252, 106], "tür": [24, 30, 112], "werkbank": [90, 214, 106]}, "text": "alle", "umsehen": "automatisch", "wege": "gesperrt"}, "Vor dem Haus": {"bewegung": "frei", "e": [{"art": "direkt", "m": "Umsehen", "pflicht": false}, {"art": "direkt", "m": "Mit Hennig sprechen", "pflicht": false}, {"art": "umsehen", "m": "Ansehen: Pfad", "pflicht": false}, {"art": "umsehen", "m": "Arnika pflücken", "pflicht": false}, {"art": "umsehen", "m": "Wegweiser lesen", "pflicht": false}, {"art": "erzaehler", "ev": "omen", "m": "PaulMon flüchtet", "pflicht": false}, {"art": "erzaehler", "m": "Lager aufschlagen und rasten", "pflicht": false}, {"art": "aus", "m": "Zur Ausgangsposition", "pflicht": false}, {"art": "erzaehler", "m": "Nach Norden zu den Stollen", "pflicht": true, "weg": true}, {"art": "erzaehler", "m": "Ins Dorf gehen", "pflicht": false, "weg": true}, {"art": "erzaehler", "m": "Zurück ins Haus", "pflicht": false, "weg": true}, {"art": "erzaehler", "m": "*Weiterreisen", "pflicht": false, "weg": true}], "kollision": "aus", "st": {}, "text": "alle", "umsehen": "erzähler", "wege": "gesperrt"}};
+
+
+// ================= Prototyp 83 – Geführter Modus (Pilot), Schritt 1 =================
+// Paul, 11.11. (Übergabe „Geführter Modus (Pilot)“, _Spielleiter/gefuehrt-p83.md): Der Spielleiter erzählt, die Spieler sehen nur freigegebene Knöpfe.
+// Ein Schalter je Spielstand (S.g83.on). Aus = alles wie bisher. An = die Regeln aus den Blöcken „## Geführt“ der szene.md (GEF83, beim Bau gelesen).
+// EINE Stelle entscheidet, ob ein Knopf sichtbar ist: vis83(). Alle Ansichten (Spielleiter, jeder Gast über mpFor63) laufen durch renderChips → apply83.
+//   Arten: direkt (ab Freigabe der Szene) · umsehen (nach „Umsehen“, oder vom Erzähler gewählt bei „Umsehen: erzähler“) · erzähler (Freigabe-Baukasten,
+//   „pflicht“ oben) · auto (das Spiel entscheidet) · aus. Knöpfe ohne Zeile: umsehen. Wege: immer erzähler.
+// Szenen ohne Block: Bewegung frei, Kollision aus, Wege gesperrt, Umsehen automatisch, Text an alle (Paul 11.11.: Text wie heute).
+function g83(){S.g83=S.g83||{on:false,sc:{}};S.g83.sc=S.g83.sc||{};return S.g83}
+function on83(){try{return!!(S&&S.g83&&S.g83.on)}catch(e){return false}}
+function gast83(){try{return typeof MP62!=='undefined'&&MP62&&MP62.role==='gast'}catch(e){return false}}
+function scn83(){try{const D=WORLD.scenes[S.scene];return D&&D.name||S.scene}catch(e){return''}}
+const DEF83={bewegung:'frei',kollision:'aus',wege:'gesperrt',umsehen:'automatisch',text:'alle',e:[],st:{}};
+function blk83(){const B=(typeof GEF83!=='undefined'&&GEF83[scn83()])||{};return Object.assign({},DEF83,B,{e:B.e||[],st:B.st||{}})}
+function gsc83(){const G=g83(),k=S.scene;return G.sc[k]||(G.sc[k]={frei:false,auf:false,an:{},aus:{},txt:[]})}
+const RX83={};function rx83(m){return RX83[m]||(RX83[m]=new RegExp('^'+m.split('*').map(x=>x.replace(/[.+?^${}()|[\]\\]/g,'\\$&')).join('.*')+'$','i'))}
+function lab83(b){return(b.textContent||'').replace(/\s+/g,' ').trim()}
+function ent83(label,B){B=B||blk83();return B.e.find(E=>!E.ev&&rx83(E.m).test(label))||null}
+function weg83(b,label){return b.classList.contains('go')||/→|verlassen$|^Zurück |gehen$|Weiterreisen|^Nach (Norden|Süden|Osten|Westen)\b|^Zur Ausgangsposition$/.test(label)}
+function head83(b,label){return b.classList.contains('tg78')||b.classList.contains('tg81')||/▸$/.test(label)}
+let REG83={};
+// --- die eine Stelle ---
+function vis83(b){const label=lab83(b),B=blk83(),E=ent83(label,B),st=gsc83();const weg=!!(E?E.weg:weg83(b,label));
+  const art=E?E.art:(weg?'erzaehler':'umsehen'),key=E?E.m:label;REG83[key]={key,label,art,pflicht:!!(E&&E.pflicht),weg};
+  let v;if(art==='aus')v=false;else if(st.aus[key])v=false;else if(st.an[key])v=true;else if(!st.frei)v=false;
+  else if(weg)v=!/gesperrt/.test(B.wege||'');else if(art==='direkt'||art==='auto')v=true;else if(art==='umsehen')v=/^erz/.test(B.umsehen||'')?false:!!st.auf;else v=false;
+  REG83[key].vis=v;return v}
+{const s=document.createElement('style');s.textContent='.g83x{display:none!important}body.g83 #genRow .lb78,body.g83 #genRow .hd78,body.g83 #genRow .tg78,body.g83 #genRow .tg81{display:none!important}body.g83 #genRow.g78 .chip.h78:not(.g83x),body.g83 #genRow .chip.h81:not(.g83x),body.g83 #genRow .chip.sub81:not(.g83x){display:revert!important}'+
+  '.txt83{opacity:.55;border-left:2px dashed #e0b04a;padding-left:4px}.sl83 .row83{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0}.sl83 button.pf83{border-color:#e0b04a;color:#f6d27a}.sl83 button.an83{background:#2c4a2c}';document.head.appendChild(s)}
+function apply83(){try{if(gast83())return;const on=on83()&&GAME_STARTED&&!talk&&!inFight()&&!(typeof TAC!=='undefined'&&TAC);document.body.classList.toggle('g83',!!on);
+  ['genRow','clsRow','spontRow'].forEach(id=>{const R=document.getElementById(id);if(!R)return;R.querySelectorAll('button').forEach(b=>{
+    if(!on){b.classList.remove('g83x');return}const label=lab83(b);
+    if(head83(b,label)){b.classList.add('g83x');return}
+    if(vis83(b)){b.classList.remove('g83x','h78','h81','sub81','sub78')}else b.classList.add('g83x')})})}catch(e){console.warn('p83',e)}}
+{const _rc83=renderChips;renderChips=function(){REG83={};const r=_rc83.apply(this,arguments);apply83();return r}}
+if(typeof szene78==='function'){const _s78=szene78;szene78=function(){const r=_s78.apply(this,arguments);apply83();return r}}
+setInterval(apply83,700);
+
+// --- Umsehen merken, Ziele: die Gruppe läuft hin, dann erst die Aktion ---
+function stelle83(n,B,td){if(n==null)return null;const s=String(n).trim().toLowerCase();if(/^-?\d+$/.test(s))return td?null:+s;
+  const P=B.st[s];if(P)return td?(P.length>=3?[P[1],P[2]]:null):P[0];
+  try{const o=(WORLD.scenes[S.scene].objs||[]).find(o=>nk(o.name)===nk(s));if(o)return td?null:o.x}catch(e){}return null}
+function ziel83(E,B){if(!E)return null;const td=!!TD;if(td){const p=E.zp||(E.zn?stelle83(E.zn,B,true):null);return p?{x:p[0],y:p[1]}:null}const x=stelle83(E.zn,B,false);return x==null?null:{x}}
+function geh83(z,fn){let done=false;const go=()=>{if(done)return;done=true;fn()};try{hero.queue=[];walk(z.x,go,z.y);
+    PARTY.filter(h=>h!==hero&&h.hp>0).forEach((h,i)=>{try{if('tx' in h){h.tx=clamp(z.x+(i+1)*(TD?12:-16),14,wW()-14);if(TD&&z.y!=null&&'ty' in h)h.ty=clampY(h.tx,z.y+(i%2?7:-5))}}catch(e){}})}catch(e){go()}
+  setTimeout(go,4500)}
+document.addEventListener('click',e=>{try{if(!on83()||gast83())return;const b=e.target.closest&&e.target.closest('button');if(!b||!b.closest('#genRow,#clsRow,#spontRow'))return;
+  const label=lab83(b);if(/^Umsehen\b/.test(label)){gsc83().auf=true;setTimeout(()=>{try{SIG67.jetzt67=''}catch(x){}renderAll()},50)}
+  if(b.__go83||talk||inFight())return;const B=blk83(),E=ent83(label,B),z=ziel83(E,B);if(!z)return;
+  e.stopImmediatePropagation();e.preventDefault();geh83(z,()=>{b.__go83=1;HIER83=1;try{b.click()}finally{b.__go83=0;HIER83=0}})}catch(err){console.warn('p83 ziel',err)}},true);
+
+// Nach der Ankunft am Ziel läuft die Aktion an Ort und Stelle (die alten Laufwege der Aktionen, z. B. Kapseln nach links, gelten dann nicht)
+let HIER83=0;{const _wk83=walk;walk=function(x,fn,y){if(HIER83&&hero&&hero.queue){hero.queue.push(fn);return}return _wk83.apply(this,arguments)}}
+// --- Bewegung: eingefroren (auch „feldweise“, bis die Raster-Ansicht kommt) ---
+function frz83(){try{return on83()&&/einge|feld/.test(blk83().bewegung||'')}catch(e){return false}}
+function plain83(){try{return GAME_STARTED&&!inFight()&&!(typeof TAC!=='undefined'&&TAC)&&(typeof MOV==='undefined'||MOV.hidden)&&!(typeof RB!=='undefined'&&RB)&&!(typeof MINI31!=='undefined'&&MINI31)&&!document.getElementById('ub80')}catch(e){return false}}
+{const _cw83=clickWalk;clickWalk=function(){if(frz83())return;return _cw83.apply(this,arguments)}}
+if(typeof draggables==='function'){const _dg83=draggables;draggables=function(){if(frz83())return[];return _dg83.apply(this,arguments)}}
+const KEY83={ArrowLeft:1,ArrowRight:1,ArrowUp:1,ArrowDown:1,a:1,d:1,w:1,s:1,A:1,D:1,W:1,S:1};
+document.addEventListener('keydown',e=>{try{const tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;if(KEY83[e.key]&&frz83()&&plain83()){e.preventDefault();e.stopImmediatePropagation()}}catch(err){}},true);
+if(typeof mpHostMsg62==='function'){const _hm83=mpHostMsg62;mpHostMsg62=function(G,m){try{if(m&&m.t==='walk'&&frz83())return}catch(e){}return _hm83.apply(this,arguments)}}
+
+// --- Kollision aus: gerade Wege, Überlappen erlaubt ---
+function kolAus83(){try{return on83()&&!/^an/.test(blk83().kollision||'aus')}catch(e){return false}}
+if(typeof col69==='function'){const _co83=col69;col69=function(){if(kolAus83())return null;return _co83.apply(this,arguments)}}
+{const _cy83=clampY;clampY=function(x,y){if(!kolAus83())return _cy83.apply(this,arguments);try{let r=clamp(y,(YMIN&&YMIN[S.scene])||46,134);
+  if(TD&&typeof on68==='function'&&on68()&&typeof sc68==='function'){const s=sc68();if(s){const t=TDY68[s[0]],u=(typeof TDYB68!=='undefined'&&TDYB68[s[0]]);if(t!=null&&r<t)r=t;if(u&&r>u)r=u}}return r}catch(e){return _cy83.apply(this,arguments)}}}
+
+// --- Wege gesperrt: auch getippt geht es erst nach der Freigabe weiter ---
+function wegFrei83(label){const B=blk83();if(!/gesperrt/.test(B.wege||''))return true;const st=gsc83();const E=label?ent83(label,B):null;const k=E?E.m:label;
+  if(k&&st.an[k])return true;return Object.keys(REG83).some(x=>REG83[x].weg&&st.an[x])&&!E}
+if(typeof impExitGo==='function'){const _ie83=impExitGo;impExitGo=function(ex){try{if(on83()&&!window.__noTravel&&!wegFrei83(ex&&ex.label)){say('(Der Weg ist noch nicht frei.)','sys');return}}catch(e){}return _ie83.apply(this,arguments)}}
+
+// --- Ereignisse aus dem Baukasten; das Spiel löst sie im geführten Modus nicht selbst aus ---
+function evDo83(E){const st=gsc83();try{if(E.ev==='ilse')ilseEnter();else if(E.ev==='omen'){if(typeof triOmen==='function')triOmen()}else if(typeof ELEM!=='undefined'&&ELEM[E.ev])ELEM[E.ev].fn()}catch(e){console.warn('p83 ereignis',e)}
+  st.an[E.m]=true;(E.frei||[]).forEach(k=>{const F=blk83().e.find(x=>nk(x.m)===nk(k));st.an[F?F.m:k]=true})}
+function evWait83(id){try{if(!on83())return false;const E=blk83().e.find(x=>x.ev===id);return!!E&&!gsc83().an[E.m]}catch(e){return false}}
+if(typeof ilseAutoCheck==='function'){const _ia83=ilseAutoCheck;ilseAutoCheck=function(){if(evWait83('ilse'))return;return _ia83.apply(this,arguments)}}
+setInterval(()=>{try{if(!GAME_STARTED)return;const G=g83();const w=S.scene==='draussen'&&evWait83('omen');if(w&&!S.flags.triOff){S.flags.triOff=1;G.triOff83=1}else if(!w&&G.triOff83){delete S.flags.triOff;G.triOff83=0}}catch(e){}},1000);
+
+// --- Text an Spieler: nur durchgereicht (nur wo die Szene es verlangt) ---
+let DURCH83=0;
+{const _sy83=say;say=function(t,type,who){try{if(on83()&&!DURCH83&&(type==='dm'||type==='npc')&&/^(nur|durch)/.test(blk83().text||'')&&GAME_STARTED){const st=gsc83();st.txt.push({t:String(t),type,who:who||null});
+      const r=_sy83.apply(this,arguments);const lg=document.getElementById('log');const L=lg&&lg.lastElementChild;if(L){L.classList.add('nogast80x','txt83')}try{SIG67.jetzt67=''}catch(e){}return r}}catch(e){}return _sy83.apply(this,arguments)}}
+function durch83(i){const st=gsc83(),x=st.txt[i];if(!x)return;DURCH83=1;try{say(x.t,x.type,x.who||undefined)}finally{DURCH83=0}st.txt.splice(i,1)}
+
+// --- Schalter: an/aus; geführt läuft nur mit der neuen Grafik ---
+function setOn83(v){g83().on=!!v;if(v){try{if(typeof setG68==='function')setG68(true)}catch(e){}}try{SIG67.jetzt67=''}catch(e){}renderAll()}
+
+// --- Erzähler: Karte „Geführt“ in „Jetzt“ (für Paul: ohne Erklärtexte) ---
+function karte83(p){try{if(!p||typeof el67!=='function')return;const old=p.querySelector('#sl83');if(old)old.remove();const c=el67('div',null,'sl67card sl83');c.id='sl83';
+  const top=el67('div',null,'row83');top.appendChild(el67('span','GEFÜHRT','k'));top.appendChild(bt67(on83()?'an':'aus',()=>setOn83(!on83()),on83()));c.appendChild(top);
+  if(on83()&&GAME_STARTED){const B=blk83(),st=gsc83();
+    if(!st.frei){const r=el67('div',null,'row83');const b=bt67('Szene freigeben',()=>{st.frei=true;SIG67.jetzt67='';renderAll()});b.classList.add('pf83');r.appendChild(b);c.appendChild(r)}
+    else{const L=[];const seen={};
+      B.e.forEach(E=>{if(E.art==='erzaehler'||(E.art==='umsehen'&&/^erz/.test(B.umsehen||'')&&st.auf)){L.push({k:E.m,E,p:!!E.pflicht,w:!!E.weg});seen[E.m]=1}});
+      Object.values(REG83).forEach(R=>{if(seen[R.key])return;if(R.weg||R.art==='erzaehler'||(R.art==='umsehen'&&/^erz/.test(B.umsehen||'')&&st.auf)){L.push({k:R.key,p:R.pflicht,w:R.weg});seen[R.key]=1}});
+      L.sort((a,b)=>(b.p-a.p)||(a.w-b.w));const r=el67('div',null,'row83');
+      L.forEach(x=>{const an=!!st.an[x.k];const b=bt67((x.p?'★ ':'')+(x.w?'→ ':'')+x.k+(an?' ✓':''),()=>{if(x.E&&x.E.ev&&!an)evDo83(x.E);else st.an[x.k]=!an;SIG67.jetzt67='';renderAll()});if(x.p)b.classList.add('pf83');if(an)b.classList.add('an83');r.appendChild(b)});
+      c.appendChild(r);
+      const det=document.createElement('details');const sm=document.createElement('summary');sm.textContent='Zeilen';det.appendChild(sm);const r2=el67('div',null,'row83');
+      Object.values(REG83).forEach(R=>{const s=st.aus[R.key]?'aus':st.an[R.key]?'an':'·';r2.appendChild(bt67(R.key+' ['+s+']',()=>{if(st.aus[R.key]){delete st.aus[R.key]}else if(st.an[R.key]){delete st.an[R.key];st.aus[R.key]=true}else st.an[R.key]=true;SIG67.jetzt67='';renderAll()}))});
+      det.appendChild(r2);if(Object.keys(REG83).length)c.appendChild(det)}
+    if(st.txt.length){st.txt.forEach((x,i)=>{const r=el67('div',null,'row83');r.appendChild(el67('span',(x.who?x.who+': ':'')+x.t.slice(0,140),'small'));r.appendChild(bt67('Durchreichen',()=>{durch83(i);SIG67.jetzt67='';renderAll()}));c.appendChild(r)})}}
+  const stn=p.querySelector('#sl67steht');p.insertBefore(c,stn||p.firstChild)}catch(e){console.warn('p83 karte',e)}}
+if(typeof jetzt67==='function'){const _j83=jetzt67;jetzt67=function(p){const r=_j83.apply(this,arguments);karte83(p);return r}}
+if(typeof sig67==='function'){const _sg83=sig67;sig67=function(k){let s=_sg83.apply(this,arguments);if(k==='jetzt67')try{s+='|g83:'+JSON.stringify(S.g83&&S.g83.on?[S.scene,gsc83(),Object.keys(REG83).length]:0)}catch(e){}return s}}
+// Schalter auch im Kasten „Gemeinsam spielen“ (beim Anlegen des Raums)
+if(typeof mpUI62==='function'){const _mu83=mpUI62;mpUI62=function(){const r=_mu83.apply(this,arguments);try{const box=document.getElementById('mp62SL');if(box&&!box.querySelector('#g83chk')){const l=document.createElement('label');l.className='small';
+  l.innerHTML='<input type="checkbox" id="g83chk"> Geführt';box.appendChild(l);const i=l.querySelector('input');i.checked=on83();i.onchange=()=>setOn83(i.checked)}else if(box){const i=box.querySelector('#g83chk');if(i)i.checked=on83()}}catch(e){}return r}}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
