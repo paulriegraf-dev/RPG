@@ -33534,7 +33534,8 @@ const GEF83={"Alter Stollen": {"ansicht": "raster", "aufdecken": "erzähler", "b
 // Szenen ohne Block: Bewegung frei, Kollision aus, Wege gesperrt, Umsehen automatisch, Text an alle (Paul 11.11.: Text wie heute).
 function g83(){S.g83=S.g83||{on:false,sc:{}};S.g83.sc=S.g83.sc||{};return S.g83}
 function on83(){try{return!!(S&&S.g83&&S.g83.on)}catch(e){return false}}
-function gast83(){try{return typeof MP62!=='undefined'&&MP62&&MP62.role==='gast'}catch(e){return false}}
+// Gast-Seite: G62.on (MP62.role ist beim Gast nicht gesetzt – sonst nahm die Gast-Seite die Sperren des Spielleiters wieder weg)
+function gast83(){try{return typeof G62!=='undefined'&&!!G62.on}catch(e){return false}}
 function scn83(){try{const D=WORLD.scenes[S.scene];return D&&D.name||S.scene}catch(e){return''}}
 const DEF83={bewegung:'frei',kollision:'aus',wege:'gesperrt',umsehen:'automatisch',text:'alle',e:[],st:{}};
 function blk83(){const B=(typeof GEF83!=='undefined'&&GEF83[scn83()])||{};return Object.assign({},DEF83,B,{e:B.e||[],st:B.st||{}})}
@@ -33553,9 +33554,11 @@ function vis83(b){const label=lab83(b),B=blk83(),E=ent83(label,B),st=gsc83();con
   REG83[key].vis=v;return v}
 {const s=document.createElement('style');s.textContent='.g83x{display:none!important}body.g83 #genRow .lb78,body.g83 #genRow .hd78,body.g83 #genRow .tg78,body.g83 #genRow .tg81{display:none!important}body.g83 #genRow.g78 .chip.h78:not(.g83x),body.g83 #genRow .chip.h81:not(.g83x),body.g83 #genRow .chip.sub81:not(.g83x){display:revert!important}'+
   '.txt83{opacity:.55;border-left:2px dashed #e0b04a;padding-left:4px}.sl83 .row83{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0}.sl83 button.pf83{border-color:#e0b04a;color:#f6d27a}.sl83 button.an83{background:#2c4a2c}';document.head.appendChild(s)}
-function apply83(){try{if(gast83())return;const on=on83()&&GAME_STARTED&&!talk&&!inFight()&&!(typeof TAC!=='undefined'&&TAC);document.body.classList.toggle('g83',!!on);
+// Im Gespräch gilt nichts davon (auch beim normalen Typen, der ohne „talk“ spricht – erkennbar an „Gespräch beenden“)
+function talk83(){try{if(talk)return true;const R=document.getElementById('genRow');return!!(R&&[...R.querySelectorAll('button')].some(b=>/^Gespräch beenden/.test((b.textContent||'').trim())))}catch(e){return false}}
+function apply83(){try{if(gast83())return;const tk=talk83();const on=on83()&&GAME_STARTED&&!inFight()&&!(typeof TAC!=='undefined'&&TAC);document.body.classList.toggle('g83',!!on&&!tk);
   ['genRow','clsRow','spontRow'].forEach(id=>{const R=document.getElementById(id);if(!R)return;R.querySelectorAll('button').forEach(b=>{
-    if(!on){b.classList.remove('g83x');return}const label=lab83(b);
+    if(!on||(tk&&id==='genRow'&&!b.classList.contains('spont'))){b.classList.remove('g83x');return}const label=lab83(b);
     if(head83(b,label)){b.classList.add('g83x');return}
     if(vis83(b)){b.classList.remove('g83x','h78','h81','sub81','sub78')}else b.classList.add('g83x')})})}catch(e){console.warn('p83',e)}}
 {const _rc83=renderChips;renderChips=function(){REG83={};const r=_rc83.apply(this,arguments);apply83();return r}}
@@ -33572,7 +33575,7 @@ function geh83(z,fn){let done=false;const go=()=>{if(done)return;done=true;fn()}
   setTimeout(go,4500)}
 document.addEventListener('click',e=>{try{if(!on83()||gast83())return;const b=e.target.closest&&e.target.closest('button');if(!b||!b.closest('#genRow,#clsRow,#spontRow'))return;
   const label=lab83(b);if(/^Umsehen\b/.test(label)){gsc83().auf=true;setTimeout(()=>{try{SIG67.jetzt67=''}catch(x){}renderAll()},50)}
-  if(b.__go83||talk||inFight())return;const B=blk83(),E=ent83(label,B),z=ziel83(E,B);if(!z)return;
+  if(b.__go83||talk83()||inFight()||MPG83)return;const B=blk83(),E=ent83(label,B),z=ziel83(E,B);if(!z)return;
   e.stopImmediatePropagation();e.preventDefault();geh83(z,()=>{b.__go83=1;HIER83=1;try{b.click()}finally{b.__go83=0;HIER83=0}})}catch(err){console.warn('p83 ziel',err)}},true);
 
 // Nach der Ankunft am Ziel läuft die Aktion an Ort und Stelle (die alten Laufwege der Aktionen, z. B. Kapseln nach links, gelten dann nicht)
@@ -33584,7 +33587,9 @@ function plain83(){try{return GAME_STARTED&&!inFight()&&!(typeof TAC!=='undefine
 if(typeof draggables==='function'){const _dg83=draggables;draggables=function(){if(frz83())return[];return _dg83.apply(this,arguments)}}
 const KEY83={ArrowLeft:1,ArrowRight:1,ArrowUp:1,ArrowDown:1,a:1,d:1,w:1,s:1,A:1,D:1,W:1,S:1};
 document.addEventListener('keydown',e=>{try{const tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;if(KEY83[e.key]&&frz83()&&plain83()){e.preventDefault();e.stopImmediatePropagation()}}catch(err){}},true);
-if(typeof mpHostMsg62==='function'){const _hm83=mpHostMsg62;mpHostMsg62=function(G,m){try{if(m&&m.t==='walk'&&frz83())return}catch(e){}return _hm83.apply(this,arguments)}}
+// Klicks eines Gastes laufen sofort (ohne Hinlaufen): Der Weg würde sonst mit dem Helden des Spielleiters gelaufen und die Aktion käme erst später, ohne den Gast
+let MPG83=0;
+if(typeof mpHostMsg62==='function'){const _hm83=mpHostMsg62;mpHostMsg62=function(G,m){try{if(m&&m.t==='walk'&&frz83())return}catch(e){}MPG83=1;try{return _hm83.apply(this,arguments)}finally{MPG83=0}}}
 
 // --- Kollision aus: gerade Wege, Überlappen erlaubt ---
 function kolAus83(){try{return on83()&&!/^an/.test(blk83().kollision||'aus')}catch(e){return false}}
@@ -33634,6 +33639,13 @@ if(typeof sig67==='function'){const _sg83=sig67;sig67=function(k){let s=_sg83.ap
 // Schalter auch im Kasten „Gemeinsam spielen“ (beim Anlegen des Raums)
 if(typeof mpUI62==='function'){const _mu83=mpUI62;mpUI62=function(){const r=_mu83.apply(this,arguments);try{const box=document.getElementById('mp62SL');if(box&&!box.querySelector('#g83chk')){const l=document.createElement('label');l.className='small';
   l.innerHTML='<input type="checkbox" id="g83chk"> Geführt';box.appendChild(l);const i=l.querySelector('input');i.checked=on83();i.onchange=()=>setOn83(i.checked)}else if(box){const i=box.querySelector('#g83chk');if(i)i.checked=on83()}}catch(e){}return r}}
+
+
+// ================= Nachbesserung zu Prototyp 83 (Paul 14.11.) =================
+// „Wenn ich als Spieler rejoine und der Spielleiter im Spielleiter-Menü ist, wird mir die Erzählen-Anzeige als Mitspieler angezeigt.“
+// Ursache: In der Ansicht „Spielleiter“ wandert das Feld „Erzählen“ (#narrForm) in #narrSlot, und #narrSlot wird an die Gäste gespiegelt.
+// Abhilfe: Das Feld trägt data-dm – solche Teile schickt der Spiegel nie an Gäste (mpSer62 blendet [data-dm] aus).
+try{const f=document.getElementById('narrForm');if(f)f.setAttribute('data-dm','1')}catch(e){}
 
 
 function intro(){roomText();exits();say('Du spielst Aldric, den Magier. Klick auf Aktionen oder tippe frei. Was das Spiel nicht kennt, geht an den Spielleiter. Was die Geschichte enthüllt, erscheint unter „Entdeckt“.','sys')}
